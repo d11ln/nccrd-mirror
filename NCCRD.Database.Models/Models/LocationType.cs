@@ -12,10 +12,7 @@ namespace NCCRD.Database.Models
     public class LocationType
     {
         public int LocationTypeId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
-        //public ICollection<Region> Regions { get; set; }
     }
 }

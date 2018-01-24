@@ -12,12 +12,12 @@ namespace NCCRD.Database.Models
     public class ProjectSubType
     {
         public int ProjectSubTypeId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
 
+        //FK - ProjectType
+        public int ProjectTypeId { get; set; }
         [Required]
         public ProjectType ProjectType { get; set; }
     }

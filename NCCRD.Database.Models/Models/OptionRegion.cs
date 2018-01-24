@@ -13,9 +13,13 @@ namespace NCCRD.Database.Models
     {
         public int OptionRegionId { get; set; }
 
+        //FK - Region
+        public int RegionId { get; set; }
         [Required]
         public Region Region { get; set; }
 
+        //FK - MAOption
+        public int MAOptionId { get; set; }
         [Required]
         public MAOption MAOption { get; set; }
     }

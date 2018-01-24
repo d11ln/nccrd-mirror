@@ -12,13 +12,9 @@ namespace NCCRD.Database.Models
     public class SitePage
     {
         public int SitePageId { get; set; }
-
         [Required]
         public string PageTitle { get; set; }
-
         [Required]
         public string URL { get; set; }
-
-        //public ICollection<AccessRight> AccessRights { get; set; }
     }
 }

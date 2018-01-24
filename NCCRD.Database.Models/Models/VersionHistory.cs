@@ -12,13 +12,10 @@ namespace NCCRD.Database.Models
     public class VersionHistory
     {
         public int VersionHistoryId { get; set; }
-
         [Required]
         public string VersionNumber { get; set; }
-
         [Required]
         public DateTime UpdateTime { get; set; }
-
         public string Comments { get; set; }
     }
 }

@@ -11,7 +11,5 @@ namespace NCCRD.Database.Models
     public class Feasibility
     {
         public int FeasibilityId { get; set; }
-
-        //public ICollection<MAOption> MAOptions { get; set; }
     }
 }

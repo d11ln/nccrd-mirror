@@ -12,13 +12,8 @@ namespace NCCRD.Database.Models
     public class ProjectType
     {
         public int ProjectTypeId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
-
-        //public virtual ICollection<ProjectSubType> ProjectSubTypes { get; set; }
-        //public virtual ICollection<Project> Projects { get; set; }
     }
 }

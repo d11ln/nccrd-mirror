@@ -12,10 +12,8 @@ namespace NCCRD.Database.Models
     public class MitigationEmissionsData
     {
         public int MitigationEmissionsDataId { get; set; }
-
         [Required]
         public int Year { get; set; }
-
         public double? CO2 { get; set; }
         public double? CH4 { get; set; }
         public double? CH4_CO2e { get; set; }
@@ -42,6 +40,8 @@ namespace NCCRD.Database.Models
         public double? Geothermal { get; set; }
         public double? Geothermal_CO2e { get; set; }
 
+        //FK - Project
+        public int? ProjectId { get; set; }
         public Project Project { get; set; }
     }
 }

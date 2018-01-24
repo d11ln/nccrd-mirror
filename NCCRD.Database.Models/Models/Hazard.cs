@@ -13,12 +13,14 @@ namespace NCCRD.Database.Models
     {
         public int HazardId { get; set; }
 
+        //FK - Driver
+        public int DriverId { get; set; }
         [Required]
         public Driver Driver { get; set; }
 
+        //FK - Stock
+        public int StockId { get; set; }
         [Required]
         public Stock Stock { get; set; }
-
-        //public ICollection<MAOption> MAOptions { get; set; }
     }
 }

@@ -13,17 +13,19 @@ namespace NCCRD.Database.Models
     {
         public int MAOptionId { get; set; }
 
+        //FK - Feasibility
+        public int FeasibilityId { get; set; }
         [Required]
         public Feasibility Feasibility { get; set; }
 
+        //FK - Hazard
+        public int HazardId { get; set; }
         [Required]
         public Hazard Hazard { get; set; }
 
+        //FK - Sector
+        public int SectorId { get; set; }
         [Required]
         public Sector Sector { get; set; }
-
-        //public ICollection<OptionFunder> OptionFunders { get; set; }
-        //public ICollection<Project> Projects { get; set; }
-        //public ICollection<OptionRegion> OptionRegions { get; set; }
     }
 }

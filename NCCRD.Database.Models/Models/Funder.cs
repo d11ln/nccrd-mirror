@@ -12,13 +12,8 @@ namespace NCCRD.Database.Models
     public class Funder
     {
         public int FunderId { get; set; }
-
         [Required]
         public string Name { get; set; }
-
         public string Description { get; set; }
-
-        //public ICollection<ProjectFunder> ProjectFunders { get; set; }
-        //public ICollection<OptionFunder> OptionFunders { get; set; }
     }
 }

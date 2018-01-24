@@ -13,9 +13,13 @@ namespace NCCRD.Database.Models
     {
         public int OptionFunderId { get; set; }
 
+        //FK - Funder
+        public int FunderId { get; set; }
         [Required]
         public Funder Funder { get; set; }
 
+        //FK - MAOption
+        public int MAOptionId { get; set; }
         [Required]
         public MAOption MAOption { get; set; }
     }

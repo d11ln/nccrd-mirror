@@ -12,16 +12,16 @@ namespace NCCRD.Database.Models
     public class AppLog
     {
         public int AppLogId { get; set; }
-
         [Required]
         public string Message { get; set; }
-
         public string MessageDetail { get; set; } //Optional
-
-        [Required]
-        public User ActiveUser { get; set; }
-
         [Required]
         public DateTime LogTime { get; set; }
+
+        //FK - User
+        [ForeignKey("ActiveUser")]
+        public int ActiveUserId { get; set; }
+        [Required]
+        public User ActiveUser { get; set; }
     }
 }

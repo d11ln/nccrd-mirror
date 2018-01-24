@@ -12,12 +12,8 @@ namespace NCCRD.Database.Models
     public class CDMStatus
     {
         public int CDMStatusId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
-
-        //public ICollection<MitigationDetail> MitigationDetails { get; set; }
     }
 }

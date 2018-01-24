@@ -12,12 +12,8 @@ namespace NCCRD.Database.Models
     public class ResearchType
     {
         public int ResearchTypeId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
-
-        //public ICollection<ResearchDetail> ResearchDetails { get; set; }
     }
 }

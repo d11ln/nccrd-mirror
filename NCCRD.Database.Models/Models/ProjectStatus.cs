@@ -12,12 +12,8 @@ namespace NCCRD.Database.Models
     public class ProjectStatus
     {
         public int ProjectStatusId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
-
-        //public ICollection<Project> Projects { get; set; }
     }
 }

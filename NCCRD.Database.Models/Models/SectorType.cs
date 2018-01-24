@@ -12,10 +12,7 @@ namespace NCCRD.Database.Models
     public class SectorType
     {
         public int SectorTypeId { get; set; }
-
         [Required]
         public string Name { get; set; }
-
-        //public ICollection<Sector> Sectors { get; set; }
     }
 }

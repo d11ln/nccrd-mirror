@@ -12,12 +12,8 @@ namespace NCCRD.Database.Models
     public class ValidationStatus
     {
         public int ValidationStatusID { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
-
-        //public ICollection<Project> Projects { get; set; }
     }
 }

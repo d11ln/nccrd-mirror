@@ -12,10 +12,8 @@ namespace NCCRD.Database.Models
     public class Country
     {
         public int CountryId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
     }
 }

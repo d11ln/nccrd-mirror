@@ -12,21 +12,21 @@ namespace NCCRD.Database.Models
     public class Sector
     {
         public int SectorId { get; set; }
-
         [Required]
         public string Value { get; set; }
 
+        //FK - SectorType
+        public int SectorTypeId { get; set; }
         [Required]
         public SectorType SectorType { get; set; }
 
-        //public Sector ParentSector { get; set; }
-        public int? ParentSectorID { get; set; } //Link to Parent-Sector
+        //FK - ParentSector
+        [ForeignKey("ParentSector")]
+        public int? ParentSectorID { get; set; }
+        public Sector ParentSector { get; set; }
 
+        //FK - Typology
+        public int? TypologyId { get; set; }
         public Typology Typology { get; set; }
-
-        //public ICollection<MitigationDetail> MitigationDetails { get; set; }
-        //public ICollection<AdaptationDetail> AdaptationDetails { get; set; }
-        //public ICollection<ResearchDetail> ResearchDetails { get; set; }
-        //public ICollection<MAOption> MAOptions { get; set; }
     }
 }

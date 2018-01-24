@@ -332,7 +332,7 @@ BEGIN
 		[NCCRDv2].dbo.ProjectSubType
 		(
 			[Value],
-			ProjectType_ProjectTypeId
+			ProjectTypeId
 		)
 	SELECT
 		PST.ProjectSubType,
@@ -404,8 +404,8 @@ BEGIN
 		[NCCRDv2].dbo.Sector
 		(
 			[Value],
-			SectorType_SectorTypeId,
-			Typology_TypologyID
+			SectorTypeId,
+			TypologyID
 		)
 	SELECT
 		PLV.ItemDisplay,
@@ -426,8 +426,8 @@ BEGIN
 		[NCCRDv2].dbo.Sector
 		(
 			[Value],
-			SectorType_SectorTypeId,
-			Typology_TypologyID
+			SectorTypeId,
+			TypologyID
 		)
 	SELECT
 		PLV.ItemDisplay,
@@ -446,8 +446,8 @@ BEGIN
 		[NCCRDv2].dbo.Sector
 		(
 			[Value],
-			SectorType_SectorTypeId,
-			Typology_TypologyID,
+			SectorTypeId,
+			TypologyID,
 			ParentSectorId
 		)
 	SELECT
@@ -478,10 +478,10 @@ BEGIN
 				[NCCRDv2].dbo.Sector S
 			INNER JOIN
 				[NCCRDv2].dbo.SectorType ST
-				ON S.SectorType_SectorTypeId = ST.SectorTypeId
+				ON S.SectorTypeId = ST.SectorTypeId
 			INNER JOIN
 				[NCCRDv2].dbo.Typology T
-				ON T.TypologyID = S.Typology_TypologyID
+				ON T.TypologyID = S.TypologyID
 			WHERE
 				ST.Name = 'HostSector'	
 				AND
@@ -494,8 +494,8 @@ BEGIN
 		[NCCRDv2].dbo.Sector
 		(
 			[Value],
-			SectorType_SectorTypeId,
-			Typology_TypologyID,
+			SectorTypeId,
+			TypologyID,
 			ParentSectorId
 		)
 	SELECT
@@ -516,10 +516,10 @@ BEGIN
 				[NCCRDv2].dbo.Sector S
 			INNER JOIN
 				[NCCRDv2].dbo.SectorType ST
-				ON S.SectorType_SectorTypeId = ST.SectorTypeId
+				ON S.SectorTypeId = ST.SectorTypeId
 			INNER JOIN
 				[NCCRDv2].dbo.Typology T
-				ON T.TypologyID = S.Typology_TypologyID
+				ON T.TypologyID = S.TypologyID
 			WHERE
 				ST.Name = 'MainSubSector'	
 				AND
@@ -580,8 +580,8 @@ INSERT INTO
         ,[PhoneNumber]
         ,[MobileNumber]
         ,[FaxNumber]
-        ,[Title_TitleId]
-        ,[UserRole_UserRoleId]
+        ,[TitleId]
+        ,[UserRoleId]
 	)
     SELECT
 		R.AppUserName,
@@ -657,7 +657,7 @@ BEGIN
 		[NCCRDv2].[dbo].[Region]
 		(
 			RegionName,
-			LocationType_LocationTypeId
+			LocationTypeId
 		)
 	SELECT
 		P.ProvinceName,
@@ -670,7 +670,7 @@ BEGIN
 		[NCCRDv2].[dbo].[Region]
 		(
 			RegionName,
-			LocationType_LocationTypeId,
+			LocationTypeId,
 			ParentRegionId
 		)
 	SELECT
@@ -685,14 +685,14 @@ BEGIN
 	INNER JOIN
 		[NCCRDv2].[dbo].[Region] REG
 		ON REG.RegionName = PRV.ProvinceName
-		AND REG.LocationType_LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'Province')
+		AND REG.LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'Province')
 
 	--LocalMunicipality--
 	INSERT INTO
 		[NCCRDv2].[dbo].[Region]
 		(
 			RegionName,
-			LocationType_LocationTypeId,
+			LocationTypeId,
 			ParentRegionId
 		)
 	SELECT
@@ -707,7 +707,7 @@ BEGIN
 	INNER JOIN
 		[NCCRDv2].[dbo].[Region] REG
 		ON REG.RegionName = DMP.MetroName
-		AND REG.LocationType_LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality')
+		AND REG.LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality')
 END
 
 --PROJECTS--
@@ -729,11 +729,11 @@ BEGIN
 			ValidationComments,
 			BudgetLower,
 			BudgetUpper,
-			ProjectType_ProjectTypeId,
-			ProjectSubType_ProjectSubTypeId,
-			ProjectStatus_ProjectStatusId,
-			ProjectManager_UserId,
-			ValidationStatus_ValidationStatusID
+			ProjectTypeId,
+			ProjectSubTypeId,
+			ProjectStatusId,
+			ProjectManagerId,
+			ValidationStatusID
 		)
 	SELECT
 		PD.ProjectTitle,
@@ -750,7 +750,7 @@ BEGIN
 		PD.BudgetLower,
 		PD.BudgetUpper,
 		PTID.ProjectTypeId,
-		PMD.ProjectType_ProjectTypeId,
+		PMD.ProjectTypeId,
 		PS.ProjectStatusId,
 		USR.UserId,
 		VS.ValidationStatusID
@@ -821,7 +821,7 @@ BEGIN
 	LEFT OUTER JOIN
 		(
 			SELECT
-				PST2.ProjectType_ProjectTypeId,
+				PST2.ProjectTypeId,
 				MD.ProjectDetailsId
 			FROM
 				[NCCRD].[dbo].[tb_erm_mitigation_details] MD
@@ -838,9 +838,9 @@ BEGIN
 		INSERT INTO
 			[NCCRDv2].[dbo].[ProjectFunder]
 			(
-				Project_ProjectId,
-				Funder_FunderId,
-				FundingStatus_FundingStatusId
+				ProjectId,
+				FunderId,
+				FundingStatusId
 			)
 		SELECT
 			P.ProjectId,
@@ -954,8 +954,8 @@ BEGIN
 		INSERT INTO
 			[NCCRDv2].[dbo].[ProjectLocation]
 			(
-				Location_LocationId,
-				Project_ProjectId
+				LocationId,
+				ProjectId
 			)
 		VALUES
 			(@NLID, @NPID)
@@ -971,8 +971,8 @@ BEGIN
 	INSERT INTO
 		[NCCRDv2].[dbo].[ProjectRegion]
 		(
-			Project_ProjectId,
-			Region_RegionId
+			ProjectId,
+			RegionId
 		)
 	SELECT DISTINCT
 		PR.ProjectId,
@@ -993,7 +993,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					LMP.LocalMunicipalityID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
 				INNER JOIN
@@ -1001,7 +1002,7 @@ BEGIN
 					ON REG.RegionName = LMP.LocalMunicipalityName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'LocalMunicipality'
 			) LMP
@@ -1009,7 +1010,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					DMP.MetroID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 				INNER JOIN
@@ -1017,7 +1019,7 @@ BEGIN
 					ON REG.RegionName = DMP.MetroName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'DistrictMunicipality'
 			) DMP
@@ -1025,7 +1027,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					PRV.ProvinceID,
+					REg.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Province] PRV
 				INNER JOIN
@@ -1033,7 +1036,7 @@ BEGIN
 					ON REG.RegionName = PRV.ProvinceName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'Province'
 			) PRV
@@ -1055,7 +1058,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					LMP.LocalMunicipalityID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
 				INNER JOIN
@@ -1063,7 +1067,7 @@ BEGIN
 					ON REG.RegionName = LMP.LocalMunicipalityName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'LocalMunicipality'
 			) LMP
@@ -1071,7 +1075,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					DMP.MetroID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 				INNER JOIN
@@ -1079,7 +1084,7 @@ BEGIN
 					ON REG.RegionName = DMP.MetroName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'DistrictMunicipality'
 			) DMP
@@ -1087,7 +1092,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					PRV.ProvinceID,
+					REg.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Province] PRV
 				INNER JOIN
@@ -1095,7 +1101,7 @@ BEGIN
 					ON REG.RegionName = PRV.ProvinceName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'Province'
 			) PRV
@@ -1117,7 +1123,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					LMP.LocalMunicipalityID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
 				INNER JOIN
@@ -1125,7 +1132,7 @@ BEGIN
 					ON REG.RegionName = LMP.LocalMunicipalityName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'LocalMunicipality'
 			) LMP
@@ -1133,7 +1140,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					DMP.MetroID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 				INNER JOIN
@@ -1141,7 +1149,7 @@ BEGIN
 					ON REG.RegionName = DMP.MetroName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'DistrictMunicipality'
 			) DMP
@@ -1149,7 +1157,8 @@ BEGIN
 		LEFT OUTER JOIN
 			(
 				SELECT
-					*
+					PRV.ProvinceID,
+					REG.RegionId
 				FROM
 					[NCCRD].[dbo].[tb_erm_Province] PRV
 				INNER JOIN
@@ -1157,7 +1166,7 @@ BEGIN
 					ON REG.RegionName = PRV.ProvinceName
 				INNER JOIN
 					[NCCRDv2].[dbo].[LocationType] LT
-					ON LT.LocationTypeId = REG.LocationType_LocationTypeId
+					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'Province'
 			) PRV
@@ -1172,8 +1181,8 @@ BEGIN
 	INSERT INTO
 		[NCCRDv2].[dbo].[ProjectTypology]
 		(
-			Project_ProjectId,
-			Typology_TypologyID
+			ProjectId,
+			TypologyID
 		)
 	SELECT
 		PT.ProjectId,
@@ -1224,8 +1233,8 @@ BEGIN
 	INSERT INTO
 		[NCCRDv2].[dbo].[ProjectTypology]
 		(
-			Project_ProjectId,
-			Typology_TypologyID
+			ProjectId,
+			TypologyID
 		)
 	SELECT
 		P.ProjectId,
@@ -1234,9 +1243,9 @@ BEGIN
 		[NCCRDv2].[dbo].[Project] P
 	LEFT OUTER JOIN
 		[NCCRDv2].[dbo].[ProjectTypology] PT
-		ON PT.Project_ProjectId = P.ProjectId
+		ON PT.ProjectId = P.ProjectId
 	WHERE
-		PT.Project_ProjectId IS NULL
+		PT.ProjectId IS NULL
 END
 
 
@@ -1260,15 +1269,15 @@ BEGIN
 	INSERT INTO
 		[NCCRDv2].[dbo].[MitigationDetails]
 		(
-			CarbonCredit_CarbonCreditId,
-			CarbonCreditMarket_CarbonCreditMarketId,
-			CDMStatus_CDMStatusId,
-			CDMMethodology_CDMMethodologyId,
-			VoluntaryMethodology_VoluntaryMethodologyId,
+			CarbonCreditId,
+			CarbonCreditMarketId,
+			CDMStatusId,
+			CDMMethodologyId,
+			VoluntaryMethodologyId,
 			OtherDescription,
 			CDMProjectNumber,
-			Project_ProjectId,
-			Sector_SectorId
+			ProjectId,
+			SectorId
 		)
 	SELECT
 		CC.CarbonCreditId,
@@ -1300,10 +1309,10 @@ BEGIN
 				ON SEC.[Value] = MSS.MainSubSectorType
 			INNER JOIN
 				[NCCRDv2].[dbo].[SectorType] ST
-				ON ST.SectorTypeId = SEC.SectorType_SectorTypeId
+				ON ST.SectorTypeId = SEC.SectorTypeId
 			INNER JOIN
 				[NCCRDv2].[dbo].[Typology] T
-				ON T.TypologyID = SEC.Typology_TypologyID
+				ON T.TypologyID = SEC.TypologyID
 			WHERE
 				ST.[Name] = 'MainSubSector'
 			AND
@@ -1322,10 +1331,10 @@ BEGIN
 				ON SEC.[Value] = SS.SubSectorType
 			INNER JOIN
 				[NCCRDv2].[dbo].[SectorType] ST
-				ON ST.SectorTypeId = SEC.SectorType_SectorTypeId
+				ON ST.SectorTypeId = SEC.SectorTypeId
 			INNER JOIN
 				[NCCRDv2].[dbo].[Typology] T
-				ON T.TypologyID = SEC.Typology_TypologyID
+				ON T.TypologyID = SEC.TypologyID
 			WHERE
 				ST.[Name] = 'SubSector'
 			AND
@@ -1434,7 +1443,7 @@ BEGIN
 			BioWaste_CO2e,
 			Geothermal,
 			Geothermal_CO2e,
-			Project_ProjectId
+			ProjectId
 		)
 	SELECT
 		MED.[Year],
@@ -1484,9 +1493,9 @@ BEGIN
 	INSERT INTO
 		[NCCRDv2].[dbo].[AdaptationDetails]
 		(
-			AdaptationPurpose_AdaptationPurposeId,
-			Project_ProjectId,
-			Sector_SectorId
+			AdaptationPurposeId,
+			ProjectId,
+			SectorId
 		)
 	SELECT
 		AP.AdaptationPurposeId,
@@ -1532,10 +1541,10 @@ BEGIN
 				ON SEC.[Value] = PLV.ItemDisplay
 			INNER JOIN
 				[NCCRDv2].[dbo].[SectorType] ST
-				ON ST.SectorTypeId = SEC.SectorType_SectorTypeId
+				ON ST.SectorTypeId = SEC.SectorTypeId
 			INNER JOIN
 				[NCCRDv2].[dbo].[Typology] T
-				ON T.TypologyID = SEC.Typology_TypologyID
+				ON T.TypologyID = SEC.TypologyID
 			WHERE
 				PL.ListName = 'Adaptation Host Sector'	
 			AND
@@ -1555,9 +1564,9 @@ BEGIN
 		(
 			Author,
 			PaperLink,
-			ResearchType_ResearchTypeId,
-			TargetAudience_TargetAudienceId,
-			Project_ProjectId
+			ResearchTypeId,
+			TargetAudienceId,
+			ProjectId
 		)
 	SELECT
 		RD.Author,

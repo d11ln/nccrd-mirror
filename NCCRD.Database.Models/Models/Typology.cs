@@ -12,11 +12,7 @@ namespace NCCRD.Database.Models
     public class Typology
     {
         public int TypologyID { get; set; }
-
         [Required]
         public string Value { get; set; }
-
-        //public ICollection<ProjectTypology> ProjectTypologies { get; set; }
-        //public ICollection<Sector> Sectors { get; set; }
     }
 }

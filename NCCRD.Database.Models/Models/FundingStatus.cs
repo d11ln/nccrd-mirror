@@ -12,12 +12,8 @@ namespace NCCRD.Database.Models
     public class FundingStatus
     {
         public int FundingStatusId { get; set; }
-
         [Required]
         public string Value { get; set; }
-
         public string Description { get; set; }
-
-        //public ICollection<ProjectFunder> ProjectFunders { get; set; }
     }
 }

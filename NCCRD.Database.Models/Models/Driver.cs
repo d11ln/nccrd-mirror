@@ -11,7 +11,5 @@ namespace NCCRD.Database.Models
     public class Driver
     {
         public int DriverId { get; set; }
-
-        //public ICollection<Hazard> Hazards { get; set; }
     }
 }

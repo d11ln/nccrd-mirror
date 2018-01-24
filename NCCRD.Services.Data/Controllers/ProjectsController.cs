@@ -56,17 +56,7 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                project = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .FirstOrDefault(x => x.ProjectId == id);
+                project = context.Project.FirstOrDefault(x => x.ProjectId == id);
             }
 
             return project;

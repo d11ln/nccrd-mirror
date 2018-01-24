@@ -13,9 +13,13 @@ namespace NCCRD.Database.Models
     {
         public int ProjectRegionId { get; set; }
 
+        //FK - Project
+        public int ProjectId { get; set; }
         [Required]
         public Project Project { get; set; }
 
+        //FK - Region
+        public int RegionId { get; set; }
         [Required]
         public Region Region { get; set; }
     }
