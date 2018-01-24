@@ -19,6 +19,6 @@ namespace NCCRD.Database.Models
         [Required]
         public string URL { get; set; }
 
-        public ICollection<AccessRight> AccessRights { get; set; }
+        //public ICollection<AccessRight> AccessRights { get; set; }
     }
 }

@@ -16,6 +16,6 @@ namespace NCCRD.Database.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Sector> Sectors { get; set; }
+        //public ICollection<Sector> Sectors { get; set; }
     }
 }

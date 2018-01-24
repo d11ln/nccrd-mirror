@@ -1,5 +1,714 @@
--- ## (5) NCCRD Data Migration Script - Project Data ## --
-USE Master
+-- ## NCCRD Data Migration Script ## --
+USE master
+
+--Title--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Title) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.Title
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'User Title'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--Typology--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Typology) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.Typology
+		(
+			[Value]
+		)
+	VALUES
+		('Mitigation'),
+		('Adaptation'),
+		('Research'),
+		('UNDEFINED')
+END
+
+--ProjectType--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.ProjectType) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.ProjectType
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Type of Project'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--ProjectStatus--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.ProjectStatus) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.ProjectStatus
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Status'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--CarbonCredit--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.CarbonCredit) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.CarbonCredit
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Carbon credits'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--CarbonCreditMarket--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.CarbonCreditMarket) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.CarbonCreditMarket
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Carbon credit Market'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--CDMStatus--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.CDMStatus) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.CDMStatus
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'CDM Status'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--ValidationStatus--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.ValidationStatus) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.ValidationStatus
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'DEAT Validation Status'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--CDMMethodology--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.CDMMethodology) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.CDMMethodology
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'CDM Approved Methodology'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--VoluntaryGoldStandard--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.VoluntaryGoldStandard) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.VoluntaryGoldStandard
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Voluntary Gold Standard'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--ResearchType--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.ResearchType) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.ResearchType
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Type of research'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--TargetAudience--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.TargetAudience) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.TargetAudience
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Target audience'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--AdaptationPurpose--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.AdaptationPurpose) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.AdaptationPurpose
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Purpose of adaptation'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--FundingStatus--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.FundingStatus) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.FundingStatus
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Funding Status'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--Country--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Country) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.Country
+		(
+			[Value]
+		)
+	SELECT
+		PLV.ItemDisplay
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Country'
+	ORDER BY
+		PLV.ItemOrder
+END
+
+--LocationType--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.LocationType) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.LocationType
+		(
+			[Value]
+		)
+	VALUES
+		('Ward'),
+		('LocalMunicipality'),
+		('DistrictMunicipality'),
+		('Province')
+END
+
+--ProjectSubType--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.ProjectSubType) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.ProjectSubType
+		(
+			[Value],
+			ProjectType_ProjectTypeId
+		)
+	SELECT
+		PST.ProjectSubType,
+		PT.ProjectTypeId
+	FROM
+		[NCCRD].[dbo].[tb_erm_Project_SubType] PST
+	INNER JOIN
+		(
+			SELECT
+				PLV.*
+			FROM
+				[NCCRD].dbo.tb_erm_picklist PL
+			INNER JOIN
+				[NCCRD].dbo.tb_erm_picklist_value PLV
+				ON PL.ListId = PLV.ListId
+			WHERE
+				PL.ListName = 'Type of Project'
+		) LU
+		ON LU.ItemNum = PST.ProjectTypeId
+	INNER JOIN
+		[NCCRDv2].[dbo].[ProjectType] PT
+		ON PT.[Value] = LU.ItemDisplay		
+END
+
+--Funder--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Funder) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.Funder
+		(
+			[Name]
+		)
+	SELECT DISTINCT
+		FND.Funder
+	FROM
+		(
+			SELECT LTRIM(RTRIM(HostPartner)) AS [Funder] FROM [NCCRD].[dbo].[tb_erm_project_details]
+			UNION ALL
+			SELECT LTRIM(RTRIM(FundingOrganisation)) AS [Funder] FROM [NCCRD].[dbo].[tb_erm_project_details]
+			WHERE FundingOrganisation NOT LIKE '%French Development Bank'
+			UNION ALL
+			SELECT LTRIM(RTRIM(FundingPartner)) AS [Funder] FROM [NCCRD].[dbo].[tb_erm_project_details]
+			UNION ALL
+			SELECT 'French Development Bank' AS [Funder]
+		) FND
+	WHERE
+		FND.Funder <> ''
+	ORDER BY
+		FND.Funder
+END
+
+--SectorTypes--
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.SectorType) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].dbo.SectorType
+		(
+			[Name]
+		)
+	VALUES
+		('HostSector'),
+		('MainSubSector'),
+		('SubSector')
+
+	--ADAPTATION--
+
+	--HostSector--
+	INSERT INTO
+		[NCCRDv2].dbo.Sector
+		(
+			[Value],
+			SectorType_SectorTypeId,
+			Typology_TypologyID
+		)
+	SELECT
+		PLV.ItemDisplay,
+		(SELECT SectorTypeId FROM [NCCRDv2].dbo.SectorType WHERE [Name] = 'HostSector'),
+		(SELECT TypologyID FROM [NCCRDv2].dbo.Typology WHERE [Value] = 'Adaptation')
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Adaptation Host Sector'
+
+	--MITIGATION--
+
+	--HostSector--
+	INSERT INTO
+		[NCCRDv2].dbo.Sector
+		(
+			[Value],
+			SectorType_SectorTypeId,
+			Typology_TypologyID
+		)
+	SELECT
+		PLV.ItemDisplay,
+		(SELECT SectorTypeId FROM [NCCRDv2].dbo.SectorType WHERE [Name] = 'HostSector'),
+		(SELECT TypologyID FROM [NCCRDv2].dbo.Typology WHERE [Value] = 'Mitigation')
+	FROM
+		[NCCRD].dbo.tb_erm_picklist PL
+	INNER JOIN
+		[NCCRD].dbo.tb_erm_picklist_value PLV
+		ON PL.ListId = PLV.ListId
+	WHERE
+		PL.ListName = 'Host Sector'
+
+	--MainSubSector--
+	INSERT INTO
+		[NCCRDv2].dbo.Sector
+		(
+			[Value],
+			SectorType_SectorTypeId,
+			Typology_TypologyID,
+			ParentSectorId
+		)
+	SELECT
+		MSS.MainSubSectorType,
+		(SELECT SectorTypeId FROM [NCCRDv2].dbo.SectorType WHERE [Name] = 'MainSubSector'),
+		(SELECT TypologyID FROM [NCCRDv2].dbo.Typology WHERE [Value] = 'Mitigation'),
+		PS.SectorId
+	FROM
+		[NCCRD].[dbo].[tb_erm_Mitigation_MainSubSector] MSS
+	INNER JOIN
+		(
+			SELECT
+				PLV.*
+			FROM
+				[NCCRD].dbo.tb_erm_picklist PL
+			INNER JOIN
+				[NCCRD].dbo.tb_erm_picklist_value PLV
+				ON PL.ListId = PLV.ListId
+			WHERE
+				PL.ListName = 'Host Sector'
+		) HS
+		ON HS.ItemNum = MSS.HostSectorId
+	INNER JOIN
+		(
+			SELECT
+				S.*
+			FROM
+				[NCCRDv2].dbo.Sector S
+			INNER JOIN
+				[NCCRDv2].dbo.SectorType ST
+				ON S.SectorType_SectorTypeId = ST.SectorTypeId
+			INNER JOIN
+				[NCCRDv2].dbo.Typology T
+				ON T.TypologyID = S.Typology_TypologyID
+			WHERE
+				ST.Name = 'HostSector'	
+				AND
+				T.Value = 'Mitigation'		
+		) PS
+		ON PS.Value = HS.ItemDisplay
+
+	--SubSector--
+	INSERT INTO
+		[NCCRDv2].dbo.Sector
+		(
+			[Value],
+			SectorType_SectorTypeId,
+			Typology_TypologyID,
+			ParentSectorId
+		)
+	SELECT
+		SS.SubSectorType,
+		(SELECT SectorTypeId FROM [NCCRDv2].dbo.SectorType WHERE [Name] = 'SubSector'),
+		(SELECT TypologyID FROM [NCCRDv2].dbo.Typology WHERE [Value] = 'Mitigation'),
+		PS.SectorId
+	FROM
+		[NCCRD].[dbo].[tb_erm_Mitigation_SubSector] SS
+	INNER JOIN
+		[NCCRD].[dbo].[tb_erm_Mitigation_MainSubSector] MSS
+		ON SS.MainSubSectorId = MSS.MainSubSectorId
+	INNER JOIN
+		(
+			SELECT
+				S.*
+			FROM
+				[NCCRDv2].dbo.Sector S
+			INNER JOIN
+				[NCCRDv2].dbo.SectorType ST
+				ON S.SectorType_SectorTypeId = ST.SectorTypeId
+			INNER JOIN
+				[NCCRDv2].dbo.Typology T
+				ON T.TypologyID = S.Typology_TypologyID
+			WHERE
+				ST.Name = 'MainSubSector'	
+				AND
+				T.Value = 'Mitigation'		
+		) PS
+		ON PS.Value = MSS.MainSubSectorType
+END
+
+IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[UserRoles]) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].[dbo].[UserRoles]
+		(
+			RoleName
+		)	
+	SELECT
+		R.RoleName
+	FROM
+		[NCCRD].[dbo].[tb_erm_roles] R
+
+	INSERT INTO
+		[NCCRDv2].[dbo].[UserRoles]
+		(
+			RoleName
+		)
+	VALUES
+		('Funder'),	
+		('ProjectOwner'),	
+		('OptionOwner')
+END
+
+IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[Users]) = 0
+BEGIN
+INSERT INTO
+	[NCCRDv2].[dbo].[Users]
+    (
+		[Username]
+        ,[Password]
+        ,[Blocked]
+        ,[FirstName]
+        ,[Surname]
+        ,[JobTitle]
+        ,[Organisation]
+        ,[PhysicalAddressLine1]
+        ,[PhysicalAddressLine2]
+        ,[PhysicalAddressLine3]
+        ,[PhysicalAddressTown]
+        ,[PhysicalAddressPostalCode]
+        ,[PhysicalAddressProvince]
+        ,[PhysicalAddressCountry]
+        ,[PostalAddressLine1]
+        ,[PostalAddressLine2]
+        ,[PostalAddressLine3]
+        ,[PostalAddressTown]
+        ,[PostalAddressPostalCode]
+        ,[PostalAddressProvince]
+        ,[PostalAddressCountry]
+        ,[PhoneNumber]
+        ,[MobileNumber]
+        ,[FaxNumber]
+        ,[Title_TitleId]
+        ,[UserRole_UserRoleId]
+	)
+    SELECT
+		R.AppUserName,
+		R.AppUserpwd,
+		R.IsBlock,
+		R.UserFirstName,
+		R.UserSurname,
+		R.UserJobTitle,
+		R.UserOrganisation,
+		R.PhysLine1,
+		R.PhysLine2,
+		R.PhysLine3,
+		R.PhyTown,
+		R.PhyCode,
+		R.PhyProvince,
+		LUC.ItemDisplay,
+		R.PostLine1,
+		R.PostLine2,
+		R.PostLine3,
+		R.PostTown,
+		R.PostCode,
+		R.PostProvince,
+		R.PostCountry,
+		R.UserPhoneNumber,
+		R.UserMobileNumber,
+		R.UserFax,
+		T.TitleId,
+		UR.UserRoleId
+	FROM
+		[NCCRD].[dbo].[tb_erm_appusers] R
+	INNER JOIN
+		(
+			SELECT
+				PLV.*
+			FROM
+				[NCCRD].[dbo].[tb_erm_picklist] PL
+			INNER JOIN	
+				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
+				ON PL.ListId = PLV.ListId
+			WHERE
+				PL.ListName = 'User Title'
+		) LUT
+		ON LUT.ItemNum = R.UserTitle
+	INNER JOIN
+		[NCCRDv2].[dbo].Title T
+		ON T.[Value] = LUT.ItemDisplay
+	INNER JOIN
+		[NCCRD].[dbo].[tb_erm_roles] LUR
+		ON LUR.RoleID = R.RoleID
+	INNER JOIN
+		[NCCRDv2].[dbo].UserRoles UR
+		ON LUR.RoleName = UR.RoleName
+	INNER JOIN
+		(
+			SELECT
+				PLV.*
+			FROM
+				[NCCRD].[dbo].[tb_erm_picklist] PL
+			INNER JOIN	
+				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
+				ON PL.ListId = PLV.ListId
+			WHERE
+				PL.ListName = 'Country'
+		) LUC
+		ON LUC.ItemNum = R.PhyCountry
+		
+END
+
+IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[Region]) = 0
+BEGIN
+	--Province--
+	INSERT INTO
+		[NCCRDv2].[dbo].[Region]
+		(
+			RegionName,
+			LocationType_LocationTypeId
+		)
+	SELECT
+		P.ProvinceName,
+		(SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'Province')
+	FROM
+		[NCCRD].[dbo].[tb_erm_Province] P
+
+	--DistrictMunicipality--
+	INSERT INTO
+		[NCCRDv2].[dbo].[Region]
+		(
+			RegionName,
+			LocationType_LocationTypeId,
+			ParentRegionId
+		)
+	SELECT
+		DMP.MetroName,
+		(SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality'),
+		REG.RegionId
+	FROM
+		[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
+	INNER JOIN
+		[NCCRD].[dbo].[tb_erm_Province] PRV
+		ON PRV.ProvinceID = DMP.ProvinceID
+	INNER JOIN
+		[NCCRDv2].[dbo].[Region] REG
+		ON REG.RegionName = PRV.ProvinceName
+		AND REG.LocationType_LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'Province')
+
+	--LocalMunicipality--
+	INSERT INTO
+		[NCCRDv2].[dbo].[Region]
+		(
+			RegionName,
+			LocationType_LocationTypeId,
+			ParentRegionId
+		)
+	SELECT
+		LMP.LocalMunicipalityName,
+		(SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'LocalMunicipality'),
+		REG.RegionId
+	FROM
+		[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
+	INNER JOIN
+		[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
+		ON DMP.MetroID = LMP.MetroID
+	INNER JOIN
+		[NCCRDv2].[dbo].[Region] REG
+		ON REG.RegionName = DMP.MetroName
+		AND REG.LocationType_LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality')
+END
 
 --PROJECTS--
 IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[Project]) = 0
@@ -457,6 +1166,80 @@ BEGIN
 END
 
 
+--PROJECT TYPOLOGY--
+IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[ProjectTypology]) = 0
+BEGIN
+	INSERT INTO
+		[NCCRDv2].[dbo].[ProjectTypology]
+		(
+			Project_ProjectId,
+			Typology_TypologyID
+		)
+	SELECT
+		PT.ProjectId,
+		PT.TypologyId
+	FROM
+		(
+			SELECT	
+				P.ProjectId,
+				(SELECT TOP(1) T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Mitigation') AS [TypologyId]
+			FROM
+				[NCCRD].[dbo].[tb_erm_project_details] PD
+			INNER JOIN
+				[NCCRDv2].[dbo].[Project] P
+				ON P.ProjectTitle = PD.ProjectTitle
+			INNER JOIN
+				[NCCRD].[dbo].[tb_erm_mitigation_details] MD
+				ON MD.ProjectDetailsId = PD.ProjectDetailsId
+
+			UNION ALL
+
+			SELECT	
+				P.ProjectId,
+				(SELECT TOP(1) T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Adaptation') AS [TypologyID]
+			FROM
+				[NCCRD].[dbo].[tb_erm_project_details] PD
+			INNER JOIN
+				[NCCRDv2].[dbo].[Project] P
+				ON P.ProjectTitle = PD.ProjectTitle
+			INNER JOIN
+				[NCCRD].[dbo].[tb_erm_Project_Adaptation_Data] PAD
+				ON PAD.ProjectDetailsId = PD.ProjectDetailsId
+
+			UNION ALL
+
+			SELECT	
+				P.ProjectId,
+				(SELECT TOP(1) T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Research') AS [TypologyId]
+			FROM
+				[NCCRD].[dbo].[tb_erm_project_details] PD
+			INNER JOIN
+				[NCCRDv2].[dbo].[Project] P
+				ON P.ProjectTitle = PD.ProjectTitle
+			INNER JOIN
+				[NCCRD].[dbo].[tb_erm_Project_Research_Data] PRD
+				ON PRD.ProjectDetailsId = PD.ProjectDetailsId
+		) PT
+
+	INSERT INTO
+		[NCCRDv2].[dbo].[ProjectTypology]
+		(
+			Project_ProjectId,
+			Typology_TypologyID
+		)
+	SELECT
+		P.ProjectId,
+		(SELECT T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'UNDEFINED')
+	FROM
+		[NCCRDv2].[dbo].[Project] P
+	LEFT OUTER JOIN
+		[NCCRDv2].[dbo].[ProjectTypology] PT
+		ON PT.Project_ProjectId = P.ProjectId
+	WHERE
+		PT.Project_ProjectId IS NULL
+END
+
+
 --[MITIGATION DETAILS]--
 IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[MitigationDetails]) = 0
 BEGIN
@@ -825,14 +1608,3 @@ BEGIN
 		[NCCRDv2].[dbo].[Project] P
 		ON P.ProjectTitle = PD.ProjectTitle
 END
-
-
-SELECT * FROM [NCCRDv2].[dbo].[Project]
-SELECT * FROM [NCCRDv2].[dbo].[AdaptationDetails]
-SELECT * FROM [NCCRDv2].[dbo].[ResearchDetails]
-SELECT * FROM [NCCRDv2].[dbo].[MitigationDetails]
-SELECT * FROM [NCCRDv2].[dbo].[MitigationEmissionsData]
-SELECT * FROM [NCCRDv2].[dbo].[Location]
-SELECT * FROM [NCCRDv2].[dbo].[ProjectLocation]
-SELECT * FROM [NCCRDv2].[dbo].[ProjectFunder]
-SELECT * FROM [NCCRDv2].[dbo].[ProjectRegion]

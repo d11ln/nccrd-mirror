@@ -56,13 +56,13 @@ namespace NCCRD.Database.Models
 
         public MAOption MAOption { get; set; } //Optional
 
-        public ICollection<AdaptationDetail> AdaptationDetails { get; set; }
-        public ICollection<MitigationDetail> MitigationDetails { get; set; }
-        public ICollection<MitigationEmissionsData> MitigationEmissionsData { get; set; }
-        public ICollection<ResearchDetail> ResearchDetails { get; set; }
-        public ICollection<ProjectTypology> ProjectTypologies { get; set; }
-        public ICollection<ProjectFunder> ProjectFunders { get; set; }
-        public ICollection<ProjectRegion> ProjectRegions { get; set; }
-        public ICollection<ProjectLocation> ProjectLocations { get; set; }
+        //public ICollection<AdaptationDetail> AdaptationDetails { get; set; }
+        //public ICollection<MitigationDetail> MitigationDetails { get; set; }
+        //public ICollection<MitigationEmissionsData> MitigationEmissionsData { get; set; }
+        //public ICollection<ResearchDetail> ResearchDetails { get; set; }
+        //public ICollection<ProjectTypology> ProjectTypologies { get; set; }
+        //public ICollection<ProjectFunder> ProjectFunders { get; set; }
+        //public ICollection<ProjectRegion> ProjectRegions { get; set; }
+        //public ICollection<ProjectLocation> ProjectLocations { get; set; }
     }
 }

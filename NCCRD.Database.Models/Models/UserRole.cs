@@ -16,7 +16,7 @@ namespace NCCRD.Database.Models
         [Required]
         public string RoleName { get; set; }
 
-        public ICollection<User> Users { get; set; }
-        public ICollection<AccessRight> AccessRights { get; set; }
+        //public ICollection<User> Users { get; set; }
+        //public ICollection<AccessRight> AccessRights { get; set; }
     }
 }

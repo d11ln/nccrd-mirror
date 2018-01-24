@@ -20,9 +20,10 @@ namespace NCCRD.Database.Models
         [Required]
         public LocationType LocationType { get; set; }
 
-        public Region ParentRegion { get; set; }
+        //public Region ParentRegion { get; set; }
+        public int? ParentRegionID { get; set; }
 
-        public ICollection<ProjectRegion> ProjectRegions { get; set; }
-        public ICollection<OptionRegion> OptionRegions { get; set; }
+        //public ICollection<ProjectRegion> ProjectRegions { get; set; }
+        //public ICollection<OptionRegion> OptionRegions { get; set; }
     }
 }

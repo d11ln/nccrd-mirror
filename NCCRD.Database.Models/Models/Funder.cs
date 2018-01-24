@@ -18,7 +18,7 @@ namespace NCCRD.Database.Models
 
         public string Description { get; set; }
 
-        public ICollection<ProjectFunder> ProjectFunders { get; set; }
-        public ICollection<OptionFunder> OptionFunders { get; set; }
+        //public ICollection<ProjectFunder> ProjectFunders { get; set; }
+        //public ICollection<OptionFunder> OptionFunders { get; set; }
     }
 }

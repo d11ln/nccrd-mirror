@@ -16,7 +16,7 @@ namespace NCCRD.Database.Models
         [Required]
         public string Value { get; set; }
 
-        public ICollection<ProjectTypology> ProjectTypologies { get; set; }
-        public ICollection<Sector> Sectors { get; set; }
+        //public ICollection<ProjectTypology> ProjectTypologies { get; set; }
+        //public ICollection<Sector> Sectors { get; set; }
     }
 }

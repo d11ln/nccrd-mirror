@@ -18,6 +18,6 @@ namespace NCCRD.Database.Models
 
         public string Description { get; set; }
 
-        public ICollection<MitigationDetail> MitigationDetails { get; set; }
+        //public ICollection<MitigationDetail> MitigationDetails { get; set; }
     }
 }

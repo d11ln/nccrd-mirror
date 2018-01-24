@@ -10,23 +10,125 @@ using System.Web.Http;
 
 namespace NCCRD.Services.Data.Controllers
 {
+    /// <summary>
+    /// Manage Project data
+    /// </summary>
     public class ProjectsController : ApiController
     {
         /// <summary>
-        /// Gat all projects
+        /// Get all Projects
         /// </summary>
-        /// <returns></returns>
-        public string Get()
+        /// <returns>Projects data as JSON</returns>
+        [HttpGet]
+        [Route("api/Projects/GetAll")]
+        public IEnumerable<Project> GetAll()
         {
-            string result = "not found";
+            List<Project> projectList = new List<Project>();
 
             using (var context = new SQLDBContext())
             {
-                var projectList = context.Project.ToList();
+                projectList = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .ToList();
+            }
 
-                if(projectList != null && projectList.Count > 0)
+            return projectList;
+        }
+
+        /// <summary>
+        /// Get Project by Id
+        /// </summary>
+        /// <param name="id">The Id of the Project to get</param>
+        /// <returns>Project data as JSON</returns>
+        [HttpGet]
+        [Route("api/Projects/GetByID/{id}")]
+        public Project GetByID(int id)
+        {
+            Project project = null;
+
+            using (var context = new SQLDBContext())
+            {
+                project = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .FirstOrDefault(x => x.ProjectId == id);
+            }
+
+            return project;
+        }
+
+        /// <summary>
+        /// Get Project by Title
+        /// </summary>
+        /// <param name="title">The Title of the Project to get</param>
+        /// <returns>Project data as JSON</returns>
+        [HttpGet]
+        [Route("api/Projects/GetByTitle/{title}")]
+        public Project GetByTitle(string title)
+        {
+            Project project = null;
+
+            using (var context = new SQLDBContext())
+            {
+                project = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .FirstOrDefault(x => x.ProjectTitle == title);
+            }
+
+            return project;
+        }
+
+        /// <summary>
+        /// Add Project
+        /// </summary>
+        /// <param name="project">The Project to add</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/Projects/Add")]
+        public bool Add([FromBody]Project project)
+        {
+            bool result = false;
+
+            using (var context = new SQLDBContext())
+            {
+                var oldProject = project = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .FirstOrDefault(x => x.ProjectId == project.ProjectId);
+
+                if (oldProject != null)
                 {
-                    result = JsonConvert.SerializeObject(projectList);
+                    result = true;
                 }
             }
 
@@ -34,52 +136,105 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
-        /// Get project by Id
+        /// Update Project
         /// </summary>
-        /// <param name="id">The Id of the Project to Get</param>
-        /// <returns></returns>
-        public string Get(string id)
+        /// <param name="project">Project to update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/Projects/Update")]
+        public bool Update([FromBody]Project project)
         {
-            string result = "not found";
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                var project = context.Project.FirstOrDefault(x => x.ProjectTitle == id);
+                var oldProject = project = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .FirstOrDefault(x => x.ProjectId == project.ProjectId);
 
-                if(project != null)
+                if (oldProject != null)
                 {
-                    result = JsonConvert.SerializeObject(project);
+                    result = true;
                 }
             }
 
             return result;
         }
 
-        //// GET api/<controller>
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+        /// <summary>
+        /// Delete Project
+        /// </summary>
+        /// <param name="project">Project to delete</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/Projects/Delete")]
+        public bool Delete([FromBody]Project project)
+        {
+            bool result = false;
 
-        //// GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+            using (var context = new SQLDBContext())
+            {
+                var oldProject = project = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .FirstOrDefault(x => x.ProjectId == project.ProjectId);
 
-        //// POST api/<controller>
-        //public void Post([FromBody]string value)
-        //{
-        //}
+                if (oldProject != null)
+                {
+                    result = true;
+                }
+            }
 
-        //// PUT api/<controller>/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
+            return result;
+        }
 
-        //// DELETE api/<controller>/5
-        //public void Delete(int id)
-        //{
-        //}
+        /// <summary>
+        /// Delete Project by Id
+        /// </summary>
+        /// <param name="id">Id of Project to delete</param>
+        /// <returns>True/False</returns>
+        [HttpGet]
+        [Route("api/Projects/DeleteById/{id}")]
+        public bool DeleteById(int id)
+        {
+            bool result = false;
+
+            using (var context = new SQLDBContext())
+            {
+                var oldProject = context.Project
+                    .Include("ProjectType")
+                    .Include("ProjectSubType.ProjectType")
+                    .Include("ProjectStatus")
+                    .Include("ProjectManager.UserRole")
+                    .Include("ProjectManager.Title")
+                    .Include("ValidationStatus")
+                    .Include("MAOption.Feasibility")
+                    .Include("MAOption.Hazard")
+                    .Include("MAOption.Sector")
+                    .FirstOrDefault(x => x.ProjectId == id);
+
+                if (oldProject != null)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
     }
 }

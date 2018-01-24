@@ -22,6 +22,6 @@ namespace NCCRD.Database.Models
         public double? LonDirection { get; set; }
         public double? LonCalculated { get; set; }
 
-        public ICollection<ProjectLocation> ProjectLocations { get; set; }
+        //public ICollection<ProjectLocation> ProjectLocations { get; set; }
     }
 }

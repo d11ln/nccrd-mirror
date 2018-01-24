@@ -18,7 +18,7 @@ namespace NCCRD.Database.Models
 
         public string Description { get; set; }
 
-        public ICollection<ProjectSubType> ProjectSubTypes { get; set; }
-        public ICollection<Project> Projects { get; set; }
+        //public virtual ICollection<ProjectSubType> ProjectSubTypes { get; set; }
+        //public virtual ICollection<Project> Projects { get; set; }
     }
 }

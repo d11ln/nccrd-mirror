@@ -12,6 +12,6 @@ namespace NCCRD.Database.Models
     {
         public int StockId { get; set; }
 
-        public ICollection<Hazard> Hazards { get; set; }
+        //public ICollection<Hazard> Hazards { get; set; }
     }
 }

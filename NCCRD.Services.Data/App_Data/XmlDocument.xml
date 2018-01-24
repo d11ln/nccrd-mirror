@@ -481,18 +481,157 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.Get">
+        <member name="T:NCCRD.Services.Data.Controllers.AccessRightsController">
             <summary>
-            Gat all projects
+            Manage AccessRights data
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.Get(System.String)">
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.GetAll">
             <summary>
-            Get project by Id
+            Get all AccessRights
             </summary>
-            <param name="id">The Id of the Project to Get</param>
-            <returns></returns>
+            <returns>AccessRights data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.GetByID(System.Int32)">
+            <summary>
+            Get AccessRight by Id
+            </summary>
+            <param name="id">The Id of the AccessRight to get</param>
+            <returns>AccessRight data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.GetByTitle(System.String)">
+            <summary>
+            Get AccessRight by RoleName
+            </summary>
+            <param name="roleName">The RoleName of the AccessRight to get</param>
+            <returns>AccessRight data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.Add(NCCRD.Database.Models.AccessRight)">
+            <summary>
+            Add AccessRight
+            </summary>
+            <param name="accessRight">The AccessRight to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.Update(NCCRD.Database.Models.AccessRight)">
+            <summary>
+            Update AccessRight
+            </summary>
+            <param name="accessRight">AccessRight to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.Delete(NCCRD.Database.Models.AccessRight)">
+            <summary>
+            Delete AccessRight
+            </summary>
+            <param name="accessRight">AccessRight to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AccessRightsController.DeleteById(System.Int32)">
+            <summary>
+            Delete AccessRight by Id
+            </summary>
+            <param name="id">Id of AccessRight to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.AdaptationDetailsController">
+            <summary>
+            Manage AdaptationDetails data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationDetailsController.GetAll">
+            <summary>
+            Get all AdaptationDetails
+            </summary>
+            <returns>AdaptationDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationDetailsController.GetByID(System.Int32)">
+            <summary>
+            Get AdaptationDetail by Id
+            </summary>
+            <param name="id">The Id of the AdaptationDetail to get</param>
+            <returns>AdaptationDetail data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationDetailsController.Add(NCCRD.Database.Models.AdaptationDetail)">
+            <summary>
+            Add AdaptationDetail
+            </summary>
+            <param name="adaptationDetail">The AdaptationDetail to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationDetailsController.Update(NCCRD.Database.Models.AdaptationDetail)">
+            <summary>
+            Update AdaptationDetail
+            </summary>
+            <param name="adaptationDetail">AdaptationDetail to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationDetailsController.Delete(NCCRD.Database.Models.AdaptationDetail)">
+            <summary>
+            Delete AdaptationDetail
+            </summary>
+            <param name="adaptationDetail">AdaptationDetail to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationDetailsController.DeleteById(System.Int32)">
+            <summary>
+            Delete AdaptationDetail by Id
+            </summary>
+            <param name="id">Id of AdaptationDetail to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectsController">
+            <summary>
+            Manage Project data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.GetAll">
+            <summary>
+            Get all Projects
+            </summary>
+            <returns>Projects data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.GetByID(System.Int32)">
+            <summary>
+            Get Project by Id
+            </summary>
+            <param name="id">The Id of the Project to get</param>
+            <returns>Project data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.GetByTitle(System.String)">
+            <summary>
+            Get Project by Title
+            </summary>
+            <param name="title">The Title of the Project to get</param>
+            <returns>Project data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.Add(NCCRD.Database.Models.Project)">
+            <summary>
+            Add Project
+            </summary>
+            <param name="project">The Project to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.Update(NCCRD.Database.Models.Project)">
+            <summary>
+            Update Project
+            </summary>
+            <param name="project">Project to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.Delete(NCCRD.Database.Models.Project)">
+            <summary>
+            Delete Project
+            </summary>
+            <param name="project">Project to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.DeleteById(System.Int32)">
+            <summary>
+            Delete Project by Id
+            </summary>
+            <param name="id">Id of Project to delete</param>
+            <returns>True/False</returns>
         </member>
     </members>
 </doc>

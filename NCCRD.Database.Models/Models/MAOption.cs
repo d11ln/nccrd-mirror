@@ -22,8 +22,8 @@ namespace NCCRD.Database.Models
         [Required]
         public Sector Sector { get; set; }
 
-        public ICollection<OptionFunder> OptionFunders { get; set; }
-        public ICollection<Project> Projects { get; set; }
-        public ICollection<OptionRegion> OptionRegions { get; set; }
+        //public ICollection<OptionFunder> OptionFunders { get; set; }
+        //public ICollection<Project> Projects { get; set; }
+        //public ICollection<OptionRegion> OptionRegions { get; set; }
     }
 }

@@ -19,6 +19,6 @@ namespace NCCRD.Database.Models
         [Required]
         public Stock Stock { get; set; }
 
-        public ICollection<MAOption> MAOptions { get; set; }
+        //public ICollection<MAOption> MAOptions { get; set; }
     }
 }

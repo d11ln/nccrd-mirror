@@ -19,13 +19,14 @@ namespace NCCRD.Database.Models
         [Required]
         public SectorType SectorType { get; set; }
 
-        public Sector ParentSector { get; set; }
+        //public Sector ParentSector { get; set; }
+        public int? ParentSectorID { get; set; } //Link to Parent-Sector
 
         public Typology Typology { get; set; }
 
-        public ICollection<MitigationDetail> MitigationDetails { get; set; }
-        public ICollection<AdaptationDetail> AdaptationDetails { get; set; }
-        public ICollection<ResearchDetail> ResearchDetails { get; set; }
-        public ICollection<MAOption> MAOptions { get; set; }
+        //public ICollection<MitigationDetail> MitigationDetails { get; set; }
+        //public ICollection<AdaptationDetail> AdaptationDetails { get; set; }
+        //public ICollection<ResearchDetail> ResearchDetails { get; set; }
+        //public ICollection<MAOption> MAOptions { get; set; }
     }
 }
