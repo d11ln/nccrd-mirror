@@ -235,7 +235,16 @@
     <Compile Include="Controllers\AdaptationDetailsController.cs" />
     <Compile Include="Controllers\AdaptationPurposeController.cs" />
     <Compile Include="Controllers\AppLogController.cs" />
+    <Compile Include="Controllers\CarbonCreditController.cs" />
+    <Compile Include="Controllers\CarbonCreditMarketController.cs" />
+    <Compile Include="Controllers\CDMMethodologyController.cs" />
+    <Compile Include="Controllers\CDMStatusController.cs" />
+    <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\FundersController.cs" />
+    <Compile Include="Controllers\FundingStatusController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\LocationTypeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

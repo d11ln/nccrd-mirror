@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NCCRD.Database.Models
 {
-    [Table("Funder")]
+    [Table("Funders")]
     public class Funder
     {
         public int FunderId { get; set; }

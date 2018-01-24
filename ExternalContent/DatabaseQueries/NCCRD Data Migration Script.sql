@@ -358,10 +358,10 @@ BEGIN
 END
 
 --Funder--
-IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Funder) = 0
+IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Funders) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2].dbo.Funder
+		[NCCRDv2].dbo.Funders
 		(
 			[Name]
 		)
@@ -852,7 +852,7 @@ BEGIN
 			[NCCRDv2].[dbo].[Project] P
 			ON P.ProjectTitle = PD.ProjectTitle
 		INNER JOIN
-			[NCCRDv2].[dbo].[Funder] FND
+			[NCCRDv2].[dbo].[Funders] FND
 			ON FND.[Name] = LTRIM(RTRIM(PD.FundingOrganisation))
 		LEFT OUTER JOIN
 			(
