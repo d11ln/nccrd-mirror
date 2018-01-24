@@ -12,7 +12,9 @@ namespace NCCRD.Database.Models
     public class Typology
     {
         public int TypologyID { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string Value { get; set; }
     }
 }

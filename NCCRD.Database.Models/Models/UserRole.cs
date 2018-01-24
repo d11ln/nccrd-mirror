@@ -12,7 +12,9 @@ namespace NCCRD.Database.Models
     public class UserRole
     {
         public int UserRoleId { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string RoleName { get; set; }
     }
 }

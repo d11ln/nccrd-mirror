@@ -12,7 +12,9 @@ namespace NCCRD.Database.Models
     public class SectorType
     {
         public int SectorTypeId { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string Name { get; set; }
     }
 }

@@ -233,6 +233,8 @@
     <Compile Include="Controllers\AccessRightsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdaptationDetailsController.cs" />
+    <Compile Include="Controllers\AdaptationPurposeController.cs" />
+    <Compile Include="Controllers\AppLogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Global.asax.cs">

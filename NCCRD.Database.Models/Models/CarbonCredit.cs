@@ -12,8 +12,11 @@ namespace NCCRD.Database.Models
     public class CarbonCredit
     {
         public int CarbonCreditId { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string Value { get; set; }
+
         public string Description { get; set; }
     }
 }

@@ -580,6 +580,85 @@
             <param name="id">Id of AdaptationDetail to delete</param>
             <returns>True/False</returns>
         </member>
+        <member name="T:NCCRD.Services.Data.Controllers.AdaptationPurposeController">
+            <summary>
+            Manage AdaptationPurpose data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationPurposeController.GetAll">
+            <summary>
+            Get all AdaptationPurpose
+            </summary>
+            <returns>AdaptationPurpose data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationPurposeController.GetByID(System.Int32)">
+            <summary>
+            Get AdaptationPurpose by Id
+            </summary>
+            <param name="id">The Id of the AdaptationPurpose to get</param>
+            <returns>AdaptationPurpose data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationPurposeController.Add(NCCRD.Database.Models.AdaptationPurpose)">
+            <summary>
+            Add AdaptationPurpose
+            </summary>
+            <param name="adaptationPurpose">The AdaptationPurpose to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationPurposeController.Update(NCCRD.Database.Models.AdaptationPurpose)">
+            <summary>
+            Update AdaptationPurpose
+            </summary>
+            <param name="adaptationPurpose">AdaptationPurpose to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationPurposeController.Delete(NCCRD.Database.Models.AdaptationPurpose)">
+            <summary>
+            Delete AdaptationPurpose
+            </summary>
+            <param name="adaptationPurpose">AdaptationPurpose to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AdaptationPurposeController.DeleteById(System.Int32)">
+            <summary>
+            Delete AdaptationPurpose by Id
+            </summary>
+            <param name="id">Id of AdaptationPurpose to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.AppLogController">
+            <summary>
+            Manage AppLog data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AppLogController.GetAll">
+            <summary>
+            Get all AppLogs
+            </summary>
+            <returns>AppLog data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AppLogController.GetByUserId(System.Int32)">
+            <summary>
+            Get AppLogs UserId
+            </summary>
+            <param name="userId">UserId to search on</param>
+            <returns>AppLog data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AppLogController.GetByUserId(System.Int32,System.Int32)">
+            <summary>
+            Get AppLogs with date range
+            </summary>
+            <param name="fromDate">From date. Format: yyyymmdd</param>
+            <param name="toDate">To date. Format: yyyymmdd</param>
+            <returns>AppLog data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.AppLogController.Add(NCCRD.Database.Models.AppLog)">
+            <summary>
+            Add AppLog entry
+            </summary>
+            <param name="appLog">The AppLog entry to add</param>
+            <returns>True/False</returns>
+        </member>
         <member name="T:NCCRD.Services.Data.Controllers.ProjectsController">
             <summary>
             Manage Project data
@@ -631,6 +710,13 @@
             Delete Project by Id
             </summary>
             <param name="id">Id of Project to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectsController.DeleteByTitle(System.String)">
+            <summary>
+            Delete Project by Title
+            </summary>
+            <param name="title">Title of Project to delete</param>
             <returns>True/False</returns>
         </member>
     </members>

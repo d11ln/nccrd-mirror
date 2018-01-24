@@ -12,8 +12,11 @@ namespace NCCRD.Database.Models
     public class ResearchType
     {
         public int ResearchTypeId { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string Value { get; set; }
+
         public string Description { get; set; }
     }
 }

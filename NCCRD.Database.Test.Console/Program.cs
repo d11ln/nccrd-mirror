@@ -100,7 +100,7 @@ namespace DatabaseTest
 
                 context.AppLog.Add(new AppLog()
                 {
-                    ActiveUser = activeUser,
+                    ActiveUserId = activeUser.UserId,
                     LogTime = DateTime.Now,
                     Message = "User Passwords Hashed"
                 });

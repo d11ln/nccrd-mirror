@@ -64,10 +64,12 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAdaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
-
-                if (oldAdaptationDetail != null)
+                if(context.AdaptationDetails.Count(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId) == 0)
                 {
+                    //Add AdaptationDetails entry
+                    context.AdaptationDetails.Add(adaptationDetail);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -88,10 +90,16 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAdaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
-
-                if (oldAdaptationDetail != null)
+                //Check if exists
+                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
+                if (existAD != null)
                 {
+                    existAD.Description = adaptationDetail.Description;
+                    existAD.AdaptationPurpose = adaptationDetail.AdaptationPurpose;
+                    existAD.Project = adaptationDetail.Project;
+                    existAD.Sector = adaptationDetail.Sector;
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -112,10 +120,13 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAdaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
-
-                if (oldAdaptationDetail != null)
+                //Check if exists
+                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
+                if (existAD != null)
                 {
+                    context.AdaptationDetails.Remove(existAD);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -136,10 +147,13 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAdaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == id);
-
-                if (oldAdaptationDetail != null)
+                //Check if exists
+                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == id);
+                if (existAD != null)
                 {
+                    context.AdaptationDetails.Remove(existAD);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }

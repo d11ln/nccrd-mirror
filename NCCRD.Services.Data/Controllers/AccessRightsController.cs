@@ -83,10 +83,11 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == accessRight.AccessRightId);
-
-                if (oldAccessRight != null)
+                if(context.AccessRights.Count(x => x.AccessRightId == accessRight.AccessRightId || (x.SitePage == accessRight.SitePage && x.UserRole == accessRight.UserRole)) == 0)
                 {
+                    context.AccessRights.Add(accessRight);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -107,10 +108,20 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == accessRight.AccessRightId);
+                //Check if exists
+                var existAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == accessRight.AccessRightId || (x.SitePage == accessRight.SitePage && x.UserRole == accessRight.UserRole));
 
-                if (oldAccessRight != null)
+                if (existAccessRight != null)
                 {
+                    //Update
+                    existAccessRight.AllowRead = accessRight.AllowRead;
+                    existAccessRight.AllowAdd = accessRight.AllowAdd;
+                    existAccessRight.AllowUpdate = accessRight.AllowUpdate;
+                    existAccessRight.AllowDelete = accessRight.AllowDelete;
+                    existAccessRight.UserRole = accessRight.UserRole;
+                    existAccessRight.SitePage = accessRight.SitePage;
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -131,10 +142,14 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == accessRight.AccessRightId);
-
-                if (oldAccessRight != null)
+                //Check is exist
+                var existAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == accessRight.AccessRightId || (x.SitePage == accessRight.SitePage && x.UserRole == accessRight.UserRole));
+                if (existAccessRight != null)
                 {
+                    //Delete
+                    context.AccessRights.Remove(existAccessRight);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -155,10 +170,14 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == id);
-
-                if (oldAccessRight != null)
+                //Check is exists
+                var existAccessRight = context.AccessRights.FirstOrDefault(x => x.AccessRightId == id);
+                if (existAccessRight != null)
                 {
+                    //Delete
+                    context.AccessRights.Remove(existAccessRight);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }

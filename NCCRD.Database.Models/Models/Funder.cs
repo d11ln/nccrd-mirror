@@ -12,8 +12,11 @@ namespace NCCRD.Database.Models
     public class Funder
     {
         public int FunderId { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string Name { get; set; }
+
         public string Description { get; set; }
     }
 }

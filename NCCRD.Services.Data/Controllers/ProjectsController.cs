@@ -1,6 +1,5 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,17 +26,7 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                projectList = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .ToList();
+                projectList = context.Project.ToList();
             }
 
             return projectList;
@@ -75,17 +64,7 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                project = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .FirstOrDefault(x => x.ProjectTitle == title);
+                project = context.Project.FirstOrDefault(x => x.ProjectTitle == title);
             }
 
             return project;
@@ -104,22 +83,15 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldProject = project = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .FirstOrDefault(x => x.ProjectId == project.ProjectId);
-
-                if (oldProject != null)
+                //Check if Project exists
+                if (context.Project.Count(x => x.ProjectTitle == project.ProjectTitle) == 0)
                 {
+                    //Add Project
+                    context.Project.Add(project);                  
+                    context.SaveChanges();
+
                     result = true;
-                }
+                }    
             }
 
             return result;
@@ -138,20 +110,33 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldProject = project = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .FirstOrDefault(x => x.ProjectId == project.ProjectId);
-
-                if (oldProject != null)
+                //Check if Project exists
+                var existProj = context.Project.FirstOrDefault(x => x.ProjectId == project.ProjectId);
+                if(existProj != null)
                 {
+                    //Update existing project
+                    existProj.ProjectTitle = project.ProjectTitle;
+                    existProj.ProjectDescription = project.ProjectDescription;
+                    existProj.LeadAgent = project.LeadAgent;
+                    existProj.HostPartner = project.HostPartner;
+                    existProj.HostOrganisation = project.HostOrganisation;
+                    existProj.StartYear = project.StartYear;
+                    existProj.EndYear = project.EndYear;
+                    existProj.ReminderSent = project.ReminderSent;
+                    existProj.AlternativeContact = project.AlternativeContact;
+                    existProj.AlternativeContactEmail = project.AlternativeContactEmail;
+                    existProj.Link = project.Link;
+                    existProj.ValidationComments = project.ValidationComments;
+                    existProj.BudgetLower = project.BudgetLower;
+                    existProj.BudgetUpper = project.BudgetUpper;
+                    existProj.ProjectType = project.ProjectType;
+                    existProj.ProjectSubType = project.ProjectSubType;
+                    existProj.ProjectStatus = project.ProjectStatus;
+                    existProj.ProjectManager = project.ProjectManager;
+                    existProj.ValidationStatus = project.ValidationStatus;
+                    existProj.MAOption = project.MAOption;
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -172,20 +157,14 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldProject = project = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .FirstOrDefault(x => x.ProjectId == project.ProjectId);
-
-                if (oldProject != null)
+                //Check if Project exists
+                var delProj = context.Project.FirstOrDefault(x => x.ProjectId == project.ProjectId);
+                if(delProj != null)
                 {
+                    //Remove Project
+                    context.Project.Remove(delProj);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }
@@ -206,20 +185,42 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                var oldProject = context.Project
-                    .Include("ProjectType")
-                    .Include("ProjectSubType.ProjectType")
-                    .Include("ProjectStatus")
-                    .Include("ProjectManager.UserRole")
-                    .Include("ProjectManager.Title")
-                    .Include("ValidationStatus")
-                    .Include("MAOption.Feasibility")
-                    .Include("MAOption.Hazard")
-                    .Include("MAOption.Sector")
-                    .FirstOrDefault(x => x.ProjectId == id);
-
-                if (oldProject != null)
+                //Check if Project exists
+                var delProj = context.Project.FirstOrDefault(x => x.ProjectId == id);
+                if (delProj != null)
                 {
+                    //Remove Project
+                    context.Project.Remove(delProj);
+                    context.SaveChanges();
+
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Delete Project by Title
+        /// </summary>
+        /// <param name="title">Title of Project to delete</param>
+        /// <returns>True/False</returns>
+        [HttpGet]
+        [Route("api/Projects/DeleteByTitle/{title}")]
+        public bool DeleteByTitle(string title)
+        {
+            bool result = false;
+
+            using (var context = new SQLDBContext())
+            {
+                //Check if Project exists
+                var delProj = context.Project.FirstOrDefault(x => x.ProjectTitle == title);
+                if (delProj != null)
+                {
+                    //Remove Project
+                    context.Project.Remove(delProj);
+                    context.SaveChanges();
+
                     result = true;
                 }
             }

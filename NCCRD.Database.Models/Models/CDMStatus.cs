@@ -12,8 +12,11 @@ namespace NCCRD.Database.Models
     public class CDMStatus
     {
         public int CDMStatusId { get; set; }
+
         [Required]
+        [MaxLength(450)]
         public string Value { get; set; }
+
         public string Description { get; set; }
     }
 }
