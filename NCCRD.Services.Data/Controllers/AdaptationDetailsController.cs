@@ -95,9 +95,9 @@ namespace NCCRD.Services.Data.Controllers
                 if (existAD != null)
                 {
                     existAD.Description = adaptationDetail.Description;
-                    existAD.AdaptationPurpose = adaptationDetail.AdaptationPurpose;
-                    existAD.Project = adaptationDetail.Project;
-                    existAD.Sector = adaptationDetail.Sector;
+                    existAD.AdaptationPurposeId = adaptationDetail.AdaptationPurposeId;
+                    existAD.ProjectId = adaptationDetail.ProjectId;
+                    existAD.SectorId = adaptationDetail.SectorId;
                     context.SaveChanges();
 
                     result = true;

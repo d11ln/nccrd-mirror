@@ -118,8 +118,8 @@ namespace NCCRD.Services.Data.Controllers
                     existAccessRight.AllowAdd = accessRight.AllowAdd;
                     existAccessRight.AllowUpdate = accessRight.AllowUpdate;
                     existAccessRight.AllowDelete = accessRight.AllowDelete;
-                    existAccessRight.UserRole = accessRight.UserRole;
-                    existAccessRight.SitePage = accessRight.SitePage;
+                    existAccessRight.UserRoleId = accessRight.UserRoleId;
+                    existAccessRight.SitePageId = accessRight.SitePageId;
                     context.SaveChanges();
 
                     result = true;

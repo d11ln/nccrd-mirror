@@ -889,6 +889,98 @@
             <param name="id">Id of Country to delete</param>
             <returns>True/False</returns>
         </member>
+        <member name="T:NCCRD.Services.Data.Controllers.DriversController">
+            <summary>
+            Manage Drivers data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.DriversController.GetAll">
+            <summary>
+            Get all Driver data
+            </summary>
+            <returns>Driver data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.DriversController.GetByID(System.Int32)">
+            <summary>
+            Get Driver by Id
+            </summary>
+            <param name="id">The Id of the Driver to get</param>
+            <returns>Driver data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.DriversController.Add(NCCRD.Database.Models.Driver)">
+            <summary>
+            Add Driver
+            </summary>
+            <param name="driver">The Driver to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.DriversController.Update(NCCRD.Database.Models.Driver)">
+            <summary>
+            Update Driver
+            </summary>
+            <param name="driver">Driver to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.DriversController.Delete(NCCRD.Database.Models.Driver)">
+            <summary>
+            Delete Driver
+            </summary>
+            <param name="driver">Driver to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.DriversController.DeleteById(System.Int32)">
+            <summary>
+            Delete Driver by Id
+            </summary>
+            <param name="id">Id of Driver to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.FeasibilityController">
+            <summary>
+            Manage Feasibility data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.FeasibilityController.GetAll">
+            <summary>
+            Get all Feasibility data
+            </summary>
+            <returns>Feasibility data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.FeasibilityController.GetByID(System.Int32)">
+            <summary>
+            Get Feasibility by Id
+            </summary>
+            <param name="id">The Id of the Feasibility to get</param>
+            <returns>Feasibility data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.FeasibilityController.Add(NCCRD.Database.Models.Feasibility)">
+            <summary>
+            Add Feasibility
+            </summary>
+            <param name="feasibility">The Feasibility to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.FeasibilityController.Update(NCCRD.Database.Models.Feasibility)">
+            <summary>
+            Update Feasibility
+            </summary>
+            <param name="feasibility">Feasibility to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.FeasibilityController.Delete(NCCRD.Database.Models.Feasibility)">
+            <summary>
+            Delete Feasibility
+            </summary>
+            <param name="feasibility">Feasibility to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.FeasibilityController.DeleteById(System.Int32)">
+            <summary>
+            Delete Feasibility by Id
+            </summary>
+            <param name="id">Id of Feasibility to delete</param>
+            <returns>True/False</returns>
+        </member>
         <member name="T:NCCRD.Services.Data.Controllers.FundersController">
             <summary>
             Manage Funder data
@@ -979,6 +1071,52 @@
             Delete FundingStatus by Id
             </summary>
             <param name="id">Id of FundingStatus to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.HazardsController">
+            <summary>
+            Manage Hazards data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.HazardsController.GetAll">
+            <summary>
+            Get all Hazard data
+            </summary>
+            <returns>Hazard data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.HazardsController.GetByID(System.Int32)">
+            <summary>
+            Get Hazard by Id
+            </summary>
+            <param name="id">The Id of the Hazard to get</param>
+            <returns>Hazard data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.HazardsController.Add(NCCRD.Database.Models.Hazard)">
+            <summary>
+            Add Hazard
+            </summary>
+            <param name="hazard">The Hazard to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.HazardsController.Update(NCCRD.Database.Models.Hazard)">
+            <summary>
+            Update Hazard
+            </summary>
+            <param name="hazard">Hazard to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.HazardsController.Delete(NCCRD.Database.Models.Hazard)">
+            <summary>
+            Delete Hazard
+            </summary>
+            <param name="hazard">Hazard to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.HazardsController.DeleteById(System.Int32)">
+            <summary>
+            Delete Hazard by Id
+            </summary>
+            <param name="id">Id of Hazard to delete</param>
             <returns>True/False</returns>
         </member>
         <member name="T:NCCRD.Services.Data.Controllers.LocationController">
@@ -1073,6 +1211,409 @@
             <param name="id">Id of LocationType to delete</param>
             <returns>True/False</returns>
         </member>
+        <member name="T:NCCRD.Services.Data.Controllers.MAOptionsController">
+            <summary>
+            Manage MAOptions data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MAOptionsController.GetAll">
+            <summary>
+            Get all MAOptions data
+            </summary>
+            <returns>MAOptions data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MAOptionsController.GetByID(System.Int32)">
+            <summary>
+            Get MAOption by Id
+            </summary>
+            <param name="id">The Id of the MAOption to get</param>
+            <returns>MAOption data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MAOptionsController.Add(NCCRD.Database.Models.MAOption)">
+            <summary>
+            Add MAOption
+            </summary>
+            <param name="maOption">The MAOption to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MAOptionsController.Update(NCCRD.Database.Models.MAOption)">
+            <summary>
+            Update MAOption
+            </summary>
+            <param name="maOption">MAOption to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MAOptionsController.Delete(NCCRD.Database.Models.MAOption)">
+            <summary>
+            Delete MAOption
+            </summary>
+            <param name="maOption">MAOption to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MAOptionsController.DeleteById(System.Int32)">
+            <summary>
+            Delete MAOption by Id
+            </summary>
+            <param name="id">Id of MAOption to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.MitigationDetailsController">
+            <summary>
+            Manage MitigationDetails data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.GetAll">
+            <summary>
+            Get all MitigationDetails data
+            </summary>
+            <returns>MitigationDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.GetByID(System.Int32)">
+            <summary>
+            Get MitigationDetails by Id
+            </summary>
+            <param name="id">The Id of the MitigationDetails to get</param>
+            <returns>MitigationDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.GetByProjectID(System.Int32)">
+            <summary>
+            Get MitigationDetails by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the MitigationDetails to get</param>
+            <returns>MitigationDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.Add(NCCRD.Database.Models.MitigationDetail)">
+            <summary>
+            Add MitigationDetails
+            </summary>
+            <param name="mitigationDetails">The MitigationDetails to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.Update(NCCRD.Database.Models.MitigationDetail)">
+            <summary>
+            Update MitigationDetails
+            </summary>
+            <param name="mitigationDetails">MitigationDetails to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.Delete(NCCRD.Database.Models.MitigationDetail)">
+            <summary>
+            Delete MitigationDetails
+            </summary>
+            <param name="mitigationDetails">MitigationDetails to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationDetailsController.DeleteById(System.Int32)">
+            <summary>
+            Delete MitigationDetails by Id
+            </summary>
+            <param name="id">Id of MitigationDetails to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController">
+            <summary>
+            Manage MitigationEmissions data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.GetAll">
+            <summary>
+            Get all MitigationEmissionsData data
+            </summary>
+            <returns>MitigationEmissionsData data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.GetByID(System.Int32)">
+            <summary>
+            Get MitigationEmissionsData by Id
+            </summary>
+            <param name="id">The Id of the MitigationEmissionsData to get</param>
+            <returns>MitigationEmissionsData data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.GetByProjectID(System.Int32)">
+            <summary>
+            Get MitigationEmissionsData by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the MitigationEmissionsData to get</param>
+            <returns>MitigationEmissionsData data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.Add(NCCRD.Database.Models.MitigationEmissionsData)">
+            <summary>
+            Add MitigationEmissionsData
+            </summary>
+            <param name="mitigationEmissionsData">The MitigationEmissionsData to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.Update(NCCRD.Database.Models.MitigationEmissionsData)">
+            <summary>
+            Update MitigationEmissionsData
+            </summary>
+            <param name="mitigationEmissionsData">MitigationEmissionsData to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.Delete(NCCRD.Database.Models.MitigationEmissionsData)">
+            <summary>
+            Delete MitigationEmissionsData
+            </summary>
+            <param name="mitigationEmissionsData">MitigationEmissionsData to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.MitigationEmissionsDataController.DeleteById(System.Int32)">
+            <summary>
+            Delete MitigationEmissionsData by Id
+            </summary>
+            <param name="id">Id of MitigationEmissionsData to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.OptionFunderController">
+            <summary>
+            Manage OptionFunder data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionFunderController.GetAll">
+            <summary>
+            Get all OptionFunder data
+            </summary>
+            <returns>OptionFunder data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionFunderController.GetByID(System.Int32)">
+            <summary>
+            Get OptionFunder by Id
+            </summary>
+            <param name="id">The Id of the OptionFunder to get</param>
+            <returns>OptionFunder data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionFunderController.Add(NCCRD.Database.Models.OptionFunder)">
+            <summary>
+            Add OptionFunder
+            </summary>
+            <param name="optionFunder">The OptionFunder to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionFunderController.Update(NCCRD.Database.Models.OptionFunder)">
+            <summary>
+            Update OptionFunder
+            </summary>
+            <param name="optionFunder">OptionFunder to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionFunderController.Delete(NCCRD.Database.Models.OptionFunder)">
+            <summary>
+            Delete OptionFunder
+            </summary>
+            <param name="optionFunder">OptionFunder to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionFunderController.DeleteById(System.Int32)">
+            <summary>
+            Delete OptionFunder by Id
+            </summary>
+            <param name="id">Id of OptionFunder to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.OptionRegionController">
+            <summary>
+            Manage OptionRegion data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionRegionController.GetAll">
+            <summary>
+            Get all OptionRegion data
+            </summary>
+            <returns>OptionRegion data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionRegionController.GetByID(System.Int32)">
+            <summary>
+            Get OptionRegion by Id
+            </summary>
+            <param name="id">The Id of the OptionRegion to get</param>
+            <returns>OptionRegion data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionRegionController.Add(NCCRD.Database.Models.OptionRegion)">
+            <summary>
+            Add OptionRegion
+            </summary>
+            <param name="optionRegion">The OptionRegion to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionRegionController.Update(NCCRD.Database.Models.OptionRegion)">
+            <summary>
+            Update OptionRegion
+            </summary>
+            <param name="optionRegion">OptionRegion to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionRegionController.Delete(NCCRD.Database.Models.OptionRegion)">
+            <summary>
+            Delete OptionRegion
+            </summary>
+            <param name="optionRegion">OptionRegion to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.OptionRegionController.DeleteById(System.Int32)">
+            <summary>
+            Delete OptionRegion by Id
+            </summary>
+            <param name="id">Id of OptionRegion to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectFunderController">
+            <summary>
+            Manage ProjectFunder data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.GetAll">
+            <summary>
+            Get all ProjectFunder data
+            </summary>
+            <returns>ProjectFunder data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectFunder by Id
+            </summary>
+            <param name="id">The Id of the ProjectFunder to get</param>
+            <returns>ProjectFunder data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.GetByProjectID(System.Int32)">
+            <summary>
+            Get ProjectFunder by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the ProjectFunder to get</param>
+            <returns>ProjectFunder data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.Add(NCCRD.Database.Models.ProjectFunder)">
+            <summary>
+            Add ProjectFunder
+            </summary>
+            <param name="projectFunder">The ProjectFunder to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.Update(NCCRD.Database.Models.ProjectFunder)">
+            <summary>
+            Update ProjectFunder
+            </summary>
+            <param name="projectFunder">ProjectFunder to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.Delete(NCCRD.Database.Models.ProjectFunder)">
+            <summary>
+            Delete ProjectFunder
+            </summary>
+            <param name="projectFunder">ProjectFunder to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectFunderController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectFunder by Id
+            </summary>
+            <param name="id">Id of ProjectFunder to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectLocationController">
+            <summary>
+            Manage ProjectLocation data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.GetAll">
+            <summary>
+            Get all ProjectLocation data
+            </summary>
+            <returns>ProjectLocation data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectLocation by Id
+            </summary>
+            <param name="id">The Id of the ProjectLocation to get</param>
+            <returns>ProjectLocation data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.GetByProjectID(System.Int32)">
+            <summary>
+            Get ProjectLocation by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the ProjectLocation to get</param>
+            <returns>ProjectLocation data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.Add(NCCRD.Database.Models.ProjectLocation)">
+            <summary>
+            Add ProjectLocation
+            </summary>
+            <param name="projectLocation">The ProjectLocation to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.Update(NCCRD.Database.Models.ProjectLocation)">
+            <summary>
+            Update ProjectLocation
+            </summary>
+            <param name="projectLocation">ProjectLocation to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.Delete(NCCRD.Database.Models.ProjectLocation)">
+            <summary>
+            Delete ProjectLocation
+            </summary>
+            <param name="projectLocation">ProjectLocation to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectLocationController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectLocation by Id
+            </summary>
+            <param name="id">Id of ProjectLocation to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectRegionController">
+            <summary>
+            Manage ProjectRegion data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.GetAll">
+            <summary>
+            Get all ProjectRegion data
+            </summary>
+            <returns>ProjectRegion data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectRegion by Id
+            </summary>
+            <param name="id">The Id of the ProjectRegion to get</param>
+            <returns>ProjectRegion data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.GetByProjectID(System.Int32)">
+            <summary>
+            Get ProjectRegion by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the ProjectRegion to get</param>
+            <returns>ProjectRegion data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.Add(NCCRD.Database.Models.ProjectRegion)">
+            <summary>
+            Add ProjectRegion
+            </summary>
+            <param name="projectRegion">The ProjectRegion to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.Update(NCCRD.Database.Models.ProjectRegion)">
+            <summary>
+            Update ProjectRegion
+            </summary>
+            <param name="projectRegion">ProjectRegion to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.Delete(NCCRD.Database.Models.ProjectRegion)">
+            <summary>
+            Delete ProjectRegion
+            </summary>
+            <param name="projectRegion">ProjectRegion to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectRegionController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectRegion by Id
+            </summary>
+            <param name="id">Id of ProjectRegion to delete</param>
+            <returns>True/False</returns>
+        </member>
         <member name="T:NCCRD.Services.Data.Controllers.ProjectsController">
             <summary>
             Manage Project data
@@ -1131,6 +1672,918 @@
             Delete Project by Title
             </summary>
             <param name="title">Title of Project to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectStatusController">
+            <summary>
+            Manage ProjectStatus data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectStatusController.GetAll">
+            <summary>
+            Get all ProjectStatus data
+            </summary>
+            <returns>ProjectStatus data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectStatusController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectStatus by Id
+            </summary>
+            <param name="id">The Id of the ProjectStatus to get</param>
+            <returns>ProjectStatus data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectStatusController.Add(NCCRD.Database.Models.ProjectStatus)">
+            <summary>
+            Add ProjectStatus
+            </summary>
+            <param name="projectStatus">The ProjectStatus to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectStatusController.Update(NCCRD.Database.Models.ProjectStatus)">
+            <summary>
+            Update ProjectStatus
+            </summary>
+            <param name="projectStatus">ProjectStatus to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectStatusController.Delete(NCCRD.Database.Models.ProjectStatus)">
+            <summary>
+            Delete ProjectStatus
+            </summary>
+            <param name="projectStatus">ProjectStatus to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectStatusController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectStatus by Id
+            </summary>
+            <param name="id">Id of ProjectStatus to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectSubTypeController">
+            <summary>
+            Manage ProjectSubType data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.GetAll">
+            <summary>
+            Get all ProjectSubType data
+            </summary>
+            <returns>ProjectSubType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectSubType by Id
+            </summary>
+            <param name="id">The Id of the ProjectSubType to get</param>
+            <returns>ProjectSubType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.GetByProjectTypeID(System.Int32)">
+            <summary>
+            Get ProjectSubType by ProjectTypeId
+            </summary>
+            <param name="projectTypeId">The ProjectTypeId of the ProjectSubType to get</param>
+            <returns>ProjectSubType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.Add(NCCRD.Database.Models.ProjectSubType)">
+            <summary>
+            Add ProjectSubType
+            </summary>
+            <param name="projectSubType">The ProjectSubType to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.Update(NCCRD.Database.Models.ProjectSubType)">
+            <summary>
+            Update ProjectSubType
+            </summary>
+            <param name="projectSubType">ProjectSubType to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.Delete(NCCRD.Database.Models.ProjectSubType)">
+            <summary>
+            Delete ProjectSubType
+            </summary>
+            <param name="projectSubType">ProjectSubType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectSubTypeController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectSubType by Id
+            </summary>
+            <param name="id">Id of ProjectSubType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectTypeController">
+            <summary>
+            Manage ProjectType data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypeController.GetAll">
+            <summary>
+            Get all ProjectType data
+            </summary>
+            <returns>ProjectType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypeController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectType by Id
+            </summary>
+            <param name="id">The Id of the ProjectType to get</param>
+            <returns>ProjectType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypeController.Add(NCCRD.Database.Models.ProjectType)">
+            <summary>
+            Add ProjectType
+            </summary>
+            <param name="projectType">The ProjectType to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypeController.Update(NCCRD.Database.Models.ProjectType)">
+            <summary>
+            Update ProjectType
+            </summary>
+            <param name="projectType">ProjectType to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypeController.Delete(NCCRD.Database.Models.ProjectType)">
+            <summary>
+            Delete ProjectType
+            </summary>
+            <param name="projectType">ProjectType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypeController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectType by Id
+            </summary>
+            <param name="id">Id of ProjectType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ProjectTypologyController">
+            <summary>
+            Manage ProjectTypology data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.GetAll">
+            <summary>
+            Get all ProjectTypology data
+            </summary>
+            <returns>ProjectTypology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.GetByID(System.Int32)">
+            <summary>
+            Get ProjectTypology by Id
+            </summary>
+            <param name="id">The Id of the ProjectTypology to get</param>
+            <returns>ProjectTypology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.GetByProjectID(System.Int32)">
+            <summary>
+            Get ProjectTypology by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the ProjectTypology to get</param>
+            <returns>ProjectTypology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.Add(NCCRD.Database.Models.ProjectTypology)">
+            <summary>
+            Add ProjectTypology
+            </summary>
+            <param name="projectTypology">The ProjectTypology to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.Update(NCCRD.Database.Models.ProjectTypology)">
+            <summary>
+            Update ProjectTypology
+            </summary>
+            <param name="projectTypology">ProjectTypology to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.Delete(NCCRD.Database.Models.ProjectTypology)">
+            <summary>
+            Delete ProjectTypology
+            </summary>
+            <param name="projectTypology">ProjectTypology to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ProjectTypologyController.DeleteById(System.Int32)">
+            <summary>
+            Delete ProjectTypology by Id
+            </summary>
+            <param name="id">Id of ProjectTypology to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.RegionController">
+            <summary>
+            Manage Region data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.RegionController.GetAll">
+            <summary>
+            Get all Region data
+            </summary>
+            <returns>Region data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.RegionController.GetByID(System.Int32)">
+            <summary>
+            Get Region by Id
+            </summary>
+            <param name="id">The Id of the Region to get</param>
+            <returns>Region data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.RegionController.Add(NCCRD.Database.Models.Region)">
+            <summary>
+            Add Region
+            </summary>
+            <param name="region">The Region to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.RegionController.Update(NCCRD.Database.Models.Region)">
+            <summary>
+            Update Region
+            </summary>
+            <param name="region">Region to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.RegionController.Delete(NCCRD.Database.Models.Region)">
+            <summary>
+            Delete Region
+            </summary>
+            <param name="region">Region to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.RegionController.DeleteById(System.Int32)">
+            <summary>
+            Delete Region by Id
+            </summary>
+            <param name="id">Id of Region to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ResearchDetailsController">
+            <summary>
+            Manage ResearchDetails data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.GetAll">
+            <summary>
+            Get all ResearchDetails data
+            </summary>
+            <returns>ResearchDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.GetByID(System.Int32)">
+            <summary>
+            Get ResearchDetails by Id
+            </summary>
+            <param name="id">The Id of the ResearchDetails to get</param>
+            <returns>ResearchDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.GetByProjectID(System.Int32)">
+            <summary>
+            Get ResearchDetails by ProjectId
+            </summary>
+            <param name="projectId">The ProjectId of the ResearchDetails to get</param>
+            <returns>ResearchDetails data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.Add(NCCRD.Database.Models.ResearchDetail)">
+            <summary>
+            Add ResearchDetails
+            </summary>
+            <param name="researchDetails">The ResearchDetails to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.Update(NCCRD.Database.Models.ResearchDetail)">
+            <summary>
+            Update ResearchDetails
+            </summary>
+            <param name="researchDetails">ResearchDetails to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.Delete(NCCRD.Database.Models.ResearchDetail)">
+            <summary>
+            Delete ResearchDetails
+            </summary>
+            <param name="researchDetails">ResearchDetails to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchDetailsController.DeleteById(System.Int32)">
+            <summary>
+            Delete ResearchDetails by Id
+            </summary>
+            <param name="id">Id of ResearchDetails to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ResearchTypeController">
+            <summary>
+            Manage ResearchType data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchTypeController.GetAll">
+            <summary>
+            Get all ResearchType data
+            </summary>
+            <returns>ResearchType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchTypeController.GetByID(System.Int32)">
+            <summary>
+            Get ResearchType by Id
+            </summary>
+            <param name="id">The Id of the ResearchType to get</param>
+            <returns>ResearchType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchTypeController.Add(NCCRD.Database.Models.ResearchType)">
+            <summary>
+            Add ResearchType
+            </summary>
+            <param name="researchType">The ResearchType to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchTypeController.Update(NCCRD.Database.Models.ResearchType)">
+            <summary>
+            Update ResearchType
+            </summary>
+            <param name="researchType">ResearchType to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchTypeController.Delete(NCCRD.Database.Models.ResearchType)">
+            <summary>
+            Delete ResearchType
+            </summary>
+            <param name="researchType">ResearchType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ResearchTypeController.DeleteById(System.Int32)">
+            <summary>
+            Delete ResearchType by Id
+            </summary>
+            <param name="id">Id of ResearchType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.SectorController">
+            <summary>
+            Manage Sector data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorController.GetAll">
+            <summary>
+            Get all Sector data
+            </summary>
+            <returns>Sector data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorController.GetByID(System.Int32)">
+            <summary>
+            Get Sector by Id
+            </summary>
+            <param name="id">The Id of the Sector to get</param>
+            <returns>Sector data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorController.Add(NCCRD.Database.Models.Sector)">
+            <summary>
+            Add Sector
+            </summary>
+            <param name="sector">The Sector to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorController.Update(NCCRD.Database.Models.Sector)">
+            <summary>
+            Update Sector
+            </summary>
+            <param name="sector">Sector to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorController.Delete(NCCRD.Database.Models.Sector)">
+            <summary>
+            Delete Sector
+            </summary>
+            <param name="sector">Sector to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorController.DeleteById(System.Int32)">
+            <summary>
+            Delete Sector by Id
+            </summary>
+            <param name="id">Id of Sector to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.SectorTypeController">
+            <summary>
+            Manage SectorType data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorTypeController.GetAll">
+            <summary>
+            Get all SectorType data
+            </summary>
+            <returns>SectorType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorTypeController.GetByID(System.Int32)">
+            <summary>
+            Get SectorType by Id
+            </summary>
+            <param name="id">The Id of the SectorType to get</param>
+            <returns>SectorType data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorTypeController.Add(NCCRD.Database.Models.SectorType)">
+            <summary>
+            Add SectorType
+            </summary>
+            <param name="sectorType">The SectorType to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorTypeController.Update(NCCRD.Database.Models.SectorType)">
+            <summary>
+            Update SectorType
+            </summary>
+            <param name="sectorType">SectorType to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorTypeController.Delete(NCCRD.Database.Models.SectorType)">
+            <summary>
+            Delete SectorType
+            </summary>
+            <param name="sectorType">SectorType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SectorTypeController.DeleteById(System.Int32)">
+            <summary>
+            Delete SectorType by Id
+            </summary>
+            <param name="id">Id of SectorType to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.SitePagesController">
+            <summary>
+            Manage SitePages data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SitePagesController.GetAll">
+            <summary>
+            Get all SitePage data
+            </summary>
+            <returns>SitePage data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SitePagesController.GetByID(System.Int32)">
+            <summary>
+            Get SitePage by Id
+            </summary>
+            <param name="id">The Id of the SitePage to get</param>
+            <returns>SitePage data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SitePagesController.Add(NCCRD.Database.Models.SitePage)">
+            <summary>
+            Add SitePage
+            </summary>
+            <param name="sitePages">The SitePage to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SitePagesController.Update(NCCRD.Database.Models.SitePage)">
+            <summary>
+            Update SitePage
+            </summary>
+            <param name="sitePage">SitePage to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SitePagesController.Delete(NCCRD.Database.Models.SitePage)">
+            <summary>
+            Delete SitePage
+            </summary>
+            <param name="sitePage">SitePage to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.SitePagesController.DeleteById(System.Int32)">
+            <summary>
+            Delete SitePage by Id
+            </summary>
+            <param name="id">Id of SitePage to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.StocksController">
+            <summary>
+            Manage Stocks data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.StocksController.GetAll">
+            <summary>
+            Get all Stock data
+            </summary>
+            <returns>Stock data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.StocksController.GetByID(System.Int32)">
+            <summary>
+            Get Stock by Id
+            </summary>
+            <param name="id">The Id of the Stock to get</param>
+            <returns>Stock data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.StocksController.Add(NCCRD.Database.Models.Stock)">
+            <summary>
+            Add Stock
+            </summary>
+            <param name="stock">The Stock to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.StocksController.Update(NCCRD.Database.Models.Stock)">
+            <summary>
+            Update Stock
+            </summary>
+            <param name="stock">Stock to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.StocksController.Delete(NCCRD.Database.Models.Stock)">
+            <summary>
+            Delete Stock
+            </summary>
+            <param name="stock">Stock to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.StocksController.DeleteById(System.Int32)">
+            <summary>
+            Delete Stock by Id
+            </summary>
+            <param name="id">Id of Stock to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.TargetAudienceController">
+            <summary>
+            Manage TargetAudience data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TargetAudienceController.GetAll">
+            <summary>
+            Get all TargetAudience data
+            </summary>
+            <returns>TargetAudience data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TargetAudienceController.GetByID(System.Int32)">
+            <summary>
+            Get TargetAudience by Id
+            </summary>
+            <param name="id">The Id of the TargetAudience to get</param>
+            <returns>TargetAudience data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TargetAudienceController.Add(NCCRD.Database.Models.TargetAudience)">
+            <summary>
+            Add TargetAudience
+            </summary>
+            <param name="targetAudience">The TargetAudience to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TargetAudienceController.Update(NCCRD.Database.Models.TargetAudience)">
+            <summary>
+            Update TargetAudience
+            </summary>
+            <param name="targetAudience">TargetAudience to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TargetAudienceController.Delete(NCCRD.Database.Models.TargetAudience)">
+            <summary>
+            Delete TargetAudience
+            </summary>
+            <param name="targetAudience">TargetAudience to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TargetAudienceController.DeleteById(System.Int32)">
+            <summary>
+            Delete TargetAudience by Id
+            </summary>
+            <param name="id">Id of TargetAudience to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.TitleController">
+            <summary>
+            Manage Title data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TitleController.GetAll">
+            <summary>
+            Get all Title data
+            </summary>
+            <returns>Title data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TitleController.GetByID(System.Int32)">
+            <summary>
+            Get Title by Id
+            </summary>
+            <param name="id">The Id of the Title to get</param>
+            <returns>Title data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TitleController.Add(NCCRD.Database.Models.Title)">
+            <summary>
+            Add Title
+            </summary>
+            <param name="title">The Title to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TitleController.Update(NCCRD.Database.Models.Title)">
+            <summary>
+            Update Title
+            </summary>
+            <param name="title">Title to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TitleController.Delete(NCCRD.Database.Models.Title)">
+            <summary>
+            Delete Title
+            </summary>
+            <param name="title">Title to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TitleController.DeleteById(System.Int32)">
+            <summary>
+            Delete Title by Id
+            </summary>
+            <param name="id">Id of Title to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.TypologyController">
+            <summary>
+            Manage Typology data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TypologyController.GetAll">
+            <summary>
+            Get all Typology data
+            </summary>
+            <returns>Typology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TypologyController.GetByID(System.Int32)">
+            <summary>
+            Get Typology by Id
+            </summary>
+            <param name="id">The Id of the Typology to get</param>
+            <returns>Typology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TypologyController.Add(NCCRD.Database.Models.Typology)">
+            <summary>
+            Add Typology
+            </summary>
+            <param name="typology">The Typology to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TypologyController.Update(NCCRD.Database.Models.Typology)">
+            <summary>
+            Update Typology
+            </summary>
+            <param name="typology">Typology to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TypologyController.Delete(NCCRD.Database.Models.Typology)">
+            <summary>
+            Delete Typology
+            </summary>
+            <param name="typology">Typology to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.TypologyController.DeleteById(System.Int32)">
+            <summary>
+            Delete Typology by Id
+            </summary>
+            <param name="id">Id of Typology to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.UserRolesController">
+            <summary>
+            Manage UserRoles data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UserRolesController.GetAll">
+            <summary>
+            Get all UserRole data
+            </summary>
+            <returns>UserRole data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UserRolesController.GetByID(System.Int32)">
+            <summary>
+            Get UserRole by Id
+            </summary>
+            <param name="id">The Id of the UserRole to get</param>
+            <returns>UserRole data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UserRolesController.Add(NCCRD.Database.Models.UserRole)">
+            <summary>
+            Add UserRole
+            </summary>
+            <param name="userRole">The UserRole to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UserRolesController.Update(NCCRD.Database.Models.UserRole)">
+            <summary>
+            Update UserRole
+            </summary>
+            <param name="userRole">UserRole to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UserRolesController.Delete(NCCRD.Database.Models.UserRole)">
+            <summary>
+            Delete UserRole
+            </summary>
+            <param name="userRole">UserRole to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UserRolesController.DeleteById(System.Int32)">
+            <summary>
+            Delete UserRole by Id
+            </summary>
+            <param name="id">Id of UserRole to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.UsersController">
+            <summary>
+            Manage Users data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UsersController.GetAll">
+            <summary>
+            Get all User data
+            </summary>
+            <returns>User data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UsersController.GetByID(System.Int32)">
+            <summary>
+            Get User by Id
+            </summary>
+            <param name="id">The Id of the User to get</param>
+            <returns>User data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UsersController.Add(NCCRD.Database.Models.User)">
+            <summary>
+            Add User
+            </summary>
+            <param name="user">The User to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UsersController.Update(NCCRD.Database.Models.User)">
+            <summary>
+            Update User
+            </summary>
+            <param name="user">User to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UsersController.Delete(NCCRD.Database.Models.User)">
+            <summary>
+            Delete User
+            </summary>
+            <param name="user">User to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.UsersController.DeleteById(System.Int32)">
+            <summary>
+            Delete User by Id
+            </summary>
+            <param name="id">Id of User to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.ValidationStatusController">
+            <summary>
+            Manage ValidationStatus data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ValidationStatusController.GetAll">
+            <summary>
+            Get all ValidationStatus data
+            </summary>
+            <returns>ValidationStatus data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ValidationStatusController.GetByID(System.Int32)">
+            <summary>
+            Get ValidationStatus by Id
+            </summary>
+            <param name="id">The Id of the ValidationStatus to get</param>
+            <returns>ValidationStatus data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ValidationStatusController.Add(NCCRD.Database.Models.ValidationStatus)">
+            <summary>
+            Add ValidationStatus
+            </summary>
+            <param name="validationStatus">The ValidationStatus to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ValidationStatusController.Update(NCCRD.Database.Models.ValidationStatus)">
+            <summary>
+            Update ValidationStatus
+            </summary>
+            <param name="validationStatus">ValidationStatus to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ValidationStatusController.Delete(NCCRD.Database.Models.ValidationStatus)">
+            <summary>
+            Delete ValidationStatus
+            </summary>
+            <param name="validationStatus">ValidationStatus to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.ValidationStatusController.DeleteById(System.Int32)">
+            <summary>
+            Delete ValidationStatus by Id
+            </summary>
+            <param name="id">Id of ValidationStatus to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.VersionHistoryController">
+            <summary>
+            Access VersionHistory data 
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VersionHistoryController.GetAll">
+            <summary>
+            Get all VersionHistory data
+            </summary>
+            <returns>VersionHistory data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VersionHistoryController.GetLatest">
+            <summary>
+            Get latest VersionHistory entry
+            </summary>
+            <returns>VersionHistory data as JSON</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController">
+            <summary>
+            Manage VoluntaryGoldStandard data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController.GetAll">
+            <summary>
+            Get all VoluntaryGoldStandard data
+            </summary>
+            <returns>VoluntaryGoldStandard data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController.GetByID(System.Int32)">
+            <summary>
+            Get VoluntaryGoldStandard by Id
+            </summary>
+            <param name="id">The Id of the VoluntaryGoldStandard to get</param>
+            <returns>VoluntaryGoldStandard data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController.Add(NCCRD.Database.Models.VoluntaryGoldStandard)">
+            <summary>
+            Add VoluntaryGoldStandard
+            </summary>
+            <param name="voluntaryGoldStandard">The VoluntaryGoldStandard to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController.Update(NCCRD.Database.Models.VoluntaryGoldStandard)">
+            <summary>
+            Update VoluntaryGoldStandard
+            </summary>
+            <param name="voluntaryGoldStandard">VoluntaryGoldStandard to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController.Delete(NCCRD.Database.Models.VoluntaryGoldStandard)">
+            <summary>
+            Delete VoluntaryGoldStandard
+            </summary>
+            <param name="voluntaryGoldStandard">VoluntaryGoldStandard to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryGoldStandardController.DeleteById(System.Int32)">
+            <summary>
+            Delete VoluntaryGoldStandard by Id
+            </summary>
+            <param name="id">Id of VoluntaryGoldStandard to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="T:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController">
+            <summary>
+            Manage VoluntaryMethodology data
+            </summary>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController.GetAll">
+            <summary>
+            Get all VoluntaryMethodology data
+            </summary>
+            <returns>VoluntaryMethodology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController.GetByID(System.Int32)">
+            <summary>
+            Get VoluntaryGoldStandard by Id
+            </summary>
+            <param name="id">The Id of the VoluntaryMethodology to get</param>
+            <returns>VoluntaryMethodology data as JSON</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController.Add(NCCRD.Database.Models.VoluntaryMethodology)">
+            <summary>
+            Add VoluntaryMethodology
+            </summary>
+            <param name="voluntaryMethodology">The VoluntaryMethodology to add</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController.Update(NCCRD.Database.Models.VoluntaryMethodology)">
+            <summary>
+            Update VoluntaryMethodology
+            </summary>
+            <param name="voluntaryMethodology">VoluntaryMethodology to update</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController.Delete(NCCRD.Database.Models.VoluntaryMethodology)">
+            <summary>
+            Delete VoluntaryMethodology
+            </summary>
+            <param name="voluntaryMethodology">VoluntaryMethodology to delete</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:NCCRD.Services.Data.Controllers.VoluntaryMethodologyController.DeleteById(System.Int32)">
+            <summary>
+            Delete VoluntaryMethodology by Id
+            </summary>
+            <param name="id">Id of VoluntaryMethodology to delete</param>
             <returns>True/False</returns>
         </member>
     </members>

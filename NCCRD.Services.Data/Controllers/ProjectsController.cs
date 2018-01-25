@@ -129,12 +129,12 @@ namespace NCCRD.Services.Data.Controllers
                     existProj.ValidationComments = project.ValidationComments;
                     existProj.BudgetLower = project.BudgetLower;
                     existProj.BudgetUpper = project.BudgetUpper;
-                    existProj.ProjectType = project.ProjectType;
-                    existProj.ProjectSubType = project.ProjectSubType;
-                    existProj.ProjectStatus = project.ProjectStatus;
-                    existProj.ProjectManager = project.ProjectManager;
-                    existProj.ValidationStatus = project.ValidationStatus;
-                    existProj.MAOption = project.MAOption;
+                    existProj.ProjectTypeId = project.ProjectTypeId;
+                    existProj.ProjectSubTypeId = project.ProjectSubTypeId;
+                    existProj.ProjectStatusId = project.ProjectStatusId;
+                    existProj.ProjectManagerId = project.ProjectManagerId;
+                    existProj.ValidationStatusId = project.ValidationStatusId;
+                    existProj.MAOptionId = project.MAOptionId;
                     context.SaveChanges();
 
                     result = true;

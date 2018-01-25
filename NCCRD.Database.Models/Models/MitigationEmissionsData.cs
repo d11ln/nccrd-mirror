@@ -68,7 +68,9 @@ namespace NCCRD.Database.Models
         public double? Geothermal_CO2e { get; set; }
 
         //FK - Project
-        public int? ProjectId { get; set; }
+        [Required]
+        public int ProjectId { get; set; }
+        [Required]
         [IgnoreDataMember]
         public Project Project { get; set; }
     }
