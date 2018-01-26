@@ -49,7 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ChangeLoggerFactory.cs" />
+    <Compile Include="Classes\SQLChangeLogger.cs" />
+    <Compile Include="Contexts\SQLChangeLoggerContext.cs" />
     <Compile Include="Contexts\SQLDBContext.cs" />
+    <Compile Include="Interfaces\IChangeLogger.cs" />
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\AdaptationDetail.cs" />
     <Compile Include="Models\AppLog.cs" />

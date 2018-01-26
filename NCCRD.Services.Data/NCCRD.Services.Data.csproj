@@ -246,6 +246,7 @@
     <Compile Include="Controllers\CarbonCreditMarketController.cs" />
     <Compile Include="Controllers\CDMMethodologyController.cs" />
     <Compile Include="Controllers\CDMStatusController.cs" />
+    <Compile Include="Controllers\ChangeLogController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\DriversController.cs" />
     <Compile Include="Controllers\FeasibilityController.cs" />

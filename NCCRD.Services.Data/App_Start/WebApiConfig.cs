@@ -28,27 +28,10 @@ namespace NCCRD.Services.Data
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            //Set support fo JSON only
+            //Set support to JSON default
             config.Formatters.Clear();
             var jsonFormatter = new JsonMediaTypeFormatter();
             config.Formatters.Add(jsonFormatter);
-            //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
         }
     }
-
-    //public class JsonContentNegotiator : IContentNegotiator
-    //{
-    //    private readonly JsonMediaTypeFormatter _jsonFormatter;
-
-    //    public JsonContentNegotiator(JsonMediaTypeFormatter formatter)
-    //    {
-    //        _jsonFormatter = formatter;
-    //    }
-
-    //    public ContentNegotiationResult Negotiate(Type type, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
-    //    {
-    //        var result = new ContentNegotiationResult(_jsonFormatter, new MediaTypeHeaderValue("application/json"));
-    //        return result;
-    //    }
-    //}
 }

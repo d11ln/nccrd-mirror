@@ -60,7 +60,7 @@ namespace NCCRD.Services.Data.Controllers
         /// <returns>AppLog data as JSON</returns>
         [HttpGet]
         [Route("api/AppLog/GetByDateRange/{fromDate}/{toDate}")]
-        public IEnumerable<AppLog> GetByUserId(int fromDate, int toDate)
+        public IEnumerable<AppLog> GetByDateRange(int fromDate, int toDate)
         {
             List<AppLog> data = new List<AppLog>();
             DateTime from = DateTime.ParseExact(fromDate.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);

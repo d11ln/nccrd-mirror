@@ -1,4 +1,7 @@
-﻿using System;
+﻿using NCCRD.Database.Classes;
+using NCCRD.Services.Data.Classes;
+using NCCRD.Services.Data.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -17,7 +20,7 @@ namespace NCCRD.Database.Models.Contexts
         public DbSet<CarbonCreditMarket> CarbonCreditMarket { get; set; }
         public DbSet<CDMMethodology> CDMMethodology { get; set; }
         public DbSet<CDMStatus> CDMStatus { get; set; }
-        public DbSet<ChangeLog> ChangeLog { get; set; }
+        private DbSet<ChangeLog> ChangeLog { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Feasibility> Feasibility { get; set; }
@@ -68,6 +71,8 @@ namespace NCCRD.Database.Models.Contexts
 
         public int SaveChanges(int? activeUserId)
         {
+            List<ChangeLog> changes = new List<ChangeLog>();
+
             var modifiedEntities = ChangeTracker.Entries()
                 .Where(p => p.State == EntityState.Modified || p.State == EntityState.Added || p.State == EntityState.Deleted).
                 ToList();
@@ -120,11 +125,18 @@ namespace NCCRD.Database.Models.Contexts
                             DateChanged = now,
                             ActiveUserId = activeUserId
                         };
-                        ChangeLog.Add(log);
+
+                        changes.Add(log);
                     }
                 }
             }
-            return base.SaveChanges();
+            int saveResult = base.SaveChanges();
+
+            //Log captured changes
+            IChangeLogger logger = ChangeLoggerFactory.CreateLogger();
+            logger.Log(changes.ToArray());
+
+            return saveResult;
         }
 
         public override int SaveChanges()

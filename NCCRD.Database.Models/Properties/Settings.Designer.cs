@@ -32,5 +32,14 @@ namespace NCCRD.Database.Properties {
                 return ((string)(this["DefaultConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SQLDB")]
+        public string LoggerType {
+            get {
+                return ((string)(this["LoggerType"]));
+            }
+        }
     }
 }
