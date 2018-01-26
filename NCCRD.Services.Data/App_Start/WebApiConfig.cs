@@ -29,27 +29,26 @@ namespace NCCRD.Services.Data
             );
 
             //Set support fo JSON only
-            var jsonFormatter = new JsonMediaTypeFormatter();
             config.Formatters.Clear();
+            var jsonFormatter = new JsonMediaTypeFormatter();
             config.Formatters.Add(jsonFormatter);
             //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-            config.Services.Replace(typeof(IContentNegotiator), new JsonContentNegotiator(jsonFormatter));
         }
     }
 
-    public class JsonContentNegotiator : IContentNegotiator
-    {
-        private readonly JsonMediaTypeFormatter _jsonFormatter;
+    //public class JsonContentNegotiator : IContentNegotiator
+    //{
+    //    private readonly JsonMediaTypeFormatter _jsonFormatter;
 
-        public JsonContentNegotiator(JsonMediaTypeFormatter formatter)
-        {
-            _jsonFormatter = formatter;
-        }
+    //    public JsonContentNegotiator(JsonMediaTypeFormatter formatter)
+    //    {
+    //        _jsonFormatter = formatter;
+    //    }
 
-        public ContentNegotiationResult Negotiate(Type type, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
-        {
-            var result = new ContentNegotiationResult(_jsonFormatter, new MediaTypeHeaderValue("application/json"));
-            return result;
-        }
-    }
+    //    public ContentNegotiationResult Negotiate(Type type, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
+    //    {
+    //        var result = new ContentNegotiationResult(_jsonFormatter, new MediaTypeHeaderValue("application/json"));
+    //        return result;
+    //    }
+    //}
 }

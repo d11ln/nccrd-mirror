@@ -12,7 +12,7 @@ namespace NCCRD.Services.Data.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "NCCRD Data Service";
 
             return View();
         }
