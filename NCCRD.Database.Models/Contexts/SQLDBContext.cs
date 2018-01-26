@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 
 namespace NCCRD.Database.Models.Contexts
@@ -63,6 +65,86 @@ namespace NCCRD.Database.Models.Contexts
         {
             System.Data.Entity.Database.SetInitializer(new SQLDBContextInitializer());
         }
+
+        public int SaveChanges(int? activeUserId)
+        {
+            var modifiedEntities = ChangeTracker.Entries()
+                .Where(p => p.State == EntityState.Modified || p.State == EntityState.Added || p.State == EntityState.Deleted).
+                ToList();
+
+            var now = DateTime.UtcNow;
+
+            foreach (var change in modifiedEntities)
+            {
+                string entityName = change.Entity.GetType().Name;
+                string primaryKeyValue = GetPrimaryKeyValue(change);
+
+                IEnumerable<string> propNames;
+                if(change.State == EntityState.Added)
+                {
+                    propNames = change.CurrentValues.PropertyNames;
+                }
+                else
+                {
+                    propNames = change.OriginalValues.PropertyNames;
+                }
+
+                foreach (var prop in propNames)
+                {
+                    string originalValue = "";
+                    string currentValue = "";
+
+                    //Get original value if possible
+                    if (change.State != EntityState.Added && change.OriginalValues[prop] != null)
+                    {
+                        originalValue = change.OriginalValues[prop].ToString();
+                    }
+
+                    //Get current value if possible
+                    if (change.State != EntityState.Deleted && change.CurrentValues[prop] != null)
+                    {
+                        currentValue = change.CurrentValues[prop].ToString();
+                    }
+
+                    //Compare
+                    if (originalValue != currentValue)
+                    {
+                        ChangeLog log = new ChangeLog()
+                        {
+                            EntityName = entityName,
+                            ChangeType = change.State.ToString(),
+                            PrimaryKeyValue = primaryKeyValue,
+                            PropertyName = prop,
+                            OldValue = originalValue,
+                            NewValue = currentValue,
+                            DateChanged = now,
+                            ActiveUserId = activeUserId
+                        };
+                        ChangeLog.Add(log);
+                    }
+                }
+            }
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges()
+        {
+            return SaveChanges(null);
+        }
+
+        private string GetPrimaryKeyValue(DbEntityEntry entry)
+        {
+            if(entry.State == EntityState.Added)
+            {
+                return "";
+            }
+            else
+            {
+                var objectStateEntry = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.Entity);
+                return objectStateEntry.EntityKey.EntityKeyValues[0].Value.ToString();
+            }
+        }
+
     }
 
     public class SQLDBContextInitializer : CreateDatabaseIfNotExists<SQLDBContext>

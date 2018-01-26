@@ -22,13 +22,13 @@ namespace NCCRD.Services.Data.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetAllProjectsAsync()
+        public void GetAll()
         {
             //arrange
             var result = new List<Project>();
 
             //act
-            HttpResponseMessage response = client.GetAsync("api/Projects/GetAllProjects").Result;
+            HttpResponseMessage response = client.GetAsync("api/Projects/GetAll").Result;
             if(response.IsSuccessStatusCode)
             {
                 result = response.Content.ReadAsAsync<List<Project>>().Result;

@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get Country by Value
+        /// </summary>
+        /// <param name="value">The Value of the Country to get</param>
+        /// <returns>Country data as JSON</returns>
+        [HttpGet]
+        [Route("api/Country/GetByValue/{value}")]
+        public Country GetByValue(string value)
+        {
+            Country data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Country.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Country
         /// </summary>
         /// <param name="country">The Country to add</param>

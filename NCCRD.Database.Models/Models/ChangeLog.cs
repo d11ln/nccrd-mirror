@@ -16,28 +16,31 @@ namespace NCCRD.Database.Models
 
         [Required]
         [MaxLength(450)]
-        public string TableName { get; set; }
+        public string EntityName { get; set; }
 
         [Required]
         [MaxLength(450)]
-        public string ColumnName { get; set; }
+        public string ChangeType { get; set; }
+
+        //[Required]
+        public string PrimaryKeyValue { get; set; }
 
         [Required]
+        [MaxLength(450)]
+        public string PropertyName { get; set; }
+
         public string OldValue { get; set; }
 
-        [Required]
         public string NewValue { get; set; }
 
         [Required]
-        public DateTime UpdateTime { get; set; }
+        public DateTime DateChanged { get; set; }
 
         //FK - User
-        [Required]
-        [ForeignKey("UpdateUser")]
-        public int UpdateUserId { get; set; }
-        [Required]
+        [ForeignKey("ActiveUser")]
+        public int? ActiveUserId { get; set; }
         [IgnoreDataMember]
-        public User UpdateUser { get; set; }
+        public User ActiveUser { get; set; }
 
     }
 }
