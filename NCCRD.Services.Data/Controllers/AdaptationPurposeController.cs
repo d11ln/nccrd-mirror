@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get AdaptationPurpose by Value
+        /// </summary>
+        /// <param name="value">The Value of the AdaptationPurpose to get</param>
+        /// <returns>AdaptationPurpose data as JSON</returns>
+        [HttpGet]
+        [Route("api/AdaptationPurpose/GetByValue/{value}")]
+        public AdaptationPurpose GetByValue(string value)
+        {
+            AdaptationPurpose data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.AdaptationPurpose.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add AdaptationPurpose
         /// </summary>
         /// <param name="adaptationPurpose">The AdaptationPurpose to add</param>

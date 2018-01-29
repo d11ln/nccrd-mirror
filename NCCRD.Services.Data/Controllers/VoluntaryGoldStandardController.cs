@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get VoluntaryGoldStandard by Value
+        /// </summary>
+        /// <param name="value">The Value of the VoluntaryGoldStandard to get</param>
+        /// <returns>VoluntaryGoldStandard data as JSON</returns>
+        [HttpGet]
+        [Route("api/VoluntaryGoldStandard/GetByValue/{value}")]
+        public VoluntaryGoldStandard GetByValue(string value)
+        {
+            VoluntaryGoldStandard data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.VoluntaryGoldStandard.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add VoluntaryGoldStandard
         /// </summary>
         /// <param name="voluntaryGoldStandard">The VoluntaryGoldStandard to add</param>

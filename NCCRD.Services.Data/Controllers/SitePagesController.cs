@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get SitePages by page Title
+        /// </summary>
+        /// <param name="pageTitle">The Title of the SitePages to get</param>
+        /// <returns>SitePages data as JSON</returns>
+        [HttpGet]
+        [Route("api/SitePages/GetByValue/{value}")]
+        public SitePage GetByValue(string pageTitle)
+        {
+            SitePage data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.SitePages.FirstOrDefault(x => x.PageTitle == pageTitle);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add SitePage
         /// </summary>
         /// <param name="sitePages">The SitePage to add</param>

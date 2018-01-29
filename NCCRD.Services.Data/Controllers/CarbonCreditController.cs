@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get CarbonCredit by Value
+        /// </summary>
+        /// <param name="value">The Value of the CarbonCredit to get</param>
+        /// <returns>CarbonCredit data as JSON</returns>
+        [HttpGet]
+        [Route("api/CarbonCredit/GetByValue/{value}")]
+        public CarbonCredit GetByValue(string value)
+        {
+            CarbonCredit data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.CarbonCredit.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add CarbonCredit
         /// </summary>
         /// <param name="carbonCredit">The CarbonCredit to add</param>

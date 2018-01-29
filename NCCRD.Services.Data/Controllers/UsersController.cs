@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get User by UserRoleId
+        /// </summary>
+        /// <param name="userRoleId">The UserRoleId of the User to get</param>
+        /// <returns>User data as JSON</returns>
+        [HttpGet]
+        [Route("api/Users/GetByUserRoleId/{userRoleId}")]
+        public User GetByUserRoleId(int userRoleId)
+        {
+            User data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Users.FirstOrDefault(x => x.UserRoleId == userRoleId);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add User
         /// </summary>
         /// <param name="user">The User to add</param>

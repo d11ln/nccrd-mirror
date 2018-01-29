@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get ProjectType by Value
+        /// </summary>
+        /// <param name="value">The Value of the ProjectType to get</param>
+        /// <returns>ProjectType data as JSON</returns>
+        [HttpGet]
+        [Route("api/ProjectType/GetByValue/{value}")]
+        public ProjectType GetByValue(string value)
+        {
+            ProjectType data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.ProjectType.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add ProjectType
         /// </summary>
         /// <param name="projectType">The ProjectType to add</param>

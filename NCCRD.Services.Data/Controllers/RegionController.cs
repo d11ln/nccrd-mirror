@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get Region by Name
+        /// </summary>
+        /// <param name="name">The Name of the Region to get</param>
+        /// <returns>Region data as JSON</returns>
+        [HttpGet]
+        [Route("api/Region/GetByValue/{value}")]
+        public Region GetByValue(string name)
+        {
+            Region data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Region.FirstOrDefault(x => x.RegionName == name);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Region
         /// </summary>
         /// <param name="region">The Region to add</param>

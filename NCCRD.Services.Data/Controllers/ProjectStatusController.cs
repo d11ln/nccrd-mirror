@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get ProjectStatus by Value
+        /// </summary>
+        /// <param name="value">The Value of the ProjectStatus to get</param>
+        /// <returns>ProjectStatus data as JSON</returns>
+        [HttpGet]
+        [Route("api/ProjectStatus/GetByValue/{value}")]
+        public ProjectStatus GetByValue(string value)
+        {
+            ProjectStatus data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.ProjectStatus.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add ProjectStatus
         /// </summary>
         /// <param name="projectStatus">The ProjectStatus to add</param>

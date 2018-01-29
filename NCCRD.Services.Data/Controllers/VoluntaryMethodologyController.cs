@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get VoluntaryMethodology by Value
+        /// </summary>
+        /// <param name="value">The Value of the VoluntaryMethodology to get</param>
+        /// <returns>VoluntaryMethodology data as JSON</returns>
+        [HttpGet]
+        [Route("api/VoluntaryMethodology/GetByValue/{value}")]
+        public VoluntaryMethodology GetByValue(string value)
+        {
+            VoluntaryMethodology data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.VoluntaryMethodology.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add VoluntaryMethodology
         /// </summary>
         /// <param name="voluntaryMethodology">The VoluntaryMethodology to add</param>

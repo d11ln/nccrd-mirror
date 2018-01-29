@@ -35,7 +35,7 @@ namespace NCCRD.Services.Data.Controllers
         /// <summary>
         /// Get AdaptationDetail by Id
         /// </summary>
-        /// <param name="id">The Id of the AdaptationDetail to get</param>
+        /// <param name="descr">The Id of the AdaptationDetail to get</param>
         /// <returns>AdaptationDetail data as JSON</returns>
         [HttpGet]
         [Route("api/AdaptationDetails/GetByID/{id}")]
@@ -45,7 +45,64 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == id);
+                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == descr);
+            }
+
+            return adaptationDetail;
+        }
+
+        /// <summary>
+        /// Get AdaptationDetail by Description
+        /// </summary>
+        /// <param name="descr">The Id of the AdaptationDetail to get</param>
+        /// <returns>AdaptationDetail data as JSON</returns>
+        [HttpGet]
+        [Route("api/AdaptationDetails/GetByID/{descr}")]
+        public AdaptationDetail GetByDescription(string descr)
+        {
+            AdaptationDetail adaptationDetail = null;
+
+            using (var context = new SQLDBContext())
+            {
+                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.Description == descr);
+            }
+
+            return adaptationDetail;
+        }
+
+        /// <summary>
+        /// Get AdaptationDetail by ProjectId
+        /// </summary>
+        /// <param name="projectId">The ProjectId of the AdaptationDetail to get</param>
+        /// <returns>AdaptationDetail data as JSON</returns>
+        [HttpGet]
+        [Route("api/AdaptationDetails/GetByProjectId/{projectId}")]
+        public AdaptationDetail GetByProjectId(int projectId)
+        {
+            AdaptationDetail adaptationDetail = null;
+
+            using (var context = new SQLDBContext())
+            {
+                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.ProjectId == projectId);
+            }
+
+            return adaptationDetail;
+        }
+
+        /// <summary>
+        /// Get AdaptationDetail by SectorId
+        /// </summary>
+        /// <param name="sectorId">The SectorId of the AdaptationDetail to get</param>
+        /// <returns>AdaptationDetail data as JSON</returns>
+        [HttpGet]
+        [Route("api/AdaptationDetails/GetBySectorId/{sectorId}")]
+        public AdaptationDetail GetBySectorId(int sectorId)
+        {
+            AdaptationDetail adaptationDetail = null;
+
+            using (var context = new SQLDBContext())
+            {
+                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.SectorId == sectorId);
             }
 
             return adaptationDetail;

@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get Funder by Value
+        /// </summary>
+        /// <param name="value">The Value of the Funder to get</param>
+        /// <returns>Funder data as JSON</returns>
+        [HttpGet]
+        [Route("api/Funders/GetByValue/{value}")]
+        public Funder GetByValue(string value)
+        {
+            Funder data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Funders.FirstOrDefault(x => x.Name == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Funder
         /// </summary>
         /// <param name="funder">The Funder to add</param>

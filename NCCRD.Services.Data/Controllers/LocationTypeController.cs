@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get LocationType by Value
+        /// </summary>
+        /// <param name="value">The Value of the LocationType to get</param>
+        /// <returns>LocationType data as JSON</returns>
+        [HttpGet]
+        [Route("api/LocationType/GetByValue/{value}")]
+        public LocationType GetByValue(string value)
+        {
+            LocationType data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.LocationType.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add LocationType
         /// </summary>
         /// <param name="locationType">The LocationType to add</param>

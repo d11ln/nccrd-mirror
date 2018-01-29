@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get Title by Value
+        /// </summary>
+        /// <param name="value">The Value of the Title to get</param>
+        /// <returns>Title data as JSON</returns>
+        [HttpGet]
+        [Route("api/Title/GetByValue/{value}")]
+        public Title GetByValue(string value)
+        {
+            Title data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Title.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Title
         /// </summary>
         /// <param name="title">The Title to add</param>

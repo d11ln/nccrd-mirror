@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get ValidationStatus by Value
+        /// </summary>
+        /// <param name="value">The Value of the ValidationStatus to get</param>
+        /// <returns>ValidationStatus data as JSON</returns>
+        [HttpGet]
+        [Route("api/ValidationStatus/GetByValue/{value}")]
+        public ValidationStatus GetByValue(string value)
+        {
+            ValidationStatus data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.ValidationStatus.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add ValidationStatus
         /// </summary>
         /// <param name="validationStatus">The ValidationStatus to add</param>

@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get Typology by Value
+        /// </summary>
+        /// <param name="value">The Value of the Typology to get</param>
+        /// <returns>Typology data as JSON</returns>
+        [HttpGet]
+        [Route("api/Typology/GetByValue/{value}")]
+        public Typology GetByValue(string value)
+        {
+            Typology data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Typology.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Typology
         /// </summary>
         /// <param name="typology">The Typology to add</param>

@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get CDMStatus by Value
+        /// </summary>
+        /// <param name="value">The Value of the CDMStatus to get</param>
+        /// <returns>CDMStatus data as JSON</returns>
+        [HttpGet]
+        [Route("api/CDMStatus/GetByValue/{value}")]
+        public CDMStatus GetByValue(string value)
+        {
+            CDMStatus data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.CDMStatus.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add CDMStatus
         /// </summary>
         /// <param name="cdmStatus">The CDMStatus to add</param>

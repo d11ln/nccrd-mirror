@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get ProjectSubType by Value
+        /// </summary>
+        /// <param name="value">The Value of the ProjectSubType to get</param>
+        /// <returns>ProjectSubType data as JSON</returns>
+        [HttpGet]
+        [Route("api/ProjectSubType/GetByValue/{value}")]
+        public ProjectSubType GetByValue(string value)
+        {
+            ProjectSubType data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.ProjectSubType.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Get ProjectSubType by ProjectTypeId
         /// </summary>
         /// <param name="projectTypeId">The ProjectTypeId of the ProjectSubType to get</param>

@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get CDMMethodology by Value
+        /// </summary>
+        /// <param name="value">The Value of the CDMMethodology to get</param>
+        /// <returns>CDMMethodology data as JSON</returns>
+        [HttpGet]
+        [Route("api/CDMMethodology/GetByValue/{value}")]
+        public CDMMethodology GetByValue(string value)
+        {
+            CDMMethodology data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.CDMMethodology.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add CDMMethodology
         /// </summary>
         /// <param name="cdmMethodology">The CDMMethodology to add</param>

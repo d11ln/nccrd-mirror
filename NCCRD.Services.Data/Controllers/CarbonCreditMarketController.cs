@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get CarbonCreditMarket by Value
+        /// </summary>
+        /// <param name="value">The Value of the CarbonCreditMarket to get</param>
+        /// <returns>CarbonCreditMarket data as JSON</returns>
+        [HttpGet]
+        [Route("api/CarbonCreditMarket/GetByValue/{value}")]
+        public CarbonCreditMarket GetByValue(string value)
+        {
+            CarbonCreditMarket data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.CarbonCreditMarket.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add CarbonCreditMarket
         /// </summary>
         /// <param name="carbonCreditMarket">The CarbonCreditMarket to add</param>

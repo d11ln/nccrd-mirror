@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get ResearchType by Value
+        /// </summary>
+        /// <param name="value">The Value of the ResearchType to get</param>
+        /// <returns>ResearchType data as JSON</returns>
+        [HttpGet]
+        [Route("api/ResearchType/GetByValue/{value}")]
+        public ResearchType GetByValue(string value)
+        {
+            ResearchType data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.ResearchType.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add ResearchType
         /// </summary>
         /// <param name="researchType">The ResearchType to add</param>

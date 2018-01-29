@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get FundingStatus by Value
+        /// </summary>
+        /// <param name="value">The Value of the FundingStatus to get</param>
+        /// <returns>FundingStatus data as JSON</returns>
+        [HttpGet]
+        [Route("api/FundingStatus/GetByValue/{value}")]
+        public FundingStatus GetByValue(string value)
+        {
+            FundingStatus data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.FundingStatus.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add FundingStatus
         /// </summary>
         /// <param name="fundingStatus">The FundingStatus to add</param>

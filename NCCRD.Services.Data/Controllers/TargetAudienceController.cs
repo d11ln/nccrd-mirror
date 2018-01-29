@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get TargetAudience by Value
+        /// </summary>
+        /// <param name="value">The Value of the TargetAudience to get</param>
+        /// <returns>TargetAudience data as JSON</returns>
+        [HttpGet]
+        [Route("api/TargetAudience/GetByValue/{value}")]
+        public TargetAudience GetByValue(string value)
+        {
+            TargetAudience data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.TargetAudience.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add TargetAudience
         /// </summary>
         /// <param name="targetAudience">The TargetAudience to add</param>

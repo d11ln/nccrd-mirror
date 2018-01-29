@@ -52,6 +52,25 @@ namespace NCCRD.Services.Data.Controllers
         }
 
         /// <summary>
+        /// Get Sector by Value
+        /// </summary>
+        /// <param name="value">The Value of the Sector to get</param>
+        /// <returns>Sector data as JSON</returns>
+        [HttpGet]
+        [Route("api/Sector/GetByValue/{value}")]
+        public Sector GetByValue(string value)
+        {
+            Sector data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                data = context.Sector.FirstOrDefault(x => x.Value == value);
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Sector
         /// </summary>
         /// <param name="sector">The Sector to add</param>
