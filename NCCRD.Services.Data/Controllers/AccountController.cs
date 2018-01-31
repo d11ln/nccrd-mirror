@@ -330,7 +330,32 @@ namespace NCCRD.Services.Data.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser()
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                Surname = model.Surname,
+                JobTitle = model.JobTitle,
+                Organisation = model.Organisation,
+                PhysicalAddressLine1 = model.PhysicalAddressLine1,
+                PhysicalAddressLine2 = model.PhysicalAddressLine2,
+                PhysicalAddressLine3 = model.PhysicalAddressLine3,
+                PhysicalAddressTown = model.PhysicalAddressTown,
+                PhysicalAddressCountry = model.PhysicalAddressCountry,
+                PhysicalAddressProvince = model.PhysicalAddressProvince,
+                PhysicalAddressPostalCode = model.PhysicalAddressPostalCode,
+                PostalAddressLine1 = model.PostalAddressLine1,
+                PostalAddressLine2 = model.PostalAddressLine2,
+                PostalAddressLine3 = model.PostalAddressLine3,
+                PostalAddressTown = model.PostalAddressTown,
+                PostalAddressProvince = model.PostalAddressProvince,
+                PostalAddressCountry = model.PostalAddressCountry,
+                PostalAddressPostalCode = model.PostalAddressPostalCode,
+                PhoneNumber = model.PhoneNumber,
+                FaxNumber = model.FaxNumber,
+                MobileNumber = model.MobileNumber
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

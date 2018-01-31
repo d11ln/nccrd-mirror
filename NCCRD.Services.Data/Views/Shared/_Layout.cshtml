@@ -23,7 +23,17 @@
                     <li>@Html.ActionLink("Swagger Docs", "", "Swagger", new { area = "" }, null)</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Login / Register", "Index", "Login", new { area = "" }, null)</li>
+                    @if (Session["UserId"] != null && Session["UserId"].ToString() != "")
+                    {
+                        var userId = "Hello, " + Session["UserId"].ToString();
+                        <li>@Html.ActionLink(userId, "Logout", "Login", new { area = "" })</li>     
+                        <li>@Html.ActionLink("Logout", "Logout", "Login", new { area = "" }, null)</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Login", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("Register", "Register", "Login", new { area = "" }, null)</li>
+                    }
                 </ul>
             </div>
         </div>

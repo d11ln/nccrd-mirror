@@ -1,0 +1,227 @@
+﻿@model NCCRD.Services.Data.Models.RegisterBindingModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<style type="text/css">
+    .required:after {
+        content: " *";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+<h2>Register</h2>
+@using (Html.BeginForm("Register", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-9">
+            <h4>Account details</h4>
+        </div>
+        <div class="col-md-3 right">
+            <h6 style="color:red">Required fields indicated with red *</h6>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <hr />
+    <h4>Profile data</h4>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.JobTitle, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.JobTitle, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Organisation, new { @class = "col-md-2 control-label required" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Organisation, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <hr />
+    <h4>Address details</h4>
+
+    <div class="form-group">
+        <h4 class="col-md-6">Physical address</h4>
+        <h4 class="col-md-6">Postal address</h4>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressLine1, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressLine1, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressLine1, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressLine1, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressLine2, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressLine2, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressLine2, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressLine2, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressLine3, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressLine3, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressLine3, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressLine3, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressTown, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressTown, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressTown, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressTown, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressPostalCode, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressPostalCode, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressPostalCode, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressPostalCode, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressProvince, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressProvince, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressProvince, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressProvince, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhysicalAddressCountry, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhysicalAddressCountry, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.PostalAddressCountry, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PostalAddressCountry, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <hr />
+    <h4>Contact details</h4>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+        </div>
+
+        @Html.LabelFor(m => m.MobileNumber, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.FaxNumber, new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        @Html.ValidationSummary("", new { @class = "text-danger col-md-offset-2 col-md-10" })
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (ViewBag.Message != null)
+                {
+                    string vbMsg = ViewBag.Message;
+                    var messages = vbMsg.Split('|');
+
+                    <ul>
+                        @foreach (string msg in messages)
+                        {
+                            <li><span style="color:firebrick">@msg</span></li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+}
+
