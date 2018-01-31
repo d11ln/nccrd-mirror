@@ -59,7 +59,7 @@ namespace NCCRD.Database.Models.Contexts
         public DbSet<VoluntaryGoldStandard> VoluntaryGoldStandard { get; set; }
         public DbSet<VoluntaryMethodology> VoluntaryMethodology { get; set; }
 
-        public SQLDBContext() : base(Properties.Settings.Default.DefaultConnectionString)
+        public SQLDBContext() : base("DefaultConnection")
         {
             System.Data.Entity.Database.SetInitializer(new SQLDBContextInitializer());
         }

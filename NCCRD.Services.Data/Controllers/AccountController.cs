@@ -22,7 +22,7 @@ namespace NCCRD.Services.Data.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
-    [ApiExplorerSettings(IgnoreApi = true)]
+    //[ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -373,6 +373,14 @@ namespace NCCRD.Services.Data.Controllers
                 return GetErrorResult(result); 
             }
             return Ok();
+        }
+
+        // GET api/values
+        [Route("GetValues")]
+        public string GetValues()
+        {
+            var userName = this.RequestContext.Principal.Identity.Name;
+            return String.Format("Hello, {0}.", userName);
         }
 
         protected override void Dispose(bool disposing)

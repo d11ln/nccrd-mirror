@@ -227,7 +227,7 @@ namespace NCCRD.Services.Data
                         // the method as shown below.
                         //
                         //c.CustomAsset("index", containingAssembly, "YourWebApiProject.SwaggerExtensions.index.html");
-                        //c.CustomAsset("index", thisAssembly, "NCCRD.Services.Data.Content.index.html");
+                        c.CustomAsset("index", thisAssembly, "NCCRD.Services.Data.Content.index.html");
 
                         // If your API has multiple versions and you've applied the MultipleApiVersions setting
                         // as described above, you can also enable a select box in the swagger-ui, that displays

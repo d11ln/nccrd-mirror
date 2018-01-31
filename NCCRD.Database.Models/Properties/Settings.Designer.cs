@@ -25,16 +25,6 @@ namespace NCCRD.Database.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=NCCRDv2;Data" +
-            " Source=.")]
-        public string DefaultConnectionString {
-            get {
-                return ((string)(this["DefaultConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("SQLDB")]
         public string LoggerType {
             get {

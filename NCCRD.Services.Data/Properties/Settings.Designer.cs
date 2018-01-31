@@ -22,15 +22,5 @@ namespace NCCRD.Services.Data.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=NCCRDv2;Data" +
-            " Source=.")]
-        public string DefaultConnectionString {
-            get {
-                return ((string)(this["DefaultConnectionString"]));
-            }
-        }
     }
 }

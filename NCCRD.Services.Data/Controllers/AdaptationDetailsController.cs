@@ -35,7 +35,7 @@ namespace NCCRD.Services.Data.Controllers
         /// <summary>
         /// Get AdaptationDetail by Id
         /// </summary>
-        /// <param name="descr">The Id of the AdaptationDetail to get</param>
+        /// <param name="id">The Id of the AdaptationDetail to get</param>
         /// <returns>AdaptationDetail data as JSON</returns>
         [HttpGet]
         [Route("api/AdaptationDetails/GetByID/{id}")]
@@ -45,7 +45,7 @@ namespace NCCRD.Services.Data.Controllers
 
             using (var context = new SQLDBContext())
             {
-                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == descr);
+                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == id);
             }
 
             return adaptationDetail;

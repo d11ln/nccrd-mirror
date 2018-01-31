@@ -12,7 +12,7 @@ namespace NCCRD.Database.Contexts
     {
         public DbSet<ChangeLog> ChangeLog { get; set; }
 
-        public SQLChangeLoggerContext() : base(Properties.Settings.Default.DefaultConnectionString)
+        public SQLChangeLoggerContext() : base("DefaultConnection")
         {
             System.Data.Entity.Database.SetInitializer(new CreateDatabaseIfNotExists<SQLChangeLoggerContext>());
         }
