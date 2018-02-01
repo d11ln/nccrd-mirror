@@ -1,0 +1,27 @@
+﻿@model NCCRD.Services.Data.Models.ProjectsViewModel
+@{
+    ViewBag.Title = "Projects";
+}
+
+<h2>Projects</h2>
+
+@if (ViewBag.Message != null)
+{
+    <label class="label-warning">@ViewBag.Message</label>
+}
+
+<hr />
+
+@foreach (var project in Model.Projects.OrderBy(p =>  p.ProjectTitle.Trim()))
+{
+    <div class="row">
+        <div class="col-md-2">
+            <h4>@project.ProjectTitle</h4>
+            <button class="btn btn-primary">View details</button>
+        </div>
+        <div class="col-md-10">
+            <p style="color:slategrey">@project.ProjectDescription</p>
+        </div>
+    </div>
+    <hr />
+}

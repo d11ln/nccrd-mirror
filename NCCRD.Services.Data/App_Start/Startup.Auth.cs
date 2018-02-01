@@ -64,6 +64,33 @@ namespace NCCRD.Services.Data
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            using (var context = new ApplicationDbContext())
+            {
+                var roleStore = new RoleStore<IdentityRole>(context);
+                var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                var defaultRoles = new string[]
+                {
+                    "Administrator",
+                    "Funder",
+                    "Project Owner",
+                    "Option Owner",
+                    "General"
+                };
+
+                foreach (var role in defaultRoles)
+                {
+                    roleManager.Create(new IdentityRole { Name = role });
+                }
+
+                //Create default admin user
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+                var user = new ApplicationUser { UserName = "admin", PasswordHash = userManager.PasswordHasher.HashPassword("admin") };
+                userManager.Create(user);
+                userManager.AddToRole(user.Id, "Administrator");
+            }
         }
     }
 }

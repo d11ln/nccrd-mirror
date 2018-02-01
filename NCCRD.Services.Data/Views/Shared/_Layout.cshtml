@@ -20,7 +20,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Swagger Docs", "", "Swagger", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Projects", "Index", "Project", new { area = "" }, null)</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Session["UserId"] != null && Session["UserId"].ToString() != "")
