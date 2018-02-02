@@ -1,4 +1,6 @@
-﻿using NCCRD.Services.Data.Models;
+﻿using NCCRD.Database.Models;
+using NCCRD.Services.Data.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,7 @@ namespace NCCRD.Services.Data.Classes
             _client.BaseAddress = new Uri("http://localhost:58683/");
         }
 
-        public async Task<HttpResponseMessage> Get(string route, string access_token = "")
+        public async Task<string> Get(string route, string access_token = "")
         {
             if(!string.IsNullOrEmpty(access_token))
             {
@@ -30,7 +32,8 @@ namespace NCCRD.Services.Data.Classes
             }
 
             var response = await _client.GetAsync(route);
-            return response;
+            string content = await response.Content.ReadAsStringAsync();
+            return content;
         }
 
         public async Task<HttpResponseMessage> Post(string route, object data, string access_token = "")
@@ -74,6 +77,38 @@ namespace NCCRD.Services.Data.Classes
             }
 
             return result;
+        }
+
+        public async Task<List<Project>> GetProjects(string access_token = "")
+        {
+            if (!string.IsNullOrEmpty(access_token))
+            {
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access_token);
+            }
+
+            var response = await _client.GetAsync("api/Projects/GetAll");
+            string content = await response.Content.ReadAsStringAsync();
+
+            List<Project> projects = new List<Project>();
+            if (response.IsSuccessStatusCode)
+            {
+                projects = JsonConvert.DeserializeObject<List<Project>>(content);
+            }
+            //else
+            //{
+            //    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            //    {
+            //        var template = new
+            //        {
+            //            Message = ""
+            //        };
+
+            //        var message = JsonConvert.DeserializeAnonymousType(content, template);
+            //        ViewBag.Message = message.Message;
+            //    }
+            //}
+
+            return projects;
         }
 
     }

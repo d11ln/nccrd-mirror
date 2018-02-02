@@ -88,8 +88,12 @@ namespace NCCRD.Services.Data
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 var user = new ApplicationUser { UserName = "admin", PasswordHash = userManager.PasswordHasher.HashPassword("admin") };
-                userManager.Create(user);
-                userManager.AddToRole(user.Id, "Administrator");
+
+                if (userManager.FindByName(user.UserName) == null)
+                {
+                    userManager.Create(user);
+                    userManager.AddToRole(user.Id, "Administrator");
+                }
             }
         }
     }

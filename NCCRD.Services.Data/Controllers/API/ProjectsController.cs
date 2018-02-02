@@ -12,7 +12,7 @@ namespace NCCRD.Services.Data.Controllers.API
     /// <summary>
     /// Manage Project data
     /// </summary>
-    [Authorize(Roles = "Administrator,Project Owner")]
+    //[Authorize(Roles = "Administrator,Project Owner")]
     public class ProjectsController : ApiController
     {
         /// <summary>
