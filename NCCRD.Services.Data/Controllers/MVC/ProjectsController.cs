@@ -17,16 +17,21 @@ namespace NCCRD.Services.Data.Controllers.MVC
         private const string unfilteredKey = "[Unfiltered]";
 
         // GET: Project
+        //public async Task<ActionResult> Index()
+        //{
+        //    var model = new ProjectsViewModel()
+        //    {
+        //        Projects = await GetProjects(),
+        //        Regions = await GetRegions(),
+        //        LocationTypes = await GetLocationTypes()
+        //    };
+
+        //    return View(model);
+        //}
+
         public async Task<ActionResult> Index()
         {
-            var model = new ProjectsViewModel()
-            {
-                Projects = await GetProjects(),
-                Regions = await GetRegions(),
-                LocationTypes = await GetLocationTypes()
-            };
-
-            return View(model);
+            return View("List");
         }
 
         [HttpGet]
@@ -115,24 +120,6 @@ namespace NCCRD.Services.Data.Controllers.MVC
             };
             filteredRegions.Add(unfilteredRegion);
 
-            //Region allMetro = new Region()
-            //{
-            //    RegionId = regions.Max(x => x.RegionId) * 11,
-            //    RegionName = unfilteredKey,
-            //    LocationTypeId = (await GetLocationTypes()).FirstOrDefault(x => x.Value == "DistrictMunicipality").LocationTypeId,
-            //    ParentRegionID = allProvince.RegionId
-            //};
-            //filteredRegions.Add(allMetro);
-
-            //Region allLocalMunicipality = new Region()
-            //{
-            //    RegionId = regions.Max(x => x.RegionId) * 12,
-            //    RegionName = unfilteredKey,
-            //    LocationTypeId = (await GetLocationTypes()).FirstOrDefault(x => x.Value == "LocalMunicipality").LocationTypeId,
-            //    ParentRegionID = allMetro.RegionId
-            //};
-            //filteredRegions.Add(allLocalMunicipality);
-
             //Order
             var orderedRegions = new List<Region>();
             orderedRegions.AddRange(filteredRegions.Where(x => x.RegionName == unfilteredKey).OrderBy(x => x.RegionId));
@@ -156,6 +143,7 @@ namespace NCCRD.Services.Data.Controllers.MVC
             var projectRegions = JsonConvert.DeserializeObject<List<ProjectRegion>>(projectRegionsJson);
             return projectRegions;
         }
+
     }
 
 

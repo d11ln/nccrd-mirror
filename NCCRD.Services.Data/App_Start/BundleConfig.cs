@@ -29,6 +29,12 @@ namespace NCCRD.Services.Data
                        "~/Scripts/knockout-{version}.js",
                        "~/Scripts/app.js"));
 
+            //MDB
+            bundles.Add(new ScriptBundle("~/bundles/MDB").Include(
+                       "~/MDB/js/popper.min.js",
+                       "~/MDB/js/bootstrap.min.js",
+                       "~/MDB/js/mdb.min.js"));
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = true;

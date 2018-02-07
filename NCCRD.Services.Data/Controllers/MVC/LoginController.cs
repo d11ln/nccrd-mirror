@@ -85,32 +85,55 @@ namespace NCCRD.Services.Data.Controllers.MVC
                 APIClient client = new APIClient();
                 var result = await client.Login(model);
 
-                //FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
-                //      result.userName,
-                //      result.issued,
-                //      result.expires,
-                //      false,
-                //      result.access_token,
-                //      FormsAuthentication.FormsCookiePath);
+                if (result.errors.Count == 0)
+                {
 
-                //// Encrypt the ticket.
-                //string encTicket = FormsAuthentication.Encrypt(ticket);
+                    //FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
+                    //      result.userName,
+                    //      result.issued,
+                    //      result.expires,
+                    //      false,
+                    //      result.access_token,
+                    //      FormsAuthentication.FormsCookiePath);
 
-                //// Create the cookie.
-                //Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                    //// Encrypt the ticket.
+                    //string encTicket = FormsAuthentication.Encrypt(ticket);
 
-                //Update session info
-                Session["UserId"] = result.userName;
-                Session["AccessTokenIssued"] = result.issued.ToString();
-                Session["AccessTokenExpires"] = result.expires.ToString();
-                Session["AccessToken"] = result.access_token;
+                    //// Create the cookie.
+                    //Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
 
-                return RedirectToAction("Index", "Home");
+                    if (!string.IsNullOrEmpty(result.access_token))
+                    {
+
+                        //Update session info
+                        Session["UserId"] = result.userName;
+                        Session["AccessTokenIssued"] = result.issued.ToString();
+                        Session["AccessTokenExpires"] = result.expires.ToString();
+                        Session["AccessToken"] = result.access_token;
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = string.Join("|", result.errors);
+                }
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+
+            Session.Remove("UserId");
+            Session.Remove("AccessTokenIssued");
+            Session.Remove("AccessTokenExpires");
+            Session.Remove("AccessToken");
+
+            return View();
         }
     }
 }

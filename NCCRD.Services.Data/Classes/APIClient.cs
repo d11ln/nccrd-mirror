@@ -60,20 +60,36 @@ namespace NCCRD.Services.Data.Classes
             using (var content = new FormUrlEncodedContent(values))
             {
                 var response = await _client.PostAsync("/Token", content);
-
-                //get access token from response body
                 var responseJson = await response.Content.ReadAsStringAsync();
-                var jObject = JObject.Parse(responseJson);
 
-                result = new LoginResponseViewModel()
+                if (response.IsSuccessStatusCode)
                 {
-                    access_token = jObject.GetValue("access_token").ToString(),
-                    token_type = jObject.GetValue("token_type").ToString(),
-                    expires_in = long.Parse(jObject.GetValue("expires_in").ToString()),
-                    userName = jObject.GetValue("userName").ToString(),
-                    issued = DateTime.ParseExact(jObject.GetValue(".issued").ToString(), "ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture),
-                    expires = DateTime.ParseExact(jObject.GetValue(".expires").ToString(), "ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture)
-                };
+
+                    //get access token from response body
+                    
+                    var jObject = JObject.Parse(responseJson);
+
+                    result = new LoginResponseViewModel()
+                    {
+                        access_token = jObject.GetValue("access_token").ToString(),
+                        token_type = jObject.GetValue("token_type").ToString(),
+                        expires_in = long.Parse(jObject.GetValue("expires_in").ToString()),
+                        userName = jObject.GetValue("userName").ToString(),
+                        issued = DateTime.ParseExact(jObject.GetValue(".issued").ToString(), "ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture),
+                        expires = DateTime.ParseExact(jObject.GetValue(".expires").ToString(), "ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture)
+                    };
+                }
+                else
+                {
+                    var obj = new
+                    {
+                        error = "",
+                        error_description = ""
+                    };
+
+                    var responseObj = JsonConvert.DeserializeAnonymousType(responseJson, obj);
+                    result.errors.Add(responseObj.error_description);
+                }
             }
 
             return result;

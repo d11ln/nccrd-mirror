@@ -62,6 +62,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -69,6 +72,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -317,7 +323,34 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\app.js" />
+    <Content Include="MDB\css\bootstrap.css" />
+    <Content Include="MDB\css\bootstrap.min.css" />
+    <Content Include="MDB\css\mdb.css" />
+    <Content Include="MDB\css\mdb.min.css" />
+    <Content Include="MDB\css\style.css" />
+    <Content Include="MDB\img\lightbox\default-skin.png" />
+    <Content Include="MDB\img\lightbox\default-skin.svg" />
+    <Content Include="MDB\img\lightbox\preloader.gif" />
+    <Content Include="MDB\img\overlays\01.png" />
+    <Content Include="MDB\img\overlays\02.png" />
+    <Content Include="MDB\img\overlays\03.png" />
+    <Content Include="MDB\img\overlays\04.png" />
+    <Content Include="MDB\img\overlays\05.png" />
+    <Content Include="MDB\img\overlays\06.png" />
+    <Content Include="MDB\img\overlays\07.png" />
+    <Content Include="MDB\img\overlays\08.png" />
+    <Content Include="MDB\img\overlays\09.png" />
+    <Content Include="MDB\img\svg\arrow_left.svg" />
+    <Content Include="MDB\img\svg\arrow_right.svg" />
+    <Content Include="MDB\index.html" />
+    <Content Include="MDB\js\bootstrap.js" />
+    <Content Include="MDB\js\bootstrap.min.js" />
+    <Content Include="MDB\js\jquery-3.2.1.min.js" />
+    <Content Include="MDB\js\mdb.js" />
+    <Content Include="MDB\js\mdb.min.js" />
+    <Content Include="MDB\js\popper.min.js" />
+    <Content Include="MDB\license.txt" />
+    <Content Include="MDB\README.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -342,6 +375,59 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="MDB\font\roboto\Roboto-Bold.eot" />
+    <Content Include="MDB\font\roboto\Roboto-Bold.ttf" />
+    <Content Include="MDB\font\roboto\Roboto-Bold.woff" />
+    <Content Include="MDB\font\roboto\Roboto-Bold.woff2" />
+    <Content Include="MDB\font\roboto\Roboto-Light.eot" />
+    <Content Include="MDB\font\roboto\Roboto-Light.ttf" />
+    <Content Include="MDB\font\roboto\Roboto-Light.woff" />
+    <Content Include="MDB\font\roboto\Roboto-Light.woff2" />
+    <Content Include="MDB\font\roboto\Roboto-Medium.eot" />
+    <Content Include="MDB\font\roboto\Roboto-Medium.ttf" />
+    <Content Include="MDB\font\roboto\Roboto-Medium.woff" />
+    <Content Include="MDB\font\roboto\Roboto-Medium.woff2" />
+    <Content Include="MDB\font\roboto\Roboto-Regular.eot" />
+    <Content Include="MDB\font\roboto\Roboto-Regular.ttf" />
+    <Content Include="MDB\font\roboto\Roboto-Regular.woff" />
+    <Content Include="MDB\font\roboto\Roboto-Regular.woff2" />
+    <Content Include="MDB\font\roboto\Roboto-Thin.eot" />
+    <Content Include="MDB\font\roboto\Roboto-Thin.ttf" />
+    <Content Include="MDB\font\roboto\Roboto-Thin.woff" />
+    <Content Include="MDB\font\roboto\Roboto-Thin.woff2" />
+    <Content Include="MDB\License.pdf" />
+    <Content Include="MDB\sass\mdb.scss" />
+    <Content Include="MDB\sass\mdb\free\data\_colors.scss" />
+    <Content Include="MDB\sass\mdb\free\data\_functions.scss" />
+    <Content Include="MDB\sass\mdb\free\data\_mixins.scss" />
+    <Content Include="MDB\sass\mdb\free\data\_prefixer.scss" />
+    <Content Include="MDB\sass\mdb\free\data\_variables-b4.scss" />
+    <Content Include="MDB\sass\mdb\free\data\_variables.scss" />
+    <Content Include="MDB\sass\mdb\free\_animations.scss" />
+    <Content Include="MDB\sass\mdb\free\_badge.scss" />
+    <Content Include="MDB\sass\mdb\free\_breadcrumb.scss" />
+    <Content Include="MDB\sass\mdb\free\_buttons.scss" />
+    <Content Include="MDB\sass\mdb\free\_cards-basic.scss" />
+    <Content Include="MDB\sass\mdb\free\_carousel-basic.scss" />
+    <Content Include="MDB\sass\mdb\free\_collapse.scss" />
+    <Content Include="MDB\sass\mdb\free\_deprecated.scss" />
+    <Content Include="MDB\sass\mdb\free\_dropdowns.scss" />
+    <Content Include="MDB\sass\mdb\free\_footer.scss" />
+    <Content Include="MDB\sass\mdb\free\_forms-basic.scss" />
+    <Content Include="MDB\sass\mdb\free\_global.scss" />
+    <Content Include="MDB\sass\mdb\free\_helpers.scss" />
+    <Content Include="MDB\sass\mdb\free\_jumbotron.scss" />
+    <Content Include="MDB\sass\mdb\free\_list-group.scss" />
+    <Content Include="MDB\sass\mdb\free\_masks.scss" />
+    <Content Include="MDB\sass\mdb\free\_modals.scss" />
+    <Content Include="MDB\sass\mdb\free\_msc.scss" />
+    <Content Include="MDB\sass\mdb\free\_navbar.scss" />
+    <Content Include="MDB\sass\mdb\free\_pagination.scss" />
+    <Content Include="MDB\sass\mdb\free\_progress.scss" />
+    <Content Include="MDB\sass\mdb\free\_tables.scss" />
+    <Content Include="MDB\sass\mdb\free\_typography.scss" />
+    <Content Include="MDB\sass\mdb\free\_waves.scss" />
+    <Content Include="MDB\sass\mdb\_custom.scss" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -357,8 +443,12 @@
     <Content Include="Scripts\knockout-3.4.2.debug.js" />
     <Content Include="Scripts\knockout-3.4.2.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\projects.list.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Views\Projects\ProjectsList.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -373,10 +463,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Login\Register.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
-    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Projects\Index%28old%29.cshtml" />
+    <Content Include="Views\Projects\List%28old%29.cshtml" />
+    <Content Include="Views\Login\Logout.cshtml" />
     <Content Include="Views\Projects\List.cshtml" />
   </ItemGroup>
   <ItemGroup>

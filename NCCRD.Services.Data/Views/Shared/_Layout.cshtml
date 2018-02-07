@@ -2,44 +2,65 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
+    @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="~/MDB/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="~/MDB/css/mdb.min.css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="~/MDB/css/style.css" rel="stylesheet">
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("NCCRD Data Service", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Swagger Docs", "", "Swagger", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Projects", "Index", "Projects", new { area = "" }, null)</li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @if (Session["UserId"] != null && Session["UserId"].ToString() != "")
-                    {
-                        var userId = "Hello, " + Session["UserId"].ToString();
-                        <li>@Html.ActionLink(userId, "Logout", "Login", new { area = "" })</li>     
-                        <li>@Html.ActionLink("Logout", "Logout", "Login", new { area = "" }, null)</li>
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink("Login", "Login", "Login", new { area = "" }, null)</li>
-                        <li>@Html.ActionLink("Register", "Register", "Login", new { area = "" }, null)</li>
-                    }
-                </ul>
-            </div>
+
+
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark indigo">
+
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="/">NCCRD Data Service</a>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Swagger">Swagger API Docs</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Projects">Projects</a></li>
+            </ul>
+
+            <ul class="navbar-nav navbar-right">
+                @if (Session["UserId"] != null && Session["UserId"].ToString() != "")
+                {
+                    var userId = "Hello, " + Session["UserId"].ToString();
+                    <li class="nav-item"><a class="nav-link" href="/Login/Logout">@userId</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Login/Logout">Logout</a></li>
+                }
+                else
+                {
+                    <li class="nav-item"><a class="nav-link" href="/Login/Login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Login/Register">Register</a></li>
+                }
+            </ul>
         </div>
-    </div>
+        <!-- Collapsible content -->
+    </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -49,7 +70,8 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+    @Scripts.Render("~/bundles/MDB")
     @RenderSection("scripts", required: false)
 </body>
 </html>

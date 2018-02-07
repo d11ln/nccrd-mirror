@@ -43,11 +43,17 @@ namespace NCCRD.Services.Data.Models
 
     public class LoginResponseViewModel
     {
+        public List<string> errors { get; set; }
         public string access_token { get; set; }
         public string token_type { get; set; }
         public long expires_in { get; set; }
         public string userName { get; set; }
         public DateTime issued { get; set; }
         public DateTime expires { get; set; }
+
+        public LoginResponseViewModel()
+        {
+            errors = new List<string>();
+        }
     }
 }

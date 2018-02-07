@@ -20,5 +20,23 @@ namespace NCCRD.Services.Data.Models
             LocationTypes = new List<LocationType>();
             ProjectRegions = new List<ProjectRegion>();
         }
+
+        public class Geometry
+        {
+            public string type { get; set; }
+            public List<double> coordinates { get; set; }
+
+            public Geometry()
+            {
+                coordinates = new List<double>();
+            }
+        }
+
+        public class ProjectGeoJson
+        {
+            public string type { get; set; }
+            public Geometry geometry { get; set; } = new Geometry();
+            public Dictionary<string, string> properties { get; set; } = new Dictionary<string, string>();
+        }
     }
 }

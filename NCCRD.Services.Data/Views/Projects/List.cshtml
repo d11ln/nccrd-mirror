@@ -1,17 +1,24 @@
-﻿@model NCCRD.Services.Data.Models.ProjectsViewModel
-
-@foreach (var project in Model.Projects.OrderBy(p => p.ProjectTitle.Trim()))
-{
-    <div class="row">
-        <div class="col-md-2">
-            <h4>@project.ProjectTitle</h4>
-            <button class="btn btn-primary">View details</button>
-        </div>
-        <div class="col-md-10">
-            <p style="color:slategrey">@project.ProjectDescription</p>
-        </div>
-    </div>
-    <hr />
+﻿
+@{
+    ViewBag.Title = "Projects";
 }
 
+<br />
+<h2>@ViewBag.Title</h2>
+<br />
 
+<div data-bind="foreach: projects">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title" data-bind="text: projectTitle"></h4>
+            <p class="card-text" data-bind="text: projectDescription"></p>
+            <a href="#" class="btn btn-primary">View</a>
+        </div>
+    </div>
+
+    <br />
+</div>
+
+<script src="~/Scripts/knockout-3.4.2.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/projects.list.js"></script>

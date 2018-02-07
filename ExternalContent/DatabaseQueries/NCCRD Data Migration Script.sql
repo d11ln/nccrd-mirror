@@ -1,5 +1,31 @@
 -- ## NCCRD Data Migration Script ## --
-USE master
+USE NCCRDv2
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[fn_npclean_string] 
+(
+	@strIn AS VARCHAR(1000)
+)
+RETURNS VARCHAR(1000)
+AS
+BEGIN
+	DECLARE @iPtr AS INT
+	SET @iPtr = PATINDEX('%[^ -~0-9A-Z]%', @strIn COLLATE LATIN1_GENERAL_BIN)
+
+	WHILE @iPtr > 0 
+	BEGIN
+		SET @strIn = REPLACE(@strIn COLLATE LATIN1_GENERAL_BIN, SUBSTRING(@strIn, @iPtr, 1), '#')
+		SET @iPtr = PATINDEX('%[^ -~0-9A-Z]%', @strIn COLLATE LATIN1_GENERAL_BIN)
+	END
+
+	RETURN @strIn
+END
+GO
+
+USE MASTER
 
 --Title--
 IF (SELECT COUNT(*) FROM [NCCRDv2].dbo.Title) = 0
@@ -551,6 +577,7 @@ BEGIN
 		('OptionOwner')
 END
 
+--Users--
 IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[Users]) = 0
 BEGIN
 INSERT INTO
@@ -833,6 +860,12 @@ BEGIN
 				ON PST2.[Value] = PST.ProjectSubType
 		) PMD
 		ON PMD.ProjectDetailsId = PD.ProjectDetailsId
+
+		--Fix ProjectTitles with no-ascii characters--
+		UPDATE
+			[NCCRDv2].[dbo].[Project]
+		SET
+			ProjectTitle = [NCCRDv2].dbo.fn_npclean_string(LTRIM(RTRIM(ProjectTitle)))
 
 		--ProjectFunders--
 		INSERT INTO

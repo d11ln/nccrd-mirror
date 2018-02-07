@@ -5,7 +5,8 @@
 
 <script type="text/javascript">
 
-    function filterProjects(s) {
+    function filterProjects() {
+        var partTitle = $("#Title").val();
 
         //Filter to bottom level Region filter
         var regionId = 0;
@@ -19,7 +20,7 @@
             regionId = $('#Province').val();
         }
 
-        $("#dvProjectList").load('@(Url.Action("List","Projects",null, Request.Url.Scheme))?partTitle=' + encodeURIComponent(s) + '&regionId=' + regionId);
+        $("#dvProjectList").load('@(Url.Action("List","Projects",null, Request.Url.Scheme))?partTitle=' + encodeURIComponent(partTitle) + '&regionId=' + regionId);
     }
 
     function provinceSelect() {
@@ -80,12 +81,14 @@
 
 </script>
 
+<br />
+
 <div class="row">
     <div class="col-md-10">
         <h2>Projects</h2>
     </div>
     <div class="col-md-2 right">
-        <button class="btn btn-primary" style="height:45px;width:150px;margin-top:20px;float:right">Add Project</button>
+        <button class="btn btn-primary" style="width:175px;float:right">Add Project</button>
     </div>
 </div>
 
@@ -101,7 +104,7 @@
 <div class="row">
     <div class="col-md-3">
         <label>Title:</label>
-        <input class="form-control" type="text" onkeyup="filterProjects(this.value);">
+        <input id="Title" class="form-control" type="text" onkeyup="filterProjects();">
     </div>
     <div class="col-md-3">
         <label>Province:</label>
@@ -129,7 +132,7 @@
     </div>
 </div>
 
-<hr />
+<br />
 
 <div class="row">
     <div class="col-md-12" id="dvProjectList">
