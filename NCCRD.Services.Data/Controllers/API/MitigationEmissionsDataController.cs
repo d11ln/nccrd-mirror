@@ -58,13 +58,13 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>MitigationEmissionsData data as JSON</returns>
         [HttpGet]
         [Route("api/MitigationEmissionsData/GetByProjectID/{projectId}")]
-        public MitigationEmissionsData GetByProjectID(int projectId)
+        public List<MitigationEmissionsData> GetByProjectID(int projectId)
         {
-            MitigationEmissionsData data = null;
+            List<MitigationEmissionsData> data = new List<MitigationEmissionsData>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.MitigationEmissionsData.FirstOrDefault(x => x.ProjectId == projectId);
+                data = context.MitigationEmissionsData.Where(x => x.ProjectId == projectId).OrderBy(x => x.Year).ToList();
             }
 
             return data;

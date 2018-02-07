@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,13 +59,52 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>MitigationDetails data as JSON</returns>
         [HttpGet]
         [Route("api/MitigationDetails/GetByProjectID/{projectId}")]
-        public MitigationDetail GetByProjectID(int projectId)
+        public List<MitigationDetailsViewModel> GetByProjectID(int projectId)
         {
-            MitigationDetail data = null;
+            List<MitigationDetailsViewModel> data = new List<MitigationDetailsViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.MitigationDetails.FirstOrDefault(x => x.ProjectId == projectId);
+                var mitigationDetails = context.MitigationDetails.Where(x => x.ProjectId == projectId).ToList();
+
+                foreach (var model in mitigationDetails)
+                {
+                    var viewModel = new MitigationDetailsViewModel(model);
+
+                    viewModel.CarbonCreditMarketName = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == viewModel.CarbonCreditId).Value;
+
+                    if (viewModel.CarbonCreditMarketId != null)
+                    {
+                        viewModel.CarbonCreditMarketName = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == viewModel.CarbonCreditMarketId).Value;
+                    }
+
+                    if (viewModel.CDMStatusId != null)
+                    {
+                        viewModel.CDMStatusName = context.CDMStatus.FirstOrDefault(x => x.CDMStatusId == viewModel.CDMStatusId).Value;
+                    }
+
+                    if (viewModel.CDMMethodologyId != null)
+                    {
+                        viewModel.CDMMethodologyName = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == viewModel.CDMMethodologyId).Value;
+                    }
+
+                    if (viewModel.VoluntaryMethodologyId != null)
+                    {
+                        viewModel.VoluntaryMethodologyName = context.VoluntaryMethodology.FirstOrDefault(x => x.VoluntaryMethodologyId == viewModel.VoluntaryMethodologyId).Value;
+                    }
+
+                    if (viewModel.VoluntaryGoldStandardId != null)
+                    {
+                        viewModel.VoluntaryGoldStandardName = context.VoluntaryGoldStandard.FirstOrDefault(x => x.VoluntaryGoldStandardId == viewModel.VoluntaryGoldStandardId).Value;
+                    }
+
+                    if (viewModel.SectorId != null)
+                    {
+                        viewModel.SectorName = context.Sector.FirstOrDefault(x => x.SectorId == viewModel.SectorId).Value;
+                    }
+
+                    data.Add(viewModel);
+                }
             }
 
             return data;

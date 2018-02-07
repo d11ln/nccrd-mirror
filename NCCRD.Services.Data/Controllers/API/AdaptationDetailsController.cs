@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,16 +78,30 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>AdaptationDetail data as JSON</returns>
         [HttpGet]
         [Route("api/AdaptationDetails/GetByProjectId/{projectId}")]
-        public AdaptationDetail GetByProjectId(int projectId)
+        public List<AdaptationDetailsViewModel> GetByProjectId(int projectId)
         {
-            AdaptationDetail adaptationDetail = null;
+            List<AdaptationDetailsViewModel> adaptationDetailVM = new List<AdaptationDetailsViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                adaptationDetail = context.AdaptationDetails.FirstOrDefault(x => x.ProjectId == projectId);
+                var adaptationDetail = context.AdaptationDetails.Where(x => x.ProjectId == projectId).ToList();
+
+                foreach (var model in adaptationDetail)
+                {
+                    var vm = new AdaptationDetailsViewModel(model);
+
+                    vm.AdaptationPurposeName = context.AdaptationPurpose.FirstOrDefault(x => x.AdaptationPurposeId == model.AdaptationPurposeId).Value;
+
+                    if (model.SectorId != null)
+                    {
+                        vm.SectorName = context.Sector.FirstOrDefault(x => x.SectorId == model.SectorId).Value;
+                    }
+
+                    adaptationDetailVM.Add(vm);
+                }
             }
 
-            return adaptationDetail;
+            return adaptationDetailVM;
         }
 
         /// <summary>

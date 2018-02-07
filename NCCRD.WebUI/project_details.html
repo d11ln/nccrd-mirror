@@ -1,156 +1,171 @@
 
-<br/>
-<h2>Project Details</h2>
-<hr>
+<br />
 
 <div class="row">
     <div class="col-md-8">
-        <h4>Project Title: ##########</h4>
+        <h2>Project Details</h2>
     </div>
     <div class="col-md-4">
-        <h3 style="float:right;margin-right:20px">[20XX - 20XX]</h4>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float:right;margin-top:-10px">Close</button>
     </div>
 </div>
 
-<br>
+<hr />
 
-<div class="row">
-    <div class="col-md-12">
-        <p>
-            <span>Description:</span> 
-            <br>
-            <span>
-                ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######
-                ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######
-                ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######
-                ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######                
-            </span>
-        </p>
-    </div>
-</div>
+<div id="projectDetailsBindObject" data-bind="with: projectDetails">
 
-<div class="row">
-    <div class="col-md-4">
-        <p>
-            <span>Lead agent:</span>
-            <br>
-            <span>##############################</span>
-        </p>
+    <!--HEADER-->
+    <div class="row">
+        <div class="col-md-9">
+            <h4 style="font-weight:bold">Project Title:</h4>
+            <h4 data-bind="text: ProjectTitle"></h4>
+        </div>
+        <div class="col-md-3">
+            <h4 style="float:right;margin-right:20px">]</h4>
+            <h4 data-bind="text: EndYear" style="float:right;margin-right:5px"></h4>
+            <h4 style="float:right;margin-right:5px">- </h4>
+            <h4 data-bind="text: StartYear" style="float:right;margin-right:5px"></h4>
+            <h4 style="float:right;margin-right:5px">[</h4>
+        </div>
     </div>
-    <div class="col-md-4" >
-        <p>
-            <span>Host partner:</span>
-            <br>
-            <span>##############################</span>
-        </p>     
-    </div>
-    <div class="col-md-4">
-        <p>
-            <span>Host organisation:</span>
-            <br>
-            <span>##############################</span>
-        </p>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <p>
-            <span>Contact (alt):</span>
-            <br>
-            <span>##############################</span>
-        </p>
-    </div>
-    <div class="col-md-4" >
-        <p>
-            <span>Contact email (alt):</span>
-            <br>
-            <span>##############################</span>
-        </p>
-    </div>
-    <div class="col-md-4">
-        <p>
-            <span>Link:</span>
-            <br>
-            <a href="">##############################</a>
-        </p>
-    </div>
-</div>
+    <br>
 
-<div class="row">
-    <div class="col-md-12">
-        <p>
-            <span>Validation comments:</span>
-            <br>
-            <span>##############################</span>
-        </p>
+    <!--PROJECT TDETAILS-->
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <span style="font-weight:bold">Description:</span>
+                <br>
+                <span data-bind="text: ProjectDescription"></span>
+            </p>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-12">
-        <p>
-            <span>Budget range:</span>
-            <br>
-            <span>R99999999</span>
-            <span> - </span>
-            <span>R99999999</span>
-        </p>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Lead agent:</span>
+                <br>
+                <span data-bind="text: LeadAgent"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Host partner:</span>
+                <br>
+                <span data-bind="text: HostPartner"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Host organisation:</span>
+                <br>
+                <span data-bind="text: HostOrganisation"></span>
+            </p>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <p>
-            <span>Project type:</span>
-            <br>
-            <span>##############################</span>
-        </p>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Contact (alt):</span>
+                <br>
+                <span data-bind="text: AlternativeContact"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Contact email (alt):</span>
+                <br>
+                <span data-bind="text: AlternativeContactEmail"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Link:</span>
+                <br>
+                <a data-bind="attr: {href: Link}" target="_blank" href="">click here</a>
+            </p>
+        </div>
     </div>
-    <div class="col-md-4" >
-        <p>
-            <span>Project sub-type:</span>
-            <br>
-            <span>##############################</span>
-        </p>
-    </div>
-    <div class="col-md-4">
-        <p>
-            <span>Project status</span>
-            <br>
-            <span>##############################</span>
-        </p>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <p>
-            <span>Project manager:</span>
-            <br>
-            <span>##############################</span>
-        </p>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <span style="font-weight:bold">Validation comments:</span>
+                <br>
+                <span data-bind="text: ValidationComments"></span>
+            </p>
+        </div>
     </div>
-    <div class="col-md-4" >
-        <p>
-            <span>Validation status</span>
-            <br>
-            <span>##############################</span>
-        </p>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <span style="font-weight:bold">Budget range:</span>
+                <br>
+                <span>R</span>
+                <span data-bind="text: BudgetLower"></span>
+                <span> - R</span>
+                <span data-bind="text: BudgetUpper"></span>
+            </p>
+        </div>
     </div>
-    <div class="col-md-4">
-        <p>
-            <span>MAOption</span>
-            <br>
-            <span>##############################</span>
-        </p>
+
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Project type:</span>
+                <br>
+                <span data-bind="text: ProjectTypeName"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Project sub-type:</span>
+                <br>
+                <span data-bind="text: ProjectSubTypeName"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Project status</span>
+                <br>
+                <span data-bind="text: ProjectStatusName"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Project manager:</span>
+                <br>
+                <span data-bind="text: ProjectManagerName"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">Validation status</span>
+                <br>
+                <span data-bind="text: ValidationStatusName"></span>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <span style="font-weight:bold">MAOption</span>
+                <br>
+                <span data-bind="text: MAOptionName"></span>
+            </p>
+        </div>
     </div>
 </div>
 
 <br>
 <hr>
 
-<!-- Nav tabs -->
+<!-- TABS -->
 <ul class="nav nav-pills nav-justified">
     <li class="nav-item">
         <a class="nav-link active" data-toggle="tab" href="#mitigation" role="tab">Mitigation details</a>
@@ -166,394 +181,518 @@
     </li>
 </ul>
 
-<hr>
 
-<!-- Tab panes -->
+<!-- TAB PANES -->
 <div class="tab-content">
 
+    <!--MITIGATION-->
     <div class="tab-pane fade show active" id="mitigation" role="tabpanel">
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Carbon credit:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4" >
-                <p>
-                    <span>Carbon credit market:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>CDM status:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>CDM methodology:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4" >
-                <p>
-                    <span>Voluntary methodology:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Voluntary gold standard:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
+        <div id="mitigationDetailsBindObject" data-bind="foreach: mitigationDetails">
 
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>CDM project number:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
+            <hr />
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Carbon credit:</span>
+                        <br>
+                        <span data-bind="text: CarbonCreditName"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Carbon credit market:</span>
+                        <br>
+                        <span data-bind="text: CarbonCreditMarketName"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">CDM status:</span>
+                        <br>
+                        <span data-bind="text: CDMStatusName"></span>
+                    </p>
+                </div>
             </div>
-            <div class="col-md-4" >
-                <p>
-                    <span>Other description:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">CDM methodology:</span>
+                        <br>
+                        <span data-bind="text: CDMMethodologyName"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Voluntary methodology:</span>
+                        <br>
+                        <span data-bind="text: VoluntaryMethodologyName"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Voluntary gold standard:</span>
+                        <br>
+                        <span data-bind="text: VoluntaryGoldStandardName"></span>
+                    </p>
+                </div>
             </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Sector:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">CDM project number:</span>
+                        <br>
+                        <span data-bind="text: CDMProjectNumber"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Other description:</span>
+                        <br>
+                        <span data-bind="text OtherDescription"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Sector:</span>
+                        <br>
+                        <span data-bind="text: SectorName"></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!--EMMISSIONS-->
     <div class="tab-pane fade" id="mitigation_emmisions" role="tabpanel">
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Year:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
+
+        <div id="mitigationEmissionsBindObject" data-bind="foreach: mitigationEmissions">
+
+            <hr />
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Year:</span>
+                        <br>
+                        <span data-bind="text: Year"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">CO2:</span>
+                        <br>
+                        <span data-bind="text: CO2"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">CH4:</span>
+                        <br>
+                        <span data-bind="text: CH4"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">CH4_CO2e:</span>
+                        <br>
+                        <span data-bind="text: CH4_CO2e"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">N2O:</span>
+                        <br>
+                        <span data-bind="text: N2O"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">N2O_CO2e:</span>
+                        <br>
+                        <span data-bind="text: N2O_CO2e"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">HFC:</span>
+                        <br>
+                        <span data-bind="text: HFC"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">HFC_CO2e:</span>
+                        <br>
+                        <span data-bind="text: HFC_CO2e"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">PFC:</span>
+                        <br>
+                        <span data-bind="text: PFC"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">PFC_CO2e:</span>
+                        <br>
+                        <span data-bind="text: PFC_CO2e"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">SF6:</span>
+                        <br>
+                        <span data-bind="text: SF6"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">SF6_CO2e:</span>
+                        <br>
+                        <span data-bind="text: SF6_CO2e"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Hydro:</span>
+                        <br>
+                        <span data-bind="text: Hydro"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Hydro_CO2e:</span>
+                        <br>
+                        <span data-bind="text: Hydro_CO2e"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Tidal:</span>
+                        <br>
+                        <span data-bind="text: Tidal"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Tidal_CO2e:</span>
+                        <br>
+                        <span data-bind="text: Tidal_CO2e"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Wind:</span>
+                        <br>
+                        <span data-bind="text: Wind"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Wind_CO2e:</span>
+                        <br>
+                        <span data-bind="text: Wind_CO2e"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Solar:</span>
+                        <br>
+                        <span data-bind="text: Solar"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Solar_CO2e:</span>
+                        <br>
+                        <span data-bind="text: Solar_CO2e"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">FossilFuelElecRed:</span>
+                        <br>
+                        <span data-bind="text: FossilFuelElecRed"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">FossilFuelElecRed_CO2e:</span>
+                        <br>
+                        <span data-bind="text: FossilFuelElecRed_CO2e"></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">BioWaste:</span>
+                        <br>
+                        <span data-bind="text: BioWaste"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">BioWaste_CO2e:</span>
+                        <br>
+                        <span data-bind="text: BioWaste_CO2e"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Geothermal:</span>
+                        <br>
+                        <span data-bind="text: Geothermal"></span>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p>
+                        <span style="font-weight:bold">Geothermal_CO2e:</span>
+                        <br>
+                        <span data-bind="text: Geothermal_CO2e"></span>
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>CO2:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>CH4:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>CH4_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>NO2:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>NO2_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>HFC:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>HFC_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>PFC:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>PFC_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>SF6:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>SF6_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Hydro:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Hydro_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Tidal:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Tidal_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Wind:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Wind_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div> 
-        
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Solar:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Solar_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div> 
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>FossilFuelElecRed:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>FossilFuelElecRed_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div> 
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>BioWaste:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>BioWaste_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div> 
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Geothermal:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Geothermal_CO2e:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div> 
     </div>
 
+    <!--ADAPTATION-->
     <div class="tab-pane fade" id="adaptation" role="tabpanel">
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <span>Description:</span>
-                    <br>
-                    <span>
-                        ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######
-                        ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######
-                        ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######
-                        ##### ####### ### ######### ## # # ######### ######### # # ###### #### ###### ######### ## ###### ### ####### ######## ######                          
-                    </span>
-                </p>
+
+        <div id="adaptationDetailsBindObject" data-bind="foreach: adaptationDetails">
+
+            <hr />
+            <br />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        <span style="font-weight:bold">Description:</span>
+                        <br>
+                        <span data-bind="text: Description"></span>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Purpose:</span>
+                        <br>
+                        <span data-bind="text: AdaptationPurposeName"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Sector:</span>
+                        <br>
+                        <span data-bind="text: SectorName"></span>
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Purpose:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4" >
-                <p>
-                    <span>Sector:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>        
     </div>
 
+    <!--RESEARCH-->
     <div class="tab-pane fade" id="research" role="tabpanel">
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Author:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
+
+        <div id="researchDetailsBindObject" data-bind="foreach: researchDetails">
+
+            <hr />
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Author:</span>
+                        <br>
+                        <span data-bind="text: Author"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Paper link:</span>
+                        <br>
+                        <a data-bind="attr {href: PaperLink}" href="">click here</a>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Research type:</span>
+                        <br>
+                        <span data-bind="text: ResearchTypeName"></span>
+                    </p>
+                </div>
             </div>
-            <div class="col-md-4" >
-                <p>
-                    <span>Paper link:</span>
-                    <br>
-                    <a href="">##############################</a>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span>Research type:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span>Target audience:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
-            </div>
-            <div class="col-md-4" >
-                <p>
-                    <span>Sector:</span>
-                    <br>
-                    <span>##############################</span>
-                </p>
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Target audience:</span>
+                        <br>
+                        <span data-bind="text: TargetAudienceName"></span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <span style="font-weight:bold">Sector:</span>
+                        <br>
+                        <span data-bind="text: SectorName"></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-                           
+
 
 <!-- SCRIPTS -->
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/knockout-3.4.2.js"></script>
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 
-    $('#projectDetailsModal').on('shown.bs.modal', function () {
-        console.log(selectedProjectId);
-    });
+    function ProjectsDetailsViewModel() {
+        var self = this;
+        self.projectDetails = ko.observable();
 
-</script> -->
+        // var token = sessionStorage.getItem(tokenKey);
+        // var headers = {};
+        // if (token) {
+        //     headers.Authorization = 'Bearer ' + token;
+        // }
+
+        var url = 'http://localhost:58683/api/projects/GetById/' + selectedProjectId;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            // headers: headers,
+            success: function (data) {
+                self.projectDetails(data);
+            }
+        });
+    }
+
+    function MitigationDetailsViewModel() {
+        var self = this;
+        self.mitigationDetails = ko.observable();
+
+        // var token = sessionStorage.getItem(tokenKey);
+        // var headers = {};
+        // if (token) {
+        //     headers.Authorization = 'Bearer ' + token;
+        // }
+
+        var url = 'http://localhost:58683/api/MitigationDetails/GetByProjectID/' + selectedProjectId;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            // headers: headers,
+            success: function (data) {
+                self.mitigationDetails(data);
+            }
+        });
+    }
+
+    function MitigationEmissionsViewModel() {
+        var self = this;
+        self.mitigationEmissions = ko.observable();
+
+        // var token = sessionStorage.getItem(tokenKey);
+        // var headers = {};
+        // if (token) {
+        //     headers.Authorization = 'Bearer ' + token;
+        // }
+
+        var url = 'http://localhost:58683/api/MitigationEmissionsData/GetByProjectID/' + selectedProjectId;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            // headers: headers,
+            success: function (data) {
+                self.mitigationEmissions(data);
+            }
+        });
+    }
+
+    function AdaptationDetailsViewModel() {
+        var self = this;
+        self.adaptationDetails = ko.observable();
+
+        // var token = sessionStorage.getItem(tokenKey);
+        // var headers = {};
+        // if (token) {
+        //     headers.Authorization = 'Bearer ' + token;
+        // }
+
+        var url = 'http://localhost:58683/api/AdaptationDetails/GetByProjectId/' + selectedProjectId;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            // headers: headers,
+            success: function (data) {
+                self.adaptationDetails(data);
+            }
+        });
+    }
+
+    function ResearchDetailsViewModel() {
+        var self = this;
+        self.researchDetails = ko.observable();
+
+        // var token = sessionStorage.getItem(tokenKey);
+        // var headers = {};
+        // if (token) {
+        //     headers.Authorization = 'Bearer ' + token;
+        // }
+
+        var url = 'http://localhost:58683/api/ResearchDetails/GetByProjectId/' + selectedProjectId;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            // headers: headers,
+            success: function (data) {
+                self.researchDetails(data);
+            }
+        });
+    }
+
+    ko.applyBindings(new ProjectsDetailsViewModel(), document.getElementById("projectDetailsBindObject"));
+    ko.applyBindings(new MitigationDetailsViewModel(), document.getElementById("mitigationDetailsBindObject"));
+    ko.applyBindings(new MitigationEmissionsViewModel(), document.getElementById("mitigationEmissionsBindObject"));
+    ko.applyBindings(new AdaptationDetailsViewModel(), document.getElementById("adaptationDetailsBindObject"));
+    ko.applyBindings(new ResearchDetailsViewModel(), document.getElementById("researchDetailsBindObject"));
+
+</script>

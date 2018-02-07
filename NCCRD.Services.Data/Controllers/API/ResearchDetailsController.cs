@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,16 +59,37 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ResearchDetails data as JSON</returns>
         [HttpGet]
         [Route("api/ResearchDetails/GetByProjectID/{projectId}")]
-        public ResearchDetail GetByProjectID(int projectId)
+        public List<ResearchDetailsViewModel> GetByProjectID(int projectId)
         {
-            ResearchDetail data = null;
+            List<ResearchDetailsViewModel> dataVM = new List<ResearchDetailsViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.ResearchDetails.FirstOrDefault(x => x.ProjectId == projectId);
+                var data = context.ResearchDetails.Where(x => x.ProjectId == projectId).ToList();
+
+                foreach(var model in data)
+                {
+                    var vm = new ResearchDetailsViewModel(model);
+
+                    vm.ResearchTypeName = context.ResearchType.FirstOrDefault(x => x.ResearchTypeId == model.ResearchTypeId).Value;
+                    vm.TargetAudienceName = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == model.TargetAudienceId).Value;
+
+                    if (model.SectorId != null)
+                    {
+                        vm.SectorName = context.Sector.FirstOrDefault(x => x.SectorId == model.SectorId).Value;
+                    }
+
+                    vm.PaperLink = vm.PaperLink.Trim();
+                    if(vm.PaperLink.StartsWith("www"))
+                    {
+                        vm.PaperLink = "http://" + vm.PaperLink;
+                    }
+
+                    dataVM.Add(vm);
+                }
             }
 
-            return data;
+            return dataVM;
         }
 
         /// <summary>

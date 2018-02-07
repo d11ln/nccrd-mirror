@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,13 +135,53 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>Project data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetByID/{id}")]
-        public Project GetByID(int id)
+        public ProjectDetailsViewModel GetByID(int id)
         {
-            Project project = null;
+            ProjectDetailsViewModel project = null;
 
             using (var context = new SQLDBContext())
             {
-                project = context.Project.FirstOrDefault(x => x.ProjectId == id);
+                project = new ProjectDetailsViewModel(context.Project.FirstOrDefault(x => x.ProjectId == id));
+
+                if(project.BudgetLower == null)
+                {
+                    project.BudgetLower = 0.00M;
+                }
+                if (project.BudgetUpper == null)
+                {
+                    project.BudgetUpper = 0.00M;
+                }
+                if (project.Link == "")
+                {
+                    project.Link = "#";
+                }
+
+                project.Link = project.Link.Trim();
+                if(project.Link.StartsWith("www"))
+                {
+                    project.Link = "http://" + project.Link;
+                }
+
+                project.ProjectTypeName = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == project.ProjectTypeId).Value;
+
+                if (project.ProjectSubTypeId != null)
+                {
+                    project.ProjectSubTypeName = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == project.ProjectSubTypeId).Value;
+                }
+
+                project.ProjectStatusName = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == project.ProjectStatusId).Value;
+
+                project.ProjectManagerName = context.Users.Select(x => new { x.UserId, Name = (x.FirstName + " " + x.Surname) }).FirstOrDefault(x => x.UserId == project.ProjectManagerId).Name;
+
+                if (project.ValidationStatusId != null)
+                {
+                    project.ValidationStatusName = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusID == project.ValidationStatusId).Value;
+                }
+
+                if (project.MAOptionId != null)
+                {
+                    project.MAOptionName = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId).Name;
+                }
             }
 
             return project;

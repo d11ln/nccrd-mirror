@@ -4,3 +4,7 @@ body{
     width:80%;
     margin:auto;
 }
+
+body.modal-open {
+    overflow: hidden;
+}

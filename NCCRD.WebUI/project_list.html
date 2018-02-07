@@ -1,21 +1,23 @@
-<!-- Project List -->
-<div data-bind="foreach: projects">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title" data-bind="text: projectTitle"></h4>
-            <p class="card-text" data-bind="text: projectDescription"></p>
-            <button data-bind="attr: { id: projectId}" class="btn btn-primary" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this.id)">View details</button>
-        </div>
-    </div>
-    <br />
-</div>
+<div id="projectListBindObject">
 
-<!-- Details Modal -->
-<div class="modal fade bottom" id="projectDetailsModal">
+    <!-- Project List -->
+    <div data-bind="foreach: projects">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title" data-bind="text: ProjectTitle"></h4>
+                <p class="card-text" data-bind="text: ProjectDescription"></p>
+                <button data-bind="attr: { id: ProjectId}" class="btn btn-primary" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this.id)">View details</button>
+            </div>
+        </div>
+        <br />
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal fade bottom" id="projectDetailsModal">
         <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div id ="project_details">
+                    <div id="project_details">
                         <!-- Content will be loaded dynamically -->
                     </div>
                 </div>
@@ -25,6 +27,7 @@
             </div>
         </div>
     </div>
+</div>
 
 <!-- SCRIPTS -->
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -32,12 +35,6 @@
 
 <script type="text/javascript">
     var selectedProjectId = 0;
-
-    function Project(data) {
-        this.projectId = ko.observable(data.ProjectId);
-        this.projectTitle = ko.observable(data.ProjectTitle);
-        this.projectDescription = ko.observable(data.ProjectDescription);
-    }
 
     function ProjectsViewModel() {
         var self = this;
@@ -77,8 +74,7 @@
             dataType: 'json',
             // headers: headers,
             success: function (data) {
-                var mappedData = $.map(data, function (item) { return new Project(item) });
-                self.projects(mappedData);
+                self.projects(data);
             }
         });
     }
@@ -95,8 +91,7 @@
     function load_details(id) {
         selectedProjectId = id;
         $("#project_details").load("project_details.html");
-        //$("#project_details").html('<object data="project_details.html">');
     }
 
-    ko.applyBindings(new ProjectsViewModel());
+    ko.applyBindings(new ProjectsViewModel(), document.getElementById("projectListBindObject"));
 </script>

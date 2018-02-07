@@ -14,6 +14,12 @@ namespace NCCRD.Database.Models
     {
         public int MAOptionId { get; set; }
 
+        [Required]
+        [MaxLength(450)]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
         //FK - Feasibility
         [Required]
         public int FeasibilityId { get; set; }
