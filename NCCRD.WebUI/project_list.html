@@ -1,0 +1,102 @@
+<!-- Project List -->
+<div data-bind="foreach: projects">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title" data-bind="text: projectTitle"></h4>
+            <p class="card-text" data-bind="text: projectDescription"></p>
+            <button data-bind="attr: { id: projectId}" class="btn btn-primary" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this.id)">View details</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade bottom" id="projectDetailsModal">
+        <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id ="project_details">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- SCRIPTS -->
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/knockout-3.4.2.js"></script>
+
+<script type="text/javascript">
+    var selectedProjectId = 0;
+
+    function Project(data) {
+        this.projectId = ko.observable(data.ProjectId);
+        this.projectTitle = ko.observable(data.ProjectTitle);
+        this.projectDescription = ko.observable(data.ProjectDescription);
+    }
+
+    function ProjectsViewModel() {
+        var self = this;
+        self.projects = ko.observableArray();
+
+        // var token = sessionStorage.getItem(tokenKey);
+        // var headers = {};
+        // if (token) {
+        //     headers.Authorization = 'Bearer ' + token;
+        // }
+
+        var urlParams = getUrlVars();
+        var titlePart = "";
+        var statusId = 0;
+        var regionId = 0;
+
+        if(urlParams["titlePart"] != undefined)
+        {
+            titlePart = urlParams["titlePart"];
+        }
+    
+        if(urlParams["statusId"] != undefined)
+        {
+            statusId = urlParams["statusId"];
+        }
+    
+        if(urlParams["regionId"] != undefined)
+        {
+            regionId = urlParams["regionId"];
+        }
+
+        var url = 'http://localhost:58683/api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            // headers: headers,
+            success: function (data) {
+                var mappedData = $.map(data, function (item) { return new Project(item) });
+                self.projects(mappedData);
+            }
+        });
+    }
+
+    function getUrlVars() {
+        var vars = {};
+        var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+        function(m,key,value) {
+            vars[key] = value;
+        });
+        return vars;
+    }
+
+    function load_details(id) {
+        selectedProjectId = id;
+        $("#project_details").load("project_details.html");
+        //$("#project_details").html('<object data="project_details.html">');
+    }
+
+    ko.applyBindings(new ProjectsViewModel());
+</script>

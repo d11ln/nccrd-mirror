@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>NCCRD - Projects</title>  
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- Font Awesome -->
+        <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap core CSS -->
+        <link href="css/mdb.min.css" rel="stylesheet"> <!-- Material Design Bootstrap -->
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+
+    <body onload="load_list()">
+
+        <nav class="navbar navbar-expand-lg navbar-dark indigo"> <!--Navbar-->
+            <div class="navbar-brand">NCCRD Data Service</div> <!-- Navbar brand -->
+
+            <!-- Collapse button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Links -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="projects.html">Projects</a></li>
+                </ul>
+            </div> 
+        </nav>
+
+        <br/>
+        <h2>Projects</h2>
+        <br/>
+
+        <div class="row">
+            <div class="col-md-12" id ="project_list">
+                <!-- Content will be loaded dynamically -->
+                <h4>Loading...</h4>
+            </div>
+        </div>
+        
+        <!-- SCRIPTS -->
+        <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script> <!-- JQuery -->
+        <script type="text/javascript" src="js/bootstrap.js"></script> <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="js/mdb.min.js"></script> <!-- MDB core JavaScript -->
+    
+        <script type="text/javascript">
+            function load_list() {
+                $("#project_list").load("project_list.html");
+            }
+        </script>
+
+    </body>
+
+</html>
