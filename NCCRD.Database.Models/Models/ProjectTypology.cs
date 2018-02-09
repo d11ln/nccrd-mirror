@@ -15,8 +15,10 @@ namespace NCCRD.Database.Models
         public int ProjectTypologyId { get; set; }
 
         //FK - Project
+        [Required]
         public int ProjectId { get; set; }
         [Required]
+        [IgnoreDataMember]
         public Project Project { get; set; }
 
         //FK - Typology

@@ -446,9 +446,6 @@
     <Content Include="Scripts\projects.list.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Views\Projects\ProjectsList.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -465,10 +462,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Login\Register.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
-    <Content Include="Views\Projects\Index%28old%29.cshtml" />
-    <Content Include="Views\Projects\List%28old%29.cshtml" />
-    <Content Include="Views\Login\Logout.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
     <Content Include="Views\Projects\List.cshtml" />
+    <Content Include="Views\Login\Logout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

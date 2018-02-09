@@ -45,7 +45,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAllFiltered")]
-        public IEnumerable<Project> GetAllFiltered(string titlePart = "", int statusId = 0, int regionId = 0)
+        public IEnumerable<Project> GetAllFiltered(string titlePart = "", int statusId = 0, int regionId = 0, int typologyId = 0)
         {
             List<Project> projectList = new List<Project>();
 

@@ -1,15 +1,120 @@
-<div id="projectListBindObject">
+<!DOCTYPE html>
+<html lang="en">
 
-    <!-- Project List -->
-    <div data-bind="foreach: projects">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title" data-bind="text: ProjectTitle"></h4>
-                <p class="card-text" data-bind="text: ProjectDescription"></p>
-                <button data-bind="attr: { id: ProjectId}" class="btn btn-primary" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this.id)">View details</button>
+<head>
+    <script type="text/javascript">
+
+        if (typeof headers_loaded == 'undefined') {
+            var headers_loaded = true;
+            document.write('<meta charset="utf-8">');
+            document.write('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">');
+            document.write('<meta http-equiv="x-ua-compatible" content="ie=edge">');
+            document.write('<title>NCCRD - Projects</title>');
+            document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">');
+            document.write('<link href="css/bootstrap.min.css" rel="stylesheet">');
+            document.write('<link href="css/mdb.min.css" rel="stylesheet">');
+            document.write('<link href="css/style.css" rel="stylesheet">');
+        }
+    </script>
+
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+
+    <!--Conditionally load knockout-->
+    <script type="text/javascript">
+        if (typeof knockout_loaded == 'undefined' || !knockout_loaded) {
+            var knockout_loaded = true
+            $.getScript("js/knockout-3.4.2.js");
+            console.log("ko loaded");
+        }
+    </script>
+
+    <!--Conditionally load bootstrap + MDB-->
+    <script type="text/javascript">
+        if (typeof bootstrap_loaded == 'undefined' || !bootstrap_loaded) {
+            var bootstrap_loaded = true
+            $.getScript("js/popper.min.js");
+            $.getScript("js/bootstrap.min.js");
+            $.getScript("js/jquery-3.2.1.min.js");
+        }
+    </script>
+</head>
+
+<body>
+
+    <hr />
+
+    <!--Filters-->
+    <div class="row">
+
+        <div class="col-md-3" id="filterTitle">
+            <label>Title:</label>
+            <input id="titleFilter" type="text" style="margin-top:5px" onkeyup="TitleFilterChanged(this.value)" />
+        </div>
+
+        <div class="col-md-3" id="filterRegion">
+            <label>Region:</label>
+            <br />
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddRegion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Region
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item"></a>
+                </div>
             </div>
         </div>
-        <br />
+
+        <div class="col-md-3" id="filterStatus">
+            <label>Status:</label>
+            <br />
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddStatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Status
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="projectStatusBindObject" data-bind="foreach: projectStatus">
+                    <a class="dropdown-item" data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" id="filterTypology">
+            <label>Typology:</label>
+            <br />
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddTypology" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Typology
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="typologyBindObject" data-bind="foreach: typology">
+                    <a class="dropdown-item" data-bind="text: Value" onclick="TypologyFilterSelected(this)"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<br />-->
+
+    <div class="row">
+        <div class="col-md-9"></div>
+        <div class="col-md-3">
+            <button class="btn btn-success" style="float:right;margin-top:15px;margin-right:0px;margin-left:0px;width:100%" onclick="FilterProjects();">Filter projects</button>
+        </div>
+    </div>
+
+    <hr />
+    <br />
+
+    <div id="projectListBindObject">
+        <!-- Project List -->
+        <div data-bind="foreach: projects">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title" data-bind="text: ProjectTitle"></h4>
+                    <p class="card-text" data-bind="text: ProjectDescription"></p>
+                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this.id)">View details</button>
+                </div>
+            </div>
+            <br />
+        </div>
     </div>
 
     <!-- Details Modal -->
@@ -27,71 +132,146 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- SCRIPTS -->
-<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="js/knockout-3.4.2.js"></script>
+    <!-- SCRIPTS -->
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 
-<script type="text/javascript">
-    var selectedProjectId = 0;
+    <script type="text/javascript">
 
-    function ProjectsViewModel() {
-        var self = this;
-        self.projects = ko.observableArray();
-
-        // var token = sessionStorage.getItem(tokenKey);
-        // var headers = {};
-        // if (token) {
-        //     headers.Authorization = 'Bearer ' + token;
-        // }
-
-        var urlParams = getUrlVars();
+        var selectedProjectId = 0;
         var titlePart = "";
         var statusId = 0;
         var regionId = 0;
+        var typologyId = 0;
 
-        if(urlParams["titlePart"] != undefined)
-        {
-            titlePart = urlParams["titlePart"];
-        }
-    
-        if(urlParams["statusId"] != undefined)
-        {
-            statusId = urlParams["statusId"];
-        }
-    
-        if(urlParams["regionId"] != undefined)
-        {
-            regionId = urlParams["regionId"];
-        }
+        function BuildUrl() {
+            var urlParams = getUrlVars();
 
-        var url = 'http://localhost:58683/api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId;
-
-        $.ajax({
-            type: 'GET',
-            url: url,
-            dataType: 'json',
-            // headers: headers,
-            success: function (data) {
-                self.projects(data);
+            if (titlePart == "" && urlParams["titlePart"] != undefined) {
+                titlePart = urlParams["titlePart"];
+                $('#titleFilter').val(decodeURIComponent(titlePart));
             }
-        });
-    }
+            if (statusId == 0 && urlParams["statusId"] != undefined) {
+                statusId = urlParams["statusId"];
+            }
+            if (regionId == 0 && urlParams["regionId"] != undefined) {
+                regionId = urlParams["regionId"];
+            }
+            if (typologyId == 0 && urlParams["typologyId"] != undefined) {
+                typologyId = urlParams["typologyId"];
+            }
 
-    function getUrlVars() {
-        var vars = {};
-        var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
-        function(m,key,value) {
-            vars[key] = value;
-        });
-        return vars;
-    }
+            return ('http://localhost:58683/api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&typologyId=' + typologyId);
+        }
 
-    function load_details(id) {
-        selectedProjectId = id;
-        $("#project_details").load("project_details.html");
-    }
+        //function GetHeaderToken() {
+        //     var token = sessionStorage.getItem(tokenKey);
+        //     var headers = {};
+        //     if (token) {
+        //         headers.Authorization = 'Bearer ' + token;
+        //     }
 
-    ko.applyBindings(new ProjectsViewModel(), document.getElementById("projectListBindObject"));
-</script>
+        //     return headers;
+        //}
+
+        function ProjectsViewModel() {
+            var self = this;
+            self.projects = ko.observableArray();
+
+            var url = BuildUrl();
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                // headers: headers,
+                success: function (data) {
+                    self.projects(data);
+                }
+            });
+        }
+
+        function ProjectStatusViewModel() {
+            var self = this;
+            self.projectStatus = ko.observableArray();
+
+            var url = 'http://localhost:58683/api/projectStatus/GetAll';
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                // headers: headers,
+                success: function (data) {
+                    self.projectStatus(data);
+                }
+            });
+        }
+
+        function TypologyViewModel() {
+            var self = this;
+            self.typology = ko.observableArray();
+
+            var url = 'http://localhost:58683/api/typology/GetAll';
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                // headers: headers,
+                success: function (data) {
+                    self.typology(data);
+                }
+            });
+        }
+
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+                function (m, key, value) {
+                    vars[key] = value;
+                });
+            return vars;
+        }
+
+        function load_details(id) {
+            selectedProjectId = id;
+            $("#project_details").load("project_details.html");
+        }
+
+        function TitleFilterChanged(val) {
+            titlePart = val;
+        }
+
+        function StatusFilterSelected(val) {
+            statusId = val.id;
+        }
+
+        function TypologyFilterSelected() {
+            typologyId = val.id;
+        }
+
+        function FilterProjects() {
+            $.ajax({
+                type: 'GET',
+                url: BuildUrl(),
+                dataType: 'json',
+                // headers: headers,
+                success: function (data) {
+                    projectsVM.projects(data);
+                }
+            });
+        }
+
+        var projectsVM = new ProjectsViewModel();
+        var projectStatusVM = new ProjectStatusViewModel();
+        var typologyVM = new TypologyViewModel();
+        ko.applyBindings(projectsVM, document.getElementById("projectListBindObject"));
+        ko.applyBindings(projectStatusVM, document.getElementById("projectStatusBindObject"));
+        ko.applyBindings(typologyVM, document.getElementById("typologyBindObject"));
+
+    </script>
+
+</body>
+
+</html>

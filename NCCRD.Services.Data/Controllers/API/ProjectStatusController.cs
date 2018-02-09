@@ -26,7 +26,13 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data = context.ProjectStatus.ToList();
+                data.Add(new ProjectStatus()
+                {
+                    ProjectStatusId = 0,
+                    Value = "[All]"
+                });
+
+                data.AddRange(context.ProjectStatus.OrderBy(x => x.Value).ToList());
             }
 
             return data;
