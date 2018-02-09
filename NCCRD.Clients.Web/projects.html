@@ -2,14 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>NCCRD - Projects</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- Font Awesome -->
-    <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap core CSS -->
-    <link href="css/mdb.min.css" rel="stylesheet"> <!-- Material Design Bootstrap -->
-    <link href="css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
 </head>
 
 <body onload="load_list()">
@@ -36,21 +29,6 @@
     <br />
     <h2>Projects</h2>
 
-
-    <!--<h2>Bootstrap 4 Dropdown as Select</h2>
-    <div class="btn-group">
-        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Select a Country <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li class="dropdown-item"><a href="#">Item I</a></li>
-            <li class="dropdown-item"><a href="#">Item II</a></li>
-            <li class="dropdown-item"><a href="#">Item III</a></li>
-            <li class="dropdown-item"><a href="#">Item IV</a></li>
-            <li class="dropdown-item"><a href="#">Item V</a></li>
-            <li class="dropdown-item"><a href="#">Other</a></li>
-        </ul>
-    </div>-->
-
-
     <div class="row">
         <div class="col-md-12" id="project_list">
             <!-- Content will be loaded dynamically -->
@@ -59,22 +37,11 @@
     </div>
 
     <!-- SCRIPTS -->
-    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script> <!-- JQuery -->
-    <script type="text/javascript" src="js/popper.min.js"></script> <!-- JQuery -->
-    <script type="text/javascript" src="js/bootstrap.min.js"></script> <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="js/mdb.min.js"></script> <!-- MDB core JavaScript -->
-
-    <script type="text/javascript">
-
-        var headers_loaded = true;
-        var jquery_loaded = true;
-        var bootstrap_loaded = true;
-        var knockout_loaded = false;
-
-        function load_list() {
-            $("#project_list").load("project_list.html");
-        }
-    </script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script type="text/javascript" src="js/projects.js"></script>
 
 </body>
 

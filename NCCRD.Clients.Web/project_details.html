@@ -3,40 +3,10 @@
 <html lang="en">
 
 <head>
-    <script type="text/javascript">
-
-        if (typeof headers_loaded === 'undefined') {
-            var headers_loaded = true;
-            document.write('<meta charset="utf-8">');
-            document.write('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">');
-            document.write('<meta http-equiv="x-ua-compatible" content="ie=edge">');
-            document.write('<title>NCCRD - Projects</title>');
-            document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">');
-            document.write('<link href="css/bootstrap.min.css" rel="stylesheet">');
-            document.write('<link href="css/mdb.min.css" rel="stylesheet">');
-            document.write('<link href="css/style.css" rel="stylesheet">');
-        }
-    </script>
-
+    <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-
-    <!--Conditionally load knockout-->
-    <script type="text/javascript">
-        if (typeof knockout_loaded === 'undefined' || knockout_loaded !== true) {
-            var knockout_loaded = true
-            $.getScript("js/knockout-3.4.2.js");
-        }
-    </script>
-
-    <!--Conditionally load bootstrap + MDB-->
-    <script type="text/javascript">
-        if (typeof bootstrap_loaded === 'undefined' || bootstrap_loaded !== true) {
-            var bootstrap_loaded = true
-            $.getScript("js/popper.min.js");
-            $.getScript("js/bootstrap.min.js");
-            $.getScript("js/jquery-3.2.1.min.js");
-        }
-    </script>
+    <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
+    <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
 </head>
 
 <body>
@@ -220,6 +190,7 @@
         </li>
     </ul>
 
+    <hr />
 
     <!-- TAB PANES -->
     <div class="tab-content">
@@ -229,7 +200,6 @@
 
             <div id="mitigationDetailsBindObject" data-bind="foreach: mitigationDetails">
 
-                <hr />
                 <br />
 
                 <div class="row">
@@ -311,7 +281,6 @@
 
             <div id="mitigationEmissionsBindObject" data-bind="foreach: mitigationEmissions">
 
-                <hr />
                 <br />
 
                 <div class="row">
@@ -524,7 +493,6 @@
 
             <div id="adaptationDetailsBindObject" data-bind="foreach: adaptationDetails">
 
-                <hr />
                 <br />
 
                 <div class="row">
@@ -560,7 +528,6 @@
 
             <div id="researchDetailsBindObject" data-bind="foreach: researchDetails">
 
-                <hr />
                 <br />
 
                 <div class="row">
@@ -606,157 +573,11 @@
         </div>
     </div>
 
+    <br />
 
     <!-- SCRIPTS -->
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-
-    <script type="text/javascript">
-
-        if (typeof selectedProjectId === 'undefined') {
-            var selectedProjectId = 0;
-        }
-
-        function getUrlVars() {
-            var vars = {};
-            var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-                function (m, key, value) {
-                    vars[key] = value;
-                });
-            return vars;
-        }
-
-        function BuildProjectDetailsUrl() {
-            var urlParams = getUrlVars();
-
-            if (selectedProjectId === 0 && urlParams["projectId"] !== undefined) {
-                selectedProjectId = urlParams["projectId"];
-            }
-
-            return ('http://localhost:58683/api/projects/GetById/' + selectedProjectId);
-        }
-
-        function ProjectsDetailsViewModel() {
-            var self = this;
-            self.projectDetails = ko.observable();
-
-            // var token = sessionStorage.getItem(tokenKey);
-            // var headers = {};
-            // if (token) {
-            //     headers.Authorization = 'Bearer ' + token;
-            // }
-
-            var url = BuildProjectDetailsUrl();
-
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                // headers: headers,
-                success: function (data) {
-                    self.projectDetails(data);
-                }
-            });
-        }
-
-        function MitigationDetailsViewModel() {
-            var self = this;
-            self.mitigationDetails = ko.observable();
-
-            // var token = sessionStorage.getItem(tokenKey);
-            // var headers = {};
-            // if (token) {
-            //     headers.Authorization = 'Bearer ' + token;
-            // }
-
-            var url = 'http://localhost:58683/api/MitigationDetails/GetByProjectID/' + selectedProjectId;
-
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                // headers: headers,
-                success: function (data) {
-                    self.mitigationDetails(data);
-                }
-            });
-        }
-
-        function MitigationEmissionsViewModel() {
-            var self = this;
-            self.mitigationEmissions = ko.observable();
-
-            // var token = sessionStorage.getItem(tokenKey);
-            // var headers = {};
-            // if (token) {
-            //     headers.Authorization = 'Bearer ' + token;
-            // }
-
-            var url = 'http://localhost:58683/api/MitigationEmissionsData/GetByProjectID/' + selectedProjectId;
-
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                // headers: headers,
-                success: function (data) {
-                    self.mitigationEmissions(data);
-                }
-            });
-        }
-
-        function AdaptationDetailsViewModel() {
-            var self = this;
-            self.adaptationDetails = ko.observable();
-
-            // var token = sessionStorage.getItem(tokenKey);
-            // var headers = {};
-            // if (token) {
-            //     headers.Authorization = 'Bearer ' + token;
-            // }
-
-            var url = 'http://localhost:58683/api/AdaptationDetails/GetByProjectId/' + selectedProjectId;
-
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                // headers: headers,
-                success: function (data) {
-                    self.adaptationDetails(data);
-                }
-            });
-        }
-
-        function ResearchDetailsViewModel() {
-            var self = this;
-            self.researchDetails = ko.observable();
-
-            // var token = sessionStorage.getItem(tokenKey);
-            // var headers = {};
-            // if (token) {
-            //     headers.Authorization = 'Bearer ' + token;
-            // }
-
-            var url = 'http://localhost:58683/api/ResearchDetails/GetByProjectId/' + selectedProjectId;
-
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'json',
-                // headers: headers,
-                success: function (data) {
-                    self.researchDetails(data);
-                }
-            });
-        }
-
-        ko.applyBindings(new ProjectsDetailsViewModel(), document.getElementById("projectDetailsBindObject"));
-        ko.applyBindings(new MitigationDetailsViewModel(), document.getElementById("mitigationDetailsBindObject"));
-        ko.applyBindings(new MitigationEmissionsViewModel(), document.getElementById("mitigationEmissionsBindObject"));
-        ko.applyBindings(new AdaptationDetailsViewModel(), document.getElementById("adaptationDetailsBindObject"));
-        ko.applyBindings(new ResearchDetailsViewModel(), document.getElementById("researchDetailsBindObject"));
-
-    </script>
+    <script type="text/javascript" src="js/project_details.js"></script>
 
 </body>
 
