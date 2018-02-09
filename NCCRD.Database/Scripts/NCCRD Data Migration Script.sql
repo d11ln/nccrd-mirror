@@ -1271,7 +1271,7 @@ BEGIN
 		)
 	SELECT
 		P.ProjectId,
-		(SELECT T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'UNDEFINED')
+		(SELECT T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Undefined')
 	FROM
 		[NCCRDv2].[dbo].[Project] P
 	LEFT OUTER JOIN

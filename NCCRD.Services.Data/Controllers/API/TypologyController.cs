@@ -29,7 +29,7 @@ namespace NCCRD.Services.Data.Controllers.API
                 data.Add(new Typology()
                 {
                     TypologyID = 0,
-                    Value = "[All]"
+                    Value = "All"
                 });
 
                 data.AddRange(context.Typology.OrderBy(x => x.Value).ToList());

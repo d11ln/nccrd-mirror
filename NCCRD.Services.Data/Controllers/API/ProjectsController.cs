@@ -42,6 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="titlePart">Part of a title to search on</param>
         /// <param name="statusId">ProjectStatusId to filter on</param>
         /// <param name="regionId">RegionId to filter on</param>
+        /// <param name="typologyId">TypologyId to filter on</param>
         /// <returns>Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAllFiltered")]
@@ -51,18 +52,34 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                //Get all RegionIds (including children)
-                var regionIds = GetChildRegions(regionId, context.Region.ToList()).Select(r => r.RegionId).Distinct();
+                var regionProjectIds = new List<int>();
+                if (regionId > 0)
+                {
+                    //Get all RegionIds (including children)
+                    var regionIds = GetChildRegions(regionId, context.Region.ToList()).Select(r => r.RegionId).Distinct();
 
-                //Get all ProjectIds assigned to these Regions
-                var projectIds = context.ProjectRegion.Where(p => regionIds.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct();
+                    //Get all ProjectIds assigned to these Regions and/or Typology
+                    regionProjectIds = context.ProjectRegion.Where(p => regionIds.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
+                }
+
+                var typologyProjectIds = new List<int>();
+                if (typologyId > 0)
+                {
+                    typologyProjectIds = context.MitigationDetails.Where(x => x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList();
+                    typologyProjectIds.AddRange(context.AdaptationDetails.Where(x => x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
+                    typologyProjectIds.AddRange(context.ResearchDetails.Where(x => x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
+
+                    //Remove duplicates
+                    typologyProjectIds = typologyProjectIds.Distinct().ToList();
+                }
 
                 //Retrieve project details and filter on query params
                 projectList = context.Project.OrderBy(p => p.ProjectTitle).
                     Where(p => 
                         (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
                         (statusId == 0 || p.ProjectStatusId == statusId) &&
-                        (regionId == 0 || projectIds.Contains(p.ProjectId))).
+                        (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
+                        (typologyId == 0 || typologyProjectIds.Contains(p.ProjectId))).
                     ToList();
             }
 

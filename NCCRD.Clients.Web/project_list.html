@@ -4,7 +4,7 @@
 <head>
     <script type="text/javascript">
 
-        if (typeof headers_loaded == 'undefined') {
+        if (typeof headers_loaded === 'undefined') {
             var headers_loaded = true;
             document.write('<meta charset="utf-8">');
             document.write('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">');
@@ -21,16 +21,15 @@
 
     <!--Conditionally load knockout-->
     <script type="text/javascript">
-        if (typeof knockout_loaded == 'undefined' || !knockout_loaded) {
+        if (typeof knockout_loaded === 'undefined' || knockout_loaded !== true) {
             var knockout_loaded = true
             $.getScript("js/knockout-3.4.2.js");
-            console.log("ko loaded");
         }
     </script>
 
     <!--Conditionally load bootstrap + MDB-->
     <script type="text/javascript">
-        if (typeof bootstrap_loaded == 'undefined' || !bootstrap_loaded) {
+        if (typeof bootstrap_loaded === 'undefined' || bootstrap_loaded !== true) {
             var bootstrap_loaded = true
             $.getScript("js/popper.min.js");
             $.getScript("js/bootstrap.min.js");
@@ -69,10 +68,10 @@
             <br />
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddStatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Status
+                    All
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="projectStatusBindObject" data-bind="foreach: projectStatus">
-                    <a class="dropdown-item" data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></a>
+                    <button class="dropdown-item" data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></button>
                 </div>
             </div>
         </div>
@@ -82,10 +81,10 @@
             <br />
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddTypology" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Typology
+                    All
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="typologyBindObject" data-bind="foreach: typology">
-                    <a class="dropdown-item" data-bind="text: Value" onclick="TypologyFilterSelected(this)"></a>
+                    <a class="dropdown-item" data-bind="attr: {id: TypologyID}, text: Value" onclick="TypologyFilterSelected(this)"></a>
                 </div>
             </div>
         </div>
@@ -96,7 +95,7 @@
     <div class="row">
         <div class="col-md-9"></div>
         <div class="col-md-3">
-            <button class="btn btn-success" style="float:right;margin-top:15px;margin-right:0px;margin-left:0px;width:100%" onclick="FilterProjects();">Filter projects</button>
+            <button class="btn btn-success" style="float:right;margin-top:15px;margin-right:0px;margin-left:0px;width:100%" onclick="FilterProjects()">Filter projects</button>
         </div>
     </div>
 
@@ -139,25 +138,25 @@
     <script type="text/javascript">
 
         var selectedProjectId = 0;
-        var titlePart = "";
-        var statusId = 0;
-        var regionId = 0;
-        var typologyId = 0;
+        let titlePart = "";
+        let statusId = 0;
+        let regionId = 0;
+        let typologyId = 0;
 
-        function BuildUrl() {
+        function BuildProjectsUrl() {
             var urlParams = getUrlVars();
 
-            if (titlePart == "" && urlParams["titlePart"] != undefined) {
+            if (titlePart === "" && urlParams["titlePart"] !== undefined) {
                 titlePart = urlParams["titlePart"];
                 $('#titleFilter').val(decodeURIComponent(titlePart));
             }
-            if (statusId == 0 && urlParams["statusId"] != undefined) {
+            if (statusId === 0 && urlParams["statusId"] !== undefined) {
                 statusId = urlParams["statusId"];
             }
-            if (regionId == 0 && urlParams["regionId"] != undefined) {
+            if (regionId === 0 && urlParams["regionId"] !== undefined) {
                 regionId = urlParams["regionId"];
             }
-            if (typologyId == 0 && urlParams["typologyId"] != undefined) {
+            if (typologyId === 0 && urlParams["typologyId"] !== undefined) {
                 typologyId = urlParams["typologyId"];
             }
 
@@ -178,7 +177,7 @@
             var self = this;
             self.projects = ko.observableArray();
 
-            var url = BuildUrl();
+            var url = BuildProjectsUrl();
 
             $.ajax({
                 type: 'GET',
@@ -225,6 +224,7 @@
             });
         }
 
+
         function getUrlVars() {
             var vars = {};
             var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
@@ -243,18 +243,28 @@
             titlePart = val;
         }
 
-        function StatusFilterSelected(val) {
-            statusId = val.id;
+        function StatusFilterSelected(item) {
+            statusId = item.id;
+            SetDropdownText(item);
         }
 
-        function TypologyFilterSelected() {
-            typologyId = val.id;
+        function TypologyFilterSelected(item) {
+            typologyId = item.id;
+            SetDropdownText(item);
+        }
+
+        function SetDropdownText(item) {
+            var selText = $(item).text();
+            $(item).parents('.dropdown').find('.dropdown-toggle').html(selText);
         }
 
         function FilterProjects() {
+
+            let url = BuildProjectsUrl();
+
             $.ajax({
                 type: 'GET',
-                url: BuildUrl(),
+                url: url,
                 dataType: 'json',
                 // headers: headers,
                 success: function (data) {

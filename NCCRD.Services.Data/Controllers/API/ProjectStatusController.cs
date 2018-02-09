@@ -29,7 +29,7 @@ namespace NCCRD.Services.Data.Controllers.API
                 data.Add(new ProjectStatus()
                 {
                     ProjectStatusId = 0,
-                    Value = "[All]"
+                    Value = "All"
                 });
 
                 data.AddRange(context.ProjectStatus.OrderBy(x => x.Value).ToList());

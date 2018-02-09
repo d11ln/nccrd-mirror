@@ -5,7 +5,7 @@
 <head>
     <script type="text/javascript">
 
-        if (typeof headers_loaded == 'undefined') {
+        if (typeof headers_loaded === 'undefined') {
             var headers_loaded = true;
             document.write('<meta charset="utf-8">');
             document.write('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">');
@@ -22,16 +22,15 @@
 
     <!--Conditionally load knockout-->
     <script type="text/javascript">
-        if (typeof knockout_loaded == 'undefined' || !knockout_loaded) {
+        if (typeof knockout_loaded === 'undefined' || knockout_loaded !== true) {
             var knockout_loaded = true
             $.getScript("js/knockout-3.4.2.js");
-            console.log("ko loaded");
         }
     </script>
 
     <!--Conditionally load bootstrap + MDB-->
     <script type="text/javascript">
-        if (typeof bootstrap_loaded == 'undefined' || !bootstrap_loaded) {
+        if (typeof bootstrap_loaded === 'undefined' || bootstrap_loaded !== true) {
             var bootstrap_loaded = true
             $.getScript("js/popper.min.js");
             $.getScript("js/bootstrap.min.js");
@@ -613,7 +612,7 @@
 
     <script type="text/javascript">
 
-        if (typeof selectedProjectId == 'undefined') {
+        if (typeof selectedProjectId === 'undefined') {
             var selectedProjectId = 0;
         }
 
@@ -626,10 +625,10 @@
             return vars;
         }
 
-        function BuildUrl() {
+        function BuildProjectDetailsUrl() {
             var urlParams = getUrlVars();
 
-            if (selectedProjectId == 0 && urlParams["projectId"] != undefined) {
+            if (selectedProjectId === 0 && urlParams["projectId"] !== undefined) {
                 selectedProjectId = urlParams["projectId"];
             }
 
@@ -646,7 +645,7 @@
             //     headers.Authorization = 'Bearer ' + token;
             // }
 
-            var url = BuildUrl();
+            var url = BuildProjectDetailsUrl();
 
             $.ajax({
                 type: 'GET',
