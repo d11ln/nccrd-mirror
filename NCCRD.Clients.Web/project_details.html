@@ -21,163 +21,13 @@
 
     <hr />
 
-    <div id="projectDetailsBindObject" data-bind="with: projectDetails">
-
-        <!--HEADER-->
-        <div class="row">
-            <div class="col-md-9">
-                <h4 style="font-weight:bold">Project Title:</h4>
-                <h4 data-bind="text: ProjectTitle"></h4>
-            </div>
-            <div class="col-md-3">
-                <h4 style="float:right;margin-right:20px">]</h4>
-                <h4 data-bind="text: EndYear" style="float:right;margin-right:5px"></h4>
-                <h4 style="float:right;margin-right:5px">- </h4>
-                <h4 data-bind="text: StartYear" style="float:right;margin-right:5px"></h4>
-                <h4 style="float:right;margin-right:5px">[</h4>
-            </div>
-        </div>
-
-        <br>
-
-        <!--PROJECT TDETAILS-->
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <span style="font-weight:bold">Description:</span>
-                    <br>
-                    <span data-bind="text: ProjectDescription"></span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Lead agent:</span>
-                    <br>
-                    <span data-bind="text: LeadAgent"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Host partner:</span>
-                    <br>
-                    <span data-bind="text: HostPartner"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Host organisation:</span>
-                    <br>
-                    <span data-bind="text: HostOrganisation"></span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Contact (alt):</span>
-                    <br>
-                    <span data-bind="text: AlternativeContact"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Contact email (alt):</span>
-                    <br>
-                    <span data-bind="text: AlternativeContactEmail"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Link:</span>
-                    <br>
-                    <a data-bind="attr: {href: Link}" target="_blank" href="">click here</a>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <span style="font-weight:bold">Validation comments:</span>
-                    <br>
-                    <span data-bind="text: ValidationComments"></span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <span style="font-weight:bold">Budget range:</span>
-                    <br>
-                    <span>R</span>
-                    <span data-bind="text: BudgetLower"></span>
-                    <span> - R</span>
-                    <span data-bind="text: BudgetUpper"></span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Project type:</span>
-                    <br>
-                    <span data-bind="text: ProjectTypeName"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Project sub-type:</span>
-                    <br>
-                    <span data-bind="text: ProjectSubTypeName"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Project status</span>
-                    <br>
-                    <span data-bind="text: ProjectStatusName"></span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Project manager:</span>
-                    <br>
-                    <span data-bind="text: ProjectManagerName"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">Validation status</span>
-                    <br>
-                    <span data-bind="text: ValidationStatusName"></span>
-                </p>
-            </div>
-            <div class="col-md-4">
-                <p>
-                    <span style="font-weight:bold">MAOption</span>
-                    <br>
-                    <span data-bind="text: MAOptionName"></span>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <hr>
-
     <!-- TABS -->
     <ul class="nav nav-pills nav-justified">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#mitigation" role="tab">Mitigation details</a>
+            <a class="nav-link active" data-toggle="tab" href="#project" role="tab">Project details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#mitigation" role="tab">Mitigation details</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#mitigation_emmisions" role="tab">Mitigation emmisions data</a>
@@ -195,9 +45,166 @@
     <!-- TAB PANES -->
     <div class="tab-content">
 
-        <!--MITIGATION-->
-        <div class="tab-pane fade show active" id="mitigation" role="tabpanel">
+        <!--PROJECT-->
+        <div class="tab-pane fade show active" id="project" role="tabpanel">
+            <div id="projectDetailsBindObject" data-bind="with: projectDetails">
 
+                <br />
+
+                <!--HEADER-->
+                <div class="row">
+                    <div class="col-md-9">
+                        <p>
+                            <span style="font-weight:bold">Project Title:</span>
+                            <br>
+                            <span data-bind="text: ProjectTitle"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h4 style="float:right;margin-right:20px">]</h4>
+                        <h4 data-bind="text: EndYear" style="float:right;margin-right:5px"></h4>
+                        <h4 style="float:right;margin-right:5px">- </h4>
+                        <h4 data-bind="text: StartYear" style="float:right;margin-right:5px"></h4>
+                        <h4 style="float:right;margin-right:5px">[</h4>
+                    </div>
+                </div>
+
+                <br>
+
+                <!--PROJECT DETAILS-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            <span style="font-weight:bold">Description:</span>
+                            <br>
+                            <span data-bind="text: ProjectDescription"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Lead agent:</span>
+                            <br>
+                            <span data-bind="text: LeadAgent"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Host partner:</span>
+                            <br>
+                            <span data-bind="text: HostPartner"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Host organisation:</span>
+                            <br>
+                            <span data-bind="text: HostOrganisation"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Contact (alt):</span>
+                            <br>
+                            <span data-bind="text: AlternativeContact"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Contact email (alt):</span>
+                            <br>
+                            <span data-bind="text: AlternativeContactEmail"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Link:</span>
+                            <br>
+                            <a data-bind="attr: {href: Link}" target="_blank" href="">click here</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            <span style="font-weight:bold">Validation comments:</span>
+                            <br>
+                            <span data-bind="text: ValidationComments"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            <span style="font-weight:bold">Budget range:</span>
+                            <br>
+                            <span>R</span>
+                            <span data-bind="text: BudgetLower"></span>
+                            <span> - R</span>
+                            <span data-bind="text: BudgetUpper"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Project type:</span>
+                            <br>
+                            <span data-bind="text: ProjectTypeName"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Project sub-type:</span>
+                            <br>
+                            <span data-bind="text: ProjectSubTypeName"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Project status</span>
+                            <br>
+                            <span data-bind="text: ProjectStatusName"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Project manager:</span>
+                            <br>
+                            <span data-bind="text: ProjectManagerName"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">Validation status</span>
+                            <br>
+                            <span data-bind="text: ValidationStatusName"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <span style="font-weight:bold">MAOption</span>
+                            <br>
+                            <span data-bind="text: MAOptionName"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--MITIGATION-->
+        <div class="tab-pane fade" id="mitigation" role="tabpanel">
             <div id="mitigationDetailsBindObject" data-bind="foreach: mitigationDetails">
 
                 <br />
