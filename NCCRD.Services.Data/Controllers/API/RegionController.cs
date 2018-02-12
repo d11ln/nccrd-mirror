@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,61 @@ namespace NCCRD.Services.Data.Controllers.API
             using (var context = new SQLDBContext())
             {
                 data = context.Region.ToList();
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// Get all Region data as Tree-data
+        /// </summary>
+        /// <returns>Region-tree-data as JSON</returns>
+        [HttpGet]
+        [Route("api/Region/GetAllTree")]
+        public TreeViewModel GetAllTree()
+        {
+            var data = new TreeViewModel();
+
+            using (var context = new SQLDBContext())
+            {
+                var provinces = context.Region.Where(x => x.LocationType.Value == "Province").OrderBy(p => p.RegionName).ToList();
+
+                foreach(var province in provinces)
+                {
+                    var provNode = new TreeNodeViewModel();
+                    provNode.id = province.RegionId;
+                    provNode.text = province.RegionName;
+
+                    var metros = context.Region.Where(x => x.ParentRegionID == province.RegionId).OrderBy(m => m.RegionName).ToList();
+                    foreach(var metro in metros)
+                    {
+                        var metroNode = new TreeNodeViewModel();
+                        metroNode.id = metro.RegionId;
+                        metroNode.text = metro.RegionName;
+
+                        var locals = context.Region.Where(x => x.ParentRegionID == metro.RegionId).OrderBy(l => l.RegionName).ToList();
+                        foreach(var local in locals)
+                        {
+                            var localNode = new TreeNodeViewModel();
+                            localNode.id = local.RegionId;
+                            localNode.text = local.RegionName;
+
+                            if(metroNode.children == null)
+                            {
+                                metroNode.children = new List<TreeNodeViewModel>();
+                            }
+                            metroNode.children.Add(localNode);
+                        }
+
+                        if(provNode.children == null)
+                        {
+                            provNode.children = new List<TreeNodeViewModel>();
+                        }
+                        provNode.children.Add(metroNode);
+                    }
+
+                    data.dataSource.Add(provNode);
+                }        
             }
 
             return data;

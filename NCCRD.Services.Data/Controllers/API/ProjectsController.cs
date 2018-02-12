@@ -42,11 +42,12 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="titlePart">Part of a title to search on</param>
         /// <param name="statusId">ProjectStatusId to filter on</param>
         /// <param name="regionId">RegionId to filter on</param>
+        /// <param name="sectorId">RegionId to filter on</param>
         /// <param name="typologyId">TypologyId to filter on</param>
         /// <returns>Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAllFiltered")]
-        public IEnumerable<Project> GetAllFiltered(string titlePart = "", int statusId = 0, int regionId = 0, int typologyId = 0)
+        public IEnumerable<Project> GetAllFiltered(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
         {
             List<Project> projectList = new List<Project>();
 
@@ -62,15 +63,15 @@ namespace NCCRD.Services.Data.Controllers.API
                     regionProjectIds = context.ProjectRegion.Where(p => regionIds.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
                 }
 
-                var typologyProjectIds = new List<int>();
-                if (typologyId > 0)
+                var sectorTypologyProjectIds = new List<int>();
+                if (typologyId > 0 || sectorId > 0)
                 {
-                    typologyProjectIds = context.MitigationDetails.Where(x => x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList();
-                    typologyProjectIds.AddRange(context.AdaptationDetails.Where(x => x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
-                    typologyProjectIds.AddRange(context.ResearchDetails.Where(x => x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
+                    sectorTypologyProjectIds = context.MitigationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList();
+                    sectorTypologyProjectIds.AddRange(context.AdaptationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
+                    sectorTypologyProjectIds.AddRange(context.ResearchDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
 
                     //Remove duplicates
-                    typologyProjectIds = typologyProjectIds.Distinct().ToList();
+                    sectorTypologyProjectIds = sectorTypologyProjectIds.Distinct().ToList();
                 }
 
                 //Retrieve project details and filter on query params
@@ -79,7 +80,7 @@ namespace NCCRD.Services.Data.Controllers.API
                         (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
                         (statusId == 0 || p.ProjectStatusId == statusId) &&
                         (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
-                        (typologyId == 0 || typologyProjectIds.Contains(p.ProjectId))).
+                        ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId))).
                     ToList();
             }
 

@@ -87,7 +87,6 @@
     <Compile Include="Models\ProjectFunder.cs" />
     <Compile Include="Models\ProjectLocation.cs" />
     <Compile Include="Models\ProjectRegion.cs" />
-    <Compile Include="Models\ProjectTypology.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\ResearchDetail.cs" />
     <Compile Include="Models\ResearchType.cs" />

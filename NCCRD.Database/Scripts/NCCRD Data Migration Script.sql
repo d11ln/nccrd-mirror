@@ -60,7 +60,7 @@ BEGIN
 		('Mitigation'),
 		('Adaptation'),
 		('Research'),
-		('UNDEFINED')
+		('Undefined')
 END
 
 --ProjectType--
@@ -1206,81 +1206,6 @@ BEGIN
 			ON PRV.ProvinceID = PRD.Province
 	) PR
 END
-
-
---PROJECT TYPOLOGY--
-IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[ProjectTypology]) = 0
-BEGIN
-	INSERT INTO
-		[NCCRDv2].[dbo].[ProjectTypology]
-		(
-			ProjectId,
-			TypologyID
-		)
-	SELECT
-		PT.ProjectId,
-		PT.TypologyId
-	FROM
-		(
-			SELECT	
-				P.ProjectId,
-				(SELECT TOP(1) T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Mitigation') AS [TypologyId]
-			FROM
-				[NCCRD].[dbo].[tb_erm_project_details] PD
-			INNER JOIN
-				[NCCRDv2].[dbo].[Project] P
-				ON P.ProjectTitle = PD.ProjectTitle
-			INNER JOIN
-				[NCCRD].[dbo].[tb_erm_mitigation_details] MD
-				ON MD.ProjectDetailsId = PD.ProjectDetailsId
-
-			UNION ALL
-
-			SELECT	
-				P.ProjectId,
-				(SELECT TOP(1) T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Adaptation') AS [TypologyID]
-			FROM
-				[NCCRD].[dbo].[tb_erm_project_details] PD
-			INNER JOIN
-				[NCCRDv2].[dbo].[Project] P
-				ON P.ProjectTitle = PD.ProjectTitle
-			INNER JOIN
-				[NCCRD].[dbo].[tb_erm_Project_Adaptation_Data] PAD
-				ON PAD.ProjectDetailsId = PD.ProjectDetailsId
-
-			UNION ALL
-
-			SELECT	
-				P.ProjectId,
-				(SELECT TOP(1) T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Research') AS [TypologyId]
-			FROM
-				[NCCRD].[dbo].[tb_erm_project_details] PD
-			INNER JOIN
-				[NCCRDv2].[dbo].[Project] P
-				ON P.ProjectTitle = PD.ProjectTitle
-			INNER JOIN
-				[NCCRD].[dbo].[tb_erm_Project_Research_Data] PRD
-				ON PRD.ProjectDetailsId = PD.ProjectDetailsId
-		) PT
-
-	INSERT INTO
-		[NCCRDv2].[dbo].[ProjectTypology]
-		(
-			ProjectId,
-			TypologyID
-		)
-	SELECT
-		P.ProjectId,
-		(SELECT T.TypologyID FROM [NCCRDv2].[dbo].[Typology] T WHERE T.[Value] = 'Undefined')
-	FROM
-		[NCCRDv2].[dbo].[Project] P
-	LEFT OUTER JOIN
-		[NCCRDv2].[dbo].[ProjectTypology] PT
-		ON PT.ProjectId = P.ProjectId
-	WHERE
-		PT.ProjectId IS NULL
-END
-
 
 --[MITIGATION DETAILS]--
 IF (SELECT COUNT(*) FROM [NCCRDv2].[dbo].[MitigationDetails]) = 0

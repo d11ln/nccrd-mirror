@@ -41,7 +41,6 @@ namespace NCCRD.Database.Models.Contexts
         public DbSet<ProjectStatus> ProjectStatus { get; set; }
         public DbSet<ProjectSubType> ProjectSubType { get; set; }
         public DbSet<ProjectType> ProjectType { get; set; }
-        public DbSet<ProjectTypology> ProjectTypology { get; set; }
         public DbSet<Region> Region { get; set; }
         public DbSet<ResearchDetail> ResearchDetails { get; set; }
         public DbSet<ResearchType> ResearchType { get; set; }
