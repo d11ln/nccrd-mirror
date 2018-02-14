@@ -9,13 +9,9 @@
     @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Bootstrap core CSS -->
     <link href="~/MDB/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
     <link href="~/MDB/css/mdb.min.css" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
     <link href="~/MDB/css/style.css" rel="stylesheet">
 
 </head>
@@ -25,7 +21,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark indigo">
 
         <!-- Navbar brand -->
-        <a class="navbar-brand" href="/">NCCRD Data Service</a>
+        @{ 
+            var homeUrl = ViewBag.SiteRoot + "/";
+        }
+        <a class="navbar-brand" href="@homeUrl">NCCRD Data Service</a>
 
         <!-- Collapse button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -37,12 +36,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Links -->
             <ul class="navbar-nav mr-auto">
-                @*<li class="nav-item"><a class="nav-link" href="/">Home</a></li>*@
-                <li class="nav-item"><a class="nav-link" href="/Swagger">Swagger API Docs</a></li>
-                @*<li class="nav-item"><a class="nav-link" href="/Projects">Projects</a></li>*@
+                @{
+                    var swaggerUrl = (ViewBag.SiteRoot + "/swagger/ui/index"); 
+                }
+                <li class="nav-item"><a class="nav-link" href="@swaggerUrl">Swagger API Docs</a></li>
             </ul>
 
-            <ul class="navbar-nav navbar-right">
+            @*<ul class="navbar-nav navbar-right">
                 @if (Session["UserId"] != null && Session["UserId"].ToString() != "")
                 {
                     var userId = "Hello, " + Session["UserId"].ToString();
@@ -54,7 +54,7 @@
                     <li class="nav-item"><a class="nav-link" href="/Login/Login">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Login/Register">Register</a></li>
                 }
-            </ul>
+            </ul>*@
         </div>
         <!-- Collapsible content -->
     </nav>
@@ -68,7 +68,6 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
-    @*@Scripts.Render("~/bundles/bootstrap")*@
     @Scripts.Render("~/bundles/MDB")
     @RenderSection("scripts", required: false)
 </body>

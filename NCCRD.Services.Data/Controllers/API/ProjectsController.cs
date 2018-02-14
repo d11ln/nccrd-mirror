@@ -193,7 +193,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
                 if (project.ValidationStatusId != null)
                 {
-                    project.ValidationStatusName = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusID == project.ValidationStatusId).Value;
+                    project.ValidationStatusName = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == project.ValidationStatusId).Value;
                 }
 
                 if (project.MAOptionId != null)

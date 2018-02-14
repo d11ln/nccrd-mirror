@@ -45,7 +45,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusID == id);
+                data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == id);
             }
 
             return data;
@@ -83,7 +83,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                if (context.ValidationStatus.Count(x => x.ValidationStatusID == validationStatus.ValidationStatusID) == 0)
+                if (context.ValidationStatus.Count(x => x.ValidationStatusId == validationStatus.ValidationStatusId) == 0)
                 {
                     //Add ValidationStatus entry
                     context.ValidationStatus.Add(validationStatus);
@@ -110,7 +110,7 @@ namespace NCCRD.Services.Data.Controllers.API
             using (var context = new SQLDBContext())
             {
                 //Check if exists
-                var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusID == validationStatus.ValidationStatusID);
+                var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == validationStatus.ValidationStatusId);
                 if (data != null)
                 {
                     //add properties to update here
@@ -139,7 +139,7 @@ namespace NCCRD.Services.Data.Controllers.API
             using (var context = new SQLDBContext())
             {
                 //Check if exists
-                var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusID == validationStatus.ValidationStatusID);
+                var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == validationStatus.ValidationStatusId);
                 if (data != null)
                 {
                     context.ValidationStatus.Remove(data);
@@ -166,7 +166,7 @@ namespace NCCRD.Services.Data.Controllers.API
             using (var context = new SQLDBContext())
             {
                 //Check if exists
-                var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusID == id);
+                var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == id);
                 if (data != null)
                 {
                     context.ValidationStatus.Remove(data);

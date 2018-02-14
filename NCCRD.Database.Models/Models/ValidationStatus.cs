@@ -11,7 +11,7 @@ namespace NCCRD.Database.Models
     [Table("ValidationStatus")]
     public class ValidationStatus
     {
-        public int ValidationStatusID { get; set; }
+        public int ValidationStatusId { get; set; }
 
         [Required]
         [MaxLength(450)]

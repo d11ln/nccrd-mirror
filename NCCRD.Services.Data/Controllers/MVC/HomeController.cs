@@ -13,6 +13,7 @@ namespace NCCRD.Services.Data.Controllers.MVC
         public ActionResult Index()
         {
             ViewBag.Title = "NCCRD Data Service";
+            ViewBag.SiteRoot = Properties.Settings.Default.siteroot;
 
             return View();
         }

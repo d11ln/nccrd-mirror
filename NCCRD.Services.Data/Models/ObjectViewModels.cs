@@ -176,5 +176,15 @@ namespace NCCRD.Services.Data.Models
         }
     }
 
+    public class UserBasic
+    {
+        public int UserId { get; set; }
+        public string Username { get; set; }
+        public string Firstname { get; set; }
+        public string Surname { get; set; }
+
+        public string DisplayName { get => Firstname + " " + Surname; }
+    }
+
 
 }
