@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Swashbuckle.Application;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -14,11 +16,13 @@ namespace NCCRD.Services.Data
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             // By default route the user to the Help area if accessing the base URI.
-            //routes.MapRoute(
-            //    "Help Area",
-            //    "",
-            //    new { controller = "Help", action = "Index" }
-            //).DataTokens = new RouteValueDictionary(new { area = "HelpPage" });
+            routes.MapHttpRoute(
+                name: "swagger_root",
+                routeTemplate: "",
+                defaults: null,
+                constraints: null,
+                handler: new RedirectHandler((message => message.RequestUri.ToString()), "swagger"));
+
 
             routes.MapRoute(
                 name: "Default",
