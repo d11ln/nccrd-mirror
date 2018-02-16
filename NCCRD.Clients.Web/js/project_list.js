@@ -61,7 +61,7 @@ function ProjectStatusViewModel() {
     var self = this;
     self.projectStatus = ko.observableArray();
 
-    var url = 'http://localhost:58683/api/projectStatus/GetAll?allOption=true';
+    var url = apiBaseURL + 'api/projectStatus/GetAll?allOption=true';
 
     $.ajax({
         type: 'GET',
@@ -78,7 +78,7 @@ function TypologyViewModel() {
     var self = this;
     self.typology = ko.observableArray();
 
-    var url = 'http://localhost:58683/api/typology/GetAll';
+    var url = apiBaseURL + 'api/typology/GetAll';
 
     $.ajax({
         type: 'GET',

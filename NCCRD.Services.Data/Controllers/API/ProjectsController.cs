@@ -240,6 +240,22 @@ namespace NCCRD.Services.Data.Controllers.API
                 //Check if Project exists
                 if (context.Project.Count(x => x.ProjectTitle == project.ProjectTitle) == 0)
                 {
+                    //Populate FK refs
+                    project.ProjectType = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == project.ProjectTypeId);
+
+                    project.ProjectSubType = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == project.ProjectSubTypeId);
+                    if (project.ProjectSubTypeId == 0) project.ProjectSubTypeId = null;
+
+                    project.ProjectStatus = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == project.ProjectStatusId);
+                    project.ProjectManager = context.Users.FirstOrDefault(x => x.UserId == project.ProjectManagerId);
+
+                    project.ValidationStatus = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == project.ValidationStatusId);
+                    if (project.ValidationStatusId == 0) project.ValidationStatusId = null;
+
+                    project.MAOption = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId);
+                    if (project.MAOptionId == 0) project.MAOptionId = null;
+
+
                     //Add Project
                     context.Project.Add(project);
                     context.SaveChanges();

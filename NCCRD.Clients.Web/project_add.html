@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <title></title>
 
-    <script src="js/conditional_include_mdbootstrap_headers.js"></script>
-    <script src="js/conditional_include_mdbootstrap.js"></script>
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/conditional_include_knockout.js"></script>
-    <script src="js/project_add.js"></script>
+    <script type="text/javascript" src="js/conditional_include_jquery.js"></script>
+    <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
+    <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
+    <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
+    <script type="text/javascript" src="js/project_add.js"></script>
 </head>
 <body>
 
@@ -16,137 +16,144 @@
     <h2>Add New Project</h2>
     <hr />
 
-    <form id="frmAddProject">
+    <div class="col-md-6">
+        <div class="md-form">
+            <input type="text" id="projectTitle" class="form-control">
+            <label for="projectTitle" style="color:steelblue">Project title</label>
+        </div>
+    </div>
 
-        <div class="col-md-6">
-            <div class="md-form">
-                <input type="text" id="projectTitle" class="form-control">
-                <label for="projectTitle" style="color:steelblue">Project title</label>
-            </div>
+    <div class="col-md-10">
+        <div class="md-form">
+            <input type="text" id="projectDescr" class="form-control">
+            <label for="projectDescr" style="color:steelblue">Project description</label>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="md-form">
+            <input type="text" id="startYear" class="form-control">
+            <label for="startYear" style="color:steelblue">Start year</label>
         </div>
 
-        <div class="col-md-10">
-            <div class="md-form">
-                <input type="text" id="projectDescr" class="form-control">
-                <label for="projectDescr" style="color:steelblue">Project description</label>
-            </div>
+        <div class="md-form">
+            <input type="text" id="endYear" class="form-control">
+            <label for="endYear" style="color:steelblue">End year</label>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="md-form">
+            <input type="text" id="leadAgent" class="form-control">
+            <label for="leadAgent" style="color:steelblue">Lead agent</label>
         </div>
 
-        <div class="col-md-2">
-            <div class="md-form">
-                <input type="text" id="startYear" class="form-control">
-                <label for="startYear" style="color:steelblue">Start year</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="endYear" class="form-control">
-                <label for="endYear" style="color:steelblue">End year</label>
-            </div>
+        <div class="md-form">
+            <input type="text" id="hostPartner" class="form-control">
+            <label for="hostPartner" style="color:steelblue">Host partner</label>
         </div>
 
-        <div class="col-md-6">
-            <div class="md-form">
-                <input type="text" id="leadAgent" class="form-control">
-                <label for="leadAgent" style="color:steelblue">Lead agent</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="hostPartner" class="form-control">
-                <label for="hostPartner" style="color:steelblue">Host partner</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="hostOrg" class="form-control">
-                <label for="hostOrg" style="color:steelblue">Host organisation</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="contactAlt" class="form-control">
-                <label for="contactAlt" style="color:steelblue">Contact (atl)</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="contactAltEmail" class="form-control">
-                <label for="contactAltEmail" style="color:steelblue">Contact email (atl)</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="link" class="form-control">
-                <label for="link" style="color:steelblue">Link</label>
-            </div>
+        <div class="md-form">
+            <input type="text" id="hostOrg" class="form-control">
+            <label for="hostOrg" style="color:steelblue">Host organisation</label>
         </div>
 
-        <div class="col-md-10">
-            <div class="md-form">
-                <input type="text" id="validationComments" class="form-control">
-                <label for="validationComments" style="color:steelblue">Validation comments</label>
-            </div>
+        <div class="md-form">
+            <input type="text" id="contactAlt" class="form-control">
+            <label for="contactAlt" style="color:steelblue">Contact (atl)</label>
         </div>
 
-        <div class="col-md-4">
-            <div class="md-form">
-                <input type="text" id="budgetLower" class="form-control">
-                <label for="budgetLower" style="color:steelblue">Budget (min)</label>
-            </div>
-
-            <div class="md-form">
-                <input type="text" id="budgetUpper" class="form-control">
-                <label for="budgetUpper" style="color:steelblue">Budget (max)</label>
-            </div>
+        <div class="md-form">
+            <input type="text" id="contactAltEmail" class="form-control">
+            <label for="contactAltEmail" style="color:steelblue">Contact email (atl)</label>
         </div>
 
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="projectType" style="color:steelblue">Project type</label>
-                <select class="form-control" id="projectType" data-bind="foreach: projectTypes">
-                    <option data-bind="attr: {id: ProjectTypeId}, text: Value"></option>
-                </select>
-            </div>
+        <div class="md-form">
+            <input type="text" id="link" class="form-control">
+            <label for="link" style="color:steelblue">Link</label>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label for="projectSubType" style="color:steelblue">Project sub-type</label>
-                <select class="form-control" id="projectSubType" data-bind="foreach: projectSubTypes">
-                    <option data-bind="attr: {id: ProjectSubTypeId}, text: Value"></option>
-                </select>
-            </div>
+    <div class="col-md-10">
+        <div class="md-form">
+            <input type="text" id="validationComments" class="form-control">
+            <label for="validationComments" style="color:steelblue">Validation comments</label>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label for="projectStatus" style="color:steelblue">Project status</label>
-                <select class="form-control" id="projectStatus" data-bind="foreach: projectStatus">
-                    <option data-bind="attr: {id: ProjectStatusId}, text: Value"></option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="projectManager" style="color:steelblue">Project manager</label>
-                <select class="form-control" id="projectManager" data-bind="foreach: projectManager">
-                    <option data-bind="attr: {id: UserId}, text: DisplayName"></option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="validationStatus" style="color:steelblue">Validation status</label>
-                <select class="form-control" id="validationStatus" data-bind="foreach: validationStatus">
-                    <option data-bind="attr: {id: ValidationStatusId}, text: Value"></option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="maOption" style="color:steelblue">Mitigation/Adaptation option</label>
-                <select class="form-control" id="maOption" data-bind="foreach: maOption">
-                    <option data-bind="attr: {id: MAOptionId}, text: Name"></option>
-                </select>
-            </div>
-
+    <div class="col-md-4">
+        <div class="md-form">
+            <input type="text" id="budgetLower" class="form-control">
+            <label for="budgetLower" style="color:steelblue">Budget (min)</label>
         </div>
 
-        <br />
-        <hr />
+        <div class="md-form">
+            <input type="text" id="budgetUpper" class="form-control">
+            <label for="budgetUpper" style="color:steelblue">Budget (max)</label>
+        </div>
+    </div>
 
-        <button id="btnAddProjectCancel" type="button" class="btn btn-secondary" data-dismiss="modal" style="float:right">Cancel</button>
-        <button id="btnAddProjectSubmit" type="button" class="btn btn-warning data-dismiss="modal" style="float:right">Submit</button>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="projectType" style="color:steelblue">Project type</label>
+            <select class="form-control" id="projectType" data-bind="foreach: projectTypes">
+                <option data-bind="attr: {value: ProjectTypeId}, text: Value"></option>
+            </select>
+        </div>
 
-    </form>
+        <div class="form-group">
+            <label for="projectSubType" style="color:steelblue">Project sub-type</label>
+            <select class="form-control" id="projectSubType" data-bind="foreach: projectSubTypes">
+                <option data-bind="attr: {value: ProjectSubTypeId}, text: Value"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="projectStatus" style="color:steelblue">Project status</label>
+            <select class="form-control" id="projectStatus" data-bind="foreach: projectStatus">
+                <option data-bind="attr: {value: ProjectStatusId}, text: Value"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="projectManager" style="color:steelblue">Project manager</label>
+            <select class="form-control" id="projectManager" data-bind="foreach: projectManager">
+                <option data-bind="attr: {value: UserId}, text: DisplayName"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="validationStatus" style="color:steelblue">Validation status</label>
+            <select class="form-control" id="validationStatus" data-bind="foreach: validationStatus">
+                <option data-bind="attr: {value: ValidationStatusId}, text: Value"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maOption" style="color:steelblue">Mitigation/Adaptation option</label>
+            <select class="form-control" id="maOption" data-bind="foreach: maOption">
+                <option data-bind="attr: {value: MAOptionId}, text: Name"></option>
+            </select>
+        </div>
+
+    </div>
+
+    <br />
+    <hr />
+
+    <button id="btnAddProjectCancel" type="button" class="btn btn-secondary" data-dismiss="modal" style="float:right">Cancel</button>
+    <button id="btnAddProjectSubmit" type="button" class="btn btn-warning" style="float:right" onclick="AddProject()">Submit</button>
+
+    <!-- Notify Frame Modal Bottom -->
+    <div class="modal fade bottom" id="frameModalBottom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-frame modal-bottom" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <label>This is a test notification</label>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
