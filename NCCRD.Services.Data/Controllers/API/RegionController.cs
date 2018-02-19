@@ -127,6 +127,32 @@ namespace NCCRD.Services.Data.Controllers.API
         }
 
         /// <summary>
+        /// Get Region by Type
+        /// </summary>
+        /// <param name="type">The Type of the Region to get</param>
+        /// <returns>Region data as JSON</returns>
+        [HttpGet]
+        [Route("api/Region/GetByType/{type}")]
+        public List<Region> GetByType(string type)
+        {
+            List<Region> data = null;
+
+            using (var context = new SQLDBContext())
+            {
+                if(int.TryParse(type, out int typeId))
+                {
+                    data = context.Region.Where(x => x.LocationType.LocationTypeId == typeId).ToList();
+                }
+                else
+                {
+                    data = context.Region.Where(x => x.LocationType.Value.ToLower() == type.ToLower()).ToList();
+                }          
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Add Region
         /// </summary>
         /// <param name="region">The Region to add</param>

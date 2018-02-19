@@ -1,12 +1,17 @@
-﻿var headers_loaded = true;
-var jquery_loaded = true;
-var bootstrap_loaded = true;
-var knockout_loaded = false;
-
+﻿
 function load_list() {
-    $("#project_list").load("project_list.html");
+    $("#project_list").load("partial_project_list.html");
 }
 
 function load_add_project() {
-    $("#project_add").load("project_add.html");
+
+    if (typeof selectedProjectId !== 'undefined') {
+        selectedProjectId = 0;
+    }
+
+    $("#project_add").load("partial_project_add.html");
 }
+
+$('#projectAddModal').on('hidden.bs.modal', function (e) {
+    $("#project_add").html("");
+})

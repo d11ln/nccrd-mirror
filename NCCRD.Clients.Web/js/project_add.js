@@ -1,83 +1,116 @@
 ﻿
+var koBindingsApplied = false;
+
+$(() => {
+    LoadProject();
+});
+
+function GetSelectedProjectId() {
+    var urlParams = getUrlVars();
+
+    //read value from URL
+    if (urlParams["projectId"] !== undefined) {
+        selectedProjectId = urlParams["projectId"];
+    }
+
+    return selectedProjectId;
+}
+
 function ProjectTypeViewModel() {
     var self = this;
     self.projectTypes = ko.observableArray();
 
-    fetch(apiBaseURL + 'api/ProjectType/GetAll')
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-            var jsonNotSelected = JSON.parse('[{"ProjectTypeId":0,"Description":"","Value":"Not Selected"}]');
-            jsonNotSelected = jsonNotSelected.concat(data);
-            self.projectTypes(jsonNotSelected);
-        });
+    let url = apiBaseURL + "api/ProjectType/GetAll";
+    $.getJSON(url, function (data) {
+        var jsonNotSelected = JSON.parse('[{"ProjectTypeId":0,"Description":"","Value":"Not Selected"}]');
+        jsonNotSelected = jsonNotSelected.concat(data);
+        self.projectTypes(jsonNotSelected);
+    });
 }
 
 function ProjectSubTypeViewModel() {
     var self = this;
     self.projectSubTypes = ko.observableArray();
 
-    fetch(apiBaseURL + 'api/ProjectSubType/GetAll')
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-            var jsonNotSelected = JSON.parse('[{"ProjectSubTypeId":0,"Description":"","Value":"Not Selected"}]');
-            jsonNotSelected = jsonNotSelected.concat(data);
-            self.projectSubTypes(jsonNotSelected);
-        });
+    let url = apiBaseURL + 'api/ProjectSubType/GetAll';
+    $.getJSON(url, function (data) {
+        var jsonNotSelected = JSON.parse('[{"ProjectSubTypeId":0,"Description":"","Value":"Not Selected"}]');
+        jsonNotSelected = jsonNotSelected.concat(data);
+        self.projectSubTypes(jsonNotSelected);
+    });
 }
 
 function ProjectStatusViewModel() {
     var self = this;
     self.projectStatus = ko.observableArray();
 
-    fetch(apiBaseURL + 'api/ProjectStatus/GetAll')
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-            var jsonNotSelected = JSON.parse('[{"ProjectStatusId":0,"Description":"","Value":"Not Selected"}]');
-            jsonNotSelected = jsonNotSelected.concat(data);
-            self.projectStatus(jsonNotSelected);
-        });
+    let url = apiBaseURL + 'api/ProjectStatus/GetAll';
+    $.getJSON(url, function (data) {
+        var jsonNotSelected = JSON.parse('[{"ProjectStatusId":0,"Description":"","Value":"Not Selected"}]');
+        jsonNotSelected = jsonNotSelected.concat(data);
+        self.projectStatus(jsonNotSelected);
+    });
 }
 
 function ProjectManagerViewModel() {
     var self = this;
     self.projectManager = ko.observableArray();
 
-    fetch(apiBaseURL + 'api/AppUsr/GetAllBasic')
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-            var jsonNotSelected = JSON.parse('[{"UserId": 0,"DisplayName": "Not Selected"}]');
-            jsonNotSelected = jsonNotSelected.concat(data);
-            self.projectManager(jsonNotSelected);
-        });
+    let url = apiBaseURL + 'api/AppUsr/GetAllBasic';
+    $.getJSON(url, function (data) {
+        var jsonNotSelected = JSON.parse('[{"UserId": 0,"DisplayName": "Not Selected"}]');
+        jsonNotSelected = jsonNotSelected.concat(data);
+        self.projectManager(jsonNotSelected);
+    });
 }
 
 function ValidationStatusViewModel() {
     var self = this;
     self.validationStatus = ko.observableArray();
 
-    fetch(apiBaseURL + 'api/ValidationStatus/GetAll')
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-            var jsonNotSelected = JSON.parse('[{"ValidationStatusId":0,"Description":"","Value":"Not Selected"}]');
-            jsonNotSelected = jsonNotSelected.concat(data);
-            self.validationStatus(jsonNotSelected);
-        });
+    let url = apiBaseURL + 'api/ValidationStatus/GetAll';
+    $.getJSON(url, function (data) {
+        var jsonNotSelected = JSON.parse('[{"ValidationStatusId":0,"Description":"","Value":"Not Selected"}]');
+        jsonNotSelected = jsonNotSelected.concat(data);
+        self.validationStatus(jsonNotSelected);
+    });
 }
 
 function MAOptionViewModel() {
     var self = this;
     self.maOption = ko.observableArray();
 
-    fetch(apiBaseURL + 'api/MAOptions/GetAll')
+    let url = apiBaseURL + 'api/MAOptions/GetAll';
+    $.getJSON(url, function (data) {
+        var jsonNotSelected = JSON.parse('[{"MAOptionId": 0,"Name": "Not Selected"}]');
+        jsonNotSelected = jsonNotSelected.concat(data);
+        self.maOption(jsonNotSelected);
+    });
+}
+
+function LoadProject(projectId) {
+    var self = this;
+    self.projectDetails = ko.observable();
+
+    let url = apiBaseURL + 'api/projects/GetById/' + GetSelectedProjectId();
+
+    //Set page context (Add/Edit)
+    if (selectedProjectId > 0) {
+        $("#addEditHeader").text("Edit Project");
+    }
+    else {
+        $("#addEditHeader").text("Add Project");
+    }
+
+    fetch(url)
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
-            var jsonNotSelected = JSON.parse('[{"MAOptionId": 0,"Name": "Not Selected"}]');
-            jsonNotSelected = jsonNotSelected.concat(data);
-            self.maOption(jsonNotSelected);
+            self.projectDetails(data);
+            $("#projectTitle").val(self.projectDetails.ProjectTitle);
         });
 }
 
-function AddProject() {
+function SaveProject() {
     let data = {
         ProjectTitle: $("#projectTitle").val(),
         ProjectDescription: $("#projectDescr").val(),
@@ -102,8 +135,9 @@ function AddProject() {
 
     if (ValidateData(data)) {
 
+        //Might not work on all browsers!!//
         fetch(apiBaseURL + "api/Projects/Add", {
-            method: 'POST', // or 'PUT'
+            method: 'POST',
             body: JSON.stringify(data),
             headers: new Headers({
                 'Content-Type': 'application/json'
@@ -178,9 +212,18 @@ function ScrollToView(id) {
     });
 }
 
-ko.applyBindings(new ProjectTypeViewModel(), document.getElementById("projectType"));
-ko.applyBindings(new ProjectSubTypeViewModel(), document.getElementById("projectSubType"));
-ko.applyBindings(new ProjectStatusViewModel(), document.getElementById("projectStatus"));
-ko.applyBindings(new ProjectManagerViewModel(), document.getElementById("projectManager"));
-ko.applyBindings(new ValidationStatusViewModel(), document.getElementById("validationStatus"));
-ko.applyBindings(new MAOptionViewModel(), document.getElementById("maOption"));
+
+if (!koBindingsApplied) {
+    //Apply bindings
+    koBindingsApplied = true;
+    ko.applyBindings(new ProjectTypeViewModel(), document.getElementById("projectType"));
+    ko.applyBindings(new ProjectSubTypeViewModel(), document.getElementById("projectSubType"));
+    ko.applyBindings(new ProjectStatusViewModel(), document.getElementById("projectStatus"));
+    ko.applyBindings(new ProjectManagerViewModel(), document.getElementById("projectManager"));
+    ko.applyBindings(new ValidationStatusViewModel(), document.getElementById("validationStatus"));
+    ko.applyBindings(new MAOptionViewModel(), document.getElementById("maOption"));
+}
+else {
+    //Update binding models
+}
+

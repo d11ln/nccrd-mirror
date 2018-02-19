@@ -3,11 +3,14 @@
 
 <head>
     <meta charset="utf-8" />
+    <title>NCCRD - Project List</title>
+
     <script type="text/javascript" src="js/conditional_include_jquery.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
     <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
     <script type="text/javascript" src="js/shared.js"></script>
+    <script type="text/javascript" src="js/projects.js"></script>
     <script type="text/javascript" src="js/project_list.js"></script>
 
     <!--Region-Tree-->
@@ -23,24 +26,30 @@
 
     <!--Filters-->
     <div class="row">
-        <div class="col-md-3">
-            <button class="btn btn-primary" id="toggleGeneral" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#generalCollapse" aria-expanded="false" aria-controls="generalCollapse" onclick="ToggleToggleText(this)">
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-sm" id="toggleGeneral" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#generalCollapse" aria-expanded="false" aria-controls="generalCollapse">
                 Show general filters
             </button>
         </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary" id="toggleRegion" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#regionCollapse" aria-expanded="false" aria-controls="regionCollapse" onclick="ToggleToggleText(this)">
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-sm" id="toggleRegion" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#regionCollapse" aria-expanded="false" aria-controls="regionCollapse">
                 Show region filter
             </button>
         </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary" id="toggleSector" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#sectorCollapse" aria-expanded="false" aria-controls="sectorCollapse" onclick="ToggleToggleText(this)">
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-sm" id="toggleSector" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#sectorCollapse" aria-expanded="false" aria-controls="sectorCollapse">
                 Show sector filter
             </button>
         </div>
-        <div class="col-md-3">
-            <button class="btn btn-success" style="width:100%;margin:0px 0px 0px 0px" onclick="FilterProjects()">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            <button class="btn btn-success btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="FilterProjects()">
                 Filter projects
+            </button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-secondary btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="ClearFilters()">
+                Clear filters
             </button>
         </div>
     </div>
@@ -49,40 +58,33 @@
         <hr />
         <div class="row">
             <div class="col-md-12">
-                <h4>General filters:</h4>
+                <p style="font-size:large">General filters:</p>
             </div>
         </div>
         <div class="row">
 
             <div class="col-md-4" id="filterTitle">
                 <label>Title:</label>
-                <input id="titleFilter" type="text" style="margin-top:5px" onkeyup="TitleFilterChanged(this.value)" />
+                <div class="md-form form-sm">
+                    <input id="titleFilter" type="text" style="margin-top:-5px" onkeyup="TitleFilterChanged(this.value)" />
+                </div>
             </div>
 
             <div class="col-md-4" id="filterStatus">
                 <label>Status:</label>
                 <br />
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddStatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        All
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="projectStatusBindObject" data-bind="foreach: projectStatus">
-                        <button class="dropdown-item" data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></button>
-                    </div>
-                </div>
+                <select id="projectStatusBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: projectStatus">
+                    <option data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></option>
+                </select>
             </div>
 
             <div class="col-md-4" id="filterTypology">
                 <label>Typology:</label>
                 <br />
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" style="width:100%;margin:0px 0px 0px 0px" type="button" id="ddTypology" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        All
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="typologyBindObject" data-bind="foreach: typology">
-                        <a class="dropdown-item" data-bind="attr: {id: TypologyID}, text: Value" onclick="TypologyFilterSelected(this)"></a>
-                    </div>
-                </div>
+                <!--background-color:#AA66CC;color:whitesmoke-->
+                <select id="typologyBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: typology">
+                    <option data-bind="attr: {id: TypologyID}, text: Value" onclick="TypologyFilterSelected(this)"></option>
+                </select>
             </div>
         </div>
     </div>
@@ -91,7 +93,7 @@
         <hr />
         <div class="row">
             <div class="col-md-9">
-                <p style="font-size:x-large">
+                <p style="font-size:large">
                     <span>Region filter: </span>
                     <span id="regionFilterText">All</span>
                 </p>
@@ -99,8 +101,8 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button id="btnRegionTreeExpandAll" class="btn btn-secondary" style="width:200px;margin:0px 0px 0px 0px">Expand all</button>
-                <button id="btnRegionTreeCollapseAll" class="btn btn-secondary" style="width:200px;margin:0px 0px 0px 0px">Collapse all</button>
+                <button id="btnRegionTreeExpandAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Expand all</button>
+                <button id="btnRegionTreeCollapseAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Collapse all</button>
             </div>
         </div>
         <br />
@@ -114,7 +116,7 @@
         <hr />
         <div class="row">
             <div class="col-md-9">
-                <p style="font-size:x-large">
+                <p style="font-size:large">
                     <span>Sector filter: </span>
                     <span id="sectorFilterText">All</span>
                 </p>
@@ -122,8 +124,8 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button id="btnSectorTreeExpandAll" class="btn btn-secondary" style="width:200px;margin:0px 0px 0px 0px">Expand all</button>
-                <button id="btnSectorTreeCollapseAll" class="btn btn-secondary" style="width:200px;margin:0px 0px 0px 0px">Collapse all</button>
+                <button id="btnSectorTreeExpandAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Expand all</button>
+                <button id="btnSectorTreeCollapseAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Collapse all</button>
             </div>
         </div>
         <br />
@@ -133,16 +135,16 @@
     </div>
 
     <hr />
-    <br />
-
+    <!--<br />-->
+    <!-- Project List -->
     <div id="projectListBindObject">
-        <!-- Project List -->
         <div data-bind="foreach: projects">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title" data-bind="text: ProjectTitle"></h4>
                     <p class="card-text" data-bind="text: ProjectDescription"></p>
-                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this.id)">View details</button>
+                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this)">View</button>
+                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#projectEditModal" onclick="load_edit_project(this)">Edit</button>
                 </div>
             </div>
             <br />
@@ -154,12 +156,31 @@
         <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
             <div class="modal-content">
                 <div class="modal-body">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Project Details</h2>
+                        </div>
+                    </div>
                     <div id="project_details">
                         <!-- Content will be loaded dynamically -->
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div class="modal fade bottom" id="projectEditModal">
+        <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="project_edit">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
                 </div>
             </div>
         </div>

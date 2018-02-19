@@ -1,47 +1,24 @@
 ﻿
-if (typeof selectedProjectId === 'undefined') {
-    var selectedProjectId = 0;
-}
-
-function getUrlVars() {
-    var vars = {};
-    var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-        function (m, key, value) {
-            vars[key] = value;
-        });
-    return vars;
-}
-
-function BuildProjectDetailsUrl() {
+//GetSelectedProjectId
+function GetSelectedProjectId() {
     var urlParams = getUrlVars();
 
-    if (selectedProjectId === 0 && urlParams["projectId"] !== undefined) {
+    //read value from URL
+    if (urlParams["projectId"] !== undefined) {
         selectedProjectId = urlParams["projectId"];
     }
 
-    return (apiBaseURL + 'api/projects/GetById/' + selectedProjectId);
+    return selectedProjectId;
 }
 
 function ProjectsDetailsViewModel() {
     var self = this;
     self.projectDetails = ko.observable();
 
-    // var token = sessionStorage.getItem(tokenKey);
-    // var headers = {};
-    // if (token) {
-    //     headers.Authorization = 'Bearer ' + token;
-    // }
+    let url = apiBaseURL + 'api/projects/GetById/' + GetSelectedProjectId();
 
-    var url = BuildProjectDetailsUrl();
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        // headers: headers,
-        success: function (data) {
-            self.projectDetails(data);
-        }
+    $.getJSON(url, function (data) {
+        self.projectDetails(data);
     });
 }
 
@@ -49,22 +26,9 @@ function MitigationDetailsViewModel() {
     var self = this;
     self.mitigationDetails = ko.observable();
 
-    // var token = sessionStorage.getItem(tokenKey);
-    // var headers = {};
-    // if (token) {
-    //     headers.Authorization = 'Bearer ' + token;
-    // }
-
-    var url = apiBaseURL + 'api/MitigationDetails/GetByProjectID/' + selectedProjectId;
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        // headers: headers,
-        success: function (data) {
-            self.mitigationDetails(data);
-        }
+    let url = apiBaseURL + 'api/MitigationDetails/GetByProjectID/' + GetSelectedProjectId();
+    $.getJSON(url, function (data) {
+        self.mitigationDetails(data);
     });
 }
 
@@ -72,22 +36,9 @@ function MitigationEmissionsViewModel() {
     var self = this;
     self.mitigationEmissions = ko.observable();
 
-    // var token = sessionStorage.getItem(tokenKey);
-    // var headers = {};
-    // if (token) {
-    //     headers.Authorization = 'Bearer ' + token;
-    // }
-
-    var url = apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID/' + selectedProjectId;
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        // headers: headers,
-        success: function (data) {
-            self.mitigationEmissions(data);
-        }
+    let url = apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID/' + GetSelectedProjectId();
+    $.getJSON(url, function (data) {
+        self.mitigationEmissions(data);
     });
 }
 
@@ -95,22 +46,9 @@ function AdaptationDetailsViewModel() {
     var self = this;
     self.adaptationDetails = ko.observable();
 
-    // var token = sessionStorage.getItem(tokenKey);
-    // var headers = {};
-    // if (token) {
-    //     headers.Authorization = 'Bearer ' + token;
-    // }
-
-    var url = apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + selectedProjectId;
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        // headers: headers,
-        success: function (data) {
-            self.adaptationDetails(data);
-        }
+    let url = apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + GetSelectedProjectId();
+    $.getJSON(url, function (data) {
+        self.adaptationDetails(data);
     });
 }
 
@@ -118,22 +56,9 @@ function ResearchDetailsViewModel() {
     var self = this;
     self.researchDetails = ko.observable();
 
-    // var token = sessionStorage.getItem(tokenKey);
-    // var headers = {};
-    // if (token) {
-    //     headers.Authorization = 'Bearer ' + token;
-    // }
-
-    var url = apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + selectedProjectId;
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'json',
-        // headers: headers,
-        success: function (data) {
-            self.researchDetails(data);
-        }
+    let url = apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + GetSelectedProjectId();
+    $.getJSON(url, function (data) {
+        self.researchDetails(data);
     });
 }
 

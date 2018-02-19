@@ -8,12 +8,12 @@
     <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
     <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
-    <script type="text/javascript" src="js/project_add.js"></script>
+    <script type="text/javascript" src="js/shared.js"></script>
 </head>
 <body>
 
     <br />
-    <h2>Add New Project</h2>
+    <h2 id="addEditHeader">[Add/Edit] Project</h2>
     <hr />
 
     <div class="col-md-6">
@@ -142,7 +142,7 @@
     <hr />
 
     <button id="btnAddProjectCancel" type="button" class="btn btn-secondary" data-dismiss="modal" style="float:right">Cancel</button>
-    <button id="btnAddProjectSubmit" type="button" class="btn btn-warning" style="float:right" onclick="AddProject()">Submit</button>
+    <button id="btnAddProjectSubmit" type="button" class="btn btn-warning" style="float:right" onclick="SaveProject()">Save</button>
 
     <!-- Notify Frame Modal Bottom -->
     <div class="modal fade bottom" id="frameModalBottom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -154,6 +154,8 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript" src="js/project_add.js"></script>
 
 </body>
 </html>
