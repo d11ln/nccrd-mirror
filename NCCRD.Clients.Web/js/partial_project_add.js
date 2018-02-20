@@ -1,6 +1,4 @@
 ﻿
-var koBindingsApplied = false;
-
 $(() => {
     LoadProject();
 });
@@ -88,11 +86,10 @@ function MAOptionViewModel() {
     });
 }
 
-function LoadProject(projectId) {
-    var self = this;
-    self.projectDetails = ko.observable();
+function LoadProject() {
 
-    let url = apiBaseURL + 'api/projects/GetById/' + GetSelectedProjectId();
+    //Get selectedProjectId
+    GetSelectedProjectId();
 
     //Set page context (Add/Edit)
     if (selectedProjectId > 0) {
@@ -102,12 +99,36 @@ function LoadProject(projectId) {
         $("#addEditHeader").text("Add Project");
     }
 
-    fetch(url)
-        .then((resp) => resp.json()) // Transform the data into json
-        .then(function (data) {
-            self.projectDetails(data);
-            $("#projectTitle").val(self.projectDetails.ProjectTitle);
+    //Load selected project
+    if (selectedProjectId > 0) {
+        //Get project data
+        let url = apiBaseURL + 'api/projects/GetById/' + selectedProjectId;
+        $.getJSON(url, function (data) {
+
+            //Fill project data/values
+            $("#projectTitle").val(data.ProjectTitle).trigger("change");
+            $("#projectDescr").val(data.ProjectDescription).trigger("change");
+            $("#startYear").val(data.StartYear).trigger("change");
+            $("#endYear").val(data.EndYear).trigger("change");
+            $("#leadAgent").val(data.LeadAgent).trigger("change");
+            $("#hostPartner").val(data.HostPartner).trigger("change");
+            $("#hostOrg").val(data.HostOrganisation).trigger("change");
+            $("#contactAlt").val(data.AlternativeContact).trigger("change");
+            $("#contactAltEmail").val(data.AlternativeContactEmail).trigger("change");
+            $("#link").val(data.Link).trigger("change");
+            $("#validationComments").val(data.ValidationComments).trigger("change");
+            $("#budgetLower").val(data.BudgetLower).trigger("change");
+            $("#budgetUpper").val(data.BudgetUpper).trigger("change");
+
+            //Set selects
+            $("#projectType option").each(function () { this.selected = (this.text == data.ProjectTypeName); });
+            $("#projectSubType option").each(function () { this.selected = (this.text == data.ProjectSubTypeName); });
+            $("#projectStatus option").each(function () { this.selected = (this.text == data.ProjectStatusName); });
+            $("#projectManager option").each(function () { this.selected = (this.text == data.ProjectManagerName); });
+            $("#validationStatus option").each(function () { this.selected = (this.text == data.ValidationStatusName); });
+            $("#maOption option").each(function () { this.selected = (this.text == data.MAOptionName); });
         });
+    }
 }
 
 function SaveProject() {
@@ -212,18 +233,12 @@ function ScrollToView(id) {
     });
 }
 
-
-if (!koBindingsApplied) {
-    //Apply bindings
-    koBindingsApplied = true;
-    ko.applyBindings(new ProjectTypeViewModel(), document.getElementById("projectType"));
-    ko.applyBindings(new ProjectSubTypeViewModel(), document.getElementById("projectSubType"));
-    ko.applyBindings(new ProjectStatusViewModel(), document.getElementById("projectStatus"));
-    ko.applyBindings(new ProjectManagerViewModel(), document.getElementById("projectManager"));
-    ko.applyBindings(new ValidationStatusViewModel(), document.getElementById("validationStatus"));
-    ko.applyBindings(new MAOptionViewModel(), document.getElementById("maOption"));
-}
-else {
-    //Update binding models
-}
+//Apply bindings
+koBindingsApplied = true;
+ko.applyBindings(new ProjectTypeViewModel(), document.getElementById("projectType"));
+ko.applyBindings(new ProjectSubTypeViewModel(), document.getElementById("projectSubType"));
+ko.applyBindings(new ProjectStatusViewModel(), document.getElementById("projectStatus"));
+ko.applyBindings(new ProjectManagerViewModel(), document.getElementById("projectManager"));
+ko.applyBindings(new ValidationStatusViewModel(), document.getElementById("validationStatus"));
+ko.applyBindings(new MAOptionViewModel(), document.getElementById("maOption"));
 

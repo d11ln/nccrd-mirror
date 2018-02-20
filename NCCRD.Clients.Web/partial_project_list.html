@@ -11,7 +11,7 @@
     <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
     <script type="text/javascript" src="js/shared.js"></script>
     <script type="text/javascript" src="js/projects.js"></script>
-    <script type="text/javascript" src="js/project_list.js"></script>
+    <script type="text/javascript" src="js/partial_project_list.js"></script>
 
     <!--Region-Tree-->
     <link href="css/gijgo/modular/core.css" rel="stylesheet" />
@@ -144,7 +144,7 @@
                     <h4 class="card-title" data-bind="text: ProjectTitle"></h4>
                     <p class="card-text" data-bind="text: ProjectDescription"></p>
                     <button data-bind="attr: { id: ProjectId}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this)">View</button>
-                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#projectEditModal" onclick="load_edit_project(this)">Edit</button>
+                    <button data-bind="attr: { id: ProjectId}" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#projectEditModal" onclick="load_edit_project(this)">Edit</button>
                 </div>
             </div>
             <br />

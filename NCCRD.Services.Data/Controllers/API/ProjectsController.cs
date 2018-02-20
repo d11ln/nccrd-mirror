@@ -53,6 +53,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
+                //GET FILTER DATA
                 var regionProjectIds = new List<int>();
                 if (regionId > 0)
                 {
@@ -74,6 +75,7 @@ namespace NCCRD.Services.Data.Controllers.API
                     sectorTypologyProjectIds = sectorTypologyProjectIds.Distinct().ToList();
                 }
 
+                //GET PORJECTS FILTERED//
                 //Retrieve project details and filter on query params
                 projectList = context.Project.OrderBy(p => p.ProjectTitle).
                     Where(p => 
@@ -104,16 +106,48 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <summary>
         /// Get Projects (GeoJson)
         /// </summary>
+        /// <param name="titlePart">Part of a title to search on</param>
+        /// <param name="statusId">ProjectStatusId to filter on</param>
+        /// <param name="regionId">RegionId to filter on</param>
+        /// <param name="sectorId">RegionId to filter on</param>
+        /// <param name="typologyId">TypologyId to filter on</param>
         /// <returns>Project data in GeoJson standard/format</returns>
         [HttpGet]
         [Route("api/Projects/GEO/GetAll")]
-        public List<ProjectGeoJson> GeoGetAll()
+        public List<ProjectGeoJson> GeoGetAll(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
         {
             List<ProjectGeoJson> projectGeo = new List<ProjectGeoJson>();
 
             using (var context = new SQLDBContext())
             {
-                var projectData = (from proj in context.Project
+                //GET FILTER DATA//
+                var regionProjectIds = new List<int>();
+                if (regionId > 0)
+                {
+                    //Get all RegionIds (including children)
+                    var regionIds = GetChildRegions(regionId, context.Region.ToList()).Select(r => r.RegionId).Distinct();
+
+                    //Get all ProjectIds assigned to these Regions and/or Typology
+                    regionProjectIds = context.ProjectRegion.Where(p => regionIds.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
+                }
+
+                var sectorTypologyProjectIds = new List<int>();
+                if (typologyId > 0 || sectorId > 0)
+                {
+                    sectorTypologyProjectIds = context.MitigationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList();
+                    sectorTypologyProjectIds.AddRange(context.AdaptationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
+                    sectorTypologyProjectIds.AddRange(context.ResearchDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
+
+                    //Remove duplicates
+                    sectorTypologyProjectIds = sectorTypologyProjectIds.Distinct().ToList();
+                }
+
+                //GET PROJECT DATA FILTERED//
+                var projectData = (from proj in context.Project.Where(p =>
+                                                                    (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
+                                                                    (statusId == 0 || p.ProjectStatusId == statusId) &&
+                                                                    (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
+                                                                    ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId)))
                                    join projLoc in context.ProjectLocation on proj.ProjectId equals projLoc.ProjectId
                                    join loc in context.Location on projLoc.LocationId equals loc.LocationId
                                    join projStat in context.ProjectStatus on proj.ProjectStatusId equals projStat.ProjectStatusId
