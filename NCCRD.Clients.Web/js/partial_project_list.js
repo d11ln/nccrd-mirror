@@ -1,35 +1,32 @@
 ﻿
-//var selectedProjectId = 0;
-
-$(() => {
-    var self = this;
-
+function ReadUrlParams() {
     //Get params from URL//
-    var urlParams = getUrlVars();
+    var qs = new Querystring();
 
     //Apply URL params where applicable//
-    if (self.titlePart === "" && urlParams["titlePart"] !== undefined) {
-        self.titlePart = urlParams["titlePart"];
+    if (titlePart === "" && qs.get('titlePart', '') !== '') {
+        titlePart = qs.get('titlePart', '');
         $('#titleFilter').val(decodeURIComponent(titlePart));
     }
-    if (self.statusId === 0 && urlParams["statusId"] !== undefined) {
-        self.statusId = urlParams["statusId"];
+    if (statusId === 0 && qs.get('statusId', '') !== '') {
+        statusId = qs.get('statusId', '');
     }
-    if (self.regionId === 0 && urlParams["regionId"] !== undefined) {
-        self.regionId = urlParams["regionId"];
+    if (regionId === 0 && qs.get('regionId', '') !== '') {
+        regionId = qs.get('regionId', '');
     }
-    if (self.sectorId === 0 && urlParams["sectorId"] !== undefined) {
-        self.sectorId = urlParams["sectorId"];
+    if (sectorId === 0 && qs.get('sectorId', '') !== '') {
+        sectorId = qs.get('sectorId', '');
     }
-    if (self.typologyId === 0 && urlParams["typologyId"] !== undefined) {
-        self.typologyId = urlParams["typologyId"];
+    if (typologyId === 0 && qs.get('typologyId', '') !== '') {
+        typologyId = qs.get('typologyId', '');
     }
-})
+}
 
 function ProjectsViewModel() {
     var self = this;
     self.projects = ko.observableArray();
 
+    ReadUrlParams();
     let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
     $.getJSON(url, function (data) {
         self.projects(data);
@@ -64,7 +61,6 @@ function load_details(item) {
 function load_edit_project(item) {
     selectedProjectId = item.getAttribute('id');
     $("#project_edit").load("partial_project_add.html");
-    SetupProjectAddEdit();
 }
 
 $('#projectDetailsModal').on('hidden.bs.modal', function (e) {
@@ -96,6 +92,7 @@ function SetDropdownText(item) {
 }
 
 function FilterProjects() {
+    ReadUrlParams();
     let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
     $.getJSON(url, function (data) {
         projectsVM.projects(data);

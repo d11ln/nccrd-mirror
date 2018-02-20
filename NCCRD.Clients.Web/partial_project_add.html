@@ -9,10 +9,23 @@
     <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
     <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
     <script type="text/javascript" src="js/shared.js"></script>
+
+    <style>
+        /*.textarea.md-textarea {
+            min-height: 6rem;
+        }*/
+
+        .basic-textarea textarea {
+            height: auto;
+        }
+                
+    </style>
+
 </head>
 <body>
 
     <br />
+
     <div class="row">
         <div class="col-md-9">
             <h2 id="addEditHeader">[Add/Edit] Project</h2>
@@ -21,10 +34,10 @@
             <label style="float:right;color:steelblue;font-style:italic;font-size:small;margin-right:20px">Required fields marked with&nbsp;&nbsp;<span style="color:red;font-weight:bold;font-size:medium">*</span></label>
         </div>
     </div>
-   
-    <hr />
 
-    <div class="col-md-6">
+    <hr />
+    
+    <div class="col-md-10">
         <div class="md-form">
             <input type="text" id="projectTitle" class="form-control">
             <label for="projectTitle" style="color:steelblue">Project title&nbsp;&nbsp;<span style="color:red;font-weight:bold">*</span></label>
@@ -32,9 +45,9 @@
     </div>
 
     <div class="col-md-10">
-        <div class="md-form">
-            <input type="text" id="projectDescr" class="form-control">
+        <div class="form-group basic-textarea">
             <label for="projectDescr" style="color:steelblue">Project description</label>
+            <textarea class="form-control" id="projectDescr" rows="7" style="margin-bottom:30px"></textarea>
         </div>
     </div>
 

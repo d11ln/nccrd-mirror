@@ -1,11 +1,11 @@
 ﻿
 //GetSelectedProjectId
 function GetSelectedProjectId() {
-    var urlParams = getUrlVars();
 
-    //read value from URL
-    if (urlParams["projectId"] !== undefined) {
-        selectedProjectId = urlParams["projectId"];
+    //Get params on local url
+    var qs = new Querystring();
+    if (qs.get('projectId', '') !== '') {
+        selectedProjectId = qs.get('projectId', '');
     }
 
     return selectedProjectId;

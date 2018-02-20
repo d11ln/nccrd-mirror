@@ -25,12 +25,3 @@ if (typeof sectorId === 'undefined') {
 if (typeof typologyId === 'undefined') {
     var typologyId = 0;
 }
-
-function getUrlVars() {
-    var vars = {};
-    var parts = window.parent.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-        function (m, key, value) {
-            vars[key] = value;
-        });
-    return vars;
-}
