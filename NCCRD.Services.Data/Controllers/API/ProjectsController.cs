@@ -333,12 +333,25 @@ namespace NCCRD.Services.Data.Controllers.API
                     existProj.ValidationComments = project.ValidationComments;
                     existProj.BudgetLower = project.BudgetLower;
                     existProj.BudgetUpper = project.BudgetUpper;
+
                     existProj.ProjectTypeId = project.ProjectTypeId;
-                    existProj.ProjectSubTypeId = project.ProjectSubTypeId;
+                    existProj.ProjectType = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == project.ProjectTypeId);
+
+                    existProj.ProjectSubTypeId = project.ProjectSubTypeId == 0 ? null : project.ProjectSubTypeId;
+                    existProj.ProjectSubType = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == project.ProjectSubTypeId);
+
                     existProj.ProjectStatusId = project.ProjectStatusId;
+                    existProj.ProjectStatus = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == project.ProjectStatusId);
+
                     existProj.ProjectManagerId = project.ProjectManagerId;
-                    existProj.ValidationStatusId = project.ValidationStatusId;
-                    existProj.MAOptionId = project.MAOptionId;
+                    existProj.ProjectManager = context.Users.FirstOrDefault(x => x.UserId == project.ProjectManagerId);
+
+                    existProj.ValidationStatusId = project.ValidationStatusId == 0 ? null : project.ValidationStatusId;
+                    existProj.ValidationStatus = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == project.ValidationStatusId);
+
+                    existProj.MAOptionId = project.MAOptionId == 0 ? null : project.MAOptionId;
+                    existProj.MAOption = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId);
+
                     context.SaveChanges();
 
                     result = true;

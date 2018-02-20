@@ -1,4 +1,6 @@
 ﻿
+var editMode = false;
+
 $(() => {
     LoadProject();
 });
@@ -95,6 +97,7 @@ function LoadProject() {
     //Set page context (Add/Edit)
     if (selectedProjectId > 0) {
         $("#addEditHeader").text("Edit Project");
+        editMode = true;
     }
     else {
         $("#addEditHeader").text("Add Project");
@@ -133,7 +136,8 @@ function LoadProject() {
 }
 
 function SaveProject() {
-    let data = {
+    let postData = {
+        ProjectId: GetSelectedProjectId(),
         ProjectTitle: $("#projectTitle").val(),
         ProjectDescription: $("#projectDescr").val(),
         StartYear: $("#startYear").val(),
@@ -155,27 +159,52 @@ function SaveProject() {
         MAOptionId: $("#maOption").val()
     };
 
-    if (ValidateData(data)) {
+    if (ValidateData(postData)) {
 
-        //Might not work on all browsers!!//
-        fetch(apiBaseURL + "api/Projects/Add", {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: new Headers({
-                'Content-Type': 'application/json'
+        let strPostData = JSON.stringify(postData);
+
+        if (editMode) {
+
+            //##EDIT##//
+            let url = apiBaseURL + "api/Projects/Update";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: strPostData,
+                contentType: 'application/json'
             })
-        })
-            .then(res => res.json())
-            .then(response => {
-                if (response === true) {
+                .done(function () {
+                    //Close modal
+                    alert("Project updated successfully");
+                    $('#projectEditModal').modal('hide');
+                })
+                .fail(function (data) {
+                    alert("Unable to save project data. See log for errors.");
+                    console.log('Error:', data);
+                });
+        }
+        else {
+
+            //##ADD##//
+            let url = apiBaseURL + "api/Projects/Add";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: strPostData,
+                contentType: 'application/json'
+            })
+                .done(function () {
                     //Close modal
                     alert("Project added successfully");
                     $('#projectAddModal').modal('hide');
-                }
-                else {
-                    console.log('Success:', response);
-                }
-            });
+                })
+                .fail(function (data) {
+                    alert("Unable to save project data. See log for errors.");
+                    console.log('Error:', response);
+                });
+        }
     }
 }
 
