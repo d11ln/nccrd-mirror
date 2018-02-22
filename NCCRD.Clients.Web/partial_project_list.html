@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <title>NCCRD - Project List</title>
 
-    <script type="text/javascript" src="js/conditional_include_jquery.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
+    <script type="text/javascript" src="js/conditional_include_jquery.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
     <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
     <script type="text/javascript" src="js/querystring.js"></script>
@@ -19,6 +19,16 @@
     <link href="css/gijgo/modular/tree.css" rel="stylesheet" />
     <script type="text/javascript" src="js/gijgo/modular/core.js"></script>
     <script type="text/javascript" src="js/gijgo/modular/tree.js"></script>
+
+    <style>
+        .float_bottom_right {
+            position: fixed;
+            right: 10.5%;
+            bottom: 10px;
+            z-index:1
+        }
+    </style>
+
 </head>
 
 <body>
@@ -82,7 +92,6 @@
             <div class="col-md-4" id="filterTypology">
                 <label>Typology:</label>
                 <br />
-                <!--background-color:#AA66CC;color:whitesmoke-->
                 <select id="typologyBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: typology">
                     <option data-bind="attr: {id: TypologyID}, text: Value" onclick="TypologyFilterSelected(this)"></option>
                 </select>
@@ -142,28 +151,22 @@
         <div data-bind="foreach: projects">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title" data-bind="text: ProjectTitle"></h4>
+                    <p class="card-title" data-bind="text: ProjectTitle" style="font-size:large"></p>
                     <p class="card-text" data-bind="text: ProjectDescription"></p>
-                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#projectDetailsModal" onclick="load_details(this)">View</button>
-                    <button data-bind="attr: { id: ProjectId}" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#projectEditModal" onclick="load_edit_project(this)">Edit</button>
+                    <button data-bind="attr: { id: ProjectId}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#largeModal" onclick="load_details(this)">View</button>
                 </div>
             </div>
             <br />
         </div>
     </div>
 
-    <!-- Details Modal -->
-    <div class="modal fade bottom" id="projectDetailsModal">
+    <!-- Large Modal -->
+    <div class="modal fade bottom" id="largeModal">
         <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
             <div class="modal-content">
                 <div class="modal-body">
                     <br />
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2>Project Details</h2>
-                        </div>
-                    </div>
-                    <div id="project_details">
+                    <div id="large_modal_content">
                         <!-- Content will be loaded dynamically -->
                     </div>
                 </div>
@@ -175,13 +178,25 @@
     </div>
 
     <!-- Add Project Modal -->
-    <div class="modal fade bottom" id="projectEditModal">
+    <div class="modal fade bottom" id="projectAddEditModal">
         <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div id="project_edit">
+                    <div id="project_add_edit">
                         <!-- Content will be loaded dynamically -->
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Back to top button-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="float_bottom_right">
+                    <button class="btn btn-secondary btn-sm" style="margin-right:0px" data-toggle="modal" data-target="#largeModal" onclick="load_add_edit_project()">Add project</button>
+                    <button class="btn btn-secondary btn-sm" onclick="back_to_top()">Back to top</button>
                 </div>
             </div>
         </div>

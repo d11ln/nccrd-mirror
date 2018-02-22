@@ -26,7 +26,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data = context.ValidationStatus.ToList();
+                data = context.ValidationStatus.OrderBy(x => x.Value.Trim()).ToList();
             }
 
             return data;

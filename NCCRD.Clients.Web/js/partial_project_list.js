@@ -1,4 +1,12 @@
 ﻿
+function back_to_top() {
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
+}
+
 function ReadUrlParams() {
     //Get params from URL//
     var qs = new Querystring();
@@ -22,55 +30,14 @@ function ReadUrlParams() {
     }
 }
 
-function ProjectsViewModel() {
-    var self = this;
-    self.projects = ko.observableArray();
-
-    ReadUrlParams();
-    let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
-    $.getJSON(url, function (data) {
-        self.projects(data);
-    });
-}
-
-function ProjectStatusViewModel() {
-    var self = this;
-    self.projectStatus = ko.observableArray();
-
-    let url = apiBaseURL + 'api/projectStatus/GetAll?allOption=true';
-    $.getJSON(url, function (data) {
-        self.projectStatus(data);
-    });
-}
-
-function TypologyViewModel() {
-    var self = this;
-    self.typology = ko.observableArray();
-
-    let url = apiBaseURL + 'api/typology/GetAll';
-    $.getJSON(url, function (data) {
-        self.typology(data);
-    });
-}
-
 function load_details(item) {
     selectedProjectId = item.getAttribute('id');
-    $("#project_details").load("partial_project_details.html");
+    $("#large_modal_content").load("partial_project_details.html");
 }
 
-function load_edit_project(item) {
-    selectedProjectId = item.getAttribute('id');
-    $("#project_edit").load("partial_project_add.html");
-}
-
-$('#projectDetailsModal').on('hidden.bs.modal', function (e) {
-    $("#project_details").html("");
+$('#largeModal').on('hidden.bs.modal', function (e) {
+    $("#large_modal_content").html("");
 })
-
-$('#projectEditModal').on('hidden.bs.modal', function (e) {
-    $("#project_edit").html("");
-})
-
 
 function TitleFilterChanged(val) {
     titlePart = val;
@@ -159,6 +126,37 @@ $("#toggleRegion").click(function () {
 $("#toggleSector").click(function () {
     ToggleToggleButton($(this));
 });
+
+function ProjectsViewModel() {
+    var self = this;
+    self.projects = ko.observableArray();
+
+    ReadUrlParams();
+    let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
+    $.getJSON(url, function (data) {
+        self.projects(data);
+    });
+}
+
+function ProjectStatusViewModel() {
+    var self = this;
+    self.projectStatus = ko.observableArray();
+
+    let url = apiBaseURL + 'api/projectStatus/GetAll?allOption=true';
+    $.getJSON(url, function (data) {
+        self.projectStatus(data);
+    });
+}
+
+function TypologyViewModel() {
+    var self = this;
+    self.typology = ko.observableArray();
+
+    let url = apiBaseURL + 'api/typology/GetAll';
+    $.getJSON(url, function (data) {
+        self.typology(data);
+    });
+}
 
 var projectsVM = new ProjectsViewModel();
 var projectStatusVM = new ProjectStatusViewModel();

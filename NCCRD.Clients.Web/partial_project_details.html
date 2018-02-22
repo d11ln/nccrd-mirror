@@ -14,6 +14,17 @@
 
 <body>
 
+    <br />
+
+    <div class="row">
+        <div class="col-md-9">
+            <h4 id="addEditHeader">Project Details</h4>
+        </div>
+        <div class="col-3">
+            <button id="editToggle" class="btn btn-sm btn-secondary" style="margin:0px;width:150px;float:right" onclick="ToggleEditClick()">EDIT MODE: OFF</button>
+        </div>
+    </div>
+
     <hr />
 
     <!-- TABS -->
@@ -22,13 +33,13 @@
             <a class="nav-link active btn-sm" data-toggle="tab" href="#project" role="tab">Project details</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link btn-sm" data-toggle="tab" href="#adaptation" role="tab">Adaptation details</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link btn-sm" data-toggle="tab" href="#mitigation" role="tab">Mitigation details</a>
         </li>
         <li class="nav-item">
             <a class="nav-link btn-sm" data-toggle="tab" href="#mitigation_emmisions" role="tab">Mitigation emissions data</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link btn-sm" data-toggle="tab" href="#adaptation" role="tab">Adaptation details</a>
         </li>
         <li class="nav-item">
             <a class="nav-link btn-sm" data-toggle="tab" href="#research" role="tab">Research details</a>
@@ -49,18 +60,13 @@
                 <!--HEADER-->
                 <div class="row">
                     <div class="col-md-9">
-                        <p>
-                            <span style="font-weight:bold">Project Title:</span>
-                            <br>
-                            <span data-bind="text: ProjectTitle"></span>
-                        </p>
+                        <label style="font-weight:bold">Project Title:</label>
+                        <input type="text" readonly data-bind="attr: {value: ProjectTitle}" />
                     </div>
                     <div class="col-md-3">
-                        <h4 style="float:right;margin-right:20px">]</h4>
-                        <h4 data-bind="text: EndYear" style="float:right;margin-right:5px"></h4>
-                        <h4 style="float:right;margin-right:5px">- </h4>
-                        <h4 data-bind="text: StartYear" style="float:right;margin-right:5px"></h4>
-                        <h4 style="float:right;margin-right:5px">[</h4>
+                        <input type="text" readonly data-bind="attr: {value: EndYear}" style="width:75px; text-align:center; font-size:x-large; float:right" />
+                        <label style="font-size:x-large; float:right"> - </label>
+                        <input type="text" readonly data-bind="attr: {value: StartYear}" style="width:75px; text-align:center; font-size:x-large; float:right" />
                     </div>
                 </div>
 
@@ -69,132 +75,151 @@
                 <!--PROJECT DETAILS-->
                 <div class="row">
                     <div class="col-md-12">
-                        <p>
-                            <span style="font-weight:bold">Description:</span>
-                            <br>
-                            <span data-bind="text: ProjectDescription"></span>
-                        </p>
+                        <label for="projectDescr" style="font-weight:bold">Description:</label>
+                        <div class="md-form">
+                            <textarea type="text" readonly data-bind="text: ProjectDescription" rows="1" id="projectDescr" class="md-textarea pt-1 py-0 pb-0"></textarea>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Lead agent:</span>
-                            <br>
-                            <span data-bind="text: LeadAgent"></span>
-                        </p>
+                        <label style="font-weight:bold">Lead agent:</label>
+                        <input type="text" readonly data-bind="attr: {value: LeadAgent}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Host partner:</span>
-                            <br>
-                            <span data-bind="text: HostPartner"></span>
-                        </p>
+                        <label style="font-weight:bold">Host partner:</label>
+                        <input type="text" readonly data-bind="attr: {value: HostPartner}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Host organisation:</span>
-                            <br>
-                            <span data-bind="text: HostOrganisation"></span>
-                        </p>
+                        <label style="font-weight:bold">Host organisation:</label>
+                        <input type="text" readonly data-bind="attr: {value: HostOrganisation}" />
                     </div>
                 </div>
 
+                <br />
+
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Contact (alt):</span>
-                            <br>
-                            <span data-bind="text: AlternativeContact"></span>
-                        </p>
+                        <label style="font-weight:bold">Contact (alt):</label>
+                        <input type="text" readonly data-bind="attr: {value: AlternativeContact}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Contact email (alt):</span>
-                            <br>
-                            <span data-bind="text: AlternativeContactEmail"></span>
-                        </p>
+                        <label style="font-weight:bold">Contact email (alt):</label>
+                        <input type="text" readonly data-bind="attr: {value: AlternativeContactEmail}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Link:</span>
-                            <br>
-                            <a data-bind="attr: {href: Link}" target="_blank" href="">click here</a>
-                        </p>
+                        <label style="font-weight:bold">Link:</label>
+                        <!--<a data-bind="attr: {href: Link}, text: Link" target="_blank" href=""></a>-->
+                        <input type="text" readonly data-bind="attr: {value: Link}" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="validationComments" style="font-weight:bold">Validation comments:</label>
+                        <div class="md-form">
+                            <textarea type="text" readonly data-bind="text: ValidationComments" rows="1" id="validationComments" class="md-textarea pt-1 py-0 pb-0"></textarea>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <p>
-                            <span style="font-weight:bold">Validation comments:</span>
-                            <br>
-                            <span data-bind="text: ValidationComments"></span>
-                        </p>
+                        <label style="font-weight:bold">Budget range:</label>
+                        <br />
+                        <label>R </label>
+                        <input type="text" readonly data-bind="attr: {value: BudgetLower}" style="width:75px" />
+                        <label style="margin-left:10px;margin-right:10px"> - </label>
+                        <label> R </label>
+                        <input type="text" readonly data-bind="attr: {value: BudgetUpper}" style="width:75px" />
                     </div>
                 </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label style="font-weight:bold">Project type:</label>
+                    <select disabled style="margin-top:-1px" class="form-control" id="projectType" data-bind="foreach: projectTypes">
+                        <option data-bind="attr: {value: ProjectTypeId}, text: Value"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label style="font-weight:bold">Project sub-type:</label>
+                    <select disabled style="margin-top:-1px" class="form-control" id="projectSubType" data-bind="foreach: projectSubTypes">
+                        <option data-bind="attr: {value: ProjectSubTypeId}, text: Value"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label style="font-weight:bold">Project status:</label>
+                    <select disabled style="margin-top:-1px" class="form-control" id="projectStatus" data-bind="foreach: projectStatus">
+                        <option data-bind="attr: {value: ProjectStatusId}, text: Value"></option>
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label style="font-weight:bold">Project manager:</label>
+                    <select disabled style="margin-top:-1px" class="form-control" id="projectManager" data-bind="foreach: projectManager">
+                        <option data-bind="attr: {value: UserId}, text: DisplayName"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label style="font-weight:bold">Validation status:</label>
+                    <select disabled style="margin-top:-1px" class="form-control" id="validationStatus" data-bind="foreach: validationStatus">
+                        <option data-bind="attr: {value: ValidationStatusId}, text: Value"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label style="font-weight:bold">MAOption:</label>
+                    <select disabled style="margin-top:-1px" class="form-control" id="maOption" data-bind="foreach: maOption">
+                        <option data-bind="attr: {value: MAOptionId}, text: Name"></option>
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+        </div>
+
+        <!--ADAPTATION-->
+        <div class="tab-pane fade" id="adaptation" role="tabpanel">
+
+            <div id="adaptationDetailsBindObject" data-bind="foreach: adaptationDetails">
+
+                <br />
 
                 <div class="row">
                     <div class="col-md-12">
-                        <p>
-                            <span style="font-weight:bold">Budget range:</span>
-                            <br>
-                            <span>R</span>
-                            <span data-bind="text: BudgetLower"></span>
-                            <span> - R</span>
-                            <span data-bind="text: BudgetUpper"></span>
-                        </p>
+                        <label for="adaptationDesrc" style="font-weight:bold">Description:</label>
+                        <div class="md-form">
+                            <textarea type="text" readonly data-bind="text: Description" rows="1" id="adaptationDesrc" class="md-textarea pt-1 py-0 pb-0"></textarea>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Project type:</span>
-                            <br>
-                            <span data-bind="text: ProjectTypeName"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Project sub-type:</span>
-                            <br>
-                            <span data-bind="text: ProjectSubTypeName"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Project status</span>
-                            <br>
-                            <span data-bind="text: ProjectStatusName"></span>
-                        </p>
-                    </div>
-                </div>
+                <br />
 
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Project manager:</span>
-                            <br>
-                            <span data-bind="text: ProjectManagerName"></span>
-                        </p>
+                        <label style="font-weight:bold">Purpose:</label>
+                        <input type="text" readonly data-bind="attr: {value: AdaptationPurposeName}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Validation status</span>
-                            <br>
-                            <span data-bind="text: ValidationStatusName"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">MAOption</span>
-                            <br>
-                            <span data-bind="text: MAOptionName"></span>
-                        </p>
+                        <label style="font-weight:bold">Sector:</label>
+                        <input type="text" readonly data-bind="attr: {value: SectorName}" />
                     </div>
                 </div>
+
+                <br />
+                <hr />
             </div>
         </div>
 
@@ -206,76 +231,54 @@
 
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Carbon credit:</span>
-                            <br>
-                            <span data-bind="text: CarbonCreditName"></span>
-                        </p>
+                        <label style="font-weight:bold">Carbon credit:</label>
+                        <input type="text" readonly data-bind="attr: {value: CarbonCreditName}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Carbon credit market:</span>
-                            <br>
-                            <span data-bind="text: CarbonCreditMarketName"></span>
-                        </p>
+                        <label style="font-weight:bold">Carbon credit market:</label>
+                        <input type="text" readonly data-bind="attr: {value: CarbonCreditMarketName}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">CDM status:</span>
-                            <br>
-                            <span data-bind="text: CDMStatusName"></span>
-                        </p>
+                        <label style="font-weight:bold">CDM status:</label>
+                        <input type="text" readonly data-bind="attr: {value: CDMStatusName}" />
                     </div>
                 </div>
+
+                <br />
 
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">CDM methodology:</span>
-                            <br>
-                            <span data-bind="text: CDMMethodologyName"></span>
-                        </p>
+                        <label style="font-weight:bold">CDM methodology:</label>
+                        <input type="text" readonly data-bind="attr: {value: CDMMethodologyName}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Voluntary methodology:</span>
-                            <br>
-                            <span data-bind="text: VoluntaryMethodologyName"></span>
-                        </p>
+                        <label style="font-weight:bold">Voluntary methodology:</label>
+                        <input type="text" readonly data-bind="attr: {value: VoluntaryMethodologyName}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Voluntary gold standard:</span>
-                            <br>
-                            <span data-bind="text: VoluntaryGoldStandardName"></span>
-                        </p>
+                        <label style="font-weight:bold">Voluntary gold standard:</label>
+                        <input type="text" readonly data-bind="attr: {value: VoluntaryGoldStandardName}" />
                     </div>
                 </div>
+
+                <br />
 
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">CDM project number:</span>
-                            <br>
-                            <span data-bind="text: CDMProjectNumber"></span>
-                        </p>
+                        <label style="font-weight:bold">CDM project number:</label>
+                        <input type="text" readonly data-bind="attr: {value: CDMProjectNumber}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Other description:</span>
-                            <br>
-                            <span data-bind="text OtherDescription"></span>
-                        </p>
+                        <label style="font-weight:bold">Other description:</label>
+                        <input type="text" readonly data-bind="attr: {value: OtherDescription}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Sector:</span>
-                            <br>
-                            <span data-bind="text: SectorName"></span>
-                        </p>
+                        <label style="font-weight:bold">Sector:</label>
+                        <input type="text" readonly data-bind="attr: {value: SectorName}" />
                     </div>
                 </div>
 
+                <br />
                 <hr />
             </div>
         </div>
@@ -289,244 +292,142 @@
 
                 <div class="row">
                     <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Year:</span>
-                            <br>
-                            <span data-bind="text: Year"></span>
-                        </p>
+                        <label style="font-weight:bold">Year:</label>
+                        <input type="text" readonly data-bind="attr: {value: Year}" />
                     </div>
                     <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">CO2:</span>
-                            <br>
-                            <span data-bind="text: CO2"></span>
-                        </p>
+                        <label style="font-weight:bold">CO2:</label>
+                        <input type="text" readonly data-bind="attr: {value: CO2}" />
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">CH4:</span>
-                            <br>
-                            <span data-bind="text: CH4"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">CH4_CO2e:</span>
-                            <br>
-                            <span data-bind="text: CH4_CO2e"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">N2O:</span>
-                            <br>
-                            <span data-bind="text: N2O"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">N2O_CO2e:</span>
-                            <br>
-                            <span data-bind="text: N2O_CO2e"></span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">HFC:</span>
-                            <br>
-                            <span data-bind="text: HFC"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">HFC_CO2e:</span>
-                            <br>
-                            <span data-bind="text: HFC_CO2e"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">PFC:</span>
-                            <br>
-                            <span data-bind="text: PFC"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">PFC_CO2e:</span>
-                            <br>
-                            <span data-bind="text: PFC_CO2e"></span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">SF6:</span>
-                            <br>
-                            <span data-bind="text: SF6"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">SF6_CO2e:</span>
-                            <br>
-                            <span data-bind="text: SF6_CO2e"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Hydro:</span>
-                            <br>
-                            <span data-bind="text: Hydro"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Hydro_CO2e:</span>
-                            <br>
-                            <span data-bind="text: Hydro_CO2e"></span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Tidal:</span>
-                            <br>
-                            <span data-bind="text: Tidal"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Tidal_CO2e:</span>
-                            <br>
-                            <span data-bind="text: Tidal_CO2e"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Wind:</span>
-                            <br>
-                            <span data-bind="text: Wind"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Wind_CO2e:</span>
-                            <br>
-                            <span data-bind="text: Wind_CO2e"></span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Solar:</span>
-                            <br>
-                            <span data-bind="text: Solar"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Solar_CO2e:</span>
-                            <br>
-                            <span data-bind="text: Solar_CO2e"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">FossilFuelElecRed:</span>
-                            <br>
-                            <span data-bind="text: FossilFuelElecRed"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">FossilFuelElecRed_CO2e:</span>
-                            <br>
-                            <span data-bind="text: FossilFuelElecRed_CO2e"></span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">BioWaste:</span>
-                            <br>
-                            <span data-bind="text: BioWaste"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">BioWaste_CO2e:</span>
-                            <br>
-                            <span data-bind="text: BioWaste_CO2e"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Geothermal:</span>
-                            <br>
-                            <span data-bind="text: Geothermal"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-3">
-                        <p>
-                            <span style="font-weight:bold">Geothermal_CO2e:</span>
-                            <br>
-                            <span data-bind="text: Geothermal_CO2e"></span>
-                        </p>
-                    </div>
-                </div>
-
-                <hr />
-            </div>
-        </div>
-
-        <!--ADAPTATION-->
-        <div class="tab-pane fade" id="adaptation" role="tabpanel">
-
-            <div id="adaptationDetailsBindObject" data-bind="foreach: adaptationDetails">
 
                 <br />
 
                 <div class="row">
-                    <div class="col-md-12">
-                        <p>
-                            <span style="font-weight:bold">Description:</span>
-                            <br>
-                            <span data-bind="text: Description"></span>
-                        </p>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">CH4:</label>
+                        <input type="text" readonly data-bind="attr: {value: CH4}" />
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Purpose:</span>
-                            <br>
-                            <span data-bind="text: AdaptationPurposeName"></span>
-                        </p>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">CH4_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: CH4_CO2e}" />
                     </div>
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Sector:</span>
-                            <br>
-                            <span data-bind="text: SectorName"></span>
-                        </p>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">N2O:</label>
+                        <input type="text" readonly data-bind="attr: {value: N2O}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">N2O_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: N2O_CO2e}" />
                     </div>
                 </div>
 
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">HFC:</label>
+                        <input type="text" readonly data-bind="attr: {value: HFC}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">HFC_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: HFC_CO2e}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">PFC:</label>
+                        <input type="text" readonly data-bind="attr: {value: PFC}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">PFC_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: PFC_CO2e}" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">SF6:</label>
+                        <input type="text" readonly data-bind="attr: {value: SF6}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">SF6_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: SF6_CO2e}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Hydro:</label>
+                        <input type="text" readonly data-bind="attr: {value: Hydro}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Hydro_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: Hydro_CO2e}" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Tidal:</label>
+                        <input type="text" readonly data-bind="attr: {value: Tidal}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Tidal_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: Tidal_CO2e}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Wind:</label>
+                        <input type="text" readonly data-bind="attr: {value: Wind}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Wind_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: Wind_CO2e}" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Solar:</label>
+                        <input type="text" readonly data-bind="attr: {value: Solar}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Solar_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: Solar_CO2e}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">FossilFuelElecRed:</label>
+                        <input type="text" readonly data-bind="attr: {value: FossilFuelElecRed}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">FossilFuelElecRed_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: FossilFuelElecRed_CO2e}" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">BioWaste:</label>
+                        <input type="text" readonly data-bind="attr: {value: BioWaste}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">BioWaste_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: BioWaste_CO2e}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Geothermal:</label>
+                        <input type="text" readonly data-bind="attr: {value: Geothermal}" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="font-weight:bold">Geothermal_CO2e:</label>
+                        <input type="text" readonly data-bind="attr: {value: Geothermal_CO2e}" />
+                    </div>
+                </div>
+
+                <br />
                 <hr />
             </div>
         </div>
@@ -540,44 +441,33 @@
 
                 <div class="row">
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Author:</span>
-                            <br>
-                            <span data-bind="text: Author"></span>
-                        </p>
+                        <label style="font-weight:bold">Author:</label>
+                        <input type="text" readonly data-bind="attr: {value: Author}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Paper link:</span>
-                            <br>
-                            <a data-bind="attr {href: PaperLink}" href="">click here</a>
-                        </p>
+                        <label style="font-weight:bold">Paper link:</label>
+                        <input type="text" readonly data-bind="attr: {value: PaperLink}" />
                     </div>
                     <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Research type:</span>
-                            <br>
-                            <span data-bind="text: ResearchTypeName"></span>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Target audience:</span>
-                            <br>
-                            <span data-bind="text: TargetAudienceName"></span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p>
-                            <span style="font-weight:bold">Sector:</span>
-                            <br>
-                            <span data-bind="text: SectorName"></span>
-                        </p>
+                        <label style="font-weight:bold">Research type:</label>
+                        <input type="text" readonly data-bind="attr: {value: ResearchTypeName}" />
                     </div>
                 </div>
 
+                <br />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label style="font-weight:bold">Target audience:</label>
+                        <input type="text" readonly data-bind="attr: {value: TargetAudienceName}" />
+                    </div>
+                    <div class="col-md-4">
+                        <label style="font-weight:bold">Sector:</label>
+                        <input type="text" readonly data-bind="attr: {value: SectorName}" />
+                    </div>
+                </div>
+
+                <br />
                 <hr />
             </div>
         </div>

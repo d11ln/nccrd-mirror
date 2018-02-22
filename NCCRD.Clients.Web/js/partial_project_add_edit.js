@@ -264,7 +264,6 @@ function ScrollToView(id) {
 }
 
 //Apply bindings
-koBindingsApplied = true;
 ko.applyBindings(new ProjectTypeViewModel(), document.getElementById("projectType"));
 ko.applyBindings(new ProjectSubTypeViewModel(), document.getElementById("projectSubType"));
 ko.applyBindings(new ProjectStatusViewModel(), document.getElementById("projectStatus"));

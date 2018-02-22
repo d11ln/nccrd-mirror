@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
 
     <script type="text/javascript" src="js/conditional_include_jquery.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
@@ -11,10 +10,6 @@
     <script type="text/javascript" src="js/shared.js"></script>
 
     <style>
-        /*.textarea.md-textarea {
-            min-height: 6rem;
-        }*/
-
         .basic-textarea textarea {
             height: auto;
         }
@@ -27,7 +22,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            <h2 id="addEditHeader">[Add/Edit] Project</h2>
+            <h4 id="addEditHeader">[Add/Edit] Project</h4>
         </div>
         <div class="col-md-3">
             <label style="float:right;color:steelblue;font-style:italic;font-size:small;margin-right:20px">Required fields marked with&nbsp;&nbsp;<span style="color:red;font-weight:bold;font-size:medium">*</span></label>
@@ -163,8 +158,8 @@
     <br />
     <hr />
 
-    <button id="btnAddProjectCancel" type="button" class="btn btn-secondary" data-dismiss="modal" style="float:right">Cancel</button>
-    <button id="btnAddProjectSubmit" type="button" class="btn btn-warning" style="float:right" onclick="SaveProject()">Save</button>
+    <button id="btnAddProjectCancel" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" style="float:right">Cancel</button>
+    <button id="btnAddProjectSubmit" type="button" class="btn btn-warning btn-sm" style="float:right" onclick="SaveProject()">Save</button>
 
     <!-- Notify Frame Modal Bottom -->
     <div class="modal fade bottom" id="frameModalBottom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -177,7 +172,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="js/partial_project_add.js"></script>
+    <script type="text/javascript" src="js/partial_project_add_edit.js"></script>
 
 </body>
 </html>

@@ -26,7 +26,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data = context.ProjectSubType.ToList();
+                data = context.ProjectSubType.OrderBy(x => x.Value.Trim()).ToList();
             }
 
             return data;
