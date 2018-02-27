@@ -8,11 +8,8 @@
     <script type="text/javascript" src="js/conditional_include_mdbootstrap_headers.js"></script>
     <script type="text/javascript" src="js/conditional_include_jquery.js"></script>
     <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
-    <script type="text/javascript" src="js/conditional_include_knockout.js"></script>
     <script type="text/javascript" src="js/querystring.js"></script>
     <script type="text/javascript" src="js/shared.js"></script>
-    <script type="text/javascript" src="js/projects.js"></script>
-    <script type="text/javascript" src="js/partial_project_list.js"></script>
 
     <!--Region-Tree-->
     <link href="css/gijgo/modular/core.css" rel="stylesheet" />
@@ -54,7 +51,7 @@
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-2">
-            <button class="btn btn-success btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="FilterProjects()">
+            <button class="btn btn-success btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="LoadProjectList()">
                 Refresh list
             </button>
         </div>
@@ -84,17 +81,17 @@
             <div class="col-md-4" id="filterStatus">
                 <label>Status:</label>
                 <br />
-                <select id="projectStatusBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: projectStatus">
+                <!--<select id="projectStatusBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: projectStatus">
                     <option data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></option>
-                </select>
+                </select>-->
             </div>
 
             <div class="col-md-4" id="filterTypology">
                 <label>Typology:</label>
                 <br />
-                <select id="typologyBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: typology">
+                <!--<select id="typologyBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: typology">
                     <option data-bind="attr: {id: TypologyID}, text: Value" onclick="TypologyFilterSelected(this)"></option>
-                </select>
+                </select>-->
             </div>
         </div>
     </div>
@@ -147,7 +144,7 @@
     <hr />
 
     <!-- Project List -->
-    <div id="projectListBindObject">
+    <!--<div id="projectListBindObject">
         <div data-bind="foreach: projects">
             <div class="card">
                 <div class="card-body">
@@ -158,6 +155,10 @@
             </div>
             <br />
         </div>
+    </div>-->
+
+    <div id="projectList">
+
     </div>
 
     <!-- Large Modal -->
@@ -202,63 +203,7 @@
         </div>
     </div>
 
-    <script>
-
-        //Fetch region tree data and setup event handlers
-        fetch(apiBaseURL + 'api/region/GetAllTree')
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function (data) {
-                $('#regionTree').tree(data);
-                var tree = $('#regionTree').tree();
-
-                tree.on('select', function (e, node, id) {
-                    let nodeData = tree.getDataById(id);
-                    regionId = nodeData.id;
-                    $("#regionFilterText").text(nodeData.text);
-                });
-
-                tree.on('unselect', function (e, node, id) {
-                    regionId = 0;
-                    $("#regionFilterText").text("All");
-                });
-
-                $("#btnRegionTreeExpandAll").click(function () {
-                    tree.expandAll();
-                });
-
-                $("#btnRegionTreeCollapseAll").click(function () {
-                    tree.collapseAll();
-                });
-            });
-
-        //Fetch sector tree data and setup event handlers
-        fetch(apiBaseURL + 'api/sector/GetAllTree')
-            .then((resp) => resp.json()) // Transform the data into json
-            .then(function (data) {
-                $('#sectorTree').tree(data);
-                var tree = $('#sectorTree').tree();
-
-                tree.on('select', function (e, node, id) {
-                    let nodeData = tree.getDataById(id);
-                    sectorId = nodeData.id;
-                    $("#sectorFilterText").text(nodeData.text);
-                });
-
-                tree.on('unselect', function (e, node, id) {
-                    sectorId = 0;
-                    $("#sectorFilterText").text("All");
-                });
-
-                $("#btnSectorTreeExpandAll").click(function () {
-                    tree.expandAll();
-                });
-
-                $("#btnSectorTreeCollapseAll").click(function () {
-                    tree.collapseAll();
-                });
-            });
-
-    </script>
+    <script type="text/javascript" src="js/partial_project_list.js"></script>
 
 </body>
 

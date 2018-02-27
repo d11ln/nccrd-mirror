@@ -1,10 +1,28 @@
 ﻿
+//## ON LOAD ##//
+
+$(() => {
+    LoadProjectList();
+    LoadStatusFilters();
+    LoadTypologyFilters();
+    LoadRegionFilters();
+    LoadSectorFilters();
+});
+
+
+//# GENERAL #//
+
 function back_to_top() {
     window.scroll({
         top: 0,
         left: 0,
         behavior: 'smooth'
     });
+}
+
+function SetDropdownText(item) {
+    let selText = $(item).text();
+    $(item).parents('.dropdown').find('.dropdown-toggle').html(selText);
 }
 
 function ReadUrlParams() {
@@ -30,39 +48,64 @@ function ReadUrlParams() {
     }
 }
 
-function load_details(item) {
-    selectedProjectId = item.getAttribute('id');
-    $("#large_modal_content").load("partial_project_details.html");
+function ToggleToggleButton(item) {
+    let itemText = item.text();
+
+    //Change colour and text
+    if (itemText.indexOf("Show") >= 0) {
+        itemText = itemText.replace("Show", "Hide");
+        item.removeClass('btn-primary');
+        item.addClass('btn-warning');
+    }
+    else {
+        itemText = itemText.replace("Hide", "Show");
+        item.removeClass('btn-warning');
+        item.addClass('btn-primary');
+    }
+
+    item.text(itemText);
 }
 
-$('#largeModal').on('hidden.bs.modal', function (e) {
-    $("#large_modal_content").html("");
-})
 
-function TitleFilterChanged(val) {
-    titlePart = val;
+$("#toggleGeneral").click(function () {
+    ToggleToggleButton($(this));
+});
+
+$("#toggleRegion").click(function () {
+    ToggleToggleButton($(this));
+});
+
+$("#toggleSector").click(function () {
+    ToggleToggleButton($(this));
+});
+
+
+//## PROJECT LIST ##/
+
+function RenderProjectList(data) {
+
+    $("#projectList").html("");
+
+    data.forEach(function (item) {
+
+        var html = '<div class="card">'
+        html += '<div class="card-body">';
+        html += '<p class="card-title" style="font-size:large">' + item.ProjectTitle + '</p>';
+        html += '<p class="card-text">' + item.ProjectDescription + '</p>';
+        html += '<button id="' + item.ProjectId + '" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#largeModal" onclick="load_details(this)">View</button>';
+        html += '</div>';
+        html += '</div>';
+        html += '<br />';
+
+        $("#projectList").append(html);
+    }); 
 }
 
-function StatusFilterSelected(item) {
-    statusId = item.id;
-    SetDropdownText(item);
-}
-
-function TypologyFilterSelected(item) {
-    typologyId = item.id;
-    SetDropdownText(item);
-}
-
-function SetDropdownText(item) {
-    let selText = $(item).text();
-    $(item).parents('.dropdown').find('.dropdown-toggle').html(selText);
-}
-
-function FilterProjects() {
+function LoadProjectList() {
     ReadUrlParams();
     let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
     $.getJSON(url, function (data) {
-        projectsVM.projects(data);
+        RenderProjectList(data);
     });
 }
 
@@ -92,75 +135,137 @@ function ClearFilters() {
     typologyId = 0;
 
     //(Un)filter all
-    FilterProjects()
+    LoadProjectList();
 }
 
 
-function ToggleToggleButton(item) {
-    let itemText = item.text();
+//## PROJECT DETAILS ##//
 
-    //Change colour and text
-    if (itemText.indexOf("Show") >= 0) {
-        itemText = itemText.replace("Show", "Hide");
-        item.removeClass('btn-primary');
-        item.addClass('btn-warning');
-    }
-    else {
-        itemText = itemText.replace("Hide", "Show");
-        item.removeClass('btn-warning');
-        item.addClass('btn-primary');
-    }
+function load_details(item) {
+    selectedProjectId = item.getAttribute('id');
+    $("#large_modal_content").load("partial_project_details.html");
+}
 
-    item.text(itemText);
+$('#largeModal').on('hidden.bs.modal', function (e) {
+    $("#large_modal_content").html("");
+})
+
+
+//## FILTERS >> TITLE ##//
+
+function TitleFilterChanged(val) {
+    titlePart = val;
 }
 
 
-$("#toggleGeneral").click(function() {
-    ToggleToggleButton($(this));
-});
+//## FILTERS >> STATUS ##//
 
-$("#toggleRegion").click(function () {
-    ToggleToggleButton($(this));
-});
-
-$("#toggleSector").click(function () {
-    ToggleToggleButton($(this));
-});
-
-function ProjectsViewModel() {
-    var self = this;
-    self.projects = ko.observableArray();
-
-    ReadUrlParams();
-    let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
-    $.getJSON(url, function (data) {
-        self.projects(data);
-    });
-}
-
-function ProjectStatusViewModel() {
-    var self = this;
-    self.projectStatus = ko.observableArray();
+function LoadStatusFilters() {
 
     let url = apiBaseURL + 'api/projectStatus/GetAll?allOption=true';
     $.getJSON(url, function (data) {
-        self.projectStatus(data);
+
+        let html = '<select class="form-control" style="font-size:smaller;height:35px">';
+
+        data.forEach(function (item) {
+            html += '<option id="psid' + item.ProjectStatusId + '" onclick="StatusFilterSelected(this)">' + item.Value + '</option>';
+        });
+
+        html += '</select>';
+        $("#filterStatus").append(html);
     });
 }
 
-function TypologyViewModel() {
-    var self = this;
-    self.typology = ko.observableArray();
+function StatusFilterSelected(item) {
+    statusId = item.id.replace("psid", "");
+    SetDropdownText(item);
+};
+
+
+//## FILTERS >> TYPOLOGY ##//
+
+function TypologyFilterSelected(item) {
+    typologyId = item.id;
+    SetDropdownText(item);
+};
+
+function LoadTypologyFilters() {
 
     let url = apiBaseURL + 'api/typology/GetAll';
     $.getJSON(url, function (data) {
-        self.typology(data);
+
+        let html = '<select class="form-control" style="font-size:smaller;height:35px">';
+
+        data.forEach(function (item) {
+            html += '<option id="tpid' + item.TypologyID +'" onclick="TypologyFilterSelected(this)">' + item.Value + '</option>';
+        });
+
+        html += '</select>';
+        $("#filterTypology").append(html);
+
     });
+};
+
+//## FILTERS >> REGION ##//
+
+//Fetch region tree data and setup event handlers
+function LoadRegionFilters() {
+    fetch(apiBaseURL + 'api/region/GetAllTree')
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) {
+            $('#regionTree').tree(data);
+            var tree = $('#regionTree').tree();
+
+            tree.on('select', function (e, node, id) {
+                let nodeData = tree.getDataById(id);
+                regionId = nodeData.id;
+                $("#regionFilterText").text(nodeData.text);
+            });
+
+            tree.on('unselect', function (e, node, id) {
+                regionId = 0;
+                $("#regionFilterText").text("All");
+            });
+
+            $("#btnRegionTreeExpandAll").click(function () {
+                tree.expandAll();
+            });
+
+            $("#btnRegionTreeCollapseAll").click(function () {
+                tree.collapseAll();
+            });
+        });
 }
 
-var projectsVM = new ProjectsViewModel();
-var projectStatusVM = new ProjectStatusViewModel();
-var typologyVM = new TypologyViewModel();
-ko.applyBindings(projectsVM, document.getElementById("projectListBindObject"));
-ko.applyBindings(projectStatusVM, document.getElementById("projectStatusBindObject"));
-ko.applyBindings(typologyVM, document.getElementById("typologyBindObject"));
+
+//## FILTERS >> SECTOR ##//
+
+function LoadSectorFilters() {
+
+    //Fetch sector tree data and setup event handlers
+    fetch(apiBaseURL + 'api/sector/GetAllTree')
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function (data) {
+            $('#sectorTree').tree(data);
+            var tree = $('#sectorTree').tree();
+
+            tree.on('select', function (e, node, id) {
+                let nodeData = tree.getDataById(id);
+                sectorId = nodeData.id;
+                $("#sectorFilterText").text(nodeData.text);
+            });
+
+            tree.on('unselect', function (e, node, id) {
+                sectorId = 0;
+                $("#sectorFilterText").text("All");
+            });
+
+            $("#btnSectorTreeExpandAll").click(function () {
+                tree.expandAll();
+            });
+
+            $("#btnSectorTreeCollapseAll").click(function () {
+                tree.collapseAll();
+            });
+        });
+}
