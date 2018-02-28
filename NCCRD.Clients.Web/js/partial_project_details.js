@@ -15,9 +15,11 @@ var validationStatusData = null;
 var maOptionsData = null;
 
 //Adaptation data
+var adaptationDetailsData = null;
 var adaptationPurposeData = null;
 
 //Mitigation data
+var mitigationDetailsData = null;
 var carbonCreditData = null;
 var carbonCreditMarketData = null;
 var cdmStatusData = null;
@@ -25,7 +27,11 @@ var cdmMethodologyData = null;
 var voluntaryMethodologyData = null;
 var voluntaryGoldStandardData = null;
 
+//MitigationEmissions data
+var mitigationEmissionsData = null;
+
 //Research data
+var researchDetailsData = null;
 var researchTypeData = null;
 var targetAudienceData = null;
 
@@ -40,23 +46,23 @@ $(() => {
     GetMAOptions(LoadProjectDetails);
 
     //Adaptation Details
-    GetAdaptationPurpose(LoadAdaptationDetails);
-    GetSectors(LoadAdaptationDetails);
+    GetAdaptationPurpose(GetAdaptationDetails);
+    GetSectors(GetAdaptationDetails);
 
     //Mitigation details
-    GetCarbonCredit(LoadMitigationDetails);
-    GetCarbonCreditMarket(LoadMitigationDetails);
-    GetCDMStatus(LoadMitigationDetails);
-    GetCDMMethodology(LoadMitigationDetails);
-    GetVoluntaryMethodology(LoadMitigationDetails);
-    GetVoluntaryGoldStandard(LoadMitigationDetails);
+    GetCarbonCredit(GetMitigationDetails);
+    GetCarbonCreditMarket(GetMitigationDetails);
+    GetCDMStatus(GetMitigationDetails);
+    GetCDMMethodology(GetMitigationDetails);
+    GetVoluntaryMethodology(GetMitigationDetails);
+    GetVoluntaryGoldStandard(GetMitigationDetails);
 
     //Mitigation emissions data
-    LoadMitigationEmissions();
+    GetMitigationEmissions();
 
     //Research details
-    GetResearchType(LoadResearchDetails);
-    GetTargetAudience(LoadResearchDetails);
+    GetResearchType(GetResearchDetails);
+    GetTargetAudience(GetResearchDetails);
 });
 
 //Textarea auto height//
@@ -83,12 +89,23 @@ $('#largeModal').on('shown.bs.modal', function (e) {
 
 //ToggleEditMode//
 $("#editToggle").click(function () {
-    let self = $('#' + this.id);
 
-    if (self.text() === 'EDIT MODE: ON') {
-        self.text("EDIT MODE: OFF");
-        self.removeClass('btn-warning');
-        self.addClass('btn-secondary');
+    if ($('#' + this.id).text() === 'EDIT MODE: ON') {
+        SetEditMode(false);
+    }
+    else {
+        SetEditMode(true);
+    }
+});
+
+function SetEditMode(state) {
+
+    let toggle = $('#editToggle');
+
+    if (state === false) {
+        toggle.text("EDIT MODE: OFF");
+        toggle.removeClass('btn-warning');
+        toggle.addClass('btn-secondary');
 
         $("input").each(function () {
             this.setAttribute("readonly", true);
@@ -110,9 +127,9 @@ $("#editToggle").click(function () {
         })
     }
     else {
-        self.text("EDIT MODE: ON");
-        self.removeClass('btn-secondary');
-        self.addClass('btn-warning');
+        toggle.text("EDIT MODE: ON");
+        toggle.removeClass('btn-secondary');
+        toggle.addClass('btn-warning');
 
         $("input").each(function () {
             this.removeAttribute("readonly");
@@ -133,7 +150,7 @@ $("#editToggle").click(function () {
             this.removeAttribute("hidden");
         })
     }
-});
+}
 
 //GetSelectedProjectId
 function GetSelectedProjectId() {
@@ -145,6 +162,13 @@ function GetSelectedProjectId() {
     }
 
     return selectedProjectId;
+}
+
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
 
@@ -385,6 +409,21 @@ function GetSectors(callback) {
     });
 }
 
+function GetAdaptationDetails() {
+
+    //Only load details when all dependent data ready
+    if (adaptationPurposeData && sectorData) {
+
+        let url = apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + GetSelectedProjectId();
+
+        $.getJSON(url, function (data) {
+
+            adaptationDetailsData = data;
+            LoadAdaptationDetails(adaptationDetailsData);
+        });
+    }
+}
+
 function LoadAdaptationPurpose(data, parent, root) {
 
     let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selAdaptationPurpose">';
@@ -411,50 +450,43 @@ function LoadAdaptationSector(data, parent, root) {
     $("#" + root).find("#" + parent).append(html);
 };
 
-function LoadAdaptationDetails() {
+function LoadAdaptationDetails(data, added) {
 
-    //Only load details when all dependent data ready
-    if (adaptationPurposeData && sectorData) {
+    let template = null;
 
-        let template = null;
-        let url = apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + GetSelectedProjectId();
+    //Get template data
+    $.get("templates/adaptationDetailsTemplate.html", function (data) {
+        template = data;
+    }, 'text').
 
-        //Get template data
-        $.get("templates/adaptationDetailsTemplate.html", function (data) {
-            template = data;
-        }, 'text').
+        then(() => {
 
-            then(() => {
+            $("#divAdaptationDetails").html("");
 
-                //Get adaptation details
-                $.getJSON(url, function (data) {
+            data.forEach(function (item) {
 
-                    //$("#tabAdaptationDetails").html("");
+                let tmpTemplate = template;
 
-                    data.forEach(function (item) {
+                //Replace parent div ID
+                let rootId = "AD" + item.AdaptationDetailId;
+                tmpTemplate = tmpTemplate.replace("AD#", rootId);
 
-                        let tmpTemplate = template;
+                if (!item.Description) item.Description = "";
+                tmpTemplate = tmpTemplate.replace("##txtAdaptationDescription##", item.Description)
+                $("#divAdaptationDetails").append(tmpTemplate);
 
-                        //Replace parent div ID
-                        let rootId = "AD" + item.AdaptationDetailId;
-                        tmpTemplate = tmpTemplate.replace("AD#", rootId);
+                LoadAdaptationPurpose(adaptationPurposeData, "divAdaptationPurpose", rootId);
+                LoadAdaptationSector(sectorData, "divAdaptationSector", rootId);
 
-                        if (!item.Description) item.Description = "";
-                        tmpTemplate = tmpTemplate.replace("##txtAdaptationDescription##", item.Description)
-                        $("#tabAdaptationDetails").append(tmpTemplate);
-
-                        LoadAdaptationPurpose(adaptationPurposeData, "divAdaptationPurpose", rootId);
-                        LoadAdaptationSector(sectorData, "divAdaptationSector", rootId);
-
-                        SetAdaptationSelects(item, rootId);
-                    });
-
-
-
-                    $('textarea').autoHeight();
-                });
+                SetAdaptationSelects(item, rootId);
             });
-    }
+
+            $('textarea').autoHeight();
+
+            if (added) {
+                SetEditMode(true);
+            }
+        });
 };
 
 function SetAdaptationSelects(data, root) {
@@ -464,12 +496,19 @@ function SetAdaptationSelects(data, root) {
 }
 
 $("#addAdaptation").click(function () {
-    //var projectId = GetSelectedProjectId();
-    //var obs = ko.observable({
-    //    ProjectId: projectId
-    //});
 
-    //adaptationDetailsViewModel.adaptationDetails.push(obs)
+    var projectId = GetSelectedProjectId();
+
+    var newItem = {
+        "AdaptationDetailId": uuidv4(),
+        "Description": "",
+        "AdaptationPurposeId": 0,
+        "ProjectId": projectId,
+        "SectorId": 0
+    }
+
+    adaptationDetailsData = adaptationDetailsData.concat(newItem);
+    LoadAdaptationDetails(adaptationDetailsData, true);
 });
 
 //----------------------//
@@ -548,7 +587,7 @@ function GetVoluntaryGoldStandard(callback) {
     });
 }
 
-function LoadMitigationDetails() {
+function GetMitigationDetails() {
 
     //Only load details when all dependent data ready
     if (carbonCreditData && carbonCreditMarketData && cdmStatusData && cdmMethodologyData && voluntaryMethodologyData && voluntaryGoldStandardData) {
@@ -556,6 +595,20 @@ function LoadMitigationDetails() {
         let template = null;
         let url = apiBaseURL + 'api/MitigationDetails/GetByProjectID/' + GetSelectedProjectId();
 
+        //Get adaptation details
+        $.getJSON(url, function (data) {
+            mitigationDetailsData = data;
+            LoadMitigationDetails(data);
+        });
+    }
+}
+
+function LoadMitigationDetails(data, added) {
+
+    //Only load details when all dependent data ready
+    if (carbonCreditData && carbonCreditMarketData && cdmStatusData && cdmMethodologyData && voluntaryMethodologyData && voluntaryGoldStandardData) {
+
+        let template = null;
         //Get template data
         $.get("templates/mitigationDetailsTemplate.html", function (data) {
             template = data;
@@ -563,43 +616,43 @@ function LoadMitigationDetails() {
 
             then(() => {
 
-                //Get adaptation details
-                $.getJSON(url, function (data) {
+                $("#divMitigationDetails").html("");
 
-                    //$("#tabMitigationDetails").html("");
+                data.forEach(function (item) {
 
-                    data.forEach(function (item) {
+                    let tmpTemplate = template;
 
-                        let tmpTemplate = template;
+                    //Replace parent div ID
+                    let rootId = "MD" + item.MitigationDetailId;
+                    tmpTemplate = tmpTemplate.replace("MD#", rootId);
 
-                        //Replace parent div ID
-                        let rootId = "MD" + item.MitigationDetailId;
-                        tmpTemplate = tmpTemplate.replace("MD#", rootId);
+                    //Text inputs
+                    if (!item.CDMProjectNumber) item.CDMProjectNumber = "";
+                    tmpTemplate = tmpTemplate.replace("##CDMProjectNumber##", item.CDMProjectNumber)
 
-                        //Text inputs
-                        if (!item.CDMProjectNumber) item.CDMProjectNumber = "";
-                        tmpTemplate = tmpTemplate.replace("##CDMProjectNumber##", item.CDMProjectNumber)
+                    if (!item.OtherDescription) item.OtherDescription = "";
+                    tmpTemplate = tmpTemplate.replace("##OtherDescription##", item.OtherDescription)
 
-                        if (!item.OtherDescription) item.OtherDescription = "";
-                        tmpTemplate = tmpTemplate.replace("##OtherDescription##", item.OtherDescription)
+                    //Appent html
+                    $("#divMitigationDetails").append(tmpTemplate);
 
-                        //Appent html
-                        $("#tabMitigationDetails").append(tmpTemplate);
+                    //Load selects
+                    LoadCarbonCredit(carbonCreditData, "divCarbonCredit", rootId);
+                    LoadCarbonCreditMarket(carbonCreditMarketData, "divCarbonCreditMarket", rootId);
+                    LoadCDMStatus(cdmStatusData, "divCDMStatus", rootId);
+                    LoadCDMMethodology(cdmMethodologyData, "divCDMMethodology", rootId);
+                    LoadVoluntaryMethodology(voluntaryMethodologyData, "divVoluntaryMethodology", rootId);
+                    LoadVoluntaryGoldStandard(voluntaryGoldStandardData, "divVoluntaryGoldStandard", rootId);
+                    LoadMitigationSector(sectorData, "divMitigationSector", rootId);
 
-                        //Load selects
-                        LoadCarbonCredit(carbonCreditData, "divCarbonCredit", rootId);
-                        LoadCarbonCreditMarket(carbonCreditMarketData, "divCarbonCreditMarket", rootId);
-                        LoadCDMStatus(cdmStatusData, "divCDMStatus", rootId);
-                        LoadCDMMethodology(cdmMethodologyData, "divCDMMethodology", rootId);
-                        LoadVoluntaryMethodology(voluntaryMethodologyData, "divVoluntaryMethodology", rootId);
-                        LoadVoluntaryGoldStandard(voluntaryGoldStandardData, "divVoluntaryGoldStandard", rootId);
-                        LoadMitigationSector(sectorData, "divMitigationSector", rootId);
-
-                        SetMitigationSelects(item, rootId);
-                    });
-
-                    $('textarea').autoHeight();
+                    SetMitigationSelects(item, rootId);
                 });
+
+                $('textarea').autoHeight();
+
+                if (added) {
+                    SetEditMode(true);
+                }
             });
     }
 }
@@ -706,22 +759,47 @@ function SetMitigationSelects(data, root) {
 }
 
 $("#addMitigation").click(function () {
-    //var projectId = GetSelectedProjectId();
-    //var obs = ko.observable({
-    //    ProjectId: projectId
-    //});
+    var projectId = GetSelectedProjectId();
 
-    //mitigationDetailsViewModel.mitigationDetails.push(obs)
+    var newItem = {
+        "MitigationDetailId": uuidv4(),
+        "VCS": 0,
+        "Other": 0,
+        "OtherDescription": "",
+        "CDMProjectNumber": "",
+        "CarbonCreditId": 0,
+        "CarbonCreditMarketId": 0,
+        "CDMStatusId": 0,
+        "CDMMethodologyId": 0,
+        "VoluntaryMethodologyId": 0,
+        "VoluntaryGoldStandardId": 0,
+        "ProjectId": projectId,
+        "SectorId": 0
+    }
+
+    mitigationDetailsData = mitigationDetailsData.concat(newItem);
+    LoadMitigationDetails(mitigationDetailsData, true);
 });
 
 //--------------------------------//
 //  MITIGATION EMISSIONS DETAILS  //
 //--------------------------------//
 
-function LoadMitigationEmissions() {
+function GetMitigationEmissions() {
+
+    let url = apiBaseURL + 'api/MitigationEmissionsData/GetByProjectId/' + GetSelectedProjectId();
+
+    //Get adaptation details
+    $.getJSON(url, function (data) {
+
+        mitigationEmissionsData = data;
+        LoadMitigationEmissions(mitigationEmissionsData);
+    });
+}
+
+function LoadMitigationEmissions(data, added) {
 
     let template = null;
-    let url = apiBaseURL + 'api/MitigationEmissionsData/GetByProjectId/' + GetSelectedProjectId();
 
     //Get template data
     $.get("templates/mitigationEmissionsTemplate.html", function (data) {
@@ -730,110 +808,142 @@ function LoadMitigationEmissions() {
 
         then(() => {
 
-            //Get adaptation details
-            $.getJSON(url, function (data) {
+            $("#divMitigationEmissions").html("");
 
-                data.forEach(function (item) {
+            data.forEach(function (item) {
 
-                    let tmpTemplate = template;
+                let tmpTemplate = template;
 
-                    //Replace parent div ID
-                    let rootId = "ME" + item.MitigationEmissionsDataId;
-                    tmpTemplate = tmpTemplate.replace("ME#", rootId);
+                //Replace parent div ID
+                let rootId = "ME" + item.MitigationEmissionsDataId;
+                tmpTemplate = tmpTemplate.replace("ME#", rootId);
 
-                    if (!item.Year) item.Year = "";
-                    tmpTemplate = tmpTemplate.replace("##Year##", item.Year)
+                if (!item.Year) item.Year = "";
+                tmpTemplate = tmpTemplate.replace("##Year##", item.Year)
 
-                    if (!item.CO2) item.CO2 = "";
-                    tmpTemplate = tmpTemplate.replace("##CO2##", item.CO2)
+                if (!item.CO2) item.CO2 = "";
+                tmpTemplate = tmpTemplate.replace("##CO2##", item.CO2)
 
-                    if (!item.CH4) item.CH4 = "";
-                    tmpTemplate = tmpTemplate.replace("##CH4##", item.CH4)
+                if (!item.CH4) item.CH4 = "";
+                tmpTemplate = tmpTemplate.replace("##CH4##", item.CH4)
 
-                    if (!item.CH4_CO2e) item.CH4_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##CH4_CO2e##", item.CH4_CO2e)
+                if (!item.CH4_CO2e) item.CH4_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##CH4_CO2e##", item.CH4_CO2e)
 
-                    if (!item.N2O) item.N2O = "";
-                    tmpTemplate = tmpTemplate.replace("##N2O##", item.N2O)
+                if (!item.N2O) item.N2O = "";
+                tmpTemplate = tmpTemplate.replace("##N2O##", item.N2O)
 
-                    if (!item.N2O_CO2e) item.N2O_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##N2O_CO2e##", item.N2O_CO2e)
+                if (!item.N2O_CO2e) item.N2O_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##N2O_CO2e##", item.N2O_CO2e)
 
-                    if (!item.HFC) item.HFC = "";
-                    tmpTemplate = tmpTemplate.replace("##HFC##", item.HFC)
+                if (!item.HFC) item.HFC = "";
+                tmpTemplate = tmpTemplate.replace("##HFC##", item.HFC)
 
-                    if (!item.HFC_CO2e) item.HFC_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##HFC_CO2e##", item.HFC_CO2e)
+                if (!item.HFC_CO2e) item.HFC_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##HFC_CO2e##", item.HFC_CO2e)
 
-                    if (!item.PFC) item.PFC = "";
-                    tmpTemplate = tmpTemplate.replace("##PFC##", item.PFC)
+                if (!item.PFC) item.PFC = "";
+                tmpTemplate = tmpTemplate.replace("##PFC##", item.PFC)
 
-                    if (!item.PFC_CO2e) item.PFC_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##PFC_CO2e##", item.PFC_CO2e)
+                if (!item.PFC_CO2e) item.PFC_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##PFC_CO2e##", item.PFC_CO2e)
 
-                    if (!item.SF6) item.SF6 = "";
-                    tmpTemplate = tmpTemplate.replace("##SF6##", item.SF6)
+                if (!item.SF6) item.SF6 = "";
+                tmpTemplate = tmpTemplate.replace("##SF6##", item.SF6)
 
-                    if (!item.SF6_CO2e) item.SF6_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##SF6_CO2e##", item.SF6_CO2e)
+                if (!item.SF6_CO2e) item.SF6_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##SF6_CO2e##", item.SF6_CO2e)
 
-                    if (!item.Hydro) item.Hydro = "";
-                    tmpTemplate = tmpTemplate.replace("##Hydro##", item.Hydro)
+                if (!item.Hydro) item.Hydro = "";
+                tmpTemplate = tmpTemplate.replace("##Hydro##", item.Hydro)
 
-                    if (!item.Hydro_CO2e) item.Hydro_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##Hydro_CO2e##", item.Hydro_CO2e)
+                if (!item.Hydro_CO2e) item.Hydro_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##Hydro_CO2e##", item.Hydro_CO2e)
 
-                    if (!item.Tidal) item.Tidal = "";
-                    tmpTemplate = tmpTemplate.replace("##Tidal##", item.Tidal)
+                if (!item.Tidal) item.Tidal = "";
+                tmpTemplate = tmpTemplate.replace("##Tidal##", item.Tidal)
 
-                    if (!item.Tidal_CO2e) item.Tidal_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##Tidal_CO2e##", item.Tidal_CO2e)
+                if (!item.Tidal_CO2e) item.Tidal_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##Tidal_CO2e##", item.Tidal_CO2e)
 
-                    if (!item.Wind) item.Wind = "";
-                    tmpTemplate = tmpTemplate.replace("##Wind##", item.Wind)
+                if (!item.Wind) item.Wind = "";
+                tmpTemplate = tmpTemplate.replace("##Wind##", item.Wind)
 
-                    if (!item.Wind_CO2e) item.Wind_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##Wind_CO2e##", item.Wind_CO2e)
+                if (!item.Wind_CO2e) item.Wind_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##Wind_CO2e##", item.Wind_CO2e)
 
-                    if (!item.Solar) item.Solar = "";
-                    tmpTemplate = tmpTemplate.replace("##Solar##", item.Solar)
+                if (!item.Solar) item.Solar = "";
+                tmpTemplate = tmpTemplate.replace("##Solar##", item.Solar)
 
-                    if (!item.Solar_CO2e) item.Solar_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##Solar_CO2e##", item.Solar_CO2e)
+                if (!item.Solar_CO2e) item.Solar_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##Solar_CO2e##", item.Solar_CO2e)
 
-                    if (!item.FossilFuelElecRed) item.FossilFuelElecRed = "";
-                    tmpTemplate = tmpTemplate.replace("##FossilFuelElecRed##", item.FossilFuelElecRed)
+                if (!item.FossilFuelElecRed) item.FossilFuelElecRed = "";
+                tmpTemplate = tmpTemplate.replace("##FossilFuelElecRed##", item.FossilFuelElecRed)
 
-                    if (!item.FossilFuelElecRed_CO2e) item.FossilFuelElecRed_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##FossilFuelElecRed_CO2e##", item.FossilFuelElecRed_CO2e)
+                if (!item.FossilFuelElecRed_CO2e) item.FossilFuelElecRed_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##FossilFuelElecRed_CO2e##", item.FossilFuelElecRed_CO2e)
 
-                    if (!item.BioWaste) item.BioWaste = "";
-                    tmpTemplate = tmpTemplate.replace("##BioWaste##", item.BioWaste)
+                if (!item.BioWaste) item.BioWaste = "";
+                tmpTemplate = tmpTemplate.replace("##BioWaste##", item.BioWaste)
 
-                    if (!item.BioWaste_CO2e) item.BioWaste_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##BioWaste_CO2e##", item.BioWaste_CO2e)
+                if (!item.BioWaste_CO2e) item.BioWaste_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##BioWaste_CO2e##", item.BioWaste_CO2e)
 
-                    if (!item.Geothermal) item.Geothermal = "";
-                    tmpTemplate = tmpTemplate.replace("##Geothermal##", item.Geothermal)
+                if (!item.Geothermal) item.Geothermal = "";
+                tmpTemplate = tmpTemplate.replace("##Geothermal##", item.Geothermal)
 
-                    if (!item.Geothermal_CO2e) item.Geothermal_CO2e = "";
-                    tmpTemplate = tmpTemplate.replace("##Geothermal_CO2e##", item.Geothermal_CO2e)
+                if (!item.Geothermal_CO2e) item.Geothermal_CO2e = "";
+                tmpTemplate = tmpTemplate.replace("##Geothermal_CO2e##", item.Geothermal_CO2e)
 
-                    $("#tabMitigationEmisions").append(tmpTemplate);
-                });
-
-                $('textarea').autoHeight();
+                $("#divMitigationEmissions").append(tmpTemplate);
             });
+
+            $('textarea').autoHeight();
+
+            if (added) {
+                SetEditMode(true);
+            }
         });
 };
 
 $("#addEmissions").click(function () {
-//    var projectId = GetSelectedProjectId();
-//    var obs = ko.observable({
-//        ProjectId: projectId
-//    });
 
-//    mitigationEmissionsViewModel.mitigationEmissions.push(obs)
+    var projectId = GetSelectedProjectId();
+
+    var newItem = {
+        "MitigationEmissionsDataId": uuidv4(),
+        "Year": 0,
+        "CO2": 0,
+        "CH4": 0,
+        "CH4_CO2e": 0,
+        "N2O": 0,
+        "N2O_CO2e": 0,
+        "HFC": 0,
+        "HFC_CO2e": 0,
+        "PFC": 0,
+        "PFC_CO2e": 0,
+        "SF6": 0,
+        "SF6_CO2e": 0,
+        "Hydro": 0,
+        "Hydro_CO2e": 0,
+        "Tidal": 0,
+        "Tidal_CO2e": 0,
+        "Wind": 0,
+        "Wind_CO2e": 0,
+        "Solar": 0,
+        "Solar_CO2e": 0,
+        "FossilFuelElecRed": 0,
+        "FossilFuelElecRed_CO2e": 0,
+        "BioWaste": 0,
+        "BioWaste_CO2e": 0,
+        "Geothermal": 0,
+        "Geothermal_CO2e": 0,
+        "ProjectId": projectId
+    };
+
+    mitigationEmissionsData = mitigationEmissionsData.concat(newItem);
+    LoadMitigationEmissions(mitigationEmissionsData, true);
 });
 
 
@@ -865,51 +975,64 @@ function GetTargetAudience(callback) {
     });
 }
 
-function LoadResearchDetails() {
+function GetResearchDetails() {
 
     //Only load details when all dependent data ready
     if (researchTypeData && targetAudienceData && sectorData) {
 
-        let template = null;
         let url = apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + GetSelectedProjectId();
 
-        //Get template data
-        $.get("templates/researchDetailsTemplate.html", function (data) {
-            template = data;
-        }, 'text').
+        //Get adaptation details
+        $.getJSON(url, function (data) {
 
-            then(() => {
-
-                //Get adaptation details
-                $.getJSON(url, function (data) {
-
-                    data.forEach(function (item) {
-
-                        let tmpTemplate = template;
-
-                        //Replace parent div ID
-                        let rootId = "RD" + item.AdaptationDetailId;
-                        tmpTemplate = tmpTemplate.replace("RD#", rootId);
-
-                        if (!item.Author) item.Author = "";
-                        tmpTemplate = tmpTemplate.replace("##Author##", item.Author)
-
-                        if (!item.PaperLink) item.PaperLink = "";
-                        tmpTemplate = tmpTemplate.replace("##PaperLink##", item.PaperLink)
-
-                        $("#tabResearchDetails").append(tmpTemplate);
-
-                        LoadResearchType(researchTypeData, "divResearchType", rootId);
-                        LoadTargetAudience(targetAudienceData, "divTargetAudience", rootId);
-                        LoadResearchSector(sectorData, "divResearchSector", rootId);
-
-                        SetResearchSelects(item, rootId);
-                    });
-
-                    $('textarea').autoHeight();
-                });
-            });
+            researchDetailsData = data;
+            LoadResearchDetails(researchDetailsData);
+        });
     }
+}
+
+function LoadResearchDetails(data, added) {
+
+    let template = null;
+
+    //Get template data
+    $.get("templates/researchDetailsTemplate.html", function (data) {
+        template = data;
+    }, 'text').
+
+        then(() => {
+
+            $("#divResearchDetails").html("");
+
+            data.forEach(function (item) {
+
+                let tmpTemplate = template;
+
+                //Replace parent div ID
+                let rootId = "RD" + item.ResearchDetailId;
+                tmpTemplate = tmpTemplate.replace("RD#", rootId);
+
+                if (!item.Author) item.Author = "";
+                tmpTemplate = tmpTemplate.replace("##Author##", item.Author)
+
+                if (!item.PaperLink) item.PaperLink = "";
+                tmpTemplate = tmpTemplate.replace("##PaperLink##", item.PaperLink)
+
+                $("#divResearchDetails").append(tmpTemplate);
+
+                LoadResearchType(researchTypeData, "divResearchType", rootId);
+                LoadTargetAudience(targetAudienceData, "divTargetAudience", rootId);
+                LoadResearchSector(sectorData, "divResearchSector", rootId);
+
+                SetResearchSelects(item, rootId);
+            });
+
+            $('textarea').autoHeight();
+
+            if (added) {
+                SetEditMode(true);
+            }
+        });
 }
 
 function LoadResearchType(data, parent, root) {
@@ -958,15 +1081,19 @@ function SetResearchSelects(data, root) {
     $("#" + root).find("#selResearchSector option").each(function () { this.selected = (this.text == data.SectorName); });
 }
 
-
 $("#addResearch").click(function () {
     var projectId = GetSelectedProjectId();
 
+    var newItem = {
+        "ResearchDetailId": uuidv4(),
+        "Author": "",
+        "PaperLink": "",
+        "ResearchTypeId": 0,
+        "TargetAudienceId": 0,
+        "ProjectId": projectId,
+        "SectorId": 0
+    };
 
-
-//    var obs = ko.observable({
-//        ProjectId: projectId
-//    });
-
-//    researchDetailsViewModel.researchDetails.push(obs)
+    researchDetailsData = researchDetailsData.concat(newItem);
+    LoadResearchDetails(researchDetailsData, true);
 });
