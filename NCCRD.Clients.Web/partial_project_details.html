@@ -27,12 +27,21 @@
 
     <div class="row">
         <div class="col-md-8">
-            <h4 id="addEditHeader">Project Details</h4>
+            <button id="btnBackToList" class="btn btn-secondary btn-sm" style="margin:-7px 5px 0px 0px" hidden>
+                <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
+            </button>
+            <h4 id="addEditHeader" style="display:inline">Project Details</h4>
         </div>
         <div class="col-4">
-            <button id="btnEdit" class="btn btn-sm btn-secondary" style="margin:0px 5px 0px 0px;float:right;width:115px">EDIT</button>
-            <button id="btnSave" class="btn btn-sm btn-warning" style="margin:0px 5px 0px 0px;float:right;width:115px" hidden>SAVE</button>
-            <button id="btnDiscard" class="btn btn-sm btn-secondary" style="margin:0px 5px 0px 0px;float:right;width:115px" hidden>DISCARD</button>
+            <button id="btnEdit" class="btn btn-sm btn-secondary" style="margin:0px 5px 0px 0px;float:right;width:115px">
+                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;EDIT
+            </button>
+            <button id="btnDiscard" class="btn btn-sm btn-secondary" style="margin:0px 5px 0px 0px;float:right;width:115px" hidden>
+                <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;DISCARD
+            </button>
+            <button id="btnSave" class="btn btn-sm btn-primary" style="margin:0px 5px 0px 0px;float:right;width:115px" hidden>
+                <i class="fa fa-save" aria-hidden="true"></i>&nbsp;&nbsp;SAVE
+            </button>
         </div>
     </div>
 
@@ -129,15 +138,21 @@
 
     <!-- Save changes modal -->
     <div class="modal fade" id="saveChangesModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-sm modal-side modal-top-right" role="document" style="margin-right:9%">
             <div class="modal-content">
                 <div class="modal-body">
                     Are you sure you want to save the changes you have made?
+                    <br />
+                    <br />
                     This action cannot be undone.
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="btnConfirmSave">Save</button>
-                    <button class="btn btn-secondary btn-sm" id="btnCancelSave">Cancel</button>
+                    <button class="btn btn-primary btn-sm" id="btnConfirmSave">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp;&nbsp;Save
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="btnCancelSave">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -145,17 +160,21 @@
 
     <!-- Discard changes modal -->
     <div class="modal fade" id="discardChangesModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-sm modal-side modal-top-right" role="document" style="margin-right:9%">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>
-                        Are you sure you want to discard the changes you have made?
-                        This action cannot be undone.
-                    </p>
+                    Are you sure you want to discard the changes you have made?
+                    <br />
+                    <br />
+                    This action cannot be undone.
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" id="btnConfirmDiscard">Discard</button>
-                    <button class="btn btn-secondary btn-sm" id="btnCancelDiscard">Cancel</button>
+                    <button class="btn btn-primary btn-sm" id="btnConfirmDiscard">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp;&nbsp;Discard
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="btnCancelDiscard">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -166,7 +185,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="float_bottom_right">
-                    <button class="btn btn-secondary btn-sm" onclick="back_to_top()">Back to top</button>
+                    <button class="btn btn-secondary btn-sm" onclick="back_to_top()">
+                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>&nbsp;&nbsp;Back to top
+                    </button>
                 </div>
             </div>
         </div>

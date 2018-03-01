@@ -22,7 +22,7 @@
             position: fixed;
             right: 10.5%;
             bottom: 10px;
-            z-index:1
+            z-index: 1
         }
     </style>
 
@@ -30,162 +30,154 @@
 
 <body>
 
-    <hr />
+    <div id="project_list_content">
 
-    <!--Filters-->
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn btn-primary btn-sm" id="toggleGeneral" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#generalCollapse" aria-expanded="false" aria-controls="generalCollapse">
-                Show general filters
-            </button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary btn-sm" id="toggleRegion" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#regionCollapse" aria-expanded="false" aria-controls="regionCollapse">
-                Show region filter
-            </button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary btn-sm" id="toggleSector" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#sectorCollapse" aria-expanded="false" aria-controls="sectorCollapse">
-                Show sector filter
-            </button>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-2">
-            <button class="btn btn-success btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="LoadProjectList()">
-                Refresh list
-            </button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-secondary btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="ClearFilters()">
-                Clear filters
-            </button>
-        </div>
-    </div>
+        <br />
 
-    <div class="collapse" id="generalCollapse">
-        <hr />
         <div class="row">
-            <div class="col-md-12">
-                <p style="font-size:large">General filters:</p>
+            <div class="col-9">
+                <h4>Projects</h4>
             </div>
         </div>
-        <div class="row">
 
-            <div class="col-md-4" id="filterTitle">
-                <label>Title:</label>
-                <div class="md-form form-sm">
-                    <input id="titleFilter" type="text" style="margin-top:-5px" onkeyup="TitleFilterChanged(this.value)" />
+        <hr />
+
+        <!--Filters-->
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-primary btn-sm" id="toggleGeneral" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#generalCollapse" aria-expanded="false" aria-controls="generalCollapse">
+                    Show general filters
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary btn-sm" id="toggleRegion" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#regionCollapse" aria-expanded="false" aria-controls="regionCollapse">
+                    Show region filter
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary btn-sm" id="toggleSector" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#sectorCollapse" aria-expanded="false" aria-controls="sectorCollapse">
+                    Show sector filter
+                </button>
+            </div>
+
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                <button class="btn btn-success btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="LoadProjectList()">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Refresh list
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-secondary btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="ClearFilters()">
+                    <i class="fa fa-eraser" aria-hidden="true"></i>&nbsp;&nbsp;Clear filters
+                </button>
+            </div>
+        </div>
+
+        <div class="collapse" id="generalCollapse">
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <p style="font-size:large">General filters:</p>
                 </div>
             </div>
+            <div class="row">
 
-            <div class="col-md-4" id="filterStatus">
-                <label>Status:</label>
-                <br />
-                <!--<select id="projectStatusBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: projectStatus">
-                    <option data-bind="attr: {id: ProjectStatusId}, text: Value" onclick="StatusFilterSelected(this)"></option>
-                </select>-->
-            </div>
+                <div class="col-md-4" id="filterTitle">
+                    <label>Title:</label>
+                    <div class="md-form form-sm">
+                        <input id="titleFilter" type="text" style="margin-top:-5px" onkeyup="TitleFilterChanged(this.value)" />
+                    </div>
+                </div>
 
-            <div class="col-md-4" id="filterTypology">
-                <label>Typology:</label>
-                <br />
-                <!--<select id="typologyBindObject" class="form-control" style="font-size:smaller;height:35px" data-bind="foreach: typology">
-                    <option data-bind="attr: {id: TypologyID}, text: Value" onclick="TypologyFilterSelected(this)"></option>
-                </select>-->
-            </div>
-        </div>
-    </div>
-
-    <div class="collapse" id="regionCollapse">
-        <hr />
-        <div class="row">
-            <div class="col-md-9">
-                <p style="font-size:large">
-                    <span>Region filter: </span>
-                    <span id="regionFilterText">All</span>
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button id="btnRegionTreeExpandAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Expand all</button>
-                <button id="btnRegionTreeCollapseAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Collapse all</button>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-12" id="regionTree"></div>
-        </div>
-
-    </div>
-
-    <div class="collapse" id="sectorCollapse">
-        <hr />
-        <div class="row">
-            <div class="col-md-9">
-                <p style="font-size:large">
-                    <span>Sector filter: </span>
-                    <span id="sectorFilterText">All</span>
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button id="btnSectorTreeExpandAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Expand all</button>
-                <button id="btnSectorTreeCollapseAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">Collapse all</button>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-12" id="sectorTree"></div>
-        </div>
-    </div>
-
-    <hr />
-
-    <div id="projectList">
-    </div>
-
-    <!-- Large Modal -->
-    <div class="modal fade bottom" id="largeModal">
-        <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
-            <div class="modal-content">
-                <div class="modal-body">
+                <div class="col-md-4" id="filterStatus">
+                    <label>Status:</label>
                     <br />
-                    <div id="large_modal_content">
-                        <!-- Content will be loaded dynamically -->
-                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+
+                <div class="col-md-4" id="filterTypology">
+                    <label>Typology:</label>
+                    <br />
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse" id="regionCollapse">
+            <hr />
+            <div class="row">
+                <div class="col-md-9">
+                    <p style="font-size:large">
+                        <span>Region filter: </span>
+                        <span id="regionFilterText">All</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button id="btnRegionTreeExpandAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Expand all
+                    </button>
+                    <button id="btnRegionTreeCollapseAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">
+                        <i class="fa fa-minus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Collapse all
+                    </button>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12" id="regionTree"></div>
+            </div>
+
+        </div>
+
+        <div class="collapse" id="sectorCollapse">
+            <hr />
+            <div class="row">
+                <div class="col-md-9">
+                    <p style="font-size:large">
+                        <span>Sector filter: </span>
+                        <span id="sectorFilterText">All</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button id="btnSectorTreeExpandAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Expand all
+                    </button>
+                    <button id="btnSectorTreeCollapseAll" class="btn btn-secondary btn-sm" style="width:200px;margin:0px 0px 0px 0px">
+                        <i class="fa fa-minus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Collapse all
+                    </button>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12" id="sectorTree"></div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div id="projectList">
+        </div>
+
+        <!--Back to top button-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float_bottom_right">
+                        <!--<button class="btn btn-secondary btn-sm" style="margin-right:0px" data-toggle="modal" data-target="#largeModal" onclick="load_add_edit_project()">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add project
+                        </button>-->
+                        <button class="btn btn-secondary btn-sm" onclick="back_to_top()">
+                            <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>&nbsp;&nbsp;Back to top
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Project Modal -->
-    <div class="modal fade bottom" id="projectAddEditModal">
-        <div class="modal-dialog modal-fluid" style="width:85%;margin:auto">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div id="project_add_edit">
-                        <!-- Content will be loaded dynamically -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Back to top button-->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="float_bottom_right">
-                    <button class="btn btn-secondary btn-sm" style="margin-right:0px" data-toggle="modal" data-target="#largeModal" onclick="load_add_edit_project()">Add project</button>
-                    <button class="btn btn-secondary btn-sm" onclick="back_to_top()">Back to top</button>
-                </div>
-            </div>
-        </div>
+    <div id="project_details_content" hidden>
+        <!--Content will be loaded dynamically-->
     </div>
 
     <script type="text/javascript" src="js/partial_project_list.js"></script>

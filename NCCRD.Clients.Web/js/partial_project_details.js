@@ -39,6 +39,9 @@ var targetAudienceData = null;
 
 //OnLoad...
 $(() => {
+
+    ToggleBackButton();
+
     GetProjectTypes(GetProjectDetails);
     GetProjectSubTypes(GetProjectDetails);
     GetProjectStatus(GetProjectDetails);
@@ -64,6 +67,19 @@ $(() => {
     //Research details
     GetResearchType(GetResearchDetails);
     GetTargetAudience(GetResearchDetails);
+});
+
+function ToggleBackButton() {
+
+    if (typeof showDetailsBackButton !== 'undefined' && showDetailsBackButton === true) {
+        $("#btnBackToList").removeAttr("hidden");
+    }
+}
+
+$("#btnBackToList").click(function () {
+
+    $("#project_details_content").attr("hidden", true);
+    $("#project_list_content").removeAttr("hidden");
 });
 
 //Textarea auto height//

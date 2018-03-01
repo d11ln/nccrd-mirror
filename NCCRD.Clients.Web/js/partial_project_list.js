@@ -140,16 +140,21 @@ function ClearFilters() {
 
 
 //## PROJECT DETAILS ##//
-
+var showDetailsBackButton;
 function load_details(item) {
+
     selectedProjectId = item.getAttribute('id');
-    $("#large_modal_content").load("partial_project_details.html");
+    showDetailsBackButton = true;
+
+    $("#project_details_content").load("partial_project_details.html");
+
+    $("#project_list_content").attr("hidden", true);
+    $("#project_details_content").removeAttr("hidden");
 }
 
-$('#largeModal').on('hidden.bs.modal', function (e) {
-    $("#large_modal_content").html("");
-})
-
+//$('#largeModal').on('hidden.bs.modal', function (e) {
+//    $("#project_details_content").html("");
+//})
 
 //## FILTERS >> TITLE ##//
 
