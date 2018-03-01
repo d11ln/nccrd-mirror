@@ -7,6 +7,7 @@
 var sectorData = null
 
 //Project data
+var projectDetailsData = null;
 var projectTypeData = null;
 var projectSubTypeData = null;
 var projectStatusData = null;
@@ -38,12 +39,12 @@ var targetAudienceData = null;
 
 //OnLoad...
 $(() => {
-    GetProjectTypes(LoadProjectDetails);
-    GetProjectSubTypes(LoadProjectDetails);
-    GetProjectStatus(LoadProjectDetails);
-    GetProjectManagers(LoadProjectDetails);
-    GetValidationStatus(LoadProjectDetails);
-    GetMAOptions(LoadProjectDetails);
+    GetProjectTypes(GetProjectDetails);
+    GetProjectSubTypes(GetProjectDetails);
+    GetProjectStatus(GetProjectDetails);
+    GetProjectManagers(GetProjectDetails);
+    GetValidationStatus(GetProjectDetails);
+    GetMAOptions(GetProjectDetails);
 
     //Adaptation Details
     GetAdaptationPurpose(GetAdaptationDetails);
@@ -88,24 +89,78 @@ $('#largeModal').on('shown.bs.modal', function (e) {
 })
 
 //ToggleEditMode//
-$("#editToggle").click(function () {
+$("#btnEdit").click(function () {
+    SetEditMode(true);
+});
 
-    if ($('#' + this.id).text() === 'EDIT MODE: ON') {
-        SetEditMode(false);
+$("#btnSave").click(function () {
+
+    $('#saveChangesModal').modal('show');
+});
+
+$("#btnConfirmSave").click(function () {
+
+    $('#saveChangesModal').modal('hide');
+    SaveClick(true);
+});
+
+$("#btnCancelSave").click(function () {
+
+    $('#saveChangesModal').modal('hide');
+});
+
+$("#btnDiscard").click(function () {
+
+    $('#discardChangesModal').modal('show');
+});
+
+$("#btnConfirmDiscard").click(function () {
+
+    $('#discardChangesModal').modal('hide');
+    SaveClick(false);
+});
+
+$("#btnCancelDiscard").click(function () {
+
+    $('#discardChangesModal').modal('hide');
+});
+
+function SaveClick(state) {
+
+    if (state === true) {
+
+        GetProjectChanges();
+        GetAdaptationChanges();
+        GetMitigationChanges();
+        GetMitigationEmissionsChanges();
+        GetResearchChanges();
+
+        if (SaveChanges()) {
+
+            //Save changes to DB
+            //...
+
+            //Disable edit mode on success
+            SetEditMode(false);
+        }
     }
     else {
-        SetEditMode(true);
+
+        //Reload data from DB
+        GetProjectDetails();
+        GetAdaptationDetails();
+        GetMitigationDetails();
+        GetMitigationEmissions();
+        GetResearchDetails();
+
+        //Disable edit mode
+        SetEditMode(false);
     }
-});
+};
 
 function SetEditMode(state) {
 
-    let toggle = $('#editToggle');
-
     if (state === false) {
-        toggle.text("EDIT MODE: OFF");
-        toggle.removeClass('btn-warning');
-        toggle.addClass('btn-secondary');
 
         $("input").each(function () {
             this.setAttribute("readonly", true);
@@ -125,11 +180,12 @@ function SetEditMode(state) {
         $(".divHidden").each(function () {
             this.setAttribute("hidden", true);
         })
+
+        document.getElementById("btnEdit").removeAttribute("hidden");
+        document.getElementById("btnSave").setAttribute("hidden", true);
+        document.getElementById("btnDiscard").setAttribute("hidden", true);
     }
     else {
-        toggle.text("EDIT MODE: ON");
-        toggle.removeClass('btn-secondary');
-        toggle.addClass('btn-warning');
 
         $("input").each(function () {
             this.removeAttribute("readonly");
@@ -149,6 +205,10 @@ function SetEditMode(state) {
         $(".divHidden").each(function () {
             this.removeAttribute("hidden");
         })
+
+        document.getElementById("btnEdit").setAttribute("hidden", true);
+        document.getElementById("btnSave").removeAttribute("hidden");
+        document.getElementById("btnDiscard").removeAttribute("hidden");
     }
 }
 
@@ -169,6 +229,19 @@ function uuidv4() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+
+function back_to_top() {
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
+}
+
+function SaveChanges() {
+
+    return true;
 }
 
 
@@ -254,12 +327,26 @@ function GetMAOptions(callback) {
     });
 }
 
+function GetProjectDetails() {
+
+    if (projectTypeData && projectSubTypeData && projectStatusData && projectManagerData && validationStatusData && maOptionsData) {
+
+        let url = apiBaseURL + 'api/projects/GetById/' + GetSelectedProjectId();
+
+        $.getJSON(url, function (data) {
+
+            projectDetailsData = data;
+            LoadProjectDetails(projectDetailsData);
+        });
+    }
+}
+
 function LoadProjectTypes(data, parent) {
 
     let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selProjectType">';
 
     data.forEach(function (item) {
-        html += '<option id="ptid' + item.ProjectTypeId + '">' + item.Value + '</option>';
+        html += '<option id="' + item.ProjectTypeId + '">' + item.Value + '</option>';
     });
 
     html += '</select>';
@@ -271,7 +358,7 @@ function LoadProjectSubTypes(data, parent) {
     let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selProjectSubType">';
 
     data.forEach(function (item) {
-        html += '<option id="pstid' + item.ProjectSubTypeId + '">' + item.Value + '</option>';
+        html += '<option id="' + item.ProjectSubTypeId + '">' + item.Value + '</option>';
     });
 
     html += '</select>';
@@ -283,7 +370,7 @@ function LoadProjectStatus(data, parent) {
     let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selProjectStatus">';
 
     data.forEach(function (item) {
-        html += '<option id="psid' + item.ProjectStatusId + '">' + item.Value + '</option>';
+        html += '<option id="' + item.ProjectStatusId + '">' + item.Value + '</option>';
     });
 
     html += '</select>';
@@ -295,7 +382,7 @@ function LoadProjectManagers(data, parent) {
     let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selProjectManager">';
 
     data.forEach(function (item) {
-        html += '<option id="pmid' + item.UserId + '">' + item.DisplayName + '</option>';
+        html += '<option id="' + item.UserId + '">' + item.DisplayName + '</option>';
     });
 
     html += '</select>';
@@ -307,7 +394,7 @@ function LoadValidationStatus(data, parent) {
     let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selValidationStatus">';
 
     data.forEach(function (item) {
-        html += '<option id="vsid' + item.ValidationStatusId + '">' + item.Value + '</option>';
+        html += '<option id="' + item.ValidationStatusId + '">' + item.Value + '</option>';
     });
 
     html += '</select>';
@@ -324,7 +411,7 @@ function LoadMAOptions(data, parent) {
         let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selMAOption">';
 
         data.forEach(function (item) {
-            html += '<option id="maoid' + item.MAOptionId + '">' + item.Name + '</option>';
+            html += '<option id="' + item.MAOptionId + '">' + item.Name + '</option>';
         });
 
         html += '</select>';
@@ -332,14 +419,21 @@ function LoadMAOptions(data, parent) {
     });
 };
 
-function LoadProjectDetails() {
+function LoadProjectDetails(data) {
 
-    if (projectTypeData && projectSubTypeData && projectStatusData && projectManagerData && validationStatusData && maOptionsData) {
+    let template = null;
 
-        let url = apiBaseURL + 'api/projects/GetById/' + GetSelectedProjectId();
+    //Get template data
+    $.get("templates/projectDetailsTemplate.html", function (tdata) {
+        template = tdata;
+    }, 'text').
 
-        $.getJSON(url, function (data) {
+        then(() => {
 
+            $("#divProjectDetails").html("");
+            $("#divProjectDetails").append(template)
+
+            //Load/Render selects
             LoadProjectTypes(projectTypeData, $("#divProjectType"));
             LoadProjectSubTypes(projectSubTypeData, $("#divProjectSubType"));
             LoadProjectStatus(projectStatusData, $("#divProjectStatus"));
@@ -361,12 +455,10 @@ function LoadProjectDetails() {
             $("#txtValidationComments").val(data.ValidationComments);
             $("#txtBudgetLower").val(data.BudgetLower);
             $("#txtBudgetUpper").val(data.BudgetUpper);
-            $("#txtBudgetUpper").val(data.BudgetUpper);
 
             $('textarea').autoHeight();
             SetProjectSelects(data);
         });
-    }
 };
 
 function SetProjectSelects(data) {
@@ -378,6 +470,43 @@ function SetProjectSelects(data) {
     $("#selValidationStatus option").each(function () { this.selected = (this.text == data.ValidationStatusName); });
     $("#selMAOption option").each(function () { this.selected = (this.text == data.MAOptionName); });
 };
+
+function GetProjectChanges() {
+
+    let rootElement = $("#tabProjectDetails");
+
+    projectDetailsData.ProjectTitle = rootElement.find("#txtProjectTitle").val();
+    projectDetailsData.StartYear = rootElement.find("#txtStartYear").val();
+    projectDetailsData.EndYear = rootElement.find("#txtEndYear").val();
+    projectDetailsData.ProjectDescription = rootElement.find("#txtProjectDescription").val();
+    projectDetailsData.LeadAgent = rootElement.find("#txtLeadAgent").val();
+    projectDetailsData.HostPartner = rootElement.find("#txtHostPartner").val();
+    projectDetailsData.HostOrganisation = rootElement.find("#txtHostOrganisation").val();
+    projectDetailsData.AlternativeContact = rootElement.find("#txtAlternativeContact").val();
+    projectDetailsData.AlternativeContactEmail = rootElement.find("#txtAlternativeContactEmail").val();
+    projectDetailsData.Link = rootElement.find("#txtLink").val();
+    projectDetailsData.ValidationComments = rootElement.find("#txtValidationComments").val();
+    projectDetailsData.BudgetLower = rootElement.find("#txtBudgetLower").val();
+    projectDetailsData.BudgetUpper = rootElement.find("#txtBudgetUpper").val();
+
+    projectDetailsData.ProjectTypeName = rootElement.find("#selProjectType option:selected").val();
+    projectDetailsData.ProjectTypeId = rootElement.find("#selProjectType option:selected").attr("id");
+
+    projectDetailsData.ProjectSubTypeName = rootElement.find("#selProjectSubType option:selected").val();
+    projectDetailsData.ProjectSubTypeId = rootElement.find("#selProjectSubType option:selected").attr("id");
+
+    projectDetailsData.ProjectStatusName = rootElement.find("#selProjectStatus option:selected").val();
+    projectDetailsData.ProjectStatusId = rootElement.find("#selProjectStatus option:selected").attr("id");
+
+    projectDetailsData.ProjectManagerName = rootElement.find("#selProjectManager option:selected").val();
+    projectDetailsData.ProjectManagerId = rootElement.find("#selProjectManager option:selected").attr("id");
+
+    projectDetailsData.ValidationStatusName = rootElement.find("#selValidationStatus option:selected").val();
+    projectDetailsData.ValidationStatusId = rootElement.find("#selValidationStatus option:selected").attr("id");
+
+    projectDetailsData.MAOptionName = rootElement.find("#selMAOption option:selected").val();
+    projectDetailsData.MAOptionId = rootElement.find("#selMAOption option:selected").attr("id");
+}
 
 
 //----------------------//
@@ -455,8 +584,8 @@ function LoadAdaptationDetails(data, added) {
     let template = null;
 
     //Get template data
-    $.get("templates/adaptationDetailsTemplate.html", function (data) {
-        template = data;
+    $.get("templates/adaptationDetailsTemplate.html", function (tdata) {
+        template = tdata;
     }, 'text').
 
         then(() => {
@@ -497,6 +626,10 @@ function SetAdaptationSelects(data, root) {
 
 $("#addAdaptation").click(function () {
 
+    //Get current changes
+    GetAdaptationChanges();
+
+    //Add new item
     var projectId = GetSelectedProjectId();
 
     var newItem = {
@@ -509,7 +642,24 @@ $("#addAdaptation").click(function () {
 
     adaptationDetailsData = adaptationDetailsData.concat(newItem);
     LoadAdaptationDetails(adaptationDetailsData, true);
+
 });
+
+function GetAdaptationChanges() {
+
+    adaptationDetailsData.forEach(function (item) {
+
+        let rootId = "AD" + item.AdaptationDetailId;
+        let rootElement = $("#" + rootId);
+
+        item.Description = rootElement.find("#txtAdaptationDescription").val();
+        item.AdaptationPurposeName = rootElement.find("#selAdaptationPurpose option:selected").val();
+        item.AdaptationPurposeId = rootElement.find("#selAdaptationPurpose option:selected").attr("id");
+        item.SectorName = rootElement.find("#selAdaptationSector option:selected").val();
+        item.SectorId = rootElement.find("#selAdaptationSector option:selected").attr("id");
+    });
+};
+
 
 //----------------------//
 //  MITIGATION DETAILS  //
@@ -610,8 +760,8 @@ function LoadMitigationDetails(data, added) {
 
         let template = null;
         //Get template data
-        $.get("templates/mitigationDetailsTemplate.html", function (data) {
-            template = data;
+        $.get("templates/mitigationDetailsTemplate.html", function (tdata) {
+            template = tdata;
         }, 'text').
 
             then(() => {
@@ -759,6 +909,11 @@ function SetMitigationSelects(data, root) {
 }
 
 $("#addMitigation").click(function () {
+
+    //Get mitigation changes
+    GetMitigationChanges();
+
+    //Add new item
     var projectId = GetSelectedProjectId();
 
     var newItem = {
@@ -781,6 +936,40 @@ $("#addMitigation").click(function () {
     LoadMitigationDetails(mitigationDetailsData, true);
 });
 
+function GetMitigationChanges() {
+
+    mitigationDetailsData.forEach(function (item) {
+
+        let rootId = "MD" + item.MitigationDetailId;
+        let rootElement = $("#" + rootId);
+
+        item.CarbonCreditName = rootElement.find("#selCarbonCredit option:selected").val();
+        item.CarbonCreditId = rootElement.find("#selCarbonCredit option:selected").attr("id");
+
+        item.CarbonCreditMarketName = rootElement.find("#selCarbonCreditMarket option:selected").val();
+        item.CarbonCreditMarketId = rootElement.find("#selCarbonCreditMarket option:selected").attr("id");
+
+        item.CDMStatusName = rootElement.find("#selCDMStatus option:selected").val();
+        item.CDMStatusId = rootElement.find("#selCDMStatus option:selected").attr("id");
+
+        item.CDMMethodologyName = rootElement.find("#selCDMMethodology option:selected").val();
+        item.CDMMethodologyId = rootElement.find("#selCDMMethodology option:selected").attr("id");
+
+        item.VoluntaryMethodologyName = rootElement.find("#selVoluntaryMethodology option:selected").val();
+        item.VoluntaryMethodologyId = rootElement.find("#selVoluntaryMethodology option:selected").attr("id");
+
+        item.VoluntaryGoldStandardName = rootElement.find("#selVoluntaryGoldStandard option:selected").val();
+        item.VoluntaryGoldStandardId = rootElement.find("#selVoluntaryGoldStandard option:selected").attr("id");
+
+        item.SectorName = rootElement.find("#selMitigationSector option:selected").val();
+        item.SectorId = rootElement.find("#selMitigationSector option:selected").attr("id");
+
+        item.CDMProjectNumber = rootElement.find("#txtCDMProjectNumber").val();
+        item.OtherDescription = rootElement.find("#txtOtherDescription").val();
+    });
+}
+
+
 //--------------------------------//
 //  MITIGATION EMISSIONS DETAILS  //
 //--------------------------------//
@@ -802,8 +991,8 @@ function LoadMitigationEmissions(data, added) {
     let template = null;
 
     //Get template data
-    $.get("templates/mitigationEmissionsTemplate.html", function (data) {
-        template = data;
+    $.get("templates/mitigationEmissionsTemplate.html", function (tdata) {
+        template = tdata;
     }, 'text').
 
         then(() => {
@@ -909,6 +1098,10 @@ function LoadMitigationEmissions(data, added) {
 
 $("#addEmissions").click(function () {
 
+    //Get current emissions changes
+    GetMitigationEmissionsChanges()
+
+    //Add new item
     var projectId = GetSelectedProjectId();
 
     var newItem = {
@@ -945,6 +1138,42 @@ $("#addEmissions").click(function () {
     mitigationEmissionsData = mitigationEmissionsData.concat(newItem);
     LoadMitigationEmissions(mitigationEmissionsData, true);
 });
+
+function GetMitigationEmissionsChanges() {
+
+    mitigationEmissionsData.forEach(function (item) {
+
+        let rootId = "ME" + item.MitigationEmissionsDataId;
+        let rootElement = $("#" + rootId);
+
+        item.Year = rootElement.find("#txtYear").val();
+        item.CO2 = rootElement.find("#txtCO2").val();
+        item.CH4 = rootElement.find("#txtCH4").val();
+        item.CH4_CO2e = rootElement.find("#txtCH4_CO2e").val();
+        item.N2O = rootElement.find("#txtN2O").val();
+        item.N2O_CO2e = rootElement.find("#txtN2O_CO2e").val();
+        item.HFC = rootElement.find("#txtHFC").val();
+        item.HFC_CO2e = rootElement.find("#txtHFC_CO2e").val();
+        item.PFC = rootElement.find("#txtPFC").val();
+        item.PFC_CO2e = rootElement.find("#txtPFC_CO2e").val();
+        item.SF6 = rootElement.find("#txtSF6").val();
+        item.SF6_CO2e = rootElement.find("#txtSF6_CO2e").val();
+        item.Hydro = rootElement.find("#txtHydro").val();
+        item.Hydro_CO2e = rootElement.find("#txtHydro_CO2e").val();
+        item.Tidal = rootElement.find("#txtTidal").val();
+        item.Tidal_CO2e = rootElement.find("#txtTidal_CO2e").val();
+        item.Wind = rootElement.find("#txtWind").val();
+        item.Wind_CO2e = rootElement.find("#txtWind_CO2e").val();
+        item.Solar = rootElement.find("#txtSolar").val();
+        item.Solar_CO2e = rootElement.find("#txtSolar_CO2e").val();
+        item.FossilFuelElecRed = rootElement.find("#txtFossilFuelElecRed").val();
+        item.FossilFuelElecRed_CO2e = rootElement.find("#txtFossilFuelElecRed_CO2e").val();
+        item.BioWaste = rootElement.find("#txtBioWaste").val();
+        item.BioWaste_CO2e = rootElement.find("#txtBioWaste_CO2e").val();
+        item.Geothermal = rootElement.find("#txtGeothermal").val();
+        item.Geothermal_CO2e = rootElement.find("#txtGeothermal_CO2e").val();
+    });
+}
 
 
 //--------------------//
@@ -996,8 +1225,8 @@ function LoadResearchDetails(data, added) {
     let template = null;
 
     //Get template data
-    $.get("templates/researchDetailsTemplate.html", function (data) {
-        template = data;
+    $.get("templates/researchDetailsTemplate.html", function (tdata) {
+        template = tdata;
     }, 'text').
 
         then(() => {
@@ -1082,6 +1311,11 @@ function SetResearchSelects(data, root) {
 }
 
 $("#addResearch").click(function () {
+
+    //Get current changes
+    GetResearchChanges();
+
+    //Add new item
     var projectId = GetSelectedProjectId();
 
     var newItem = {
@@ -1097,3 +1331,24 @@ $("#addResearch").click(function () {
     researchDetailsData = researchDetailsData.concat(newItem);
     LoadResearchDetails(researchDetailsData, true);
 });
+
+function GetResearchChanges() {
+
+    researchDetailsData.forEach(function (item) {
+
+        let rootId = "AD" + item.ResearchDetailId;
+        let rootElement = $("#" + rootId);
+
+        item.Author = rootElement.find("#txtAuthor").val();
+        item.PaperLink = rootElement.find("#txtPaperLink").val();
+
+        item.ResearchTypeName = rootElement.find("#selResearchType option:selected").val();
+        item.ResearchTypeId = rootElement.find("#selResearchType option:selected").attr("id");
+
+        item.TargetAudienceName = rootElement.find("#selTargetAudience option:selected").val();
+        item.TargetAudienceId = rootElement.find("#selTargetAudience option:selected").attr("id");
+
+        item.SectorName = rootElement.find("#selResearchSector option:selected").val();
+        item.SectorId = rootElement.find("#selResearchSector option:selected").attr("id");
+    });
+}

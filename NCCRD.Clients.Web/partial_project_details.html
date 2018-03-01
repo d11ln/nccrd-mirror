@@ -9,6 +9,16 @@
     <script type="text/javascript" src="js/conditional_include_mdbootstrap.js"></script>
     <script type="text/javascript" src="js/querystring.js"></script>
     <script type="text/javascript" src="js/shared.js"></script>
+
+    <style>
+        .float_bottom_right {
+            position: fixed;
+            right: 10.5%;
+            bottom: 10px;
+            z-index: 1
+        }
+    </style>
+
 </head>
 
 <body>
@@ -16,11 +26,13 @@
     <br />
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <h4 id="addEditHeader">Project Details</h4>
         </div>
-        <div class="col-3">
-            <button id="editToggle" class="btn btn-sm btn-secondary" style="margin:0px;width:150px;float:right">EDIT MODE: OFF</button>
+        <div class="col-4">
+            <button id="btnEdit" class="btn btn-sm btn-secondary" style="margin:0px 5px 0px 0px;float:right;width:115px">EDIT</button>
+            <button id="btnSave" class="btn btn-sm btn-warning" style="margin:0px 5px 0px 0px;float:right;width:115px" hidden>SAVE</button>
+            <button id="btnDiscard" class="btn btn-sm btn-secondary" style="margin:0px 5px 0px 0px;float:right;width:115px" hidden>DISCARD</button>
         </div>
     </div>
 
@@ -50,124 +62,10 @@
     <!-- TAB PANES -->
     <div class="tab-content">
 
-        <!--PROJECT-->
+        <!--PROJECT DETAILS-->
         <div class="tab-pane fade show active" id="tabProjectDetails" role="tabpanel">
-            <div id="projectDetailsBindObject">
-                <div data-bind="with: projectDetails">
-
-                    <!--<br />-->
-                    <!--HEADER-->
-                    <div class="row">
-                        <div class="col-md-9">
-                            <label style="font-weight:bold">Project Title:</label>
-                            <input id="txtProjectTitle" type="text" readonly />
-                        </div>
-                        <div class="col-md-3">
-                            <input id="txtEndYear" type="text" readonly style="width:75px; text-align:center; font-size:x-large; float:right" />
-                            <label style="font-size:x-large; float:right"> - </label>
-                            <input id="txtStartYear" type="text" readonly style="width:75px; text-align:center; font-size:x-large; float:right" />
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <!--PROJECT DETAILS-->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="projectDescr" style="font-weight:bold">Description:</label>
-                            <div class="md-form">
-                                <textarea id="txtProjectDescription" type="text" readonly rows="1" class="md-textarea pt-1 py-0 pb-0"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label style="font-weight:bold">Lead agent:</label>
-                            <input id="txtLeadAgent" type="text" readonly />
-                        </div>
-                        <div class="col-md-4">
-                            <label style="font-weight:bold">Host partner:</label>
-                            <input id="txtHostPartner" type="text" readonly />
-                        </div>
-                        <div class="col-md-4">
-                            <label style="font-weight:bold">Host organisation:</label>
-                            <input id="txtHostOrganisation" type="text" readonly />
-                        </div>
-                    </div>
-
-                    <br />
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label style="font-weight:bold">Contact (alt):</label>
-                            <input id="txtAlternativeContact" type="text" readonly />
-                        </div>
-                        <div class="col-md-4">
-                            <label style="font-weight:bold">Contact email (alt):</label>
-                            <input id="txtAlternativeContactEmail" type="text" readonly />
-                        </div>
-                        <div class="col-md-4">
-                            <label style="font-weight:bold">Link:</label>
-                            <input id="txtLink" type="text" readonly />
-                        </div>
-                    </div>
-
-                    <br />
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="validationComments" style="font-weight:bold">Validation comments:</label>
-                            <div class="md-form">
-                                <textarea id="txtValidationComments" type="text" readonly rows="1" class="md-textarea pt-1 py-0 pb-0"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label style="font-weight:bold">Budget range:</label>
-                            <br />
-                            <label>R </label>
-                            <input id="txtBudgetLower" type="text" readonly style="width:125px" />
-                            <label style="margin-left:10px;margin-right:10px"> - </label>
-                            <label> R </label>
-                            <input id="txtBudgetUpper" type="text" readonly style="width:125px" />
-                        </div>
-                    </div>
-                </div>
-
-                <br />
-
-                <div class="row">
-                    <div id="divProjectType" class="col-md-4">
-                        <label style="font-weight:bold">Project type:</label>
-                    </div>
-                    <div id="divProjectSubType" class="col-md-4">
-                        <label style="font-weight:bold">Project sub-type:</label>
-                    </div>
-                    <div id="divProjectStatus" class="col-md-4">
-                        <label style="font-weight:bold">Project status:</label>
-                    </div>
-                </div>
-
-                <br />
-
-                <div class="row">
-                    <div id="divProjectManager" class="col-md-4">
-                        <label style="font-weight:bold">Project manager:</label>
-                    </div>
-                    <div id="divValidationStatus" class="col-md-4">
-                        <label style="font-weight:bold">Validation status:</label>
-                    </div>
-                    <div id="divMAOptions" class="col-md-4">
-                        <label style="font-weight:bold">MAOption:</label>
-                    </div>
-                </div>
+            <div id="divProjectDetails">
             </div>
-
-            <br />
-
         </div>
 
         <!--ADAPTATION-->
@@ -228,6 +126,51 @@
     </div>
 
     <br />
+
+    <!-- Save changes modal -->
+    <div class="modal fade" id="saveChangesModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure you want to save the changes you have made?
+                    This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="btnConfirmSave">Save</button>
+                    <button class="btn btn-secondary btn-sm" id="btnCancelSave">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discard changes modal -->
+    <div class="modal fade" id="discardChangesModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        Are you sure you want to discard the changes you have made?
+                        This action cannot be undone.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="btnConfirmDiscard">Discard</button>
+                    <button class="btn btn-secondary btn-sm" id="btnCancelDiscard">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Back to top button-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="float_bottom_right">
+                    <button class="btn btn-secondary btn-sm" onclick="back_to_top()">Back to top</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- SCRIPTS -->
     <script type="text/javascript" src="js/partial_project_details.js"></script>
