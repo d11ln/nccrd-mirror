@@ -15,9 +15,7 @@ namespace NCCRD.Database.Models
         public int MitigationDetailId { get; set; }
 
         public int? VCS { get; set; } //No idea what this is for
-
         public int? Other { get; set; } //No idea what this is for
-
         public string OtherDescription { get; set; } //No idea what this is for
 
         [MaxLength(450)]

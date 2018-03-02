@@ -1264,7 +1264,14 @@ function GetMitigationChanges() {
 
 function ValidateMitigationData(data) {
 
-    return true;
+    if (data.CarbonCreditId === "0") {
+        alert("Carbon credit selection required");
+    }
+    else {
+        return true;
+    }
+
+    return false;
 }
 
 function SaveMitigationChanges() {
@@ -1636,7 +1643,92 @@ function GetMitigationEmissionsChanges() {
 
 function ValidateMitigationEmissionsData(data) {
 
-    return true;
+    if (data.Year === "") {
+        alert("Year value required");
+    }
+    else if (data.Year !== "" && isNaN(data.Year)) {
+        alert("Invalid value for Year");
+    }
+    else if (data.CO2 !== "" && isNaN(data.CO2)) {
+        alert("Invalid value for CO2");
+    }
+    else if (data.CH4 !== "" && isNaN(data.CH4)) {
+        alert("Invalid value for CH4");
+    }
+    else if (data.CH4_CO2e !== "" && isNaN(data.CH4_CO2e)) {
+        alert("Invalid value for CH4_CO2e");
+    }
+    else if (data.N2O !== "" && isNaN(data.N2O)) {
+        alert("Invalid value for N2O");
+    }
+    else if (data.N2O_CO2e !== "" && isNaN(data.N2O_CO2e)) {
+        alert("Invalid value for N2O_CO2e");
+    }
+    else if (data.HFC !== "" && isNaN(data.HFC)) {
+        alert("Invalid value for HFC");
+    }
+    else if (data.HFC_CO2e !== "" && isNaN(data.HFC_CO2e)) {
+        alert("Invalid value for HFC_CO2e");
+    }
+    else if (data.PFC !== "" && isNaN(data.PFC)) {
+        alert("Invalid value for PFC");
+    }
+    else if (data.PFC_CO2e !== "" && isNaN(data.PFC_CO2e)) {
+        alert("Invalid value for PFC_CO2e");
+    }
+    else if (data.SF6 !== "" && isNaN(data.SF6)) {
+        alert("Invalid value for SF6");
+    }
+    else if (data.SF6_CO2e !== "" && isNaN(data.SF6_CO2e)) {
+        alert("Invalid value for SF6_CO2e");
+    }
+    else if (data.Hydro !== "" && isNaN(data.Hydro)) {
+        alert("Invalid value for Hydro");
+    }
+    else if (data.Hydro_CO2e !== "" && isNaN(data.Hydro_CO2e)) {
+        alert("Invalid value for Hydro_CO2e");
+    }
+    else if (data.Tidal !== "" && isNaN(data.Tidal)) {
+        alert("Invalid value for Tidal");
+    }
+    else if (data.Tidal_CO2e !== "" && isNaN(data.Tidal_CO2e)) {
+        alert("Invalid value for Tidal_CO2e");
+    }
+    else if (data.Wind !== "" && isNaN(data.Wind)) {
+        alert("Invalid value for Wind");
+    }
+    else if (data.Wind_CO2e !== "" && isNaN(data.Wind_CO2e)) {
+        alert("Invalid value for Wind_CO2e");
+    }
+    else if (data.Solar !== "" && isNaN(data.Solar)) {
+        alert("Invalid value for Solar");
+    }
+    else if (data.Solar_CO2e !== "" && isNaN(data.Solar_CO2e)) {
+        alert("Invalid value for Solar_CO2e");
+    }
+    else if (data.FossilFuelElecRed !== "" && isNaN(data.FossilFuelElecRed)) {
+        alert("Invalid value for FossilFuelElecRed");
+    }
+    else if (data.FossilFuelElecRed_CO2e !== "" && isNaN(data.FossilFuelElecRed_CO2e)) {
+        alert("Invalid value for FossilFuelElecRed_CO2e");
+    }
+    else if (data.BioWaste !== "" && isNaN(data.BioWaste)) {
+        alert("Invalid value for BioWaste");
+    }
+    else if (data.BioWaste_CO2e !== "" && isNaN(data.BioWaste_CO2e)) {
+        alert("Invalid value for BioWaste_CO2e");
+    }
+    else if (data.Geothermal !== "" && isNaN(data.Geothermal)) {
+        alert("Invalid value for Geothermal");
+    }
+    else if (data.Geothermal_CO2e !== "" && isNaN(data.Geothermal_CO2e)) {
+        alert("Invalid value for Geothermal_CO2e");
+    }
+    else {
+        return true;
+    }
+
+    return false;
 };
 
 function SaveMitigationEmissionsChanges() {
@@ -1872,7 +1964,20 @@ function GetResearchChanges() {
 
 function ValidateResearchData(data) {
 
-    return true;
+    if (data.Author === "") {
+        alert("Author value required");
+    }
+    else if (data.ResearchTypeId === "0") {
+        alert("Research type selection required");
+    }
+    else if (data.TargetAudienceId === "0") {
+        alert("Target audience selection required");
+    }
+    else {
+        return true;
+    }
+
+    return false;
 };
 
 function SaveResearchChanges() {

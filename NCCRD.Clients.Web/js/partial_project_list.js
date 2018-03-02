@@ -104,6 +104,7 @@ function RenderProjectList(data) {
 function LoadProjectList() {
     ReadUrlParams();
     let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
+
     $.getJSON(url, function (data) {
         RenderProjectList(data);
     });
@@ -114,10 +115,10 @@ function ClearFilters() {
     $("#titleFilter").val("");
 
     //Clear status filter
-    $('#projectStatusBindObject').dropdown().val("All");
+    $('#selProjectStatusFilter').dropdown().val("All");
 
     //Clear typology filter
-    $('#typologyBindObject').dropdown().val("All");
+    $('#selProjectTypologyFilter').dropdown().val("All");
 
     //Clear region filter
     let tree = $('#regionTree').tree();
@@ -170,10 +171,10 @@ function LoadStatusFilters() {
     let url = apiBaseURL + 'api/projectStatus/GetAll?allOption=true';
     $.getJSON(url, function (data) {
 
-        let html = '<select class="form-control" style="font-size:smaller;height:35px">';
+        let html = '<select id="selProjectStatusFilter" class="form-control" style="font-size:smaller;height:35px">';
 
         data.forEach(function (item) {
-            html += '<option id="psid' + item.ProjectStatusId + '" onclick="StatusFilterSelected(this)">' + item.Value + '</option>';
+            html += '<option id="' + item.ProjectStatusId + '" onclick="StatusFilterSelected(this)">' + item.Value + '</option>';
         });
 
         html += '</select>';
@@ -199,10 +200,10 @@ function LoadTypologyFilters() {
     let url = apiBaseURL + 'api/typology/GetAll';
     $.getJSON(url, function (data) {
 
-        let html = '<select class="form-control" style="font-size:smaller;height:35px">';
+        let html = '<select id="selProjectTypologyFilter" class="form-control" style="font-size:smaller;height:35px">';
 
         data.forEach(function (item) {
-            html += '<option id="tpid' + item.TypologyID +'" onclick="TypologyFilterSelected(this)">' + item.Value + '</option>';
+            html += '<option id="' + item.TypologyID +'" onclick="TypologyFilterSelected(this)">' + item.Value + '</option>';
         });
 
         html += '</select>';
