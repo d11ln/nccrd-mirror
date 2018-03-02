@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add UserRole
         /// </summary>
         /// <param name="userRole">The UserRole to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update UserRole
         /// </summary>
         /// <param name="userRole">UserRole to update</param>
@@ -122,9 +122,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete UserRole
         /// </summary>
         /// <param name="userRole">UserRole to delete</param>
@@ -149,9 +149,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete UserRole by Id
         /// </summary>
         /// <param name="id">Id of UserRole to delete</param>
@@ -176,6 +176,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

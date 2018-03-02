@@ -129,57 +129,45 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="adaptationDetail">The AdaptationDetail to add</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/AdaptationDetails/Add")]
-        public bool Add([FromBody]AdaptationDetail adaptationDetail)
+        [Route("api/AdaptationDetails/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]AdaptationDetail adaptationDetail)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                if(context.AdaptationDetails.Count(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId) == 0)
+                adaptationDetail.AdaptationPurpose = context.AdaptationPurpose.FirstOrDefault(x => x.AdaptationPurposeId == adaptationDetail.AdaptationPurposeId);
+                adaptationDetail.Project = context.Project.FirstOrDefault(x => x.ProjectId == adaptationDetail.ProjectId);
+
+                adaptationDetail.Sector = context.Sector.FirstOrDefault(x => x.SectorId == adaptationDetail.SectorId);
+                if (adaptationDetail.SectorId == 0) adaptationDetail.SectorId = null;
+
+                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
+                if (existAD == null)
                 {
                     //Add AdaptationDetails entry
                     context.AdaptationDetails.Add(adaptationDetail);
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update AdaptationDetail
-        /// </summary>
-        /// <param name="adaptationDetail">AdaptationDetail to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/AdaptationDetails/Update")]
-        public bool Update([FromBody]AdaptationDetail adaptationDetail)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
-                if (existAD != null)
+                else
                 {
+                    //Update existing AdaptationDetails entry
                     existAD.Description = adaptationDetail.Description;
                     existAD.AdaptationPurposeId = adaptationDetail.AdaptationPurposeId;
+                    existAD.AdaptationPurpose = adaptationDetail.AdaptationPurpose;
                     existAD.ProjectId = adaptationDetail.ProjectId;
+                    existAD.Project = adaptationDetail.Project;
                     existAD.SectorId = adaptationDetail.SectorId;
-                    context.SaveChanges();
-
-                    result = true;
+                    existAD.Sector = adaptationDetail.Sector;
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Delete AdaptationDetail
         /// </summary>
         /// <param name="adaptationDetail">AdaptationDetail to delete</param>
@@ -204,9 +192,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete AdaptationDetail by Id
         /// </summary>
         /// <param name="id">Id of AdaptationDetail to delete</param>
@@ -231,6 +219,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

@@ -51,7 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add Stock
         /// </summary>
         /// <param name="stock">The Stock to add</param>
@@ -75,9 +75,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update Stock
         /// </summary>
         /// <param name="stock">Stock to update</param>
@@ -103,9 +103,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Stock
         /// </summary>
         /// <param name="stock">Stock to delete</param>
@@ -130,9 +130,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Stock by Id
         /// </summary>
         /// <param name="id">Id of Stock to delete</param>
@@ -157,6 +157,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

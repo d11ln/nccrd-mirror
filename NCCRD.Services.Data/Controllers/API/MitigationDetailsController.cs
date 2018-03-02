@@ -71,7 +71,7 @@ namespace NCCRD.Services.Data.Controllers.API
                 {
                     var viewModel = new MitigationDetailsViewModel(model);
 
-                    viewModel.CarbonCreditMarketName = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == viewModel.CarbonCreditId).Value;
+                    viewModel.CarbonCreditName = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == viewModel.CarbonCreditId).Value;
 
                     if (viewModel.CarbonCreditMarketId != null)
                     {
@@ -116,65 +116,74 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="mitigationDetails">The MitigationDetails to add</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/MitigationDetails/Add")]
-        public bool Add([FromBody]MitigationDetail mitigationDetails)
+        [Route("api/MitigationDetails/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]MitigationDetail mitigationDetails)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                if (context.MitigationDetails.Count(x => x.MitigationDetailId == mitigationDetails.MitigationDetailId) == 0)
+                mitigationDetails.CarbonCredit = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == mitigationDetails.CarbonCreditId);
+
+                mitigationDetails.CarbonCreditMarket = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == mitigationDetails.CarbonCreditMarketId);
+                if (mitigationDetails.CarbonCreditMarketId == 0) mitigationDetails.CarbonCreditMarketId = null;
+
+                mitigationDetails.CDMStatus = context.CDMStatus.FirstOrDefault(x => x.CDMStatusId == mitigationDetails.CDMStatusId);
+                if (mitigationDetails.CDMStatusId == 0) mitigationDetails.CDMStatusId = null;
+
+                mitigationDetails.CDMMethodology = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == mitigationDetails.CDMMethodologyId);
+                if (mitigationDetails.CDMMethodologyId == 0) mitigationDetails.CDMMethodologyId = null;
+
+                mitigationDetails.VoluntaryMethodology = context.VoluntaryMethodology.FirstOrDefault(x => x.VoluntaryMethodologyId == mitigationDetails.VoluntaryMethodologyId);
+                if (mitigationDetails.VoluntaryMethodologyId == 0) mitigationDetails.VoluntaryMethodologyId = null;
+
+                mitigationDetails.VoluntaryGoldStandard = context.VoluntaryGoldStandard.FirstOrDefault(x => x.VoluntaryGoldStandardId == mitigationDetails.VoluntaryGoldStandardId);
+                if (mitigationDetails.VoluntaryGoldStandardId == 0) mitigationDetails.VoluntaryGoldStandardId = null;
+
+                mitigationDetails.Project = context.Project.FirstOrDefault(x => x.ProjectId == mitigationDetails.ProjectId);
+
+                mitigationDetails.Sector = context.Sector.FirstOrDefault(x => x.SectorId == mitigationDetails.SectorId);
+                if (mitigationDetails.SectorId == 0) mitigationDetails.SectorId = null;
+
+                var data = context.MitigationDetails.FirstOrDefault(x => x.MitigationDetailId == mitigationDetails.MitigationDetailId);
+                if (data == null)
                 {
                     //Add MitigationDetails entry
                     context.MitigationDetails.Add(mitigationDetails);
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update MitigationDetails
-        /// </summary>
-        /// <param name="mitigationDetails">MitigationDetails to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/MitigationDetails/Update")]
-        public bool Update([FromBody]MitigationDetail mitigationDetails)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MitigationDetails.FirstOrDefault(x => x.MitigationDetailId == mitigationDetails.MitigationDetailId);
-                if (data != null)
+                else
                 {
+                    //Update existing MitigationDetails entry
                     data.VCS = mitigationDetails.VCS;
                     data.Other = mitigationDetails.Other;
                     data.OtherDescription = mitigationDetails.OtherDescription;
                     data.CDMProjectNumber = mitigationDetails.CDMProjectNumber;
                     data.CarbonCreditId = mitigationDetails.CarbonCreditId;
+                    data.CarbonCredit = mitigationDetails.CarbonCredit;
                     data.CarbonCreditMarketId = mitigationDetails.CarbonCreditMarketId;
+                    data.CarbonCreditMarket = mitigationDetails.CarbonCreditMarket;
                     data.CDMStatusId = mitigationDetails.CDMStatusId;
+                    data.CDMStatus = mitigationDetails.CDMStatus;
                     data.CDMMethodologyId = mitigationDetails.CDMMethodologyId;
+                    data.CDMMethodology = mitigationDetails.CDMMethodology;
                     data.VoluntaryMethodologyId = mitigationDetails.VoluntaryMethodologyId;
+                    data.VoluntaryMethodology = mitigationDetails.VoluntaryMethodology;
                     data.VoluntaryGoldStandardId = mitigationDetails.VoluntaryGoldStandardId;
+                    data.VoluntaryGoldStandard = mitigationDetails.VoluntaryGoldStandard;
                     data.ProjectId = mitigationDetails.ProjectId;
+                    data.Project = mitigationDetails.Project;
                     data.SectorId = mitigationDetails.SectorId;
-                    context.SaveChanges();
-
-                    result = true;
+                    data.Sector = mitigationDetails.Sector;
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Delete MitigationDetails
         /// </summary>
         /// <param name="mitigationDetails">MitigationDetails to delete</param>
@@ -199,9 +208,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete MitigationDetails by Id
         /// </summary>
         /// <param name="id">Id of MitigationDetails to delete</param>
@@ -226,6 +235,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

@@ -51,7 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add Hazard
         /// </summary>
         /// <param name="hazard">The Hazard to add</param>
@@ -75,9 +75,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update Hazard
         /// </summary>
         /// <param name="hazard">Hazard to update</param>
@@ -103,9 +103,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Hazard
         /// </summary>
         /// <param name="hazard">Hazard to delete</param>
@@ -130,9 +130,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Hazard by Id
         /// </summary>
         /// <param name="id">Id of Hazard to delete</param>
@@ -157,6 +157,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

@@ -22,7 +22,7 @@ namespace NCCRD.Services.Data.Controllers.API
 {
     [Authorize]
     [RoutePrefix("api/Account")]
-    //[ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

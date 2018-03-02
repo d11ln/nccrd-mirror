@@ -84,7 +84,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add ProjectStatus
         /// </summary>
         /// <param name="projectStatus">The ProjectStatus to add</param>
@@ -108,9 +108,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update ProjectStatus
         /// </summary>
         /// <param name="projectStatus">ProjectStatus to update</param>
@@ -136,9 +136,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ProjectStatus
         /// </summary>
         /// <param name="projectStatus">ProjectStatus to delete</param>
@@ -163,9 +163,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ProjectStatus by Id
         /// </summary>
         /// <param name="id">Id of ProjectStatus to delete</param>
@@ -190,6 +190,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

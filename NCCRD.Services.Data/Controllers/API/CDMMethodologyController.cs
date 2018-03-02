@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add CDMMethodology
         /// </summary>
         /// <param name="cdmMethodology">The CDMMethodology to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update CDMMethodology
         /// </summary>
         /// <param name="cdmMethodology">CDMMethodology to update</param>
@@ -122,9 +122,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete CDMMethodology
         /// </summary>
         /// <param name="cdmMethodology">CDMMethodology to delete</param>
@@ -149,9 +149,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete CDMMethodology by Id
         /// </summary>
         /// <param name="id">Id of CDMMethodology to delete</param>
@@ -176,6 +176,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

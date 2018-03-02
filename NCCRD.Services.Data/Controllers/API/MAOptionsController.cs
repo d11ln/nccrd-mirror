@@ -108,7 +108,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add MAOption
         /// </summary>
         /// <param name="maOption">The MAOption to add</param>
@@ -132,9 +132,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update MAOption
         /// </summary>
         /// <param name="maOption">MAOption to update</param>
@@ -160,9 +160,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete MAOption
         /// </summary>
         /// <param name="maOption">MAOption to delete</param>
@@ -187,9 +187,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete MAOption by Id
         /// </summary>
         /// <param name="id">Id of MAOption to delete</param>
@@ -214,6 +214,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

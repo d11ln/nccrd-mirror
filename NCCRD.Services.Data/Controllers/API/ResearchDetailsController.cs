@@ -98,27 +98,49 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="researchDetails">The ResearchDetails to add</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/ResearchDetails/Add")]
-        public bool Add([FromBody]ResearchDetail researchDetails)
+        [Route("api/ResearchDetails/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]ResearchDetail researchDetails)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                if (context.ResearchDetails.Count(x => x.ResearchDetailId == researchDetails.ResearchDetailId) == 0)
-                {
-                    //Add Region entry
-                    context.ResearchDetails.Add(researchDetails);
-                    context.SaveChanges();
+                researchDetails.Project = context.Project.FirstOrDefault(x => x.ProjectId == researchDetails.ProjectId);
+                researchDetails.ResearchType = context.ResearchType.FirstOrDefault(x => x.ResearchTypeId == researchDetails.ResearchTypeId);
+                researchDetails.TargetAudience = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == researchDetails.TargetAudienceId);
 
-                    result = true;
+                researchDetails.Sector = context.Sector.FirstOrDefault(x => x.SectorId == researchDetails.SectorId);
+                if (researchDetails.SectorId == 0) researchDetails.SectorId = null;
+
+                var data = context.ResearchDetails.FirstOrDefault(x => x.ResearchDetailId == researchDetails.ResearchDetailId);
+                if (data == null)
+                {
+                    //Add Research details entry
+                    context.ResearchDetails.Add(researchDetails);
                 }
+                else
+                {
+                    //Update existing Research details entry
+                    data.Author = researchDetails.Author;
+                    data.PaperLink = researchDetails.PaperLink;
+                    data.ResearchTypeId = researchDetails.ResearchTypeId;
+                    data.ResearchType = researchDetails.ResearchType;
+                    data.TargetAudienceId = researchDetails.TargetAudienceId;
+                    data.TargetAudience = researchDetails.TargetAudience;
+                    data.ProjectId = researchDetails.ProjectId;
+                    data.Project = researchDetails.Project;
+                    data.SectorId = researchDetails.SectorId;
+                    data.Sector = researchDetails.Sector;
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Update ResearchDetails
         /// </summary>
         /// <param name="researchDetails">ResearchDetails to update</param>
@@ -148,9 +170,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ResearchDetails
         /// </summary>
         /// <param name="researchDetails">ResearchDetails to delete</param>
@@ -175,9 +197,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ResearchDetails by Id
         /// </summary>
         /// <param name="id">Id of ResearchDetails to delete</param>
@@ -202,6 +224,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

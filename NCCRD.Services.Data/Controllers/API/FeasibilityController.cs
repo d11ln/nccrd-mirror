@@ -51,7 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add Feasibility
         /// </summary>
         /// <param name="feasibility">The Feasibility to add</param>
@@ -75,9 +75,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update Feasibility
         /// </summary>
         /// <param name="feasibility">Feasibility to update</param>
@@ -103,9 +103,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Feasibility
         /// </summary>
         /// <param name="feasibility">Feasibility to delete</param>
@@ -130,9 +130,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Feasibility by Id
         /// </summary>
         /// <param name="id">Id of Feasibility to delete</param>
@@ -157,6 +157,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

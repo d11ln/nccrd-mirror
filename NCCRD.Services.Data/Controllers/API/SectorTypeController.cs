@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add SectorType
         /// </summary>
         /// <param name="sectorType">The SectorType to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update SectorType
         /// </summary>
         /// <param name="sectorType">SectorType to update</param>
@@ -121,9 +121,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete SectorType
         /// </summary>
         /// <param name="sectorType">SectorType to delete</param>
@@ -148,9 +148,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete SectorType by Id
         /// </summary>
         /// <param name="id">Id of SectorType to delete</param>
@@ -175,6 +175,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

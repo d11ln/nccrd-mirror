@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add ResearchType
         /// </summary>
         /// <param name="researchType">The ResearchType to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update ResearchType
         /// </summary>
         /// <param name="researchType">ResearchType to update</param>
@@ -122,9 +122,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ResearchType
         /// </summary>
         /// <param name="researchType">ResearchType to delete</param>
@@ -149,9 +149,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ResearchType by Id
         /// </summary>
         /// <param name="id">Id of ResearchType to delete</param>
@@ -176,6 +176,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

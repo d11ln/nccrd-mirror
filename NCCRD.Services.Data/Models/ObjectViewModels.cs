@@ -143,8 +143,13 @@ namespace NCCRD.Services.Data.Models
 
         public ResearchDetailsViewModel(ResearchDetail model)
         {
+            ResearchDetailId = model.ResearchDetailId;
             Author = model.Author;
             PaperLink = model.PaperLink;
+            ResearchTypeId = model.ResearchTypeId;
+            TargetAudienceId = model.TargetAudienceId;
+            ProjectId = model.ProjectId;
+            SectorId = model.SectorId;
         }
 
         public string ResearchTypeName { get; set; }

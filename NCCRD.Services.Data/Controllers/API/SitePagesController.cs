@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add SitePage
         /// </summary>
         /// <param name="sitePages">The SitePage to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update SitePage
         /// </summary>
         /// <param name="sitePage">SitePage to update</param>
@@ -122,9 +122,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete SitePage
         /// </summary>
         /// <param name="sitePage">SitePage to delete</param>
@@ -149,9 +149,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete SitePage by Id
         /// </summary>
         /// <param name="id">Id of SitePage to delete</param>
@@ -176,6 +176,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

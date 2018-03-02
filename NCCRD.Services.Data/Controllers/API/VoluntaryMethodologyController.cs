@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add VoluntaryMethodology
         /// </summary>
         /// <param name="voluntaryMethodology">The VoluntaryMethodology to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update VoluntaryMethodology
         /// </summary>
         /// <param name="voluntaryMethodology">VoluntaryMethodology to update</param>
@@ -123,9 +123,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete VoluntaryMethodology
         /// </summary>
         /// <param name="voluntaryMethodology">VoluntaryMethodology to delete</param>
@@ -150,9 +150,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete VoluntaryMethodology by Id
         /// </summary>
         /// <param name="id">Id of VoluntaryMethodology to delete</param>
@@ -177,6 +177,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

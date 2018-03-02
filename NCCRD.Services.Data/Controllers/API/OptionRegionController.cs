@@ -51,7 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add OptionRegion
         /// </summary>
         /// <param name="optionRegion">The OptionRegion to add</param>
@@ -75,9 +75,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update OptionRegion
         /// </summary>
         /// <param name="optionRegion">OptionRegion to update</param>
@@ -103,9 +103,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete OptionRegion
         /// </summary>
         /// <param name="optionRegion">OptionRegion to delete</param>
@@ -130,9 +130,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete OptionRegion by Id
         /// </summary>
         /// <param name="id">Id of OptionRegion to delete</param>
@@ -157,6 +157,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

@@ -257,7 +257,27 @@ function back_to_top() {
 
 function SaveChanges() {
 
-    return true;
+    let state = true;
+
+    state = SaveProjectChanges();
+
+    if (state === true) {
+        state = SaveAdaptationChanges();
+    }
+
+    if (state === true) {
+        state = SaveMitigationChanges();
+    }
+
+    if (state === true) {
+        state = SaveMitigationEmissionsChanges();
+    }
+
+    if (state === true) {
+        state = SaveResearchChanges();
+    }
+
+    return state;
 }
 
 
@@ -351,6 +371,7 @@ function GetProjectDetails() {
 
         $.getJSON(url, function (data) {
 
+            data.State = "Unchanged"; //Set initial data state
             projectDetailsData = data;
             LoadProjectDetails(projectDetailsData);
         });
@@ -490,40 +511,199 @@ function SetProjectSelects(data) {
 function GetProjectChanges() {
 
     let rootElement = $("#tabProjectDetails");
+    let value = "";
 
-    projectDetailsData.ProjectTitle = rootElement.find("#txtProjectTitle").val();
-    projectDetailsData.StartYear = rootElement.find("#txtStartYear").val();
-    projectDetailsData.EndYear = rootElement.find("#txtEndYear").val();
-    projectDetailsData.ProjectDescription = rootElement.find("#txtProjectDescription").val();
-    projectDetailsData.LeadAgent = rootElement.find("#txtLeadAgent").val();
-    projectDetailsData.HostPartner = rootElement.find("#txtHostPartner").val();
-    projectDetailsData.HostOrganisation = rootElement.find("#txtHostOrganisation").val();
-    projectDetailsData.AlternativeContact = rootElement.find("#txtAlternativeContact").val();
-    projectDetailsData.AlternativeContactEmail = rootElement.find("#txtAlternativeContactEmail").val();
-    projectDetailsData.Link = rootElement.find("#txtLink").val();
-    projectDetailsData.ValidationComments = rootElement.find("#txtValidationComments").val();
-    projectDetailsData.BudgetLower = rootElement.find("#txtBudgetLower").val();
-    projectDetailsData.BudgetUpper = rootElement.find("#txtBudgetUpper").val();
+    value = rootElement.find("#txtProjectTitle").val();
+    if (projectDetailsData.ProjectTitle !== value) {
+        projectDetailsData.ProjectTitle = value;
+        projectDetailsData.State = "Modified";
+    }
 
-    projectDetailsData.ProjectTypeName = rootElement.find("#selProjectType option:selected").val();
-    projectDetailsData.ProjectTypeId = rootElement.find("#selProjectType option:selected").attr("id");
+    value = rootElement.find("#txtProjectTitle").val();
+    if (projectDetailsData.ProjectTitle !== value) {
+        projectDetailsData.ProjectTitle = value;
+        projectDetailsData.State = "Modified";
+    }
 
-    projectDetailsData.ProjectSubTypeName = rootElement.find("#selProjectSubType option:selected").val();
-    projectDetailsData.ProjectSubTypeId = rootElement.find("#selProjectSubType option:selected").attr("id");
+    value = rootElement.find("#txtStartYear").val();
+    if (projectDetailsData.StartYear.toString() !== value) {
+        projectDetailsData.StartYear = value;
+        projectDetailsData.State = "Modified";
+    }
 
-    projectDetailsData.ProjectStatusName = rootElement.find("#selProjectStatus option:selected").val();
-    projectDetailsData.ProjectStatusId = rootElement.find("#selProjectStatus option:selected").attr("id");
+    value = rootElement.find("#txtEndYear").val();
+    if (projectDetailsData.EndYear.toString() !== value) {
+        projectDetailsData.EndYear = value;
+        projectDetailsData.State = "Modified";
+    }
 
-    projectDetailsData.ProjectManagerName = rootElement.find("#selProjectManager option:selected").val();
-    projectDetailsData.ProjectManagerId = rootElement.find("#selProjectManager option:selected").attr("id");
+    value = rootElement.find("#txtProjectDescription").val();
+    if (projectDetailsData.ProjectDescription !== value) {
+        projectDetailsData.ProjectDescription = value;
+        projectDetailsData.State = "Modified";
+    }
 
-    projectDetailsData.ValidationStatusName = rootElement.find("#selValidationStatus option:selected").val();
-    projectDetailsData.ValidationStatusId = rootElement.find("#selValidationStatus option:selected").attr("id");
+    value = rootElement.find("#txtLeadAgent").val();
+    if (projectDetailsData.LeadAgent !== value) {
+        projectDetailsData.LeadAgent = value
+        projectDetailsData.State = "Modified";
+    }
 
-    projectDetailsData.MAOptionName = rootElement.find("#selMAOption option:selected").val();
-    projectDetailsData.MAOptionId = rootElement.find("#selMAOption option:selected").attr("id");
+    value = rootElement.find("#txtHostPartner").val();
+    if (projectDetailsData.HostPartner !== value) {
+        projectDetailsData.HostPartner = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtHostOrganisation").val();
+    if (projectDetailsData.HostOrganisation !== value) {
+        projectDetailsData.HostOrganisation = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtAlternativeContact").val();
+    if (projectDetailsData.AlternativeContact !== value) {
+        projectDetailsData.AlternativeContact = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtAlternativeContactEmail").val();
+    if (projectDetailsData.AlternativeContactEmail !== value) {
+        projectDetailsData.AlternativeContactEmail = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtLink").val();
+    if (projectDetailsData.Link !== value) {
+        projectDetailsData.Link = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtValidationComments").val();
+    if (projectDetailsData.ValidationComments !== value) {
+        projectDetailsData.ValidationComments = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtBudgetLower").val();
+    if (projectDetailsData.BudgetLower.toString() !== value) {
+        projectDetailsData.BudgetLower = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#txtBudgetUpper").val();
+    if (projectDetailsData.BudgetUpper.toString() !== value) {
+        projectDetailsData.BudgetUpper = value;
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#selProjectType option:selected").val();
+    if (projectDetailsData.ProjectTypeName !== value && value !== 'Not Selected') {
+        projectDetailsData.ProjectTypeName = value;
+        projectDetailsData.ProjectTypeId = rootElement.find("#selProjectType option:selected").attr("id");
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#selProjectSubType option:selected").val();
+    if (projectDetailsData.ProjectSubTypeName !== value && value !== 'Not Selected') {
+        projectDetailsData.ProjectSubTypeName = value;
+        projectDetailsData.ProjectSubTypeId = rootElement.find("#selProjectSubType option:selected").attr("id");
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#selProjectStatus option:selected").val();
+    if (projectDetailsData.ProjectStatusName !== value && value !== 'Not Selected') {
+        projectDetailsData.ProjectStatusName = value;
+        projectDetailsData.ProjectStatusId = rootElement.find("#selProjectStatus option:selected").attr("id");
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#selProjectManager option:selected").val();
+    if (projectDetailsData.ProjectManagerName !== value && value !== 'Not Selected') {
+        projectDetailsData.ProjectManagerName = value;
+        projectDetailsData.ProjectManagerId = rootElement.find("#selProjectManager option:selected").attr("id");
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#selValidationStatus option:selected").val();
+    if (projectDetailsData.ValidationStatusName !== value && value !== 'Not Selected') {
+        projectDetailsData.ValidationStatusName = value;
+        projectDetailsData.ValidationStatusId = rootElement.find("#selValidationStatus option:selected").attr("id");
+        projectDetailsData.State = "Modified";
+    }
+
+    value = rootElement.find("#selMAOption option:selected").val();
+    if (projectDetailsData.MAOptionName !== value && value !== 'Not Selected') {
+        projectDetailsData.MAOptionName = value;
+        projectDetailsData.MAOptionId = rootElement.find("#selMAOption option:selected").attr("id");
+        projectDetailsData.State = "Modified";
+    }
 }
 
+function ValidateProjectData(data) {
+
+    if (data.ProjectTitle === "") {
+        alert("Project title required");
+    }
+    else if (data.LeadAgent === "") {
+        alert("Lead agent required");
+    }
+    else if (data.HostOrganisation === "") {
+        alert("Host organisation required");
+    }
+    else if (data.ProjectTypeId === "0") {
+        alert("Project type selection required");
+    }
+    else if (data.ProjectStatusId === "0") {
+        alert("Project status selection required");
+    }
+    else if (data.ProjectManagerId === "0") {
+        alert("Project manager selection required");
+    }
+    else if (isNaN(data.StartYear)) {
+        alert("Invalid value for Start year");
+    }
+    else if (isNaN(data.EndYear)) {
+        alert("Invalid value for End year");
+    }
+    else if (isNaN(data.BudgetLower)) {
+        alert("Invalid value for Budget lower");
+    }
+    else if (isNaN(data.BudgetUpper)) {
+        alert("Invalid value for Budget upper");
+    }
+    else {
+        return true;
+    }
+
+    return false;
+}
+
+function SaveProjectChanges() {
+
+    if (projectDetailsData.State === "Modified" && ValidateProjectData(projectDetailsData) === true) {
+
+        let strPostData = JSON.stringify(projectDetailsData);
+        let url = apiBaseURL + "api/Projects/AddOrUpdate";
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: strPostData,
+            contentType: 'application/json'
+        })
+            .done(function () {
+                alert("Project saved successfully");
+            })
+            .fail(function (data) {
+                alert("Unable to save project data. See log for errors.");
+                console.log('Error:', data);
+                return false;
+            });
+    }
+
+    return true;
+};
 
 //----------------------//
 //  ADAPTATION DETAILS  //
@@ -610,13 +790,14 @@ function LoadAdaptationDetails(data, added) {
 
             data.forEach(function (item) {
 
+                data.State = "Unchanged"; //Set initial data state
                 let tmpTemplate = template;
 
                 //Replace parent div ID
                 let rootId = "AD" + item.AdaptationDetailId;
                 tmpTemplate = tmpTemplate.replace("AD#", rootId);
 
-                if (!item.Description) item.Description = "";
+                if (item.Description === null) item.Description = "";
                 tmpTemplate = tmpTemplate.replace("##txtAdaptationDescription##", item.Description)
                 $("#divAdaptationDetails").append(tmpTemplate);
 
@@ -667,13 +848,70 @@ function GetAdaptationChanges() {
 
         let rootId = "AD" + item.AdaptationDetailId;
         let rootElement = $("#" + rootId);
+        let value = "";
 
-        item.Description = rootElement.find("#txtAdaptationDescription").val();
-        item.AdaptationPurposeName = rootElement.find("#selAdaptationPurpose option:selected").val();
-        item.AdaptationPurposeId = rootElement.find("#selAdaptationPurpose option:selected").attr("id");
-        item.SectorName = rootElement.find("#selAdaptationSector option:selected").val();
-        item.SectorId = rootElement.find("#selAdaptationSector option:selected").attr("id");
+        value = rootElement.find("#txtAdaptationDescription").val();
+        if (item.Description !== value) {
+            item.Description = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#selAdaptationPurpose option:selected").val();
+        if (item.AdaptationPurposeName !== value && value !== 'Not Selected') {
+            item.AdaptationPurposeName = value;
+            item.AdaptationPurposeId = rootElement.find("#selAdaptationPurpose option:selected").attr("id");
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#selAdaptationSector option:selected").val();
+        if (item.SectorName !== value && value !== 'Not Selected') {
+            item.SectorName = value;
+            item.SectorId = rootElement.find("#selAdaptationSector option:selected").attr("id");
+            item.State = "Modified";
+        }
     });
+};
+
+function ValidateAdaptationData(data) {
+
+    if (data.AdaptationPurposeId === "0") {
+        alert("Adaptation purpose required");
+    }
+    else {
+        return true;
+    }
+
+    return false;
+};
+
+function SaveAdaptationChanges() {
+
+    adaptationDetailsData.forEach(function (item) {
+
+        if (item.State === 'Modified' && ValidateAdaptationData(item)) {
+
+            //Save adaptation changes
+            let strPostData = JSON.stringify(item);
+            let url = apiBaseURL + "/api/AdaptationDetails/AddOrUpdate";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: strPostData,
+                contentType: 'application/json'
+            })
+                .done(function () {
+                    alert("Adaptation data saved successfully");
+                })
+                .fail(function (data) {
+                    alert("Unable to save adaptation data. See log for errors.");
+                    console.log('Error:', data);
+                    return false;
+                });
+        }
+    });
+
+    return true;
 };
 
 
@@ -688,7 +926,7 @@ function GetCarbonCredit(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        carbonCreditData = JSON.parse('[{"CarbonCreditId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        carbonCreditData = JSON.parse('[{"CarbonCreditId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -700,7 +938,7 @@ function GetCarbonCreditMarket(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        carbonCreditMarketData = JSON.parse('[{"CarbonCreditMarketId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        carbonCreditMarketData = JSON.parse('[{"CarbonCreditMarketId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -712,7 +950,7 @@ function GetCDMStatus(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        cdmStatusData = JSON.parse('[{"CDMStatusId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        cdmStatusData = JSON.parse('[{"CDMStatusId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -724,7 +962,7 @@ function GetCDMMethodology(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        cdmMethodologyData = JSON.parse('[{"CDMMethodologyId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        cdmMethodologyData = JSON.parse('[{"CDMMethodologyId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -736,7 +974,7 @@ function GetVoluntaryMethodology(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        voluntaryMethodologyData = JSON.parse('[{"VoluntaryMethodologyId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        voluntaryMethodologyData = JSON.parse('[{"VoluntaryMethodologyId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -748,7 +986,7 @@ function GetVoluntaryGoldStandard(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        voluntaryGoldStandardData = JSON.parse('[{"VoluntaryGoldStandardId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        voluntaryGoldStandardData = JSON.parse('[{"VoluntaryGoldStandardId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -786,6 +1024,7 @@ function LoadMitigationDetails(data, added) {
 
                 data.forEach(function (item) {
 
+                    data.State = "Unchanged"; //Set initial data state
                     let tmpTemplate = template;
 
                     //Replace parent div ID
@@ -793,10 +1032,10 @@ function LoadMitigationDetails(data, added) {
                     tmpTemplate = tmpTemplate.replace("MD#", rootId);
 
                     //Text inputs
-                    if (!item.CDMProjectNumber) item.CDMProjectNumber = "";
+                    if (item.CDMProjectNumber === null) item.CDMProjectNumber = "";
                     tmpTemplate = tmpTemplate.replace("##CDMProjectNumber##", item.CDMProjectNumber)
 
-                    if (!item.OtherDescription) item.OtherDescription = "";
+                    if (item.OtherDescription === null) item.OtherDescription = "";
                     tmpTemplate = tmpTemplate.replace("##OtherDescription##", item.OtherDescription)
 
                     //Appent html
@@ -958,32 +1197,105 @@ function GetMitigationChanges() {
 
         let rootId = "MD" + item.MitigationDetailId;
         let rootElement = $("#" + rootId);
+        let value = "";
 
-        item.CarbonCreditName = rootElement.find("#selCarbonCredit option:selected").val();
-        item.CarbonCreditId = rootElement.find("#selCarbonCredit option:selected").attr("id");
+        value = rootElement.find("#selCarbonCredit option:selected").val();
+        if (item.CarbonCreditName !== value && value !== 'Not Selected') {
+            item.CarbonCreditName = value;
+            item.CarbonCreditId = rootElement.find("#selCarbonCredit option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.CarbonCreditMarketName = rootElement.find("#selCarbonCreditMarket option:selected").val();
-        item.CarbonCreditMarketId = rootElement.find("#selCarbonCreditMarket option:selected").attr("id");
+        value = rootElement.find("#selCarbonCreditMarket option:selected").val();
+        if (item.CarbonCreditMarketName !== value && value !== 'Not Selected') {
+            item.CarbonCreditMarketName = value;
+            item.CarbonCreditMarketId = rootElement.find("#selCarbonCreditMarket option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.CDMStatusName = rootElement.find("#selCDMStatus option:selected").val();
-        item.CDMStatusId = rootElement.find("#selCDMStatus option:selected").attr("id");
+        value = rootElement.find("#selCDMStatus option:selected").val();
+        if (item.CDMStatusName !== value && value !== 'Not Selected') {
+            item.CDMStatusName = value;
+            item.CDMStatusId = rootElement.find("#selCDMStatus option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.CDMMethodologyName = rootElement.find("#selCDMMethodology option:selected").val();
-        item.CDMMethodologyId = rootElement.find("#selCDMMethodology option:selected").attr("id");
+        value = rootElement.find("#selCDMMethodology option:selected").val();
+        if (item.CDMMethodologyName !== value && value !== 'Not Selected') {
+            item.CDMMethodologyName = value;
+            item.CDMMethodologyId = rootElement.find("#selCDMMethodology option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.VoluntaryMethodologyName = rootElement.find("#selVoluntaryMethodology option:selected").val();
-        item.VoluntaryMethodologyId = rootElement.find("#selVoluntaryMethodology option:selected").attr("id");
+        value = rootElement.find("#selVoluntaryMethodology option:selected").val();
+        if (item.VoluntaryMethodologyName !== value && value !== 'Not Selected') {
+            item.VoluntaryMethodologyName = value;
+            item.VoluntaryMethodologyId = rootElement.find("#selVoluntaryMethodology option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.VoluntaryGoldStandardName = rootElement.find("#selVoluntaryGoldStandard option:selected").val();
-        item.VoluntaryGoldStandardId = rootElement.find("#selVoluntaryGoldStandard option:selected").attr("id");
+        value = rootElement.find("#selVoluntaryGoldStandard option:selected").val();
+        if (item.VoluntaryGoldStandardName !== value && value !== 'Not Selected') {
+            item.VoluntaryGoldStandardName = value;
+            item.VoluntaryGoldStandardId = rootElement.find("#selVoluntaryGoldStandard option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.SectorName = rootElement.find("#selMitigationSector option:selected").val();
-        item.SectorId = rootElement.find("#selMitigationSector option:selected").attr("id");
+        value = rootElement.find("#selMitigationSector option:selected").val();
+        if (item.SectorName !== value && value !== 'Not Selected') {
+            item.SectorName = value;
+            item.SectorId = rootElement.find("#selMitigationSector option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.CDMProjectNumber = rootElement.find("#txtCDMProjectNumber").val();
-        item.OtherDescription = rootElement.find("#txtOtherDescription").val();
+        value = rootElement.find("#txtCDMProjectNumber").val();
+        if (item.CDMProjectNumber !== value) {
+            item.CDMProjectNumber = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtOtherDescription").val();
+        if (item.OtherDescription !== value) {
+            item.OtherDescription = value;
+            item.State = "Modified";
+        }
     });
 }
+
+function ValidateMitigationData(data) {
+
+    return true;
+}
+
+function SaveMitigationChanges() {
+
+    mitigationDetailsData.forEach(function (item) {
+
+        if (item.State === 'Modified' && ValidateMitigationData(item)) {
+
+            //Save adaptation changes
+            let strPostData = JSON.stringify(item);
+            let url = apiBaseURL + "/api/MitigationDetails/AddOrUpdate";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: strPostData,
+                contentType: 'application/json'
+            })
+                .done(function () {
+                    alert("Mitigation data saved successfully");
+                })
+                .fail(function (data) {
+                    alert("Unable to save mitigation data. See log for errors.");
+                    console.log('Error:', data);
+                    return false;
+                });
+        }
+    });
+
+    return true;
+};
 
 
 //--------------------------------//
@@ -1017,88 +1329,89 @@ function LoadMitigationEmissions(data, added) {
 
             data.forEach(function (item) {
 
+                data.State = "Unchanged"; //Set initial data state
                 let tmpTemplate = template;
 
                 //Replace parent div ID
                 let rootId = "ME" + item.MitigationEmissionsDataId;
                 tmpTemplate = tmpTemplate.replace("ME#", rootId);
 
-                if (!item.Year) item.Year = "";
+                if (item.Year === null) item.Year = "";
                 tmpTemplate = tmpTemplate.replace("##Year##", item.Year)
 
-                if (!item.CO2) item.CO2 = "";
+                if (item.CO2 === null) item.CO2 = "";
                 tmpTemplate = tmpTemplate.replace("##CO2##", item.CO2)
 
-                if (!item.CH4) item.CH4 = "";
+                if (item.CH4 === null) item.CH4 = "";
                 tmpTemplate = tmpTemplate.replace("##CH4##", item.CH4)
 
-                if (!item.CH4_CO2e) item.CH4_CO2e = "";
+                if (item.CH4_CO2e === null) item.CH4_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##CH4_CO2e##", item.CH4_CO2e)
 
-                if (!item.N2O) item.N2O = "";
+                if (item.N2O === null) item.N2O = "";
                 tmpTemplate = tmpTemplate.replace("##N2O##", item.N2O)
 
-                if (!item.N2O_CO2e) item.N2O_CO2e = "";
+                if (item.N2O_CO2e === null) item.N2O_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##N2O_CO2e##", item.N2O_CO2e)
 
-                if (!item.HFC) item.HFC = "";
+                if (item.HFC === null) item.HFC = "";
                 tmpTemplate = tmpTemplate.replace("##HFC##", item.HFC)
 
-                if (!item.HFC_CO2e) item.HFC_CO2e = "";
+                if (item.HFC_CO2e === null) item.HFC_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##HFC_CO2e##", item.HFC_CO2e)
 
-                if (!item.PFC) item.PFC = "";
+                if (item.PFC === null) item.PFC = "";
                 tmpTemplate = tmpTemplate.replace("##PFC##", item.PFC)
 
-                if (!item.PFC_CO2e) item.PFC_CO2e = "";
+                if (item.PFC_CO2e === null) item.PFC_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##PFC_CO2e##", item.PFC_CO2e)
 
-                if (!item.SF6) item.SF6 = "";
+                if (item.SF6 === null) item.SF6 = "";
                 tmpTemplate = tmpTemplate.replace("##SF6##", item.SF6)
 
-                if (!item.SF6_CO2e) item.SF6_CO2e = "";
+                if (item.SF6_CO2e === null) item.SF6_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##SF6_CO2e##", item.SF6_CO2e)
 
-                if (!item.Hydro) item.Hydro = "";
+                if (item.Hydro === null) item.Hydro = "";
                 tmpTemplate = tmpTemplate.replace("##Hydro##", item.Hydro)
 
-                if (!item.Hydro_CO2e) item.Hydro_CO2e = "";
+                if (item.Hydro_CO2e === null) item.Hydro_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##Hydro_CO2e##", item.Hydro_CO2e)
 
-                if (!item.Tidal) item.Tidal = "";
+                if (item.Tidal === null) item.Tidal = "";
                 tmpTemplate = tmpTemplate.replace("##Tidal##", item.Tidal)
 
-                if (!item.Tidal_CO2e) item.Tidal_CO2e = "";
+                if (item.Tidal_CO2e === null) item.Tidal_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##Tidal_CO2e##", item.Tidal_CO2e)
 
-                if (!item.Wind) item.Wind = "";
+                if (item.Wind === null) item.Wind = "";
                 tmpTemplate = tmpTemplate.replace("##Wind##", item.Wind)
 
-                if (!item.Wind_CO2e) item.Wind_CO2e = "";
+                if (item.Wind_CO2e === null) item.Wind_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##Wind_CO2e##", item.Wind_CO2e)
 
-                if (!item.Solar) item.Solar = "";
+                if (item.Solar === null) item.Solar = "";
                 tmpTemplate = tmpTemplate.replace("##Solar##", item.Solar)
 
-                if (!item.Solar_CO2e) item.Solar_CO2e = "";
+                if (item.Solar_CO2e === null) item.Solar_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##Solar_CO2e##", item.Solar_CO2e)
 
-                if (!item.FossilFuelElecRed) item.FossilFuelElecRed = "";
+                if (item.FossilFuelElecRed === null) item.FossilFuelElecRed = "";
                 tmpTemplate = tmpTemplate.replace("##FossilFuelElecRed##", item.FossilFuelElecRed)
 
-                if (!item.FossilFuelElecRed_CO2e) item.FossilFuelElecRed_CO2e = "";
+                if (item.FossilFuelElecRed_CO2e === null) item.FossilFuelElecRed_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##FossilFuelElecRed_CO2e##", item.FossilFuelElecRed_CO2e)
 
-                if (!item.BioWaste) item.BioWaste = "";
+                if (item.BioWaste === null) item.BioWaste = "";
                 tmpTemplate = tmpTemplate.replace("##BioWaste##", item.BioWaste)
 
-                if (!item.BioWaste_CO2e) item.BioWaste_CO2e = "";
+                if (item.BioWaste_CO2e === null) item.BioWaste_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##BioWaste_CO2e##", item.BioWaste_CO2e)
 
-                if (!item.Geothermal) item.Geothermal = "";
+                if (item.Geothermal === null) item.Geothermal = "";
                 tmpTemplate = tmpTemplate.replace("##Geothermal##", item.Geothermal)
 
-                if (!item.Geothermal_CO2e) item.Geothermal_CO2e = "";
+                if (item.Geothermal_CO2e === null) item.Geothermal_CO2e = "";
                 tmpTemplate = tmpTemplate.replace("##Geothermal_CO2e##", item.Geothermal_CO2e)
 
                 $("#divMitigationEmissions").append(tmpTemplate);
@@ -1161,35 +1474,200 @@ function GetMitigationEmissionsChanges() {
 
         let rootId = "ME" + item.MitigationEmissionsDataId;
         let rootElement = $("#" + rootId);
+        let value = "";
 
-        item.Year = rootElement.find("#txtYear").val();
-        item.CO2 = rootElement.find("#txtCO2").val();
-        item.CH4 = rootElement.find("#txtCH4").val();
-        item.CH4_CO2e = rootElement.find("#txtCH4_CO2e").val();
-        item.N2O = rootElement.find("#txtN2O").val();
-        item.N2O_CO2e = rootElement.find("#txtN2O_CO2e").val();
-        item.HFC = rootElement.find("#txtHFC").val();
-        item.HFC_CO2e = rootElement.find("#txtHFC_CO2e").val();
-        item.PFC = rootElement.find("#txtPFC").val();
-        item.PFC_CO2e = rootElement.find("#txtPFC_CO2e").val();
-        item.SF6 = rootElement.find("#txtSF6").val();
-        item.SF6_CO2e = rootElement.find("#txtSF6_CO2e").val();
-        item.Hydro = rootElement.find("#txtHydro").val();
-        item.Hydro_CO2e = rootElement.find("#txtHydro_CO2e").val();
-        item.Tidal = rootElement.find("#txtTidal").val();
-        item.Tidal_CO2e = rootElement.find("#txtTidal_CO2e").val();
-        item.Wind = rootElement.find("#txtWind").val();
-        item.Wind_CO2e = rootElement.find("#txtWind_CO2e").val();
-        item.Solar = rootElement.find("#txtSolar").val();
-        item.Solar_CO2e = rootElement.find("#txtSolar_CO2e").val();
-        item.FossilFuelElecRed = rootElement.find("#txtFossilFuelElecRed").val();
-        item.FossilFuelElecRed_CO2e = rootElement.find("#txtFossilFuelElecRed_CO2e").val();
-        item.BioWaste = rootElement.find("#txtBioWaste").val();
-        item.BioWaste_CO2e = rootElement.find("#txtBioWaste_CO2e").val();
-        item.Geothermal = rootElement.find("#txtGeothermal").val();
-        item.Geothermal_CO2e = rootElement.find("#txtGeothermal_CO2e").val();
+        value = rootElement.find("#txtYear").val();
+        if (item.Year.toString() !== value) {
+            item.Year = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtCO2").val();
+        if (item.CO2.toString() !== value) {
+            item.CO2 = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtCH4").val();
+        if (item.CH4.toString() !== value) {
+            item.CH4 = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtCH4_CO2e").val();
+        if (item.CH4_CO2e.toString() !== value) {
+            item.CH4_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtN2O").val();
+        if (item.N2O.toString() !== value) {
+            item.N2O = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtN2O_CO2e").val();
+        if (item.N2O_CO2e.toString() !== value) {
+            item.N2O_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtHFC").val();
+        if (item.HFC.toString() !== value) {
+            item.HFC = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtHFC_CO2e").val();
+        if (item.HFC_CO2e.toString() !== value) {
+            item.HFC_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtPFC").val();
+        if (item.PFC.toString() !== value) {
+            item.PFC = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtPFC_CO2e").val();
+        if (item.PFC_CO2e.toString() !== value) {
+            item.PFC_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtSF6").val();
+        if (item.SF6.toString() !== value) {
+            item.SF6 = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtSF6_CO2e").val();
+        if (item.SF6_CO2e.toString() !== value) {
+            item.SF6_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtHydro").val();
+        if (item.Hydro.toString() !== value) {
+            item.Hydro = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtHydro_CO2e").val();
+        if (item.Hydro_CO2e.toString() !== value) {
+            item.Hydro_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtTidal").val();
+        if (item.Tidal.toString() !== value) {
+            item.Tidal = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtTidal_CO2e").val();
+        if (item.Tidal_CO2e.toString() !== value) {
+            item.Tidal_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtWind").val();
+        if (item.Wind.toString() !== value) {
+            item.Wind = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtWind_CO2e").val();
+        if (item.Wind_CO2e.toString() !== value) {
+            item.Wind_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtSolar").val();
+        if (item.Solar.toString() !== value) {
+            item.Solar = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtSolar_CO2e").val();
+        if (item.Solar_CO2e.toString() !== value) {
+            item.Solar_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtFossilFuelElecRed").val();
+        if (item.FossilFuelElecRed.toString() !== value) {
+            item.FossilFuelElecRed = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtFossilFuelElecRed_CO2e").val();
+        if (item.FossilFuelElecRed_CO2e.toString() !== value) {
+            item.FossilFuelElecRed_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtBioWaste").val();
+        if (item.BioWaste.toString() !== value) {
+            item.BioWaste = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtBioWaste_CO2e").val();
+        if (item.BioWaste_CO2e.toString() !== value) {
+            item.BioWaste_CO2e = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtGeothermal").val();
+        if (item.Geothermal.toString() !== value) {
+            item.Geothermal = value;
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#txtGeothermal_CO2e").val();
+        if (item.Geothermal_CO2e.toString() !== value) {
+            item.Geothermal_CO2e = value;
+            item.State = "Modified";
+        }
     });
 }
+
+function ValidateMitigationEmissionsData(data) {
+
+    return true;
+};
+
+function SaveMitigationEmissionsChanges() {
+
+    mitigationEmissionsData.forEach(function (item) {
+
+        if (item.State === 'Modified' && ValidateMitigationEmissionsData(item)) {
+
+            //Save adaptation changes
+            let strPostData = JSON.stringify(item);
+            let url = apiBaseURL + "/api/MitigationEmissionsData/AddOrUpdate";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: strPostData,
+                contentType: 'application/json'
+            })
+                .done(function () {
+                    alert("Mitigation emissions data saved successfully");
+                })
+                .fail(function (data) {
+                    alert("Unable to save mitigation emissions data. See log for errors.");
+                    console.log('Error:', data);
+                    return false;
+                });
+        }
+    });
+
+    return true;
+};
 
 
 //--------------------//
@@ -1203,7 +1681,7 @@ function GetResearchType(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        researchTypeData = JSON.parse('[{"ResearchTypeId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        researchTypeData = JSON.parse('[{"ResearchTypeId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -1215,7 +1693,7 @@ function GetTargetAudience(callback) {
     $.getJSON(url, function (data) {
 
         data.sort(function (a, b) { return a["Value"].localeCompare(b["Value"]) });
-        targetAudienceData = JSON.parse('[{"TargetAudienceId": 0, "Value": "Not selected", "Description": ""}]').concat(data);
+        targetAudienceData = JSON.parse('[{"TargetAudienceId": 0, "Value": "Not Selected", "Description": ""}]').concat(data);
         if (callback) callback();
     });
 }
@@ -1251,16 +1729,17 @@ function LoadResearchDetails(data, added) {
 
             data.forEach(function (item) {
 
+                data.State = "Unchanged"; //Set initial data state
                 let tmpTemplate = template;
 
                 //Replace parent div ID
                 let rootId = "RD" + item.ResearchDetailId;
                 tmpTemplate = tmpTemplate.replace("RD#", rootId);
 
-                if (!item.Author) item.Author = "";
+                if (item.Author === null) item.Author = "";
                 tmpTemplate = tmpTemplate.replace("##Author##", item.Author)
 
-                if (!item.PaperLink) item.PaperLink = "";
+                if (item.PaperLink === null) item.PaperLink = "";
                 tmpTemplate = tmpTemplate.replace("##PaperLink##", item.PaperLink)
 
                 $("#divResearchDetails").append(tmpTemplate);
@@ -1308,7 +1787,7 @@ function LoadTargetAudience(data, parent, root) {
 
 function LoadResearchSector(data, parent, root) {
 
-    let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selMitigationSector">';
+    let html = '<select disabled style="margin-top:-1px;color:black" class="form-control" id="selResearchSector">';
     data.forEach(function (item) {
 
         html += '<option id="' + item.SectorId + '">' + item.Value + '</option>';
@@ -1352,19 +1831,76 @@ function GetResearchChanges() {
 
     researchDetailsData.forEach(function (item) {
 
-        let rootId = "AD" + item.ResearchDetailId;
+        let rootId = "RD" + item.ResearchDetailId;
         let rootElement = $("#" + rootId);
+        let value = "";
 
-        item.Author = rootElement.find("#txtAuthor").val();
-        item.PaperLink = rootElement.find("#txtPaperLink").val();
+        value = rootElement.find("#txtAuthor").val();
+        if (item.Author !== value) {
+            item.Author = value;
+            item.State = "Modified";
+        }
 
-        item.ResearchTypeName = rootElement.find("#selResearchType option:selected").val();
-        item.ResearchTypeId = rootElement.find("#selResearchType option:selected").attr("id");
+        value = rootElement.find("#txtPaperLink").val();
+        if (item.PaperLink !== value) {
+            item.PaperLink = value;
+            item.State = "Modified";
+        }
 
-        item.TargetAudienceName = rootElement.find("#selTargetAudience option:selected").val();
-        item.TargetAudienceId = rootElement.find("#selTargetAudience option:selected").attr("id");
+        value = rootElement.find("#selResearchType option:selected").val();
+        if (item.ResearchTypeName !== value && value !== 'Not Selected') {
+            item.ResearchTypeName = value;
+            item.ResearchTypeId = rootElement.find("#selResearchType option:selected").attr("id");
+            item.State = "Modified";
+        }
 
-        item.SectorName = rootElement.find("#selResearchSector option:selected").val();
-        item.SectorId = rootElement.find("#selResearchSector option:selected").attr("id");
+        value = rootElement.find("#selTargetAudience option:selected").val();
+        if (item.TargetAudienceName !== value && value !== 'Not Selected') {
+            item.TargetAudienceName = value;
+            item.TargetAudienceId = rootElement.find("#selTargetAudience option:selected").attr("id");
+            item.State = "Modified";
+        }
+
+        value = rootElement.find("#selResearchSector option:selected").val();
+        if (item.SectorName !== value && value !== 'Not Selected') {
+            item.SectorName = value;
+            item.SectorId = rootElement.find("#selResearchSector option:selected").attr("id");
+            item.State = "Modified";
+        }
     });
 }
+
+function ValidateResearchData(data) {
+
+    return true;
+};
+
+function SaveResearchChanges() {
+
+    researchDetailsData.forEach(function (item) {
+
+        if (item.State === 'Modified' && ValidateResearchData(item)) {
+
+            //Save adaptation changes
+            let strPostData = JSON.stringify(item);
+            let url = apiBaseURL + "/api/ResearchDetails/AddOrUpdate";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: strPostData,
+                contentType: 'application/json'
+            })
+                .done(function () {
+                    alert("Research data saved successfully");
+                })
+                .fail(function (data) {
+                    alert("Unable to save research data. See log for errors.");
+                    console.log('Error:', data);
+                    return false;
+                });
+        }
+    });
+
+    return true;
+};

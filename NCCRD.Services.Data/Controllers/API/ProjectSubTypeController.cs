@@ -89,7 +89,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add ProjectSubType
         /// </summary>
         /// <param name="projectSubType">The ProjectSubType to add</param>
@@ -113,9 +113,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update ProjectSubType
         /// </summary>
         /// <param name="projectSubType">ProjectSubType to update</param>
@@ -142,9 +142,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ProjectSubType
         /// </summary>
         /// <param name="projectSubType">ProjectSubType to delete</param>
@@ -169,9 +169,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ProjectSubType by Id
         /// </summary>
         /// <param name="id">Id of ProjectSubType to delete</param>
@@ -196,6 +196,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

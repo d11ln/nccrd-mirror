@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return accessRight;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add AccessRight
         /// </summary>
         /// <param name="accessRight">The AccessRight to add</param>
@@ -83,7 +83,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                if(context.AccessRights.Count(x => x.AccessRightId == accessRight.AccessRightId || (x.SitePage == accessRight.SitePage && x.UserRole == accessRight.UserRole)) == 0)
+                if (context.AccessRights.Count(x => x.AccessRightId == accessRight.AccessRightId || (x.SitePage == accessRight.SitePage && x.UserRole == accessRight.UserRole)) == 0)
                 {
                     context.AccessRights.Add(accessRight);
                     context.SaveChanges();
@@ -93,9 +93,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update AccessRight
         /// </summary>
         /// <param name="accessRight">AccessRight to update</param>
@@ -127,9 +127,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete AccessRight
         /// </summary>
         /// <param name="accessRight">AccessRight to delete</param>
@@ -155,9 +155,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete AccessRight by Id
         /// </summary>
         /// <param name="id">Id of AccessRight to delete</param>
@@ -183,6 +183,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

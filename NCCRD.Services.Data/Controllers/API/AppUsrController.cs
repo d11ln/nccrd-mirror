@@ -94,7 +94,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add User
         /// </summary>
         /// <param name="user">The User to add</param>
@@ -118,9 +118,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update User
         /// </summary>
         /// <param name="user">User to update</param>
@@ -170,9 +170,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete User
         /// </summary>
         /// <param name="user">User to delete</param>
@@ -197,9 +197,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete User by Id
         /// </summary>
         /// <param name="id">Id of User to delete</param>
@@ -224,6 +224,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

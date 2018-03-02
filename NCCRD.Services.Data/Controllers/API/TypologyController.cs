@@ -76,7 +76,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add Typology
         /// </summary>
         /// <param name="typology">The Typology to add</param>
@@ -100,9 +100,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update Typology
         /// </summary>
         /// <param name="typology">Typology to update</param>
@@ -128,9 +128,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Typology
         /// </summary>
         /// <param name="typology">Typology to delete</param>
@@ -155,9 +155,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Typology by Id
         /// </summary>
         /// <param name="id">Id of Typology to delete</param>
@@ -182,6 +182,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

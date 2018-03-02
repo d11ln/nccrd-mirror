@@ -152,7 +152,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add Region
         /// </summary>
         /// <param name="region">The Region to add</param>
@@ -176,9 +176,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update Region
         /// </summary>
         /// <param name="region">Region to update</param>
@@ -206,9 +206,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Region
         /// </summary>
         /// <param name="region">Region to delete</param>
@@ -233,9 +233,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Region by Id
         /// </summary>
         /// <param name="id">Id of Region to delete</param>
@@ -260,6 +260,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

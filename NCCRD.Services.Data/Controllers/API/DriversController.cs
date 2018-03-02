@@ -51,7 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add Driver
         /// </summary>
         /// <param name="driver">The Driver to add</param>
@@ -75,9 +75,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update Driver
         /// </summary>
         /// <param name="driver">Driver to update</param>
@@ -103,9 +103,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Driver
         /// </summary>
         /// <param name="driver">Driver to delete</param>
@@ -130,9 +130,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Driver by Id
         /// </summary>
         /// <param name="id">Id of Driver to delete</param>
@@ -157,6 +157,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

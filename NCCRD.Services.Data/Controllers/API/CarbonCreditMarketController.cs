@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add CarbonCreditMarket
         /// </summary>
         /// <param name="carbonCreditMarket">The CarbonCreditMarket to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update CarbonCreditMarket
         /// </summary>
         /// <param name="carbonCreditMarket">CarbonCreditMarket to update</param>
@@ -122,9 +122,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete CarbonCreditMarket
         /// </summary>
         /// <param name="carbonCreditMarket">CarbonCreditMarket to delete</param>
@@ -149,9 +149,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete CarbonCreditMarket by Id
         /// </summary>
         /// <param name="id">Id of CarbonCreditMarket to delete</param>
@@ -176,6 +176,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

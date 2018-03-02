@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add TargetAudience
         /// </summary>
         /// <param name="targetAudience">The TargetAudience to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update TargetAudience
         /// </summary>
         /// <param name="targetAudience">TargetAudience to update</param>
@@ -123,9 +123,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete TargetAudience
         /// </summary>
         /// <param name="targetAudience">TargetAudience to delete</param>
@@ -150,9 +150,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete TargetAudience by Id
         /// </summary>
         /// <param name="id">Id of TargetAudience to delete</param>
@@ -177,6 +177,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

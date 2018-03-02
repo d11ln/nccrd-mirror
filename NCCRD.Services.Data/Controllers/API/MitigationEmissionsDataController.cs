@@ -76,42 +76,22 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="mitigationEmissionsData">The MitigationEmissionsData to add</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/MitigationEmissionsData/Add")]
-        public bool Add([FromBody]MitigationEmissionsData mitigationEmissionsData)
+        [Route("api/MitigationEmissionsData/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]MitigationEmissionsData mitigationEmissionsData)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                if (context.MitigationEmissionsData.Count(x => x.MitigationEmissionsDataId == mitigationEmissionsData.MitigationEmissionsDataId) == 0)
+                mitigationEmissionsData.Project = context.Project.FirstOrDefault(x => x.ProjectId == mitigationEmissionsData.ProjectId);
+
+                var data = context.MitigationEmissionsData.FirstOrDefault(x => x.MitigationEmissionsDataId == mitigationEmissionsData.MitigationEmissionsDataId);
+                if (data == null)
                 {
                     //Add MitigationEmissionsData entry
                     context.MitigationEmissionsData.Add(mitigationEmissionsData);
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update MitigationEmissionsData
-        /// </summary>
-        /// <param name="mitigationEmissionsData">MitigationEmissionsData to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/MitigationEmissionsData/Update")]
-        public bool Update([FromBody]MitigationEmissionsData mitigationEmissionsData)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MitigationEmissionsData.FirstOrDefault(x => x.MitigationEmissionsDataId == mitigationEmissionsData.MitigationEmissionsDataId);
-                if (data != null)
+                else
                 {
                     data.Year = mitigationEmissionsData.Year;
                     data.CO2 = mitigationEmissionsData.CO2;
@@ -140,16 +120,17 @@ namespace NCCRD.Services.Data.Controllers.API
                     data.Geothermal = mitigationEmissionsData.Geothermal;
                     data.Geothermal_CO2e = mitigationEmissionsData.Geothermal_CO2e;
                     data.ProjectId = mitigationEmissionsData.ProjectId;
-                    context.SaveChanges();
-
-                    result = true;
+                    data.Project = mitigationEmissionsData.Project;
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Delete MitigationEmissionsData
         /// </summary>
         /// <param name="mitigationEmissionsData">MitigationEmissionsData to delete</param>
@@ -174,9 +155,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete MitigationEmissionsData by Id
         /// </summary>
         /// <param name="id">Id of MitigationEmissionsData to delete</param>
@@ -201,6 +182,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

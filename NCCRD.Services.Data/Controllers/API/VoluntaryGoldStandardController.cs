@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add VoluntaryGoldStandard
         /// </summary>
         /// <param name="voluntaryGoldStandard">The VoluntaryGoldStandard to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update VoluntaryGoldStandard
         /// </summary>
         /// <param name="voluntaryGoldStandard">VoluntaryGoldStandard to update</param>
@@ -123,9 +123,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete VoluntaryGoldStandard
         /// </summary>
         /// <param name="voluntaryGoldStandard">VoluntaryGoldStandard to delete</param>
@@ -150,9 +150,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete VoluntaryGoldStandard by Id
         /// </summary>
         /// <param name="id">Id of VoluntaryGoldStandard to delete</param>
@@ -177,6 +177,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

@@ -264,16 +264,19 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="project">The Project to add</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/Projects/Add")]
-        public bool Add([FromBody]Project project)
+        [Route("api/Projects/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]Project project)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
                 //Check if Project exists
-                if (context.Project.Count(x => x.ProjectTitle == project.ProjectTitle) == 0)
+                var existProj = context.Project.FirstOrDefault(x => x.ProjectId == project.ProjectId);
+                if (existProj == null)
                 {
+                    //## ADD PROJECT ##//
+
                     //Populate FK refs
                     project.ProjectType = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == project.ProjectTypeId);
 
@@ -289,36 +292,11 @@ namespace NCCRD.Services.Data.Controllers.API
                     project.MAOption = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId);
                     if (project.MAOptionId == 0) project.MAOptionId = null;
 
-
-                    //Add Project
                     context.Project.Add(project);
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update Project
-        /// </summary>
-        /// <param name="project">Project to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/Projects/Update")]
-        public bool Update([FromBody]Project project)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if Project exists
-                var existProj = context.Project.FirstOrDefault(x => x.ProjectId == project.ProjectId);
-                if (existProj != null)
+                else
                 {
-                    //Update existing project
+                    //## UPDATE PROJECT ##//
                     existProj.ProjectTitle = project.ProjectTitle;
                     existProj.ProjectDescription = project.ProjectDescription;
                     existProj.LeadAgent = project.LeadAgent;
@@ -351,17 +329,16 @@ namespace NCCRD.Services.Data.Controllers.API
 
                     existProj.MAOptionId = project.MAOptionId == 0 ? null : project.MAOptionId;
                     existProj.MAOption = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId);
-
-                    context.SaveChanges();
-
-                    result = true;
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Project
         /// </summary>
         /// <param name="project">Project to delete</param>
@@ -387,9 +364,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Project by Id
         /// </summary>
         /// <param name="id">Id of Project to delete</param>
@@ -415,9 +392,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete Project by Title
         /// </summary>
         /// <param name="title">Title of Project to delete</param>
@@ -443,6 +420,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

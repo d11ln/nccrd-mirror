@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add ValidationStatus
         /// </summary>
         /// <param name="validationStatus">The ValidationStatus to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update ValidationStatus
         /// </summary>
         /// <param name="validationStatus">ValidationStatus to update</param>
@@ -123,9 +123,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ValidationStatus
         /// </summary>
         /// <param name="validationStatus">ValidationStatus to delete</param>
@@ -150,9 +150,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete ValidationStatus by Id
         /// </summary>
         /// <param name="id">Id of ValidationStatus to delete</param>
@@ -177,6 +177,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }

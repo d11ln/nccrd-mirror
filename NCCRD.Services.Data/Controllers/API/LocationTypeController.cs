@@ -70,7 +70,7 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Add LocationType
         /// </summary>
         /// <param name="locationType">The LocationType to add</param>
@@ -94,9 +94,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Update LocationType
         /// </summary>
         /// <param name="locationType">LocationType to update</param>
@@ -121,9 +121,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete LocationType
         /// </summary>
         /// <param name="locationType">LocationType to delete</param>
@@ -148,9 +148,9 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Delete LocationType by Id
         /// </summary>
         /// <param name="id">Id of LocationType to delete</param>
@@ -175,6 +175,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }
+        }*/
     }
 }
