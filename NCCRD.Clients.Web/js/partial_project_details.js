@@ -4,6 +4,7 @@
 //-----------//
 
 //Shared data
+var changesSaved = false;
 var sectorData = null
 
 //Project data
@@ -40,6 +41,7 @@ var targetAudienceData = null;
 //OnLoad...
 $(() => {
 
+    changesSaved = false;
     ToggleBackButton();
 
     GetProjectTypes(GetProjectDetails);
@@ -78,8 +80,17 @@ function ToggleBackButton() {
 
 $("#btnBackToList").click(function () {
 
+    if (changesSaved === true) {
+        LoadProjectList(true);
+    }
+
     $("#project_details_content").attr("hidden", true);
+    $("#project_details_content").html("");
     $("#project_list_content").removeAttr("hidden");
+
+    if (changesSaved === false) {
+        ScrollToSelectedProject();
+    }
 });
 
 //Textarea auto height//
@@ -240,11 +251,13 @@ function GetSelectedProjectId() {
     return selectedProjectId;
 }
 
-function uuidv4() {
+function GetUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+
+    //return new Date().valueOf();
 }
 
 function back_to_top() {
@@ -367,14 +380,48 @@ function GetProjectDetails() {
 
     if (projectTypeData && projectSubTypeData && projectStatusData && projectManagerData && validationStatusData && maOptionsData) {
 
-        let url = apiBaseURL + 'api/projects/GetById/' + GetSelectedProjectId();
+        let projectId = GetSelectedProjectId();
+        if (projectId === 0) {
 
-        $.getJSON(url, function (data) {
+            //Add new project
+            let newProject = {
+                "ProjectId": GetUID(),
+                "ProjectTitle": "",
+                "ProjectDescription": "",
+                "LeadAgent": "",
+                "HostPartner": "",
+                "HostOrganisation": "",
+                "StartYear": 0,
+                "EndYear": 0,
+                "AlternativeContact": "",
+                "AlternativeContactEmail": "",
+                "Link": "",
+                "ValidationComments": "",
+                "BudgetLower": 0,
+                "BudgetUpper": 0,
+                "ProjectTypeId": 0,
+                "ProjectSubTypeId": 0,
+                "ProjectStatusId": 0,
+                "ProjectManagerId": 0,
+                "ValidationStatusId": 0,
+                "MAOptionId": 0
+            }
 
-            data.State = "Unchanged"; //Set initial data state
-            projectDetailsData = data;
+            projectDetailsData = newProject;
             LoadProjectDetails(projectDetailsData);
-        });
+        }
+        else {
+
+            //Get existing project
+            let url = apiBaseURL + 'api/projects/GetById/' + projectId;
+
+            $.getJSON(url, function (data) {
+
+                data.State = "Unchanged"; //Set initial data state
+                projectDetailsData = data;
+                LoadProjectDetails(projectDetailsData);
+            });
+        }
     }
 }
 
@@ -693,7 +740,8 @@ function SaveProjectChanges() {
             contentType: 'application/json'
         })
             .done(function () {
-                alert("Project saved successfully");
+                changesSaved = true;
+                GetProjectDetails();
             })
             .fail(function (data) {
                 alert("Unable to save project data. See log for errors.");
@@ -830,7 +878,7 @@ $("#addAdaptation").click(function () {
     var projectId = GetSelectedProjectId();
 
     var newItem = {
-        "AdaptationDetailId": uuidv4(),
+        "AdaptationDetailId": GetUID(),
         "Description": "",
         "AdaptationPurposeId": 0,
         "ProjectId": projectId,
@@ -901,7 +949,8 @@ function SaveAdaptationChanges() {
                 contentType: 'application/json'
             })
                 .done(function () {
-                    alert("Adaptation data saved successfully");
+                    changesSaved = true;
+                    GetAdaptationDetails();
                 })
                 .fail(function (data) {
                     alert("Unable to save adaptation data. See log for errors.");
@@ -1172,7 +1221,7 @@ $("#addMitigation").click(function () {
     var projectId = GetSelectedProjectId();
 
     var newItem = {
-        "MitigationDetailId": uuidv4(),
+        "MitigationDetailId": GetUID(),
         "VCS": 0,
         "Other": 0,
         "OtherDescription": "",
@@ -1291,7 +1340,8 @@ function SaveMitigationChanges() {
                 contentType: 'application/json'
             })
                 .done(function () {
-                    alert("Mitigation data saved successfully");
+                    changesSaved = true;
+                    GetMitigationDetails();
                 })
                 .fail(function (data) {
                     alert("Unable to save mitigation data. See log for errors.");
@@ -1441,7 +1491,7 @@ $("#addEmissions").click(function () {
     var projectId = GetSelectedProjectId();
 
     var newItem = {
-        "MitigationEmissionsDataId": uuidv4(),
+        "MitigationEmissionsDataId": GetUID(),
         "Year": 0,
         "CO2": 0,
         "CH4": 0,
@@ -1748,7 +1798,8 @@ function SaveMitigationEmissionsChanges() {
                 contentType: 'application/json'
             })
                 .done(function () {
-                    alert("Mitigation emissions data saved successfully");
+                    changesSaved = true;
+                    GetMitigationEmissions();
                 })
                 .fail(function (data) {
                     alert("Unable to save mitigation emissions data. See log for errors.");
@@ -1906,7 +1957,7 @@ $("#addResearch").click(function () {
     var projectId = GetSelectedProjectId();
 
     var newItem = {
-        "ResearchDetailId": uuidv4(),
+        "ResearchDetailId": GetUID(),
         "Author": "",
         "PaperLink": "",
         "ResearchTypeId": 0,
@@ -1997,7 +2048,8 @@ function SaveResearchChanges() {
                 contentType: 'application/json'
             })
                 .done(function () {
-                    alert("Research data saved successfully");
+                    changesSaved = true;
+                    GetResearchDetails();
                 })
                 .fail(function (data) {
                     alert("Unable to save research data. See log for errors.");

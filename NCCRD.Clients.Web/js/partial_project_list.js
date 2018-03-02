@@ -1,6 +1,5 @@
 ﻿
 //## ON LOAD ##//
-
 $(() => {
     LoadProjectList();
     LoadStatusFilters();
@@ -9,9 +8,7 @@ $(() => {
     LoadSectorFilters();
 });
 
-
 //# GENERAL #//
-
 function back_to_top() {
     window.scroll({
         top: 0,
@@ -66,7 +63,6 @@ function ToggleToggleButton(item) {
     item.text(itemText);
 }
 
-
 $("#toggleGeneral").click(function () {
     ToggleToggleButton($(this));
 });
@@ -79,34 +75,49 @@ $("#toggleSector").click(function () {
     ToggleToggleButton($(this));
 });
 
-
 //## PROJECT LIST ##/
-
 function RenderProjectList(data) {
 
     $("#projectList").html("");
 
     data.forEach(function (item) {
 
-        var html = '<div class="card">'
+        var html = '<div id="' + item.ProjectId + '" class="card">'
         html += '<div class="card-body">';
         html += '<p class="card-title" style="font-size:large">' + item.ProjectTitle + '</p>';
         html += '<p class="card-text">' + item.ProjectDescription + '</p>';
-        html += '<button id="' + item.ProjectId + '" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#largeModal" onclick="load_details(this)">View</button>';
+        html += '<button id="' + item.ProjectId + '" class="btn btn-primary btn-sm" onclick="LoadProjectDetailsSection(this)">View</button>';
         html += '</div>';
         html += '</div>';
         html += '<br />';
 
         $("#projectList").append(html);
-    }); 
+    });
 }
 
-function LoadProjectList() {
+function ScrollToSelectedProject() {
+    $("#" + selectedProjectId)[0].scrollIntoView({
+        behavior: "smooth", // or "auto" or "instant"
+        block: "start", // or "end"
+        alignToTop: false
+    });
+}
+
+function LoadProjectList(scrollToSelectedProject) {
+
     ReadUrlParams();
     let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
 
     $.getJSON(url, function (data) {
         RenderProjectList(data);
+
+        //Scrol selected project into view
+        if (typeof scrollToSelectedProject !== 'undefined') {
+            if (typeof selectedProjectId !== 'undefined' && selectedProjectId > 0) {
+
+                ScrollToSelectedProject();
+            }
+        };
     });
 }
 
@@ -139,12 +150,13 @@ function ClearFilters() {
     LoadProjectList();
 }
 
-
 //## PROJECT DETAILS ##//
 var showDetailsBackButton;
-function load_details(item) {
+function LoadProjectDetailsSection(item) {
 
-    selectedProjectId = item.getAttribute('id');
+    selectedProjectId = 0
+    if (typeof item !== 'undefined') selectedProjectId = item.getAttribute('id');
+
     showDetailsBackButton = true;
 
     $("#project_details_content").load("partial_project_details.html");
@@ -153,19 +165,12 @@ function load_details(item) {
     $("#project_details_content").removeAttr("hidden");
 }
 
-//$('#largeModal').on('hidden.bs.modal', function (e) {
-//    $("#project_details_content").html("");
-//})
-
 //## FILTERS >> TITLE ##//
-
 function TitleFilterChanged(val) {
     titlePart = val;
 }
 
-
 //## FILTERS >> STATUS ##//
-
 function LoadStatusFilters() {
 
     let url = apiBaseURL + 'api/projectStatus/GetAll?allOption=true';
@@ -187,9 +192,7 @@ function StatusFilterSelected(item) {
     SetDropdownText(item);
 };
 
-
 //## FILTERS >> TYPOLOGY ##//
-
 function TypologyFilterSelected(item) {
     typologyId = item.id;
     SetDropdownText(item);
@@ -203,7 +206,7 @@ function LoadTypologyFilters() {
         let html = '<select id="selProjectTypologyFilter" class="form-control" style="font-size:smaller;height:35px">';
 
         data.forEach(function (item) {
-            html += '<option id="' + item.TypologyID +'" onclick="TypologyFilterSelected(this)">' + item.Value + '</option>';
+            html += '<option id="' + item.TypologyID + '" onclick="TypologyFilterSelected(this)">' + item.Value + '</option>';
         });
 
         html += '</select>';
@@ -213,8 +216,6 @@ function LoadTypologyFilters() {
 };
 
 //## FILTERS >> REGION ##//
-
-//Fetch region tree data and setup event handlers
 function LoadRegionFilters() {
     fetch(apiBaseURL + 'api/region/GetAllTree')
         .then((resp) => resp.json()) // Transform the data into json
@@ -243,9 +244,7 @@ function LoadRegionFilters() {
         });
 }
 
-
 //## FILTERS >> SECTOR ##//
-
 function LoadSectorFilters() {
 
     //Fetch sector tree data and setup event handlers
