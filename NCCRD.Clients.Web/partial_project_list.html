@@ -17,7 +17,7 @@
     <script type="text/javascript" src="js/gijgo/modular/core.js"></script>
     <script type="text/javascript" src="js/gijgo/modular/tree.js"></script>
 
-    <style>
+    <style type="text/css">
         .float_bottom_right {
             position: fixed;
             right: 10.5%;
@@ -40,33 +40,33 @@
             </div>
         </div>
 
+        <!--Filter chips-->
+        <div class="row">
+            <div id="filterChips" class="col-md-12">
+                <!--Filter chip will go in here-->
+            </div>
+        </div>
+
         <hr />
 
         <!--Filters-->
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button class="btn btn-primary btn-sm" id="toggleGeneral" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#generalCollapse" aria-expanded="false" aria-controls="generalCollapse">
                     Show general filters
                 </button>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button class="btn btn-primary btn-sm" id="toggleRegion" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#regionCollapse" aria-expanded="false" aria-controls="regionCollapse">
                     Show region filter
                 </button>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button class="btn btn-primary btn-sm" id="toggleSector" style="width:100%;margin:0px 0px 0px 0px" type="button" data-toggle="collapse" data-target="#sectorCollapse" aria-expanded="false" aria-controls="sectorCollapse">
                     Show sector filter
                 </button>
             </div>
-
-            <div class="col-md-2"></div>
-            <div class="col-md-2">
-                <button class="btn btn-success btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="LoadProjectList()">
-                    <i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Refresh list
-                </button>
-            </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button class="btn btn-secondary btn-sm" style="width:100%;margin:0px 0px 0px 0px" onclick="ClearFilters()">
                     <i class="fa fa-eraser" aria-hidden="true"></i>&nbsp;&nbsp;Clear filters
                 </button>
@@ -85,7 +85,16 @@
                 <div class="col-md-4" id="filterTitle">
                     <label>Title:</label>
                     <div class="md-form form-sm">
-                        <input id="titleFilter" type="text" style="margin-top:-5px" onkeyup="TitleFilterChanged(this.value)" />
+                        <table>
+                            <tr>
+                                <td width="100%">
+                                    <input id="titleFilter" type="text" style="margin-top:-5px" onkeyup="TitleFilterChanged(this.value)" />
+                                </td>
+                                <td>
+                                    <button id="btnApplyTitleFilter" class="btn btn-sm btn-primary" style="margin:3px 0px 0px 5px;height:35px">Apply</button>
+                                </td>
+                            </tr>
+                        </table>       
                     </div>
                 </div>
 
@@ -178,6 +187,18 @@
 
     <div id="project_details_content" hidden>
         <!--Content will be loaded dynamically-->
+    </div>
+
+    <!-- Loading modal -->
+    <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3 style="text-align:center">Loading</h3>
+                    <img src="images/loading2.gif" id="loadingImg" align="middle" style="margin:auto;width:100%" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="js/partial_project_list.js"></script>

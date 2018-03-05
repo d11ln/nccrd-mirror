@@ -41,6 +41,8 @@ var targetAudienceData = null;
 //OnLoad...
 $(() => {
 
+    ShowLoading();
+
     changesSaved = false;
     ToggleBackButton();
 
@@ -293,6 +295,19 @@ function SaveChanges() {
     return state;
 }
 
+function ShowLoading() {
+
+    $("#loadingModal").modal('show');
+}
+
+function HideLoading() {
+
+    if (projectDetailsData && adaptationDetailsData && mitigationDetailsData && mitigationEmissionsData && researchDetailsData){
+
+        $("#loadingModal").modal('hide');
+    }
+}
+
 
 //-------------------//
 //  PROJECT DETAILS  //
@@ -379,6 +394,8 @@ function GetMAOptions(callback) {
 function GetProjectDetails() {
 
     if (projectTypeData && projectSubTypeData && projectStatusData && projectManagerData && validationStatusData && maOptionsData) {
+
+        ShowLoading();
 
         let projectId = GetSelectedProjectId();
         if (projectId === 0) {
@@ -542,6 +559,8 @@ function LoadProjectDetails(data) {
 
             $('textarea').autoHeight();
             SetProjectSelects(data);
+
+            HideLoading();
         });
 };
 
@@ -730,6 +749,8 @@ function SaveProjectChanges() {
 
     if (projectDetailsData.State === "Modified" && ValidateProjectData(projectDetailsData) === true) {
 
+        ShowLoading();
+
         let strPostData = JSON.stringify(projectDetailsData);
         let url = apiBaseURL + "api/Projects/AddOrUpdate";
 
@@ -746,11 +767,8 @@ function SaveProjectChanges() {
             .fail(function (data) {
                 alert("Unable to save project data. See log for errors.");
                 console.log('Error:', data);
-                return false;
             });
     }
-
-    return true;
 };
 
 //----------------------//
@@ -787,6 +805,7 @@ function GetAdaptationDetails() {
     //Only load details when all dependent data ready
     if (adaptationPurposeData && sectorData) {
 
+        ShowLoading();
         let url = apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + GetSelectedProjectId();
 
         $.getJSON(url, function (data) {
@@ -860,6 +879,8 @@ function LoadAdaptationDetails(data, added) {
             if (added) {
                 SetEditMode(true);
             }
+
+            HideLoading();
         });
 };
 
@@ -937,6 +958,8 @@ function SaveAdaptationChanges() {
     adaptationDetailsData.forEach(function (item) {
 
         if (item.State === 'Modified' && ValidateAdaptationData(item)) {
+
+            ShowLoading();
 
             //Save adaptation changes
             let strPostData = JSON.stringify(item);
@@ -1045,6 +1068,8 @@ function GetMitigationDetails() {
     //Only load details when all dependent data ready
     if (carbonCreditData && carbonCreditMarketData && cdmStatusData && cdmMethodologyData && voluntaryMethodologyData && voluntaryGoldStandardData) {
 
+        ShowLoading();
+
         let template = null;
         let url = apiBaseURL + 'api/MitigationDetails/GetByProjectID/' + GetSelectedProjectId();
 
@@ -1107,6 +1132,8 @@ function LoadMitigationDetails(data, added) {
                 if (added) {
                     SetEditMode(true);
                 }
+
+                HideLoading();
             });
     }
 }
@@ -1329,6 +1356,8 @@ function SaveMitigationChanges() {
 
         if (item.State === 'Modified' && ValidateMitigationData(item)) {
 
+            ShowLoading();
+
             //Save adaptation changes
             let strPostData = JSON.stringify(item);
             let url = apiBaseURL + "/api/MitigationDetails/AddOrUpdate";
@@ -1360,6 +1389,8 @@ function SaveMitigationChanges() {
 //--------------------------------//
 
 function GetMitigationEmissions() {
+
+    ShowLoading();
 
     let url = apiBaseURL + 'api/MitigationEmissionsData/GetByProjectId/' + GetSelectedProjectId();
 
@@ -1479,6 +1510,8 @@ function LoadMitigationEmissions(data, added) {
             if (added) {
                 SetEditMode(true);
             }
+
+            HideLoading();
         });
 };
 
@@ -1787,6 +1820,8 @@ function SaveMitigationEmissionsChanges() {
 
         if (item.State === 'Modified' && ValidateMitigationEmissionsData(item)) {
 
+            ShowLoading();
+
             //Save adaptation changes
             let strPostData = JSON.stringify(item);
             let url = apiBaseURL + "/api/MitigationEmissionsData/AddOrUpdate";
@@ -1846,6 +1881,8 @@ function GetResearchDetails() {
     //Only load details when all dependent data ready
     if (researchTypeData && targetAudienceData && sectorData) {
 
+        ShowLoading();
+
         let url = apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + GetSelectedProjectId();
 
         //Get adaptation details
@@ -1899,6 +1936,8 @@ function LoadResearchDetails(data, added) {
             if (added) {
                 SetEditMode(true);
             }
+
+            HideLoading();
         });
 }
 
@@ -2036,6 +2075,8 @@ function SaveResearchChanges() {
     researchDetailsData.forEach(function (item) {
 
         if (item.State === 'Modified' && ValidateResearchData(item)) {
+
+            ShowLoading();
 
             //Save adaptation changes
             let strPostData = JSON.stringify(item);

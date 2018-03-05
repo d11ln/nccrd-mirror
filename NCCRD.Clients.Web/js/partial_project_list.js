@@ -1,6 +1,11 @@
 ﻿
+var activeFilterList = [];
+
 //## ON LOAD ##//
 $(() => {
+
+    ShowLoading();
+
     LoadProjectList();
     LoadStatusFilters();
     LoadTypologyFilters();
@@ -75,6 +80,16 @@ $("#toggleSector").click(function () {
     ToggleToggleButton($(this));
 });
 
+function ShowLoading() {
+
+    $("#loadingModal").modal('show');
+}
+
+function HideLoading() {
+
+    $("#loadingModal").modal('hide');
+}
+
 //## PROJECT LIST ##/
 function RenderProjectList(data) {
 
@@ -93,6 +108,8 @@ function RenderProjectList(data) {
 
         $("#projectList").append(html);
     });
+
+    HideLoading();
 }
 
 function ScrollToSelectedProject() {
@@ -104,6 +121,8 @@ function ScrollToSelectedProject() {
 }
 
 function LoadProjectList(scrollToSelectedProject) {
+
+    ShowLoading();
 
     ReadUrlParams();
     let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
@@ -122,33 +141,118 @@ function LoadProjectList(scrollToSelectedProject) {
 }
 
 function ClearFilters() {
+
+    ClearTitleFilter();
+    ClearStatusFilter();
+    ClearTypologyFilter();
+    ClearRegionFilter();
+
+    //Reload project list
+    LoadProjectList();
+}
+
+function ClearTitleFilter() {
+
     //Clear title filter
     $("#titleFilter").val("");
+    titlePart = "";
+
+    UpdateActiveFilterList("Title", "", true);
+}
+
+function ClearStatusFilter() {
 
     //Clear status filter
     $('#selProjectStatusFilter').dropdown().val("All");
+    statusId = 0;
+
+    UpdateActiveFilterList("Status", "All", true);
+}
+
+function ClearTypologyFilter() {
 
     //Clear typology filter
     $('#selProjectTypologyFilter').dropdown().val("All");
+    typologyId = 0;
+
+    UpdateActiveFilterList("Typology", "All", true);
+}
+
+function ClearRegionFilter() {
 
     //Clear region filter
     let tree = $('#regionTree').tree();
     tree.unselectAll();
+    regionId = 0;
 
-    //Clear region filter
+    UpdateActiveFilterList("Region", "", true);
+}
+
+function ClearSectorFilter() {
+
+    //Clear sector filter
     tree = $('#sectorTree').tree();
     tree.unselectAll();
-
-    //REset all filters
-    titlePart = "";
-    statusId = 0;
-    regionId = 0;
     sectorId = 0;
-    typologyId = 0;
 
-    //(Un)filter all
-    LoadProjectList();
+    UpdateActiveFilterList("Sector", "", true);
 }
+
+function UpdateActiveFilterList(type, value, remove) {
+
+    //Remove item
+    activeFilterList = jQuery.grep(activeFilterList, function (item) {
+        return item.type !== type;
+    });
+
+    //Add back in (i.e. Update) if not set to remove
+    if (!remove) {
+        activeFilterList = activeFilterList.concat({ "type": type, "value": value });
+    }
+
+    RenderActiveFilterList();
+}
+
+function RenderActiveFilterList() {
+
+    //Clear chips
+    $("#filterChips").html("");
+
+    activeFilterList.forEach(function (item) {
+    
+        var html = '<div id=' + item.type + ' class="badge badge- pill success-color">';
+        html += '<label style="vertical-align:middle;margin:0px">' + item.type + ': ' + item.value + '</label>'
+        html += '&nbsp;&nbsp;'
+        html += '<i class="fa fa-times-circle fa-2x" aria-hidden="true" onclick="RemoveFilterClick(this)" style="vertical-align:middle;margin:0px"></i>'
+        html += '</div>&nbsp;'
+
+        $("#filterChips").append(html);
+    });
+}
+
+function RemoveFilterClick(element) {
+
+    var type = $(element.parentNode).attr("id");
+
+    if (type === "Title") {
+        ClearTitleFilter();
+    }
+    else if (type === "Status") {
+        ClearStatusFilter();
+    }
+    else if (type === "Typology") {
+        ClearTypologyFilter();
+    }
+    else if (type === "Region") {
+        ClearRegionFilter();
+    }
+    else if (type === "Sector") {
+        ClearSectorFilter();
+    }
+
+    LoadProjectList();
+};
+
 
 //## PROJECT DETAILS ##//
 var showDetailsBackButton;
@@ -170,6 +274,12 @@ function TitleFilterChanged(val) {
     titlePart = val;
 }
 
+$("#btnApplyTitleFilter").click(function () {
+    let val = $("#titleFilter").val();
+    UpdateActiveFilterList("Title", val, val === "");
+    LoadProjectList();
+});
+
 //## FILTERS >> STATUS ##//
 function LoadStatusFilters() {
 
@@ -190,12 +300,16 @@ function LoadStatusFilters() {
 function StatusFilterSelected(item) {
     statusId = item.id.replace("psid", "");
     SetDropdownText(item);
+    UpdateActiveFilterList("Status", $(item).text(), $(item).text() === 'All');
+    LoadProjectList();
 };
 
 //## FILTERS >> TYPOLOGY ##//
 function TypologyFilterSelected(item) {
     typologyId = item.id;
     SetDropdownText(item);
+    UpdateActiveFilterList("Typology", $(item).text(), $(item).text() === 'All');
+    LoadProjectList();
 };
 
 function LoadTypologyFilters() {
@@ -224,14 +338,21 @@ function LoadRegionFilters() {
             var tree = $('#regionTree').tree();
 
             tree.on('select', function (e, node, id) {
+
                 let nodeData = tree.getDataById(id);
                 regionId = nodeData.id;
                 $("#regionFilterText").text(nodeData.text);
+
+                UpdateActiveFilterList("Region", nodeData.text, false);
+                LoadProjectList();
             });
 
             tree.on('unselect', function (e, node, id) {
+
                 regionId = 0;
                 $("#regionFilterText").text("All");
+                UpdateActiveFilterList("Region", "", true);
+                LoadProjectList();
             });
 
             $("#btnRegionTreeExpandAll").click(function () {
@@ -255,14 +376,20 @@ function LoadSectorFilters() {
             var tree = $('#sectorTree').tree();
 
             tree.on('select', function (e, node, id) {
+
                 let nodeData = tree.getDataById(id);
                 sectorId = nodeData.id;
                 $("#sectorFilterText").text(nodeData.text);
+                UpdateActiveFilterList("Sector", nodeData.text, false);
+                LoadProjectList();
             });
 
             tree.on('unselect', function (e, node, id) {
+
                 sectorId = 0;
                 $("#sectorFilterText").text("All");
+                UpdateActiveFilterList("Sector", "", true);
+                LoadProjectList();
             });
 
             $("#btnSectorTreeExpandAll").click(function () {
