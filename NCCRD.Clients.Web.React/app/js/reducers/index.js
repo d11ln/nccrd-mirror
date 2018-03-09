@@ -1,7 +1,8 @@
 'use strict'
 
-const ProjectsReducer = require('./ProjectsReducer')
+import ProjectsReducer from './ProjectsReducer'
 
-export default { 
-  projects: ProjectsReducer 
+
+export default {
+  projects: ProjectsReducer
 }
