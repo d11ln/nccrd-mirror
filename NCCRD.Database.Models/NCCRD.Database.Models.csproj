@@ -54,6 +54,15 @@
     <Compile Include="Contexts\SQLChangeLoggerContext.cs" />
     <Compile Include="Contexts\SQLDBContext.cs" />
     <Compile Include="Interfaces\IChangeLogger.cs" />
+    <Compile Include="Migrations\201802132119216_InitialCreate.cs" />
+    <Compile Include="Migrations\201802132119216_InitialCreate.Designer.cs">
+      <DependentUpon>201802132119216_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803052211137_AddedPolygonFilter.cs" />
+    <Compile Include="Migrations\201803052211137_AddedPolygonFilter.Designer.cs">
+      <DependentUpon>201803052211137_AddedPolygonFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\AdaptationDetail.cs" />
     <Compile Include="Models\AppLog.cs" />
@@ -113,6 +122,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201802132119216_InitialCreate.resx">
+      <DependentUpon>201802132119216_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803052211137_AddedPolygonFilter.resx">
+      <DependentUpon>201803052211137_AddedPolygonFilter.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

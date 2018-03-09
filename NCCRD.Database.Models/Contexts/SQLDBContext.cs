@@ -1,4 +1,5 @@
 ﻿using NCCRD.Database.Classes;
+using NCCRD.Database.Migrations;
 using NCCRD.Services.Data.Classes;
 using NCCRD.Services.Data.Interfaces;
 using System;
@@ -60,12 +61,14 @@ namespace NCCRD.Database.Models.Contexts
 
         public SQLDBContext() : base("DefaultConnection")
         {
-            System.Data.Entity.Database.SetInitializer(new SQLDBContextInitializer());
+            //System.Data.Entity.Database.SetInitializer(new SQLDBContextInitializer());
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<SQLDBContext, Configuration>());
         }
 
         public SQLDBContext(string connectionString) : base(connectionString)
         {
-            System.Data.Entity.Database.SetInitializer(new SQLDBContextInitializer());
+            //System.Data.Entity.Database.SetInitializer(new SQLDBContextInitializer());
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<SQLDBContext, Configuration>());
         }
 
         public int SaveChanges(int? activeUserId)
@@ -158,32 +161,32 @@ namespace NCCRD.Database.Models.Contexts
 
     }
 
-    public class SQLDBContextInitializer : CreateDatabaseIfNotExists<SQLDBContext>
-    {
-        protected override void Seed(SQLDBContext context)
-        {
-            SeedVersionHistoryData(context);
+    //public class SQLDBContextInitializer : MigrateDatabaseToLatestVersion<SQLDBContext, DbConfiguration>
+    //{
+    //    protected override void Seed(SQLDBContext context)
+    //    {
+    //        SeedVersionHistoryData(context);
 
-            base.Seed(context);
-        }
+    //        base.Seed(context);
+    //    }
 
-        private void SeedVersionHistoryData(SQLDBContext context)
-        {
-            context.VersionHistory.AddRange(new List<VersionHistory>()
-            {
-                new VersionHistory()
-                {
-                    VersionNumber = "v1.0.0",
-                    UpdateTime = DateTime.Parse("2009-01-31 10:23:21.740")
-                },
-                new VersionHistory()
-                {
-                    VersionNumber = "v2.0.0",
-                    Comments = "Redesigned database structure (with EntityFramework 6.2.0 - CodeFirst)",
-                    UpdateTime = DateTime.Now
-                }
-            });
-        }
+    //    private void SeedVersionHistoryData(SQLDBContext context)
+    //    {
+    //        context.VersionHistory.AddRange(new List<VersionHistory>()
+    //        {
+    //            new VersionHistory()
+    //            {
+    //                VersionNumber = "v1.0.0",
+    //                UpdateTime = DateTime.Parse("2009-01-31 10:23:21.740")
+    //            },
+    //            new VersionHistory()
+    //            {
+    //                VersionNumber = "v2.0.0",
+    //                Comments = "Redesigned database structure (with EntityFramework 6.2.0 - CodeFirst)",
+    //                UpdateTime = DateTime.Now
+    //            }
+    //        });
+    //    }
 
-    }
+    //}
 }

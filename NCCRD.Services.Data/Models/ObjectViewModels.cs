@@ -191,5 +191,12 @@ namespace NCCRD.Services.Data.Models
         public string DisplayName { get => Firstname + " " + Surname; }
     }
 
-
+    public class PolygonFilterResults
+    {
+        public int ProjectId { get; set; }
+        public string ProjectTitle { get; set; }
+        public int LocationId { get; set; }
+        public double LatCalculated { get; set; }
+        public double LonCalculated { get; set; }
+    }
 }

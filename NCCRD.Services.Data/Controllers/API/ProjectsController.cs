@@ -3,6 +3,7 @@ using NCCRD.Database.Models.Contexts;
 using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -256,6 +257,31 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return project;
+        }
+
+        /// <summary>
+        /// Get Projects by Polygon
+        /// </summary>
+        /// <param name="polygon">The Polygon definition to search in</param>
+        /// <returns>Projects data as JSON</returns>
+        [HttpGet]
+        [Route("api/Projects/GetByPolygon")]
+        public List<PolygonFilterResults> GetByPolygon(string polygon)
+        {
+            List<PolygonFilterResults> results = new List<PolygonFilterResults>();
+
+            using (var context = new SQLDBContext())
+            {
+                //project = context.Project.FirstOrDefault(x => x.ProjectTitle == title);
+
+                var polygonWKT = new SqlParameter("@WKT", polygon);
+
+                results = context.Database
+                    .SqlQuery<PolygonFilterResults>("PolygonFilter @WKT", polygonWKT)
+                    .ToList();
+            }
+
+            return results;
         }
 
         /// <summary>
