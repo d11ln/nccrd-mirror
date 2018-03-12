@@ -14,6 +14,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'mdbreact/docs/css/mdb.min.css'
 
+
 import store from './store'
 
 import queryString from 'query-string'

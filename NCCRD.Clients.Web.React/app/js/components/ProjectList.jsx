@@ -1,18 +1,20 @@
 'use strict'
 
 import React from 'react'
-import ProjectCard from './ProjectCard.jsx';
+import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
+import { LOAD_PROJECTS } from "../constants/action-types"
+import { apiBaseURL } from "../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
-    let { projects: { projectHeaders } } = state
-    return { projectHeaders }
+    let { projectData: { projects } } = state
+    return { projects }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateCards: payload => {
-            dispatch({ type: 'UPDATE_CARDS', payload })
+        loadInitial: payload => {
+            dispatch({ type: LOAD_PROJECTS, payload })
         }
     }
 }
@@ -24,23 +26,23 @@ class ProjectList extends React.Component {
     }
 
     componentDidMount() {
-        let { updateCards } = this.props
-        fetch('http://localhost:58683/api/Projects/GetAll/List', {
+        let { loadInitial } = this.props
+        fetch(apiBaseURL + 'api/Projects/GetAll/List', {
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-            updateCards(res)
+            loadInitial(res)
         })
     }
 
     buildList() {
 
-        const { projectHeaders } = this.props
+        const { projects } = this.props
         let ar = []
 
-        if (typeof projectHeaders !== 'undefined') {
-            for (let i of projectHeaders) {
+        if (typeof projects !== 'undefined') {
+            for (let i of projects) {
                 ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
             }
 

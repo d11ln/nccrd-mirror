@@ -1,8 +1,10 @@
 'use strict'
 
 import ProjectsReducer from './ProjectsReducer'
+import LookupsReducer from './LookupsReducer'
 
 
 export default {
-  projects: ProjectsReducer
+    projectData: ProjectsReducer,
+    lookupData: LookupsReducer
 }

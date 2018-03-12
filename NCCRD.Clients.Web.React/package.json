@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "bootstrap": "^4.0.0",
+    "bootstrap-tree-view": "^1.8.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "material-ui": "^1.0.0-beta.36",
@@ -29,6 +30,7 @@
     "react-select": "^1.2.1",
     "react-tap-event-plugin": "^3.0.2",
     "redux": "^3.7.2",
+    "save": "^2.3.2",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

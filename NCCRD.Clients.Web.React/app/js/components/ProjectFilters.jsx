@@ -2,91 +2,96 @@
 
 import React from 'react'
 import { Button, Collapse } from 'mdbreact'
-import FiltersGeneral from './filters/FiltersGeneral.jsx';
+
+//Filters
+import GeneralFilters from './filters/GeneralFilters.jsx';
+import RegionFilters from './filters/RegionFilters.jsx';
+import SectorFilters from './filters/SectorFilters.jsx';
 
 class ProjectFilters extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.toggleGeneral = this.toggleGeneral.bind(this);
-    this.toggleRegion = this.toggleRegion.bind(this);
-    this.toggleSector = this.toggleSector.bind(this);
+    constructor(props) {
+        super(props);
+        this.toggleGeneral = this.toggleGeneral.bind(this);
+        this.toggleRegion = this.toggleRegion.bind(this);
+        this.toggleSector = this.toggleSector.bind(this);
 
-    this.state = {
-      collapseGeneral: false,
-      collapseRegion: false,
-      collapseSector: false,
-    };
-  }
-
-  onComponentDidMount() {
-
-  }
-
-  toggleGeneral() {
-    this.setState({ collapseGeneral: !this.state.collapseGeneral });
-  }
-
-  toggleRegion() {
-    this.setState({ collapseRegion: !this.state.collapseRegion });
-  }
-
-  toggleSector() {
-    this.setState({ collapseSector: !this.state.collapseSector });
-  }
-
-  getBottonColor(state) {
-    if (state === true) {
-      return "warning"
+        this.state = {
+            collapseGeneral: false,
+            collapseRegion: false,
+            collapseSector: false,
+        };
     }
-    else {
-      return "primary"
+
+    onComponentDidMount() {
+
     }
-  }
 
-  render() {
-    return (
-      <div>
+    toggleGeneral() {
+        this.setState({ collapseGeneral: !this.state.collapseGeneral });
+    }
 
-        <hr />
+    toggleRegion() {
+        this.setState({ collapseRegion: !this.state.collapseRegion });
+    }
 
-        <div className="row">
-          <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseGeneral)} className="btn-sm" onTouchTap={this.toggleGeneral}>General filters</Button>
-          </div>
+    toggleSector() {
+        this.setState({ collapseSector: !this.state.collapseSector });
+    }
 
-          <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseRegion)} className="btn-sm" onTouchTap={this.toggleRegion} >Region filters</Button>
-          </div>
+    getBottonColor(state) {
+        if (state === true) {
+            return "warning"
+        }
+        else {
+            return "primary"
+        }
+    }
 
-          <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseSector)} className="btn-sm" onTouchTap={this.toggleSector} >Sector filters</Button>
-          </div>
+    render() {
+        return (
+            <div>
 
-          <div className="col-md-3">
-            <Button block color="secondary" className="btn-sm" onTouchTap={() => location.hash = "/"} >Clear filters</Button>
-          </div>
-        </div>
+                <hr />
 
-        <hr />
+                <div className="row">
+                    <div className="col-md-3">
+                        <Button block color={this.getBottonColor(this.state.collapseGeneral)} className="btn-sm" onTouchTap={this.toggleGeneral}>General filters</Button>
+                    </div>
 
-        <Collapse isOpen={this.state.collapseGeneral} >
-          <FiltersGeneral />
-        </Collapse>
+                    <div className="col-md-3">
+                        <Button block color={this.getBottonColor(this.state.collapseRegion)} className="btn-sm" onTouchTap={this.toggleRegion} >Region filters</Button>
+                    </div>
 
-        <Collapse isOpen={this.state.collapseRegion}>
-          <p>REGION</p>
-          <hr />
-        </Collapse>
+                    <div className="col-md-3">
+                        <Button block color={this.getBottonColor(this.state.collapseSector)} className="btn-sm" onTouchTap={this.toggleSector} >Sector filters</Button>
+                    </div>
 
-        <Collapse isOpen={this.state.collapseSector}>
-          <p>SECTOR</p>
-          <hr />
-        </Collapse>
+                    <div className="col-md-3">
+                        <Button block color="secondary" className="btn-sm" onTouchTap={() => location.hash = "/"} >Clear filters</Button>
+                    </div>
+                </div>
 
-      </div>
-    )
-  }
+                <hr />
+
+                <Collapse isOpen={this.state.collapseGeneral} >
+                    <GeneralFilters />
+                    <hr />
+                </Collapse>
+
+                <Collapse isOpen={this.state.collapseRegion}>
+                    <RegionFilters />
+                    <hr />
+                </Collapse>
+
+                <Collapse isOpen={this.state.collapseSector}>
+                    <SectorFilters />
+                    <hr />
+                </Collapse>
+
+            </div>
+        )
+    }
 }
 
 export default ProjectFilters
