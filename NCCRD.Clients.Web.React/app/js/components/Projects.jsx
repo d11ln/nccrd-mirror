@@ -2,6 +2,7 @@
 
 import React from 'react'
 import ProjectList from './ProjectList.jsx'
+import ProjectFilters from './ProjectFilters.jsx'
 
 class Projects extends React.Component {
 
@@ -15,7 +16,10 @@ class Projects extends React.Component {
 
     render() {
         return (
-          <ProjectList/>
+          <div>
+            <ProjectFilters />
+            <ProjectList />
+          </div>
         )
     }
 }

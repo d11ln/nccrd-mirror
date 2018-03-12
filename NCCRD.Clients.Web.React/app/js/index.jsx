@@ -18,10 +18,10 @@ import store from './store'
 
 import queryString from 'query-string'
 import { Button } from 'mdbreact/'
-import { HashRouter as Router, Switch, Route } from 'react-router-dom'
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
-import CustomNavbar from './components/CustomNavbar.jsx'
 import Projects from './components/Projects.jsx'
+import ProjectDetails from './components/ProjectDetails.jsx'
 /**
  * Tap Event
  * @ignore
@@ -35,14 +35,15 @@ class App extends React.Component {
   render() {
     return (
       <div className="container">
-      <Router>
-        <div>
-        <CustomNavbar />
-        <Switch>
-          <Route path="/projects" component={Projects} />
-        </Switch>
-        </div>
-      </Router> 
+        <Router>
+          <div>
+            <Switch>    
+              <Redirect from="/" to="/projects" exact />
+              <Route path="/projects"  component={Projects} exact />
+              <Route path="/projects/:id"  component={ProjectDetails} exact />
+            </Switch>
+          </div>
+        </Router> 
       </div>
     )
   }

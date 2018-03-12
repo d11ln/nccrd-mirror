@@ -41,6 +41,13 @@ namespace NCCRD.Services.Data.Models
         }
     }
 
+    public class ProjectListViewModel
+    {
+        public int ProjectId { get; set; }
+        public string ProjectTitle { get; set; }
+        public string ProjectDescription { get; set; }
+    }
+
     public class ProjectDetailsViewModel : Project
     {
         public ProjectDetailsViewModel() : base()

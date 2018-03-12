@@ -5,16 +5,16 @@ import ProjectCard from './ProjectCard.jsx';
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {
-  let { projects: { projectHeaders } } = state
-  return { projectHeaders }
+    let { projects: { projectHeaders } } = state
+    return { projectHeaders }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    updateCards: payload => {
-      dispatch({type: 'UPDATE_CARDS', payload})
+    return {
+        updateCards: payload => {
+            dispatch({ type: 'UPDATE_CARDS', payload })
+        }
     }
-  }
 }
 
 class ProjectList extends React.Component {
@@ -24,30 +24,34 @@ class ProjectList extends React.Component {
     }
 
     componentDidMount() {
-      let{ updateCards } = this.props
-      //fetch('http://localhost:58683/api/Projects/GetAll', {
-      //  headers: {
-      //  "Content-Type": "application/json"
-      //}}).then(res => res.json()).then(res => {
-        updateCards("res")
-      //})
+        let { updateCards } = this.props
+        fetch('http://localhost:58683/api/Projects/GetAll/List', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            updateCards(res)
+        })
     }
 
-    test() {
-      const { projectHeaders } = this.props
-      let ar = []
-      console.log( `hwat`, projectHeaders)
-      if(typeof projectHeaders !== 'undefined') {
-        for(let i of projectHeaders) {
-          ar.push(<ProjectCard pId={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription}/>)
+    buildList() {
+
+        const { projectHeaders } = this.props
+        let ar = []
+
+        if (typeof projectHeaders !== 'undefined') {
+            for (let i of projectHeaders) {
+                ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
+            }
+
+            return ar
         }
-        return ar
-      }
-      return <div/>
+        return <div />
     }
+
     render() {
         return (
-          this.test()
+            this.buildList()
         )
     }
 }

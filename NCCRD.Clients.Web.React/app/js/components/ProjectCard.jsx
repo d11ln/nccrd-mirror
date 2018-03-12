@@ -14,15 +14,18 @@ class ProjectCard extends React.Component {
     }
 
     render() {
-        return (
+      return (
+        <div>
           <Card>
             <CardBody>
               <CardTitle>{this.props.ptitle}</CardTitle>
               <CardText>{this.props.pdes}</CardText>
-              <Button onTouchTap={() => location.hash+=`/`+this.props.pId}>Button</Button>
+              <Button color="primary" className="btn-sm" onTouchTap={() => location.hash = `/projects/` + this.props.pid}>View</Button>
             </CardBody>
           </Card>
-        )
+          <br />
+        </div>
+      ) 
     }
 }
 

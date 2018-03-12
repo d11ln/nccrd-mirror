@@ -19,23 +19,23 @@ namespace NCCRD.Services.Data.Controllers.API
     //[Authorize(Roles = "Administrator,Project Owner")]
     public class ProjectsController : ApiController
     {
-        /// <summary>
-        /// Get all Projects
-        /// </summary>
-        /// <returns>Projects data as JSON</returns>
-        [HttpGet]
-        [Route("api/Projects/GetAll")]
-        public IEnumerable<Project> GetAll()
-        {
-            List<Project> projectList = new List<Project>();
+        ///// <summary>
+        ///// Get all Projects
+        ///// </summary>
+        ///// <returns>Projects data as JSON</returns>
+        //[HttpGet]
+        //[Route("api/Projects/GetAll")]
+        //public IEnumerable<Project> GetAll()
+        //{
+        //    List<Project> projectList = new List<Project>();
 
-            using (var context = new SQLDBContext())
-            {
-                projectList = context.Project.OrderBy(p => p.ProjectTitle).ToList();
-            }
+        //    using (var context = new SQLDBContext())
+        //    {
+        //        projectList = context.Project.OrderBy(p => p.ProjectTitle).ToList();
+        //    }
 
-            return projectList;
-        }
+        //    return projectList;
+        //}
 
         /// <summary>
         /// Get all Projects filtered on query params
@@ -47,8 +47,8 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="typologyId">TypologyId to filter on</param>
         /// <returns>Projects data as JSON</returns>
         [HttpGet]
-        [Route("api/Projects/GetAllFiltered")]
-        public IEnumerable<Project> GetAllFiltered(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
+        [Route("api/Projects/GetAll")]
+        public IEnumerable<Project> GetAll(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
         {
             List<Project> projectList = new List<Project>();
 
@@ -88,6 +88,28 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return projectList;
+        }
+
+        /// <summary>
+        /// Get all Projects filtered on query params
+        /// </summary>
+        /// <param name="titlePart">Part of a title to search on</param>
+        /// <param name="statusId">ProjectStatusId to filter on</param>
+        /// <param name="regionId">RegionId to filter on</param>
+        /// <param name="sectorId">RegionId to filter on</param>
+        /// <param name="typologyId">TypologyId to filter on</param>
+        /// <returns>Minimal Projects data as JSON</returns>
+        [HttpGet]
+        [Route("api/Projects/GetAll/List")]
+        public IEnumerable<ProjectListViewModel> GetAllList(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
+        {
+            return GetAll(titlePart, statusId, regionId,sectorId,typologyId).
+                        Select(x => new ProjectListViewModel()
+                        {
+                            ProjectId = x.ProjectId,
+                            ProjectTitle = x.ProjectTitle,
+                            ProjectDescription = x.ProjectDescription
+                        }).ToList();
         }
 
         private List<Region> GetChildRegions(int regionId, List<Region> regionList)
