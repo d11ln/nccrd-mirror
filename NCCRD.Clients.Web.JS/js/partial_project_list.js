@@ -125,7 +125,7 @@ function LoadProjectList(scrollToSelectedProject) {
     ShowLoading();
 
     ReadUrlParams();
-    let url = (apiBaseURL + 'api/projects/GetAllFiltered?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
+    let url = (apiBaseURL + 'api/projects/GetAll/List?titlePart=' + titlePart + '&statusId=' + statusId + '&regionId=' + regionId + '&sectorId=' + sectorId + '&typologyId=' + typologyId);
 
     $.getJSON(url, function (data) {
         RenderProjectList(data);
@@ -334,7 +334,7 @@ function LoadRegionFilters() {
     fetch(apiBaseURL + 'api/region/GetAllTree')
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
-            $('#regionTree').tree(data);
+            
             var tree = $('#regionTree').tree();
 
             tree.on('select', function (e, node, id) {

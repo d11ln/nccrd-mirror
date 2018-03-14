@@ -26,11 +26,11 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data.Add(new Typology()
-                {
-                    TypologyID = 0,
-                    Value = "All"
-                });
+                //data.Add(new Typology()
+                //{
+                //    TypologyID = 0,
+                //    Value = "All"
+                //});
 
                 data.AddRange(context.Typology.OrderBy(x => x.Value).ToList());
             }

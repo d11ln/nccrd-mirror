@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import { Button } from 'mdbreact'
+import { Button, Input } from 'mdbreact'
 
 class TitleFilter extends React.Component {
 
@@ -12,16 +12,16 @@ class TitleFilter extends React.Component {
     render() {
         return (
             <div className="col-md-4">
-                <label>Title:</label>
+                <label style={{fontWeight: "bold"}}>Title:</label>
                 <div className="md-form form-sm">
                     <table>
                         <tbody>
                             <tr>
                                 <td width="100%">
-                                    <input type="text" style={{ marginTop: "-5px" }} />
+                                    <Input size="sm" style={{ marginTop: "-2px"}} />
                                 </td>
                                 <td>
-                                    <Button color="primary" size="sm" style={{ margin: "3px 0px 0px 5px", height: "35px" }}>Apply</Button>
+                                    <Button color="primary" size="sm" style={{ height: "35px", marginLeft: "3px", marginTop: "-2px" }}>Apply</Button>
                                 </td>
                             </tr>
                         </tbody>

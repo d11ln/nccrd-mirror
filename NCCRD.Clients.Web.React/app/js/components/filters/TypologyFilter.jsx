@@ -7,6 +7,7 @@ import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
 import { LOAD_TYPOLOGY } from "../../constants/action-types"
 import { apiBaseURL } from "../../constants/apiBaseURL";
+import SelectComponent from '../SelectComponent.jsx'
 
 const mapStateToProps = (state, props) => {
     let { lookupData: { typology } } = state
@@ -41,33 +42,10 @@ class TypologyFilter extends React.Component {
             })
     }
 
-    typologyOptions() {
-
-        const { typology } = this.props
-        let ar = [{ value: "0", label: "Not selected" }]
-
-        if (typeof typology !== 'undefined') {
-            for (let i of typology) {
-                ar.push({ value: i.TypologyId, label: i.Value })
-            }
-        }
-
-        return ar
-    }
-
     render() {
 
         return (
-            <div className="col-md-4" id="filterTypology">
-                <label>Typology:</label>
-                <br />
-                <Select style={{ marginTop: "3px" }}
-                    name="selFilterTypology"
-                    value="0"
-                    options={this.typologyOptions()}
-                />
-
-            </div>
+            <SelectComponent col="col-md-4" label="Typology:" readOnly="false" value="0" options={this.props.typology} />
         )
     }
 }

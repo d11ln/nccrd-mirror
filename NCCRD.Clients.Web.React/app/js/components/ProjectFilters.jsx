@@ -68,7 +68,9 @@ class ProjectFilters extends React.Component {
                     </div>
 
                     <div className="col-md-3">
-                        <Button block color="secondary" className="btn-sm" onTouchTap={() => location.hash = "/"} >Clear filters</Button>
+                        <Button block color="secondary" className="btn-sm" onTouchTap={() => location.hash = "/"} >
+                            <i className="fa fa-eraser" aria-hidden="true"></i>&nbsp;&nbsp;Clear filters
+                        </Button>
                     </div>
                 </div>
 

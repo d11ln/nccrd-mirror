@@ -12,8 +12,9 @@ const middleware = routerMiddleware(history)
 const store = createStore(
     combineReducers({ ...reducers, router: routerReducer }), {
         ...applyMiddleware(middleware),
-        projectData: { projects: [], adaptations: [], mitigations: [], emissions: [], research: [] },
-        lookupData: { projectStatus: [], typology: [], regionTree: [], sectorTree: [] }
+        projectData: { projects: [], projectDetails: {}, adaptationDetails: [], mitigationDetails: [], emissionsData: [], researchDetails: [] },
+        lookupData: { projectTypes: [], projectSubTypes: [], projectStatus: [], users: [], validationStatus: [], typology: [], 
+                        regionTree: [], sectorTree: [], maOptions: [], adaptationPurpose: [], sector: [] }
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 

@@ -35,7 +35,7 @@ class RegionFilters extends React.Component {
         }).then(res => res.json())
             .then(res => {
                 loadData(res)
-            }) 
+            })
     }
 
     fillTree() {
@@ -55,6 +55,18 @@ class RegionFilters extends React.Component {
                         <p style={{ fontSize: "large" }}>Region filters:</p>
                     </div>
                 </div>
+
+                <div className="row">
+                    <div className="col-md-12">
+                        <Button color="secondary" size="sm" id="btnRegionTreeExpandAll" style={{ marginLeft: "0px" }}>
+                            <i className="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Expand all
+                        </Button>
+                        <Button color="secondary" size="sm" id="btnRegionTreeCollapseAll">
+                            <i className="fa fa-minus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Collapse all
+                        </Button>
+                    </div>
+                </div>
+                <br />
 
                 <div className="row">
                     <div className="col-md-12" key="regionTree" id="regionTree">

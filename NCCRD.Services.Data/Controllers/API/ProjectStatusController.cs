@@ -20,25 +20,25 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ProjectStatus data as JSON</returns>
         [HttpGet]
         [Route("api/ProjectStatus/GetAll")]
-        public IEnumerable<ProjectStatus> GetAll(bool allOption = false, bool sorted = true)
+        public IEnumerable<ProjectStatus> GetAll()
         {
             List<ProjectStatus> data = new List<ProjectStatus>();
 
             using (var context = new SQLDBContext())
             {
-                if (allOption)
-                {
-                    data.Add(new ProjectStatus()
-                    {
-                        ProjectStatusId = 0,
-                        Value = "All"
-                    });
-                }
+                //if (allOption)
+                //{
+                //    data.Add(new ProjectStatus()
+                //    {
+                //        ProjectStatusId = 0,
+                //        Value = "All"
+                //    });
+                //}
 
-                if(sorted)
-                {
-                    data = data.OrderBy(d => d.Value).ToList();
-                }
+                //if(sorted)
+                //{
+                //    data = data.OrderBy(d => d.Value).ToList();
+                //}
 
                 data.AddRange(context.ProjectStatus.OrderBy(x => x.Value).ToList());
             }

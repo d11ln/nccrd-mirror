@@ -5,8 +5,9 @@ import { Button } from 'mdbreact'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
-import { LOAD_REGIONS } from "../../constants/action-types"
+import { LOAD_PROJECT_STATUS } from "../../constants/action-types"
 import { apiBaseURL } from "../../constants/apiBaseURL";
+import SelectComponent from '../SelectComponent.jsx'
 
 const mapStateToProps = (state, props) => {
     let { lookupData: { projectStatus } } = state
@@ -16,7 +17,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadData: payload => {
-            dispatch({ type: LOAD_REGIONS, payload })
+            dispatch({ type: LOAD_PROJECT_STATUS, payload })
         }
     }
 }
@@ -41,33 +42,10 @@ class StatusFilter extends React.Component {
             })
     }
 
-    projectStatusOptions() {
-
-        const { projectStatus } = this.props
-        let ar = [{ value: "0", label: "Not selected" }]
-
-        if (typeof projectStatus !== 'undefined') {
-            for (let i of projectStatus) {
-                ar.push({ value: i.ProjectStatusId, label: i.Value })
-            }
-        }
-
-        return ar
-    }
-
     render() {
 
         return (
-            <div className="col-md-4" id="filterStatus">
-                <label>Status:</label>
-                <br />
-                <Select style={{ marginTop: "3px" }}
-                    name="selFilterStatus"
-                    value="0"
-                    options={this.projectStatusOptions()}
-                />
-
-            </div>
+            <SelectComponent col="col-md-4" label="Status:" readOnly="false" value={0} options={this.props.projectStatus} />
         )
     }
 }

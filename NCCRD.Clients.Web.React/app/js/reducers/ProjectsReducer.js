@@ -1,6 +1,6 @@
 'use strict'
 
-import { LOAD_PROJECTS } from "../constants/action-types";
+import { LOAD_PROJECTS, LOAD_PROJECT_DETAILS, LOAD_ADAPTATION_DETAILS } from "../constants/action-types";
 
 export default function ProjectsReducer(state = {}, action) {
 
@@ -9,15 +9,15 @@ export default function ProjectsReducer(state = {}, action) {
     switch (type) {
 
         case LOAD_PROJECTS: {
+            return { ...state, projects: payload }
+        }
 
-            const data = payload.map((x) => {
-                const { ProjectId, ProjectTitle, ProjectDescription } = x
-                return {
-                    ProjectId, ProjectTitle, ProjectDescription
-                }
-            })
+        case LOAD_PROJECT_DETAILS:{
+            return { ...state, projectDetails: payload }
+        }
 
-            return { ...state, projects: data }
+        case LOAD_ADAPTATION_DETAILS:{
+            return { ...state, adaptationDetails: payload }
         }
 
         default: {
