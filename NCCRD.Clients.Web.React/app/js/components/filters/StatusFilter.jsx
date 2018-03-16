@@ -52,6 +52,7 @@ class StatusFilter extends React.Component {
 
     componentDidMount() {
 
+        //Load data
         let { loadData } = this.props
         fetch(apiBaseURL + 'api/ProjectStatus/GetAll', {
             headers: {
