@@ -37,3 +37,6 @@ export const CLEAR_FILTERS = "CLEAR_FILTERS";
 //Trees
 export const LOAD_REGION_TREE = "LOAD_REGION_TREE";
 export const LOAD_SECTOR_TREE = "LOAD_SECTOR_TREE";
+
+//Loading
+export const SET_LOADING = "SET_LOADING";

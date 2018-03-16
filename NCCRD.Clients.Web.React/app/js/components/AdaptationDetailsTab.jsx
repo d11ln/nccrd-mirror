@@ -3,7 +3,7 @@
 import React from 'react'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { LOAD_ADAPTATION_DETAILS } from "../constants/action-types"
+import { LOAD_ADAPTATION_DETAILS, SET_LOADING } from "../constants/action-types"
 import AdaptationDetailsItem from './AdaptationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -15,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     loadAdaptationDetails: payload => {
       dispatch({ type: LOAD_ADAPTATION_DETAILS, payload })
+    },
+    setLoading: payload => {
+        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -28,13 +31,17 @@ class AdaptationDetailsTab extends React.Component {
   componentDidMount() {
 
     //Load AdaptationDetails
-    let { loadAdaptationDetails, projectId } = this.props
+    let { loadAdaptationDetails, setLoading, projectId } = this.props
+
+    setLoading(true)
+
     fetch(apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + projectId, {
       headers: {
         "Content-Type": "application/json"
       }
     }).then(res => res.json()).then(res => {
       loadAdaptationDetails(res)
+      setLoading(false)
     })
 
   }

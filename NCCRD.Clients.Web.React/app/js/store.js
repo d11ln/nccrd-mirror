@@ -13,47 +13,52 @@ const store = createStore(
     combineReducers({ ...reducers, router: routerReducer }), {
         ...applyMiddleware(middleware),
 
-        projectData: 
-        { 
-            projects: [], 
-            projectDetails: {}, 
-            adaptationDetails: [], 
-            mitigationDetails: [], 
-            emissionsData: [], 
-            researchDetails: []
-        },
+        projectData:
+            {
+                projects: [],
+                projectDetails: {},
+                adaptationDetails: [],
+                mitigationDetails: [],
+                emissionsData: [],
+                researchDetails: []
+            },
 
-        lookupData: 
-        { 
-            projectTypes: [], 
-            projectSubTypes: [], 
-            projectStatus: [], 
-            users: [], 
-            validationStatus: [], 
-            typology: [],               
-            regionTree: [], 
-            sectorTree: [],
-            maOptions: [], 
-            adaptationPurpose: [], 
-            sector: [], 
-            carbonCredit: [],
-            carbonCreditMarket: [], 
-            cdmStatus: [], 
-            cdmMethodology: [], 
-            voluntaryMethodology: [], 
-            voluntaryGoldStandard: [],
-            researchType: [], 
-            targetAudience: []
-        },
+        lookupData:
+            {
+                projectTypes: [],
+                projectSubTypes: [],
+                projectStatus: [],
+                users: [],
+                validationStatus: [],
+                typology: [],
+                regionTree: [],
+                sectorTree: [],
+                maOptions: [],
+                adaptationPurpose: [],
+                sector: [],
+                carbonCredit: [],
+                carbonCreditMarket: [],
+                cdmStatus: [],
+                cdmMethodology: [],
+                voluntaryMethodology: [],
+                voluntaryGoldStandard: [],
+                researchType: [],
+                targetAudience: []
+            },
 
-        filterData: 
-        {
-            titleFilter: "", 
-            statusFilter: 0, 
-            typologyFilter: 0,
-            regionFilter: 0,
-            sectorFilter: 0
-        }
+        filterData:
+            {
+                titleFilter: "",
+                statusFilter: 0,
+                typologyFilter: 0,
+                regionFilter: 0,
+                sectorFilter: 0
+            },
+
+        loadingData:
+            {
+                loading: true
+            }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )

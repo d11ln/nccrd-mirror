@@ -9,7 +9,7 @@ import {
     CLEAR_FILTERS
 } from "../constants/action-types";
 
-export default function ProjectsReducer(state = {}, action) {
+export default function FilterReducer(state = {}, action) {
 
     const { type, payload } = action
 

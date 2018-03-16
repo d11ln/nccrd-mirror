@@ -5,7 +5,7 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextComponent from './TextComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import { LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE, LOAD_SECTOR } from "../constants/action-types"
+import { LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE, LOAD_SECTOR, SET_LOADING } from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { researchType, targetAudience, sector } } = state
@@ -22,6 +22,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadSectors: payload => {
       dispatch({ type: LOAD_SECTOR, payload })
+    },
+    setLoading: payload => {
+        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -32,10 +35,11 @@ class ResearchDetailsItem extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
+  loadResearchType(){
 
     //Load ResearchType
     let { loadResearchType } = this.props
+
     fetch(apiBaseURL + 'api/ResearchType/GetAll/', {
       headers: {
         "Content-Type": "application/json"
@@ -43,9 +47,13 @@ class ResearchDetailsItem extends React.Component {
     }).then(res => res.json()).then(res => {
       loadResearchType(res)
     })
+  }
+
+  loadTargetAudience(){
 
     //Load TargetAudience
     let { loadTargetAudience } = this.props
+
     fetch(apiBaseURL + 'api/TargetAudience/GetAll/', {
       headers: {
         "Content-Type": "application/json"
@@ -53,9 +61,13 @@ class ResearchDetailsItem extends React.Component {
     }).then(res => res.json()).then(res => {
       loadTargetAudience(res)
     })
- 
+  }
+
+  loadSectors(){
+
     //Load Sectors
     let { loadSectors } = this.props
+
     fetch(apiBaseURL + 'api/Sector/GetAll/', {
       headers: {
         "Content-Type": "application/json"
@@ -63,7 +75,19 @@ class ResearchDetailsItem extends React.Component {
     }).then(res => res.json()).then(res => {
       loadSectors(res)
     })
+  }
 
+  componentDidMount() {
+
+    let { setLoading } = this.props
+
+    setLoading(true)
+
+    $.when(
+      this.loadResearchType(),
+      this.loadTargetAudience(),
+      this.loadSectors()
+    ).done(() => { setLoading(false) })
   }
 
   render() {

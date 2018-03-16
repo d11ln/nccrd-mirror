@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button } from 'mdbreact'
 import { connect } from 'react-redux'
-import { LOAD_PROJECT_DETAILS } from "../constants/action-types"
+import { LOAD_PROJECT_DETAILS, SET_LOADING } from "../constants/action-types"
 import { apiBaseURL } from "../constants/apiBaseURL"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
@@ -11,6 +11,7 @@ import MitigationDetailsTab from './MitigationDetailsTab.jsx'
 import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
 import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from './RangeComponent.jsx'
+import { BeatLoader } from 'react-spinners';
 
 //react-tabs
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -18,13 +19,17 @@ import 'react-tabs/style/react-tabs.css';
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projectDetails } } = state
-    return { projectDetails }
+    let { loadingData: { loading } } = state
+    return { projectDetails, loading }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         loadProjectDetails: payload => {
             dispatch({ type: LOAD_PROJECT_DETAILS, payload })
+        },
+        setLoading: payload => {
+            dispatch({ type: SET_LOADING, payload })
         }
     }
 }
@@ -41,7 +46,9 @@ class ProjectDetails extends React.Component {
     componentDidMount() {
 
         //Load ProjectType
-        let { loadProjectDetails } = this.props
+        let { loadProjectDetails, setLoading } = this.props
+
+        setLoading(true)
 
         fetch(apiBaseURL + 'api/Projects/GetById/' + this.state.projectId, {
             headers: {
@@ -49,6 +56,7 @@ class ProjectDetails extends React.Component {
             }
         }).then(res => res.json()).then(res => {
             loadProjectDetails(res)
+            setLoading(false)
         })
 
     }
@@ -59,6 +67,22 @@ class ProjectDetails extends React.Component {
 
         return (
             <div>
+
+                <div
+                    hidden={!this.props.loading}
+                    className="card"
+                    style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "999", background: "#5499c7" }}>
+
+                    <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
+                        <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#f8f9f9" }}>LOADING</label>
+                        <BeatLoader
+                            color={' #a9cce3 '}
+                            size={30}
+                            loading={this.props.loading}
+                        />
+                    </div>
+                </div>
+
                 <br />
                 <div className="row">
 

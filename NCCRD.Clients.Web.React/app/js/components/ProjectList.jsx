@@ -3,7 +3,7 @@
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
-import { LOAD_PROJECTS } from "../constants/action-types"
+import { LOAD_PROJECTS, SET_LOADING } from "../constants/action-types"
 import { apiBaseURL } from "../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
@@ -16,6 +16,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loadProjects: payload => {
             dispatch({ type: LOAD_PROJECTS, payload })
+        },
+        setLoading: payload => {
+            dispatch({ type: SET_LOADING, payload })
         }
     }
 }
@@ -39,7 +42,7 @@ class ProjectList extends React.Component {
 
         console.log("loading projects")
 
-        let { loadProjects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
+        let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
 
         this.setState({
             titleFilter: titleFilter,
@@ -48,6 +51,8 @@ class ProjectList extends React.Component {
             regionFilter: regionFilter,
             sectorFilter: sectorFilter
         })
+
+        setLoading(true)
 
         fetch(apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
             '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter, {
@@ -58,6 +63,7 @@ class ProjectList extends React.Component {
 
             }).then(res => res.json()).then(res => {
                 loadProjects(res)
+                setLoading(false)
             })
     }
 
@@ -77,7 +83,7 @@ class ProjectList extends React.Component {
 
         //If any filters changed...refetch projects
         if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-                pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter) {
+            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter) {
 
             this.getProjectList()
         }
@@ -100,7 +106,9 @@ class ProjectList extends React.Component {
 
     render() {
         return (
-            this.buildList()
+            <div>
+                {this.buildList()}
+            </div>
         )
     }
 }

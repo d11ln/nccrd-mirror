@@ -5,7 +5,7 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextAreaComponent from './TextAreaComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import { LOAD_ADAPTATION_PURPOSE, LOAD_SECTOR } from "../constants/action-types"
+import { LOAD_ADAPTATION_PURPOSE, LOAD_SECTOR, SET_LOADING } from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { adaptationPurpose, sector } } = state
@@ -19,6 +19,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadSectors: payload => {
       dispatch({ type: LOAD_SECTOR, payload })
+    },
+    setLoading: payload => {
+        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -29,10 +32,11 @@ class AdaptationDetailsItem extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
+  loadAdaptationPurpose(){
 
     //Load AdaptationPurpose
     let { loadAdaptationPurpose } = this.props
+
     fetch(apiBaseURL + 'api/AdaptationPurpose/GetAll/', {
       headers: {
         "Content-Type": "application/json"
@@ -40,9 +44,13 @@ class AdaptationDetailsItem extends React.Component {
     }).then(res => res.json()).then(res => {
       loadAdaptationPurpose(res)
     })
+  }
+
+  loadSectors(){
 
     //Load Sectors
     let { loadSectors } = this.props
+
     fetch(apiBaseURL + 'api/Sector/GetAll/', {
       headers: {
         "Content-Type": "application/json"
@@ -50,7 +58,18 @@ class AdaptationDetailsItem extends React.Component {
     }).then(res => res.json()).then(res => {
       loadSectors(res)
     })
+  }
 
+  componentDidMount() {
+
+    let { setLoading } = this.props
+
+    setLoading(true)
+
+    $.when(
+      this.loadAdaptationPurpose(),
+      this.loadSectors()
+    ).done(() => { setLoading(false) })
   }
 
   render() {

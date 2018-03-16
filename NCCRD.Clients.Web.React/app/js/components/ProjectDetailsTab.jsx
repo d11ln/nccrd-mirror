@@ -10,7 +10,7 @@ import SelectComponent from './SelectComponent.jsx'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import {
   LOAD_PROJECT_TYPE, LOAD_PROJECT_SUBTYPE, LOAD_PROJECT_STATUS,
-  LOAD_USERS, LOAD_VALIDATION_STATUS, LOAD_MA_OPTIONS
+  LOAD_USERS, LOAD_VALIDATION_STATUS, LOAD_MA_OPTIONS, SET_LOADING
 } from "../constants/action-types"
 
 
@@ -36,10 +36,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadValidationStatus: payload => {
       dispatch({ type: LOAD_VALIDATION_STATUS, payload })
-    }
-    ,
+    },
     loadMAOptions: payload => {
       dispatch({ type: LOAD_MA_OPTIONS, payload })
+    },
+    setLoading: payload => {
+        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -50,10 +52,11 @@ class ProjectDetailsTab extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
+  loadProjectTypes(){
 
     //Load ProjectType
-    let { loadProjectTypes } = this.props
+    let { loadProjectTypes, setLoading } = this.props
+
     fetch(apiBaseURL + 'api/ProjectType/GetAll', {
       headers: {
         "Content-Type": "application/json"
@@ -61,19 +64,27 @@ class ProjectDetailsTab extends React.Component {
     }).then(res => res.json()).then(res => {
       loadProjectTypes(res)
     })
+  }
+
+  loadProjectSubTypes(){
 
     //Load ProjectSubType
     let { loadProjectSubTypes } = this.props
+
     fetch(apiBaseURL + 'api/ProjectSubType/GetAll', {
       headers: {
         "Content-Type": "application/json"
       }
     }).then(res => res.json()).then(res => {
       loadProjectSubTypes(res)
-    })
+    })    
+  }
+
+  loadProjectStatus(){
 
     //Load ProjectStatus
     let { loadProjectStatus } = this.props
+
     fetch(apiBaseURL + 'api/ProjectStatus/GetAll', {
       headers: {
         "Content-Type": "application/json"
@@ -81,9 +92,13 @@ class ProjectDetailsTab extends React.Component {
     }).then(res => res.json()).then(res => {
       loadProjectStatus(res)
     })
+  }
+
+  loadProjectManagers(){
 
     //Load ProjectManagers (Users)
     let { loadProjectManagers } = this.props
+
     fetch(apiBaseURL + 'api/AppUsr/GetAllBasic', {
       headers: {
         "Content-Type": "application/json"
@@ -91,9 +106,13 @@ class ProjectDetailsTab extends React.Component {
     }).then(res => res.json()).then(res => {
       loadProjectManagers(res)
     })
+  }
+
+  loadValidationStatus(){
 
     //Load ValidationStatus
     let { loadValidationStatus } = this.props
+
     fetch(apiBaseURL + 'api/ValidationStatus/GetAll', {
       headers: {
         "Content-Type": "application/json"
@@ -102,8 +121,13 @@ class ProjectDetailsTab extends React.Component {
       loadValidationStatus(res)
     })
 
+  }
+
+  loadMAOptions(){
+
     //Load MAOptions
     let { loadMAOptions } = this.props
+
     fetch(apiBaseURL + 'api/ValidationStatus/GetAll', {
       headers: {
         "Content-Type": "application/json"
@@ -111,7 +135,22 @@ class ProjectDetailsTab extends React.Component {
     }).then(res => res.json()).then(res => {
       loadMAOptions(res)
     })
+  }
 
+  componentDidMount() {
+
+    let { setLoading } = this.props
+
+    setLoading(true)
+
+    $.when(
+      this.loadProjectTypes(),
+      this.loadProjectSubTypes(),
+      this.loadProjectStatus(),
+      this.loadProjectManagers(),
+      this.loadValidationStatus(),
+      this.loadMAOptions()
+    ).done(() => { setLoading(false) })
   }
 
 

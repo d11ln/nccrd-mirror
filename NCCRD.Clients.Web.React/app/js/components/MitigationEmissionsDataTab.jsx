@@ -3,7 +3,7 @@
 import React from 'react'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { LOAD_MITIGATION_EMISSIONS } from "../constants/action-types"
+import { LOAD_MITIGATION_EMISSIONS, SET_LOADING } from "../constants/action-types"
 import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -15,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     loadMitigationEmissions: payload => {
       dispatch({ type: LOAD_MITIGATION_EMISSIONS, payload })
+    },
+    setLoading: payload => {
+        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -28,13 +31,17 @@ class MitigationEmissionsDataTab extends React.Component {
   componentDidMount() {
 
     //Load MitigationDetails
-    let { loadMitigationEmissions, projectId } = this.props
+    let { loadMitigationEmissions, setLoading, projectId } = this.props
+
+    setLoading(true);
+
     fetch(apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID//' + projectId, {
       headers: {
         "Content-Type": "application/json"
       }
     }).then(res => res.json()).then(res => {
       loadMitigationEmissions(res)
+      setLoading(false)
     })
 
   }
