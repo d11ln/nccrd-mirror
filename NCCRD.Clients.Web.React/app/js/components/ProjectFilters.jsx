@@ -2,11 +2,26 @@
 
 import React from 'react'
 import { Button, Collapse } from 'mdbreact'
+import { connect } from 'react-redux'
+import { CLEAR_FILTERS } from "../constants/action-types"
 
 //Filters
 import GeneralFilters from './filters/GeneralFilters.jsx';
 import RegionFilters from './filters/RegionFilters.jsx';
 import SectorFilters from './filters/SectorFilters.jsx';
+
+
+const mapStateToProps = (state, props) => {
+    return { }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        clearFilters: payload => {
+            dispatch({ type: CLEAR_FILTERS, payload })
+        }
+    }
+}
 
 class ProjectFilters extends React.Component {
 
@@ -15,6 +30,7 @@ class ProjectFilters extends React.Component {
         this.toggleGeneral = this.toggleGeneral.bind(this);
         this.toggleRegion = this.toggleRegion.bind(this);
         this.toggleSector = this.toggleSector.bind(this);
+        this.clearFilters = this.clearFilters.bind(this)
 
         this.state = {
             collapseGeneral: false,
@@ -44,6 +60,15 @@ class ProjectFilters extends React.Component {
         }
     }
 
+    clearFilters() {
+
+        let { clearFilters } = this.props
+        clearFilters("")
+
+        location.hash = "/"
+
+    }
+
     render() {
         return (
             <div>
@@ -64,7 +89,7 @@ class ProjectFilters extends React.Component {
                     </div>
 
                     <div className="col-md-3">
-                        <Button block color="secondary" className="btn-sm" onTouchTap={() => location.hash = "/"} >
+                        <Button block color="secondary" className="btn-sm" onTouchTap={this.clearFilters} >
                             <i className="fa fa-eraser" aria-hidden="true"></i>&nbsp;&nbsp;Clear filters
                         </Button>
                     </div>
@@ -92,4 +117,4 @@ class ProjectFilters extends React.Component {
     }
 }
 
-export default ProjectFilters
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectFilters)
