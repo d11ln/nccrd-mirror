@@ -51,7 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data = context.Typology.FirstOrDefault(x => x.TypologyID == id);
+                data = context.Typology.FirstOrDefault(x => x.TypologyId == id);
             }
 
             return data;
