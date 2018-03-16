@@ -8,12 +8,13 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projects } } = state
-    return { projects }
+    let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } } = state
+    return { projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadInitial: payload => {
+        loadProjects: payload => {
             dispatch({ type: LOAD_PROJECTS, payload })
         }
     }
@@ -23,17 +24,63 @@ class ProjectList extends React.Component {
 
     constructor(props) {
         super(props);
+
+        //Set initial state
+        this.state = {
+            titleFilter: "",
+            statusFilter: 0,
+            typologyFilter: 0,
+            regionFilter: 0,
+            sectorFilter: 0
+        }
+    }
+
+    getProjectList() {
+
+        console.log("loading projects")
+
+        let { loadProjects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
+
+        this.setState({
+            titleFilter: titleFilter,
+            statusFilter: statusFilter,
+            typologyFilter: typologyFilter,
+            regionFilter: regionFilter,
+            sectorFilter: sectorFilter
+        })
+
+        fetch(apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
+            '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter, {
+
+                headers: {
+                    "Content-Type": "application/json"
+                }
+
+            }).then(res => res.json()).then(res => {
+                loadProjects(res)
+            })
     }
 
     componentDidMount() {
-        let { loadInitial } = this.props
-        fetch(apiBaseURL + 'api/Projects/GetAll/List', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(res => res.json()).then(res => {
-            loadInitial(res)
-        })
+        this.getProjectList()
+    }
+
+    componentDidUpdate() {
+
+        let pTitleFilter = this.props.titleFilter
+        let pStatusFilter = this.props.statusFilter
+        let pTypologyFilter = this.props.typologyFilter
+        let pRegionFilter = this.props.regionFilter
+        let pSectorFilter = this.props.sectorFilter
+
+        let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.state
+
+        //If any filters changed...refetch projects
+        if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
+                pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter) {
+
+            this.getProjectList()
+        }
     }
 
     buildList() {

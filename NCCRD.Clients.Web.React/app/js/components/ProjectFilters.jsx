@@ -23,10 +23,6 @@ class ProjectFilters extends React.Component {
         };
     }
 
-    onComponentDidMount() {
-
-    }
-
     toggleGeneral() {
         this.setState({ collapseGeneral: !this.state.collapseGeneral });
     }

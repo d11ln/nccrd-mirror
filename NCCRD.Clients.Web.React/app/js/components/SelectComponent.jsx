@@ -9,8 +9,9 @@ class SelectComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    //let { value } = props
-    //this.state = { ...this.state, value }
+    //Set initial internal state
+    this.state = { selectedValue: props.value }
+    this.onSelect = this.onSelect.bind(this)
   }
 
   selectOptions() {
@@ -19,18 +20,36 @@ class SelectComponent extends React.Component {
     let ar = [] //[{ value: "0", label: "Not selected" }]
 
     if (typeof options !== 'undefined') {
-        for (let i of options) {
-            ar.push({ value: i.id, label: i.value })
-        }
+      for (let i of options) {
+        ar.push({ value: i.id, label: i.value })
+      }
     }
 
     return ar
-}
+  }
 
+  onSelect(selectedOption){
+    
+    let selectedValue = 0
+    if(selectedOption !== null)
+    {
+      selectedValue = selectedOption.value
+    }
+
+    //Update internal state
+    this.setState({ selectedValue: selectedValue})
+
+    //Raise callback
+    let { selectCallback } = this.props
+    if(typeof selectCallback !== 'undefined'){
+      selectCallback(selectedValue)
+    }
+  }
+  
   render() {
 
-    //let { value } = this.state
-    let { col, label, id, readOnly, value } = this.props
+    let { col, label, id, readOnly, onChange } = this.props
+    let selectedValue = this.state.selectedValue
 
     return (
       <div className={col}>
@@ -39,8 +58,9 @@ class SelectComponent extends React.Component {
         <Select id={id}
           readOnly={readOnly}
           name={id}
-          value={value}
+          value={selectedValue}
           options={this.selectOptions()}
+          onChange={this.onSelect}
         />
 
       </div>

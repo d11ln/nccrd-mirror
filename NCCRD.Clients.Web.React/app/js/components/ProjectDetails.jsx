@@ -7,6 +7,9 @@ import { LOAD_PROJECT_DETAILS } from "../constants/action-types"
 import { apiBaseURL } from "../constants/apiBaseURL"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
+import MitigationDetailsTab from './MitigationDetailsTab.jsx'
+import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
+import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from './RangeComponent.jsx'
 
 //react-tabs
@@ -32,11 +35,11 @@ class ProjectDetails extends React.Component {
         super(props)
 
         let projectId = this.props.match.params.id
-        this.state = {...this.state, projectId}
+        this.state = { ...this.state, projectId }
     }
 
     componentDidMount() {
-  
+
         //Load ProjectType
         let { loadProjectDetails } = this.props
 
@@ -60,7 +63,7 @@ class ProjectDetails extends React.Component {
                 <div className="row">
 
                     <div className="col-md-9">
-                        <table style={{marginTop: "-10px"}}>
+                        <table style={{ marginTop: "-10px" }}>
                             <tbody>
                                 <tr>
                                     <td>
@@ -92,18 +95,33 @@ class ProjectDetails extends React.Component {
 
                     <TabPanel>
                         <ProjectDetailsTab />
+                        <br />
+                        <br />
+                        <br />
                     </TabPanel>
                     <TabPanel>
                         <AdaptationDetailsTab projectId={this.state.projectId} />
+                        <br />
+                        <br />
+                        <br />
                     </TabPanel>
                     <TabPanel>
-                        <h2>Any content 3</h2>
+                        <MitigationDetailsTab projectId={this.state.projectId} />
+                        <br />
+                        <br />
+                        <br />
                     </TabPanel>
                     <TabPanel>
-                        <h2>Any content 4</h2>
+                        <MitigationEmissionsDataTab projectId={this.state.projectId} />
+                        <br />
+                        <br />
+                        <br />
                     </TabPanel>
                     <TabPanel>
-                        <h2>Any content 5</h2>
+                        <ResearchDetailsTab projectId={this.state.projectId} />
+                        <br />
+                        <br />
+                        <br />
                     </TabPanel>
                 </Tabs>
 

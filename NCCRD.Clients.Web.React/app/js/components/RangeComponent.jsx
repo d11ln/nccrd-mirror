@@ -6,8 +6,6 @@ class RangeComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    let { valueFrom, valueTo } = props
-    this.state = { ...this.state, valueFrom, valueTo }
   }
 
   getPrefix() {
@@ -31,10 +29,9 @@ class RangeComponent extends React.Component {
     }
   }
 
-  getLabel(){
+  getLabel() {
     let { label } = this.props
-    if(label !== "")
-    {
+    if (label !== "") {
       return (
         <div>
           <label style={{ fontWeight: "bold" }}>{label}</label>
@@ -42,18 +39,27 @@ class RangeComponent extends React.Component {
         </div>
       )
     }
-    else
-    {
+    else {
       return (
-        <div></div>     
+        <div></div>
       )
     }
   }
 
+  fixUndefinedValue(value){
+
+    if(typeof value === 'undefined'){
+      value = ""
+    }
+
+    return value
+  }
+
   render() {
 
-    const { valueFrom, valueTo } = this.state
-    const { label, inputWidth, col, readOnly, size, align } = this.props
+    let { label, inputWidth, col, readOnly, size, align,  valueFrom, valueTo } = this.props
+    valueFrom = this.fixUndefinedValue(valueFrom)
+    valueTo = this.fixUndefinedValue(valueTo)
 
     return (
       <div className={col}>

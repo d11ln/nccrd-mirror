@@ -172,10 +172,6 @@ class ProjectDetailsTab extends React.Component {
           <SelectComponent col="col-md-4" label="MAOptions:" readOnly="true" value={projectDetails.MAOptionId} options={this.props.maOptions} />
         </div>
 
-        <br />
-        <br />
-        <br />
-
       </div>
 
 

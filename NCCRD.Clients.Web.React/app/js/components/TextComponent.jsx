@@ -11,10 +11,19 @@ class TextComponent extends React.Component {
     this.state = { ...this.state, value }
   }
 
+  fixUndefinedValue(value){
+
+    if(typeof value === 'undefined'){
+      value = ""
+    }
+
+    return value
+  }
+
   render() {
 
-    let { value } = this.state
-    let { col, label, id, readOnly } = this.props
+    let { col, label, id, readOnly, value } = this.props
+    value = this.fixUndefinedValue(value)
 
     return (
       <div className={col}>
