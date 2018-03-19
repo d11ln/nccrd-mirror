@@ -207,7 +207,6 @@ class MitigationDetailsItem extends React.Component {
             value={details.SectorId} options={sector} />
         </div>
 
-
         <br />
         <hr />
 

@@ -76,22 +76,6 @@ class Projects extends React.Component {
                     </div>
                 </div>
 
-                {/* <!--Back to top button--> */}
-                {/* <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="float_bottom_right">
-                                <button class="btn btn-secondary btn-sm" style="margin-right:0px" onclick="LoadProjectDetailsSection()">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add project
-                        </button>
-                                <button class="btn btn-secondary btn-sm" onclick="back_to_top()">
-                                    <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>&nbsp;&nbsp;Back to top
-                        </button>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
-
                 <ProjectFilters />
                 <ProjectList />
             </div>

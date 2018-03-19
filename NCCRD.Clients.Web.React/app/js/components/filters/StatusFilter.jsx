@@ -32,17 +32,10 @@ class StatusFilter extends React.Component {
 
     constructor(props) {
         super(props);
-        this.selectCallbackHandler = this.selectCallbackHandler.bind(this)
-
-        //Set initial local
-        this.state = { statusFilter: 0 }
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
         if (typeof parsedHash.status !== 'undefined') {
-
-            //Update local state
-            this.state = { statusFilter: parsedHash.status }
 
             //Dispatch to store
             let { loadStatusFilter } = this.props
@@ -64,25 +57,17 @@ class StatusFilter extends React.Component {
             })
     }
 
-    selectCallbackHandler(selectedValue) {
-
-        if (selectedValue !== this.state.statusFilter) {
-            //Update local state
-            this.setState({ statusFilter: selectedValue })
-
-            //Dispatch to store
-            let { loadStatusFilter } = this.props
-            loadStatusFilter(selectedValue)
-        }
-    }
-
     render() {
 
-        let { statusFilter } = this.state
+        let { statusFilter } = this.props
 
         return (
-            <SelectComponent col="col-md-4" label="Status:" readOnly="false" value={statusFilter} options={this.props.projectStatus}
-                selectCallback={this.selectCallbackHandler}
+            <SelectComponent 
+                col="col-md-4" 
+                label="Status:" 
+                selectedValue={statusFilter} 
+                options={this.props.projectStatus}
+                setSelectedValueKey={LOAD_STATUS_FILTER}
             />
         )
     }

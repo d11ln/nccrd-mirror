@@ -110,6 +110,10 @@ class ResearchDetailsItem extends React.Component {
           <SelectComponent col="col-md-4" label="Target audience::" readOnly="true" value={details.TargetAudienceId} options={targetAudience} />
           <SelectComponent col="col-md-4" label="Sector:" readOnly="true" value={details.SectorId} options={sector} />
         </div>
+
+        <br/>
+        <hr/>
+        
       </div>
     )
   }

@@ -5,7 +5,10 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextAreaComponent from './TextAreaComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import { LOAD_ADAPTATION_PURPOSE, LOAD_SECTOR, SET_LOADING } from "../constants/action-types"
+import {
+  LOAD_ADAPTATION_PURPOSE, LOAD_SECTOR, SET_LOADING, SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE,
+  SET_ADAPTATION_DETAILS_SECTOR
+} from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { adaptationPurpose, sector } } = state
@@ -21,7 +24,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: LOAD_SECTOR, payload })
     },
     setLoading: payload => {
-        dispatch({ type: SET_LOADING, payload })
+      dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -32,7 +35,7 @@ class AdaptationDetailsItem extends React.Component {
     super(props)
   }
 
-  loadAdaptationPurpose(){
+  loadAdaptationPurpose() {
 
     //Load AdaptationPurpose
     let { loadAdaptationPurpose } = this.props
@@ -46,7 +49,7 @@ class AdaptationDetailsItem extends React.Component {
     })
   }
 
-  loadSectors(){
+  loadSectors() {
 
     //Load Sectors
     let { loadSectors } = this.props
@@ -81,15 +84,37 @@ class AdaptationDetailsItem extends React.Component {
         <br />
 
         <div className="row">
-          <TextAreaComponent col="col-md-12" readOnly="true" label="Description:" id="txtDescription" value={details.Description} />
+          <TextAreaComponent
+            col="col-md-12"
+            label="Description:"
+            id="txtDescription"
+            value={details.Description}
+            setValueKey={SET_ADAPTATION_DETAILS_DESCR + "|" + details.AdaptationDetailId}
+          />
         </div>
 
         <br />
 
         <div className="row">
-          <SelectComponent col="col-md-4" label="Purpose:" readOnly="true" value={details.AdaptationPurposeId} options={adaptationPurpose} />
-          <SelectComponent col="col-md-4" label="Sector:" readOnly="true" value={details.SectorId} options={sector} />
+          <SelectComponent
+            col="col-md-4"
+            label="Purpose:"
+            readOnly="true"
+            selectedValue={details.AdaptationPurposeId}
+            options={adaptationPurpose}
+            setSelectedValueKey={SET_ADAPTATION_DETAILS_PURPOSE + "|" + details.AdaptationDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Sector:"
+            selectedValue={details.SectorId}
+            options={sector}
+            setSelectedValueKey={SET_ADAPTATION_DETAILS_SECTOR + "|" + details.AdaptationDetailId}
+          />
         </div>
+
+        <br/>
+        <hr/>
       </div>
     )
   }

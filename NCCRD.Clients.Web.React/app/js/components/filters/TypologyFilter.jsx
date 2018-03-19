@@ -32,17 +32,10 @@ class TypologyFilter extends React.Component {
 
     constructor(props) {
         super(props);
-        this.selectCallbackHandler = this.selectCallbackHandler.bind(this)
-
-        //Set initial local
-        this.state = { typologyFilter: 0 }
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
         if (typeof parsedHash.typology !== 'undefined') {
-
-            //Update local state
-            this.state = { typologyFilter: parsedHash.typology }
 
             //Dispatch to store
             let { loadTypologyFilter } = this.props
@@ -64,25 +57,18 @@ class TypologyFilter extends React.Component {
             })
     }
 
-    selectCallbackHandler(selectedValue) {
-
-        if (selectedValue !== this.state.typologyFilter) {
-            //Update local state
-            this.setState({ typologyFilter: selectedValue })
-
-            //Dispatch to store
-            let { loadTypologyFilter } = this.props
-            loadTypologyFilter(selectedValue)
-        }
-    }
-
     render() {
 
-        let { typologyFilter } = this.state
+        let { typologyFilter } = this.props
 
         return (
-            <SelectComponent col="col-md-4" label="Typology:" readOnly="false" value={typologyFilter} options={this.props.typology}
+            <SelectComponent 
+                col="col-md-4" 
+                label="Typology:" 
+                selectedValue={typologyFilter} 
+                options={this.props.typology}
                 selectCallback={this.selectCallbackHandler}
+                setSelectedValueKey={LOAD_TYPOLOGY_FILTER}
             />
         )
     }

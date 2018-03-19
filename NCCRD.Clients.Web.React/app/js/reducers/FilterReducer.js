@@ -6,7 +6,8 @@ import {
     LOAD_TYPOLOGY_FILTER,
     LOAD_REGION_FILTER,
     LOAD_SECTOR_FILTER,
-    CLEAR_FILTERS
+    CLEAR_FILTERS,
+    SET_STATUS_FILTER
 } from "../constants/action-types";
 
 export default function FilterReducer(state = {}, action) {

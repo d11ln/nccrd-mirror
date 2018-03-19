@@ -23,8 +23,6 @@ class SelectComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    //Set initial internal state
-    this.state = { selectedValue: props.value }
     this.onSelect = this.onSelect.bind(this)
   }
 
@@ -42,41 +40,39 @@ class SelectComponent extends React.Component {
     return ar
   }
 
-  onSelect(selectedOption){
-    
-    let selectedValue = 0
-    if(selectedOption !== null)
-    {
-      selectedValue = selectedOption.value
+  getFontColour() {
+    if (this.props.editMode) {
+      return "steelblue"
     }
+    else {
+      return "black"
+    }
+  }
 
-    //Update internal state
-    this.setState({ selectedValue: selectedValue})
+  onSelect(selectedOption) {
 
-    //Raise callback
-    let { selectCallback } = this.props
-    if(typeof selectCallback !== 'undefined'){
-      selectCallback(selectedValue)
+    let selectedValue = 0
+    if (selectedOption !== null) {
+      selectedValue = selectedOption.value
     }
 
     //Dispatch to store
     let { setSelectedValueKey, setSelectedValue } = this.props
-    if(typeof this.props.setSelectedValueKey !== 'undefined'){
+    if (typeof this.props.setSelectedValueKey !== 'undefined') {
       setSelectedValue(setSelectedValueKey, selectedValue)
     }
   }
-  
+
   render() {
 
-    let { col, label, id, readOnly, onChange } = this.props
-    let selectedValue = this.state.selectedValue
+    let { col, label, id, editMode, onChange, selectedValue } = this.props
 
     return (
       <div className={col}>
         <label style={{ fontWeight: "bold" }}>{label}</label>
 
         <Select id={id}
-          readOnly={readOnly}
+          disabled={!editMode}
           name={id}
           value={selectedValue}
           options={this.selectOptions()}
