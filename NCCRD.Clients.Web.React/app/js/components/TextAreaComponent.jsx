@@ -1,18 +1,27 @@
 'use strict'
 
 import React from 'react'
-//import autosize from "autosize"
 import TextareaAutosize from "react-textarea-autosize"
+import { connect } from 'react-redux'
+
+const mapStateToProps = (state, props) => {
+  let { projectData: { editMode } } = state
+  return { editMode }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setValue: (key, payload) => {
+      dispatch({ type: key, payload })
+    }
+  }
+}
 
 class TextAreaComponent extends React.Component {
 
   constructor(props) {
     super(props);
   }
-
-  // componentDidMount() {
-  //   autosize(this.textarea); 
-  // }
 
   fixUndefinedValue(value) {
 
@@ -23,17 +32,40 @@ class TextAreaComponent extends React.Component {
     return value
   }
 
+  getFontColour() {
+    if (this.props.editMode) {
+      return "steelblue"
+    }
+    else {
+      return "black"
+    }
+  }
+
+  valueChange(event) {
+    if (typeof this.props.setValueKey !== 'undefined') {
+      this.props.setValue(this.props.setValueKey, event.target.value)
+    }
+  }
+
   render() {
 
-    let { col, label, readOnly, id, value } = this.props
+    let { col, label, editMode, id, value } = this.props
     value = this.fixUndefinedValue(value)
 
     return (
       <div className={col}>
         <label style={{ fontWeight: "bold" }}>{label}</label>
         <TextareaAutosize
-          style={{borderStyle: "solid", borderWidth: "0px 0px 1px 0px", borderColor: "#b4b4b4", paddingBottom: "5px"}}
+          readOnly={!editMode}
+          style={{
+            borderStyle: "solid",
+            borderWidth: "0px 0px 1px 0px",
+            borderColor: "#b4b4b4",
+            paddingBottom: "4px",
+            color: this.getFontColour()
+          }}
           value={value}
+          onChange={this.valueChange.bind(this)}
         />
       </div>
     )
@@ -41,4 +73,4 @@ class TextAreaComponent extends React.Component {
   }
 }
 
-export default TextAreaComponent
+export default connect(mapStateToProps, mapDispatchToProps)(TextAreaComponent)

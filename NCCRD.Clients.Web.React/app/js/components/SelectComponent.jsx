@@ -3,6 +3,20 @@
 import React from 'react'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
+import { connect } from 'react-redux'
+
+const mapStateToProps = (state, props) => {
+  let { projectData: { editMode } } = state
+  return { editMode }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setSelectedValue: (key, payload) => {
+      dispatch({ type: key, payload })
+    }
+  }
+}
 
 class SelectComponent extends React.Component {
 
@@ -17,7 +31,7 @@ class SelectComponent extends React.Component {
   selectOptions() {
 
     const { options } = this.props
-    let ar = [] //[{ value: "0", label: "Not selected" }]
+    let ar = []
 
     if (typeof options !== 'undefined') {
       for (let i of options) {
@@ -44,6 +58,12 @@ class SelectComponent extends React.Component {
     if(typeof selectCallback !== 'undefined'){
       selectCallback(selectedValue)
     }
+
+    //Dispatch to store
+    let { setSelectedValueKey, setSelectedValue } = this.props
+    if(typeof this.props.setSelectedValueKey !== 'undefined'){
+      setSelectedValue(setSelectedValueKey, selectedValue)
+    }
   }
   
   render() {
@@ -68,4 +88,4 @@ class SelectComponent extends React.Component {
   }
 }
 
-export default SelectComponent
+export default connect(mapStateToProps, mapDispatchToProps)(SelectComponent)

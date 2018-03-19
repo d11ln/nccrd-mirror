@@ -171,7 +171,7 @@ class SectorFilters extends React.Component {
       <div>
         <div className="row">
           <div className="col-md-12">
-            <label style={{ fontSize: "large" }}>Sector filters:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <label style={{ fontSize: "large" }}>Sector filters:&nbsp;&nbsp;</label>
             <label style={{ fontSize: "large" }}>{selectedValue}</label>
           </div>
         </div>

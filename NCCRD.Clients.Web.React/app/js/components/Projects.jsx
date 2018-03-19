@@ -5,6 +5,7 @@ import ProjectList from './ProjectList.jsx'
 import ProjectFilters from './ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners';
+import { Button } from 'mdbreact'
 
 const mapStateToProps = (state, props) => {
     let { loadingData: { loading } } = state
@@ -15,6 +16,21 @@ class Projects extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.backToTop = this.backToTop.bind(this)
+        this.addProject = this.addProject.bind(this)
+    }
+
+    backToTop() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    addProject() {
+        console.log("add project")
     }
 
     render() {
@@ -22,20 +38,59 @@ class Projects extends React.Component {
         return (
             <div>
 
-                <div
-                    hidden={!this.props.loading}
-                    className="card"
-                    style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99", background: "#5499c7" }}>
-                    
-                    <div className="card-body" style={{ margin: "30px 80px 30px 80px"}}>
-                        <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#f8f9f9" }}>LOADING</label>
-                        <BeatLoader
-                            color={' #a9cce3 '}
-                            size={30}
-                            loading={this.props.loading}
-                        />
+                <div className="container-fluid">
+                    <div className="row">
+                        <div
+                            hidden={!this.props.loading}
+                            className="card"
+                            style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99" }}>
+
+                            <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
+                                <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
+                                <BeatLoader
+                                    color={'#4285F4'}
+                                    size={30}
+                                    loading={this.props.loading}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99"}}>
+                                <Button style={{width: "150px"}} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
+                                    <i className="fa fa-plus-circle" aria-hidden="true" />
+                                    &nbsp;&nbsp;
+                                    Add project
+                                </Button>
+                                <Button style={{width: "150px"}} color="secondary" className="btn-sm" onTouchTap={this.backToTop} >
+                                    <i className="fa fa-arrow-circle-up" aria-hidden="true" />
+                                    &nbsp;&nbsp;
+                                    Back to top
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* <!--Back to top button--> */}
+                {/* <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float_bottom_right">
+                                <button class="btn btn-secondary btn-sm" style="margin-right:0px" onclick="LoadProjectDetailsSection()">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add project
+                        </button>
+                                <button class="btn btn-secondary btn-sm" onclick="back_to_top()">
+                                    <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>&nbsp;&nbsp;Back to top
+                        </button>
+                            </div>
+                        </div>
+                    </div>
+                </div> */}
 
                 <ProjectFilters />
                 <ProjectList />

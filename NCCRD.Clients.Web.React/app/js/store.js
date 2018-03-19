@@ -20,7 +20,8 @@ const store = createStore(
                 adaptationDetails: [],
                 mitigationDetails: [],
                 emissionsData: [],
-                researchDetails: []
+                researchDetails: [],
+                editMode: false
             },
 
         lookupData:

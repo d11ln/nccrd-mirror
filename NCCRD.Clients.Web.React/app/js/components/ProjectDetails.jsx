@@ -3,7 +3,16 @@
 import React from 'react'
 import { Button } from 'mdbreact'
 import { connect } from 'react-redux'
-import { LOAD_PROJECT_DETAILS, SET_LOADING } from "../constants/action-types"
+
+import 
+{ 
+    LOAD_PROJECT_DETAILS, 
+    SET_LOADING, 
+    SET_EDIT_MODE, 
+    SET_PROJECT_DETAILS_YEAR_FROM, 
+    SET_PROJECT_DETAILS_YEAR_TO 
+} from "../constants/action-types"
+
 import { apiBaseURL } from "../constants/apiBaseURL"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
@@ -18,9 +27,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 const mapStateToProps = (state, props) => {
-    let { projectData: { projectDetails } } = state
+    let { projectData: { projectDetails, editMode } } = state
     let { loadingData: { loading } } = state
-    return { projectDetails, loading }
+    return { projectDetails, editMode, loading }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -30,6 +39,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         setLoading: payload => {
             dispatch({ type: SET_LOADING, payload })
+        },
+        setEditMode: payload => {
+            dispatch({ type: SET_EDIT_MODE, payload })
         }
     }
 }
@@ -38,6 +50,10 @@ class ProjectDetails extends React.Component {
 
     constructor(props) {
         super(props)
+
+        this.editClick = this.editClick.bind(this)
+        this.saveClick = this.saveClick.bind(this)
+        this.discardClick = this.discardClick.bind(this)
 
         let projectId = this.props.match.params.id
         this.state = { ...this.state, projectId }
@@ -61,9 +77,27 @@ class ProjectDetails extends React.Component {
 
     }
 
+    editClick() {
+
+        let { setEditMode } = this.props
+        setEditMode(true)
+    }
+
+    saveClick() {
+
+        let { setEditMode } = this.props
+        setEditMode(false)
+    }
+
+    discardClick() {
+
+        let { setEditMode } = this.props
+        setEditMode(false)
+    }
+
     render() {
 
-        const { projectDetails } = this.props
+        const { projectDetails, editMode } = this.props
 
         return (
             <div>
@@ -71,12 +105,12 @@ class ProjectDetails extends React.Component {
                 <div
                     hidden={!this.props.loading}
                     className="card"
-                    style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "999", background: "#5499c7" }}>
+                    style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99", background: "white" }}>
 
                     <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
-                        <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#f8f9f9" }}>LOADING</label>
+                        <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
                         <BeatLoader
-                            color={' #a9cce3 '}
+                            color={'#4285F4'}
                             size={30}
                             loading={this.props.loading}
                         />
@@ -87,23 +121,33 @@ class ProjectDetails extends React.Component {
                 <div className="row">
 
                     <div className="col-md-9">
-                        <table style={{ marginTop: "-10px" }}>
+                        <table >
                             <tbody>
                                 <tr>
-                                    <td>
-                                        <Button color="secondary" size="sm" id="btnBackToList" onTouchTap={() => location.hash = "/projects"}>
-                                            <i className="fa fa-chevron-circle-left" aria-hidden="true"></i><br />Back
+                                    <td valign="top">
+                                        <Button style={{ width: "100px", marginTop: "3px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={() => location.hash = "/projects"}>
+                                            <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
                                         </Button>
                                     </td>
                                     <td>
-                                        <label style={{ display: "inline", fontSize: "x-large" }}><b>Project Title: </b>{projectDetails.ProjectTitle}</label>
+                                        <p style={{ fontSize: "x-large" }}><b>Project Title: </b>{projectDetails.ProjectTitle}</p>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <RangeComponent col="col-md-3" align="center" size="x-large" readOnly="true" id="txtYear" label="" inputWidth="75px" valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear} />
+                    <RangeComponent
+                        col="col-md-3"
+                        align="center"
+                        size="x-large"
+                        id="txtYear"
+                        label=""
+                        inputWidth="75px"
+                        valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
+                        setValueFromKey={SET_PROJECT_DETAILS_YEAR_FROM}
+                        setValueToKey={SET_PROJECT_DETAILS_YEAR_TO}
+                    />
                 </div>
 
                 <br />
@@ -148,6 +192,30 @@ class ProjectDetails extends React.Component {
                         <br />
                     </TabPanel>
                 </Tabs>
+
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
+                                <Button hidden={editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.editClick} >
+                                    <i className="fa fa-pencil" aria-hidden="true" />
+                                    &nbsp;&nbsp;
+                                    Edit
+                                </Button>
+                                <Button hidden={!editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.saveClick} >
+                                    <i className="fa fa-save" aria-hidden="true" />
+                                    &nbsp;&nbsp;
+                                    Save
+                                </Button>
+                                <Button hidden={!editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.discardClick} >
+                                    <i className="fa fa-trash-o" aria-hidden="true" />
+                                    &nbsp;&nbsp;
+                                    Discard
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         )
