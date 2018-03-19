@@ -9,7 +9,10 @@ import {
     SET_PROJECT_DETAILS_VALIDATION_COMMENTS, SET_PROJECT_DETAILS_PROJECT_TYPE, SET_PROJECT_DETAILS_PROJECT_SUBTYPE,
     SET_PROJECT_DETAILS_PROJECT_STATUS, SET_PROJECT_DETAILS_PROJECT_MANAGER, SET_PROJECT_DETAILS_VALIDATION_STATUS,
     SET_PROJECT_DETAILS_MAOPTION, SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE, SET_ADAPTATION_DETAILS_SECTOR,
-    ADD_ADAPTATION_DETAILS
+    ADD_ADAPTATION_DETAILS, ADD_MITIGATION_DETAILS, SET_MITIGATION_CARBON_CREDIT, SET_MITIGATION_CARBON_CREDIT_MARKET,
+    SET_MITIGATION_CDM_STATUS, SET_MITIGATION_CDM_METHODOLOGY, SET_MITIGATION_VOLUNTARY_METHODOLOGY,
+    SET_MITIGATION_VOLUNTARY_GOLD_STANDARD, SET_MITIGATION_CDM_PROJECT_NUMBER, SET_MITIGATION_OTHER_DESCR,
+    SET_MITIGATION_SECTOR
 } from "../constants/action-types";
 
 const _ = require('lodash')
@@ -62,7 +65,6 @@ export default function ProjectsReducer(state = {}, action) {
 
             let { adaptationDetails, projectDetails } = state
 
-
             let newItem = {
                 "AdaptationDetailId": getUID(),
                 "Description": "",
@@ -76,6 +78,29 @@ export default function ProjectsReducer(state = {}, action) {
 
         case LOAD_MITIGATION_DETAILS: {
             return { ...state, mitigationDetails: payload }
+        }
+
+        case ADD_MITIGATION_DETAILS: {
+
+            let { mitigationDetails, projectDetails } = state
+
+            let newItem =   {
+                "MitigationDetailId": getUID(),
+                "VCS": 0,
+                "Other": 0,
+                "OtherDescription": "",
+                "CDMProjectNumber": "",
+                "CarbonCreditId": 0,
+                "CarbonCreditMarketId": 0,
+                "CDMStatusId": 0,
+                "CDMMethodologyId": 0,
+                "VoluntaryMethodologyId": 0,
+                "VoluntaryGoldStandardId": 0,
+                "ProjectId": projectDetails.ProjectId,
+                "SectorId": 0
+              }
+
+            return { ...state, mitigationDetails: [...mitigationDetails, newItem] }
         }
 
         case LOAD_MITIGATION_EMISSIONS: {
@@ -216,6 +241,114 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, SectorId: payload }] }
         }
 
+        case SET_MITIGATION_CARBON_CREDIT: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditId: payload }] }
+        }
+
+        case SET_MITIGATION_CARBON_CREDIT_MARKET: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditMarketId: payload }] }
+        } 
+        
+        case SET_MITIGATION_CDM_STATUS: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMStatusId: payload }] }
+        }      
+        
+        case SET_MITIGATION_CDM_METHODOLOGY: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMMethodologyId: payload }] }
+        }
+
+        case SET_MITIGATION_VOLUNTARY_METHODOLOGY: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryMethodologyId: payload }] }
+        }     
+        
+        case SET_MITIGATION_VOLUNTARY_GOLD_STANDARD: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryGoldStandardId: payload }] }
+        }  
+        
+        case SET_MITIGATION_CDM_PROJECT_NUMBER: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMProjectNumber: payload }] }
+        }
+        
+        case SET_MITIGATION_OTHER_DESCR: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, OtherDescription: payload }] }
+        }
+
+        case SET_MITIGATION_SECTOR: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, SectorId: payload }] }
+        }        
+        
         default: {
             return state
         }

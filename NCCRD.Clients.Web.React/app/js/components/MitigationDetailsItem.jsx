@@ -7,7 +7,10 @@ import TextComponent from './TextComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
 import {
   LOAD_CARBON_CREDIT, LOAD_CARBON_CREDIT_MARKET, LOAD_CDM_STATUS, LOAD_CDM_METHODOLOGY, LOAD_VOLUNTARY_METHODOLOGY,
-  LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_SECTOR, SET_LOADING
+  LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_SECTOR, SET_LOADING, SET_MITIGATION_CARBON_CREDIT, SET_MITIGATION_CARBON_CREDIT_MARKET,
+  SET_MITIGATION_CDM_STATUS, SET_MITIGATION_CDM_METHODOLOGY, SET_MITIGATION_VOLUNTARY_METHODOLOGY,
+  SET_MITIGATION_VOLUNTARY_GOLD_STANDARD, SET_MITIGATION_CDM_PROJECT_NUMBER, SET_MITIGATION_OTHER_DESCR,
+  SET_MITIGATION_SECTOR
 } from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
@@ -43,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: LOAD_SECTOR, payload })
     },
     setLoading: payload => {
-        dispatch({ type: SET_LOADING, payload })
+      dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -54,7 +57,7 @@ class MitigationDetailsItem extends React.Component {
     super(props)
   }
 
-  loadCarbonCredit(){
+  loadCarbonCredit() {
 
     //LOAD_CARBON_CREDIT
     let { loadCarbonCredit } = this.props
@@ -68,7 +71,7 @@ class MitigationDetailsItem extends React.Component {
     })
   }
 
-  loadCarbonCreditMarket(){
+  loadCarbonCreditMarket() {
 
     //LOAD_CARBON_CREDIT_MARKET
     let { loadCarbonCreditMarket } = this.props
@@ -82,7 +85,7 @@ class MitigationDetailsItem extends React.Component {
     })
   }
 
-  loadCDMStatus(){
+  loadCDMStatus() {
 
     //LOAD_CDM_STATUS
     let { loadCDMStatus } = this.props
@@ -96,7 +99,7 @@ class MitigationDetailsItem extends React.Component {
     })
   }
 
-  loadCDMMethodology(){
+  loadCDMMethodology() {
 
     //LOAD_CDM_METHODOLOG
     let { loadCDMMethodology } = this.props
@@ -110,7 +113,7 @@ class MitigationDetailsItem extends React.Component {
     })
   }
 
-  loadVoluntaryMethodology(){
+  loadVoluntaryMethodology() {
 
     //LOAD_VOLUNTARY_METHODOLOGY
     let { loadVoluntaryMethodology } = this.props
@@ -124,7 +127,7 @@ class MitigationDetailsItem extends React.Component {
     })
   }
 
-  loadVoluntaryGoldStandard(){
+  loadVoluntaryGoldStandard() {
 
     //LOAD_VOLUNTARY_GOLD_STANDARD
     let { loadVoluntaryGoldStandard } = this.props
@@ -138,7 +141,7 @@ class MitigationDetailsItem extends React.Component {
     })
   }
 
-  loadSectors(){
+  loadSectors() {
 
     //Load Sectors
     let { loadSectors } = this.props
@@ -179,32 +182,79 @@ class MitigationDetailsItem extends React.Component {
         <br />
 
         <div className="row">
-          <SelectComponent col="col-md-4" label="Carbon credit:" readOnly="true"
-            value={details.CarbonCreditId} options={carbonCredit} />
-          <SelectComponent col="col-md-4" label="Carbon credit market:" readOnly="true"
-            value={details.CarbonCreditMarketId} options={carbonCreditMarket} />
-          <SelectComponent col="col-md-4" label="CDM status:" readOnly="true"
-            value={details.CDMStatusId} options={cdmStatus} />
+          <SelectComponent
+            col="col-md-4"
+            label="Carbon credit:"
+            selectedValue={details.CarbonCreditId}
+            options={carbonCredit}
+            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT + "|" + details.MitigationDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Carbon credit market:"
+            selectedValue={details.CarbonCreditMarketId}
+            options={carbonCreditMarket}
+            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT_MARKET + "|" + details.MitigationDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="CDM status:"
+            selectedValue={details.CDMStatusId}
+            options={cdmStatus}
+            setSelectedValueKey={SET_MITIGATION_CDM_STATUS + "|" + details.MitigationDetailId}
+          />
         </div>
 
         <br />
 
         <div className="row">
-          <SelectComponent col="col-md-4" label="CDM methodology:" readOnly="true"
-            value={details.CDMMethodologyId} options={cdmMethodology} />
-          <SelectComponent col="col-md-4" label="Voluntary methodology:" readOnly="true"
-            value={details.VoluntaryMethodologyId} options={voluntaryMethodology} />
-          <SelectComponent col="col-md-4" label="Voluntary gold standard:" readOnly="true"
-            value={details.VoluntaryGoldStandardId} options={voluntaryGoldStandard} />
+          <SelectComponent
+            col="col-md-4"
+            label="CDM methodology:"
+            selectedValue={details.CDMMethodologyId}
+            options={cdmMethodology}
+            setSelectedValueKey={SET_MITIGATION_CDM_METHODOLOGY + "|" + details.MitigationDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Voluntary methodology:"
+            selectedValue={details.VoluntaryMethodologyId}
+            options={voluntaryMethodology}
+            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_METHODOLOGY + "|" + details.MitigationDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Voluntary gold standard:"
+            selectedValue={details.VoluntaryGoldStandardId}
+            options={voluntaryGoldStandard}
+            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_GOLD_STANDARD + "|" + details.MitigationDetailId}
+          />
         </div>
 
         <br />
 
         <div className="row">
-          <TextComponent col="col-md-4" readOnly="true" label="CDM project number:" id="txtCDMProjectNumber" value={details.CDMProjectNumber} />
-          <TextComponent col="col-md-4" readOnly="true" label="Other description:" id="txtOtherDescription" value={details.OtherDescription} />
-          <SelectComponent col="col-md-4" label="Sector:" readOnly="true"
-            value={details.SectorId} options={sector} />
+          <TextComponent
+            col="col-md-4"
+            label="CDM project number:"
+            id="txtCDMProjectNumber"
+            value={details.CDMProjectNumber}
+            setValueKey={SET_MITIGATION_CDM_PROJECT_NUMBER + "|" + details.MitigationDetailId}
+          />
+          <TextComponent
+            col="col-md-4"
+            label="Other description:"
+            id="txtOtherDescription"
+            value={details.OtherDescription}
+            setValueKey={SET_MITIGATION_OTHER_DESCR + "|" + details.MitigationDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Sector:"
+            selectedValue={details.SectorId}
+            options={sector}
+            setSelectedValueKey={SET_MITIGATION_SECTOR + "|" + details.MitigationDetailId}
+          />
         </div>
 
         <br />

@@ -1,14 +1,15 @@
 'use strict'
 
 import React from 'react'
+import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { LOAD_MITIGATION_DETAILS, SET_LOADING } from "../constants/action-types"
+import { LOAD_MITIGATION_DETAILS, SET_LOADING, ADD_MITIGATION_DETAILS } from "../constants/action-types"
 import MitigationDetailsItem from './MitigationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { mitigationDetails } } = state
-  return { mitigationDetails }
+  let { projectData: { mitigationDetails, editMode } } = state
+  return { mitigationDetails, editMode }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -16,8 +17,11 @@ const mapDispatchToProps = (dispatch) => {
     loadMitigationDetails: payload => {
       dispatch({ type: LOAD_MITIGATION_DETAILS, payload })
     },
+    addMitigationDetails: payload => {
+      dispatch({ type: ADD_MITIGATION_DETAILS, payload })
+    },
     setLoading: payload => {
-        dispatch({ type: SET_LOADING, payload })
+      dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -26,6 +30,8 @@ class MitigationDetailsTab extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.addClick = this.addClick.bind(this)
   }
 
   componentDidMount() {
@@ -53,7 +59,7 @@ class MitigationDetailsTab extends React.Component {
 
     if (typeof mitigationDetails !== 'undefined') {
 
-      for (let i of mitigationDetails) {
+      for (let i of mitigationDetails.sort((a, b) => parseInt(a.MitigationDetailId) - parseInt(b.MitigationDetailId))) {
         details.push(<MitigationDetailsItem key={i.MitigationDetailId} details={i} />)
       }
 
@@ -62,10 +68,27 @@ class MitigationDetailsTab extends React.Component {
     return <div />
   }
 
+  addClick() {
+
+    let { addMitigationDetails } = this.props
+    addMitigationDetails("")
+  }
+
   render() {
+
+    let { editMode } = this.props
+
     return (
       <div>
+
+        <Button hidden={!editMode} style={{ marginLeft: "0px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
+          <i className="fa fa-plus-circle" aria-hidden="true" />
+          &nbsp;&nbsp;
+          Add Mitigation Details
+        </Button>
+
         {this.loadDetails()}
+
       </div>
     )
   }
