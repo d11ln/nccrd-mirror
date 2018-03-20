@@ -84,7 +84,7 @@ class MitigationEmissionsDataTab extends React.Component {
         <Button hidden={!editMode} style={{ marginLeft: "0px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
           <i className="fa fa-plus-circle" aria-hidden="true" />
           &nbsp;&nbsp;
-          Add Mitigation Details
+          Add Emissions Data
         </Button>
 
         {this.loadDetails()}

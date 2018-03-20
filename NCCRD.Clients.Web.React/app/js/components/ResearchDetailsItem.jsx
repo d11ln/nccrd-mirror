@@ -5,7 +5,10 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextComponent from './TextComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import { LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE, LOAD_SECTOR, SET_LOADING } from "../constants/action-types"
+import {
+  LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE, LOAD_SECTOR, SET_LOADING, SET_RESEARCH_AUTHOR, SET_RESEARCH_PAPER_LINK,
+  SET_RESEARCH_RESEARCH_TYPE, SET_RESEARCH_TARGET_AUDIENCE, SET_RESEARCH_SECTOR
+} from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { researchType, targetAudience, sector } } = state
@@ -24,7 +27,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: LOAD_SECTOR, payload })
     },
     setLoading: payload => {
-        dispatch({ type: SET_LOADING, payload })
+      dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -35,7 +38,7 @@ class ResearchDetailsItem extends React.Component {
     super(props)
   }
 
-  loadResearchType(){
+  loadResearchType() {
 
     //Load ResearchType
     let { loadResearchType } = this.props
@@ -49,7 +52,7 @@ class ResearchDetailsItem extends React.Component {
     })
   }
 
-  loadTargetAudience(){
+  loadTargetAudience() {
 
     //Load TargetAudience
     let { loadTargetAudience } = this.props
@@ -63,7 +66,7 @@ class ResearchDetailsItem extends React.Component {
     })
   }
 
-  loadSectors(){
+  loadSectors() {
 
     //Load Sectors
     let { loadSectors } = this.props
@@ -99,21 +102,51 @@ class ResearchDetailsItem extends React.Component {
         <br />
 
         <div className="row">
-          <TextComponent col="col-md-4" readOnly="true" label="Author:" id="txtAuthor" value={details.Author} />
-          <TextComponent col="col-md-4" readOnly="true" label="Paper link:" id="txtPaperLink" value={details.PaperLink} />
-          <SelectComponent col="col-md-4" label="Research type:" readOnly="true" value={details.ResearchTypeId} options={researchType} />
+          <TextComponent
+            col="col-md-4"
+            label="Author:"
+            id="txtAuthor"
+            value={details.Author}
+            setValueKey={SET_RESEARCH_AUTHOR + "|" + details.ResearchDetailId}
+          />
+          <TextComponent
+            col="col-md-4"
+            label="Paper link:"
+            id="txtPaperLink"
+            value={details.PaperLink}
+            setValueKey={SET_RESEARCH_PAPER_LINK + "|" + details.ResearchDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Research type:"
+            selectedValue={details.ResearchTypeId}
+            options={researchType}
+            setSelectedValueKey={SET_RESEARCH_RESEARCH_TYPE + "|" + details.ResearchDetailId}
+          />
         </div>
 
         <br />
 
         <div className="row">
-          <SelectComponent col="col-md-4" label="Target audience::" readOnly="true" value={details.TargetAudienceId} options={targetAudience} />
-          <SelectComponent col="col-md-4" label="Sector:" readOnly="true" value={details.SectorId} options={sector} />
+          <SelectComponent
+            col="col-md-4"
+            label="Target audience::"
+            selectedValue={details.TargetAudienceId}
+            options={targetAudience}
+            setSelectedValueKey={SET_RESEARCH_TARGET_AUDIENCE + "|" + details.ResearchDetailId}
+          />
+          <SelectComponent
+            col="col-md-4"
+            label="Sector:"
+            selectedValue={details.SectorId}
+            options={sector}
+            setSelectedValueKey={SET_RESEARCH_SECTOR + "|" + details.ResearchDetailId}
+          />
         </div>
 
-        <br/>
-        <hr/>
-        
+        <br />
+        <hr />
+
       </div>
     )
   }

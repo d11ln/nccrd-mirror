@@ -17,7 +17,9 @@ import {
     SET_EMISSIONS_PFC, SET_EMISSIONS_PFC_CO2e, SET_EMISSIONS_SF6, SET_EMISSIONS_SF6_CO2e, SET_EMISSIONS_Hydro,
     SET_EMISSIONS_Hydro_CO2e, SET_EMISSIONS_Tidal, SET_EMISSIONS_Tidal_CO2e, SET_EMISSIONS_Wind, SET_EMISSIONS_Wind_CO2e,
     SET_EMISSIONS_Solar, SET_EMISSIONS_Solar_CO2e, SET_EMISSIONS_FossilFuelElecRed, SET_EMISSIONS_FossilFuelElecRed_CO2e,
-    SET_EMISSIONS_BioWaste, SET_EMISSIONS_BioWaste_CO2e, SET_EMISSIONS_Geothermal, SET_EMISSIONS_Geothermal_CO2e
+    SET_EMISSIONS_BioWaste, SET_EMISSIONS_BioWaste_CO2e, SET_EMISSIONS_Geothermal, SET_EMISSIONS_Geothermal_CO2e,
+    ADD_RESEARCH_DETAILS, SET_RESEARCH_AUTHOR, SET_RESEARCH_PAPER_LINK, SET_RESEARCH_RESEARCH_TYPE, SET_RESEARCH_TARGET_AUDIENCE,
+    SET_RESEARCH_SECTOR
 } from "../constants/action-types";
 
 const _ = require('lodash')
@@ -144,7 +146,7 @@ export default function ProjectsReducer(state = {}, action) {
                 "BioWaste_CO2e": 0,
                 "Geothermal": 0,
                 "Geothermal_CO2e": 0,
-                "ProjectId": projectDetails.ProjectId,
+                "ProjectId": projectDetails.ProjectId
             }
 
             return { ...state, emissionsData: [...emissionsData, newItem] }
@@ -152,6 +154,23 @@ export default function ProjectsReducer(state = {}, action) {
 
         case LOAD_RESEARCH_DETAILS: {
             return { ...state, researchDetails: payload }
+        }
+
+        case ADD_RESEARCH_DETAILS: {
+
+            let { researchDetails, projectDetails } = state
+
+            let newItem = {
+                "ResearchDetailId": getUID(),
+                "Author": "",
+                "PaperLink": "",
+                "ResearchTypeId": 0,
+                "TargetAudienceId": 0,
+                "ProjectId": projectDetails.ProjectId,
+                "SectorId": 0
+              }
+
+            return { ...state, researchDetails: [...researchDetails, newItem] }
         }
 
         case SET_EDIT_MODE: {
@@ -702,6 +721,66 @@ export default function ProjectsReducer(state = {}, action) {
 
             //return updated state
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Geothermal_CO2e: payload }] }
+        }
+
+        case SET_RESEARCH_AUTHOR: {
+            let { researchDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(researchDetails, "ResearchDetailId", id)
+            //Remove item from array
+            researchDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, Author: payload }] }
+        }
+
+        case SET_RESEARCH_PAPER_LINK: {
+            let { researchDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(researchDetails, "ResearchDetailId", id)
+            //Remove item from array
+            researchDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, PaperLink: payload }] }
+        }
+
+        case SET_RESEARCH_RESEARCH_TYPE: {
+            let { researchDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(researchDetails, "ResearchDetailId", id)
+            //Remove item from array
+            researchDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, ResearchTypeId: payload }] }
+        }
+
+        case SET_RESEARCH_TARGET_AUDIENCE: {
+            let { researchDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(researchDetails, "ResearchDetailId", id)
+            //Remove item from array
+            researchDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, TargetAudienceId: payload }] }
+        }
+
+        case SET_RESEARCH_SECTOR: {
+            let { researchDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(researchDetails, "ResearchDetailId", id)
+            //Remove item from array
+            researchDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, SectorId: payload }] }
         }
 
         default: {
