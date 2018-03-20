@@ -8,7 +8,8 @@ import { LOAD_MITIGATION_DETAILS, SET_LOADING, ADD_MITIGATION_DETAILS } from "..
 import MitigationDetailsItem from './MitigationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { mitigationDetails, editMode } } = state
+  let { mitigationData: { mitigationDetails } } = state
+  let { globalData: { editMode } } = state
   return { mitigationDetails, editMode }
 }
 

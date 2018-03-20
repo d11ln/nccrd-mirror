@@ -13,15 +13,36 @@ const store = createStore(
     combineReducers({ ...reducers, router: routerReducer }), {
         ...applyMiddleware(middleware),
 
+        globalData:
+            {
+                loading: true,
+                editMode: false
+            },
+
         projectData:
             {
                 projects: [],
-                projectDetails: {},
-                adaptationDetails: [],
-                mitigationDetails: [],
-                emissionsData: [],
-                researchDetails: [],
-                editMode: false
+                projectDetails: {}
+            },
+
+        adaptationData:
+            {
+                adaptationDetails: []
+            },
+
+        mitigationData:
+            {
+                mitigationDetails: []
+            },
+
+        emissionData:
+            {
+                emissionsData: []
+            },
+
+        researchData:
+            {
+                researchDetails: []
             },
 
         lookupData:
@@ -54,11 +75,6 @@ const store = createStore(
                 typologyFilter: 0,
                 regionFilter: 0,
                 sectorFilter: 0
-            },
-
-        loadingData:
-            {
-                loading: true
             }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

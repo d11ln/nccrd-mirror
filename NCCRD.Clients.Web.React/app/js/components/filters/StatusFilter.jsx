@@ -68,6 +68,7 @@ class StatusFilter extends React.Component {
                 selectedValue={statusFilter} 
                 options={this.props.projectStatus}
                 setSelectedValueKey={LOAD_STATUS_FILTER}
+                editModeOverride={true}
             />
         )
     }

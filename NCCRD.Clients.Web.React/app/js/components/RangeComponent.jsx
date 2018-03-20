@@ -4,7 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { editMode } } = state
+  let { globalData: { editMode } } = state
   return { editMode }
 }
 

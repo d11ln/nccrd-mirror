@@ -8,7 +8,8 @@ import { LOAD_MITIGATION_EMISSIONS, SET_LOADING, ADD_MITIGATION_EMISSIONS } from
 import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { emissionsData, editMode } } = state
+  let { emissionData: { emissionsData } } = state
+  let { globalData: { editMode } } = state
   return { emissionsData, editMode }
 }
 

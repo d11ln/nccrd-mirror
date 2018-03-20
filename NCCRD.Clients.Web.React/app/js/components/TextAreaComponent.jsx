@@ -5,7 +5,7 @@ import TextareaAutosize from "react-textarea-autosize"
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { editMode } } = state
+  let { globalData: { editMode } } = state
   return { editMode }
 }
 

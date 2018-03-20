@@ -8,7 +8,7 @@ import { BeatLoader } from 'react-spinners';
 import { Button } from 'mdbreact'
 
 const mapStateToProps = (state, props) => {
-    let { loadingData: { loading } } = state
+    let { globalData: { loading } } = state
     return { loading }
 }
 

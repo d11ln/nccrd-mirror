@@ -8,7 +8,8 @@ import { LOAD_ADAPTATION_DETAILS, SET_LOADING, ADD_ADAPTATION_DETAILS } from "..
 import AdaptationDetailsItem from './AdaptationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { adaptationDetails, editMode } } = state
+  let { adaptationData: { adaptationDetails } } = state
+  let { globalData: { editMode } } = state
   return { adaptationDetails, editMode }
 }
 

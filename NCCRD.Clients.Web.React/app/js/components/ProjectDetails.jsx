@@ -27,8 +27,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 const mapStateToProps = (state, props) => {
-    let { projectData: { projectDetails, editMode } } = state
-    let { loadingData: { loading } } = state
+    let { projectData: { projectDetails} } = state
+    let { globalData: { loading, editMode  } } = state
     return { projectDetails, editMode, loading }
 }
 

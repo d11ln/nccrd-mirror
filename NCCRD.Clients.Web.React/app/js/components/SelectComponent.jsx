@@ -6,7 +6,7 @@ import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { editMode } } = state
+  let { globalData: { editMode } } = state
   return { editMode }
 }
 
@@ -24,6 +24,7 @@ class SelectComponent extends React.Component {
     super(props);
 
     this.onSelect = this.onSelect.bind(this)
+    this.getDisabledState = this.getDisabledState.bind(this)
   }
 
   selectOptions() {
@@ -63,16 +64,31 @@ class SelectComponent extends React.Component {
     }
   }
 
+  getDisabledState() {
+    let { editMode, editModeOverride } = this.props
+
+    let disabledState = true
+
+    if (typeof editModeOverride !== "undefined" && editModeOverride === true) {
+      disabledState = false
+    }
+    else if(typeof editMode !== "undefined" && editMode === true) {
+      disabledState = false
+    }
+
+    return disabledState
+  }
+
   render() {
 
-    let { col, label, id, editMode, onChange, selectedValue } = this.props
+    let { col, label, id, onChange, selectedValue } = this.props
 
     return (
       <div className={col}>
         <label style={{ fontWeight: "bold" }}>{label}</label>
 
         <Select id={id}
-          disabled={!editMode}
+          disabled={this.getDisabledState()}
           name={id}
           value={selectedValue}
           options={this.selectOptions()}

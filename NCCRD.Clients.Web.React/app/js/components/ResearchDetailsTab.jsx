@@ -8,7 +8,8 @@ import { LOAD_RESEARCH_DETAILS, SET_LOADING, ADD_RESEARCH_DETAILS } from "../con
 import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { researchDetails, editMode } } = state
+  let { researchData: { researchDetails } } = state
+  let { globalData: { editMode } } = state
   return { researchDetails, editMode }
 }
 
