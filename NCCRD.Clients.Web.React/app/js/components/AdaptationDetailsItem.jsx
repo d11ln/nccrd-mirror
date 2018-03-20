@@ -89,7 +89,8 @@ class AdaptationDetailsItem extends React.Component {
             label="Description:"
             id="txtDescription"
             value={details.Description}
-            setValueKey={SET_ADAPTATION_DETAILS_DESCR + "|" + details.AdaptationDetailId}
+            setValueKey={SET_ADAPTATION_DETAILS_DESCR}
+            parentId={details.AdaptationDetailId}
           />
         </div>
 
@@ -102,14 +103,16 @@ class AdaptationDetailsItem extends React.Component {
             readOnly="true"
             selectedValue={details.AdaptationPurposeId}
             options={adaptationPurpose}
-            setSelectedValueKey={SET_ADAPTATION_DETAILS_PURPOSE + "|" + details.AdaptationDetailId}
+            setSelectedValueKey={SET_ADAPTATION_DETAILS_PURPOSE}
+            parentId={details.AdaptationDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
             options={sector}
-            setSelectedValueKey={SET_ADAPTATION_DETAILS_SECTOR + "|" + details.AdaptationDetailId}
+            setSelectedValueKey={SET_ADAPTATION_DETAILS_SECTOR}
+            parentId={details.AdaptationDetailId}
           />
         </div>
 

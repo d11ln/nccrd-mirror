@@ -187,21 +187,24 @@ class MitigationDetailsItem extends React.Component {
             label="Carbon credit:"
             selectedValue={details.CarbonCreditId}
             options={carbonCredit}
-            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT}
+            parentId={details.MitigationDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Carbon credit market:"
             selectedValue={details.CarbonCreditMarketId}
             options={carbonCreditMarket}
-            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT_MARKET + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT_MARKET}
+            parentId={details.MitigationDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="CDM status:"
             selectedValue={details.CDMStatusId}
             options={cdmStatus}
-            setSelectedValueKey={SET_MITIGATION_CDM_STATUS + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_CDM_STATUS}
+            parentId={details.MitigationDetailId}
           />
         </div>
 
@@ -213,21 +216,24 @@ class MitigationDetailsItem extends React.Component {
             label="CDM methodology:"
             selectedValue={details.CDMMethodologyId}
             options={cdmMethodology}
-            setSelectedValueKey={SET_MITIGATION_CDM_METHODOLOGY + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_CDM_METHODOLOGY}
+            parentId={details.MitigationDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Voluntary methodology:"
             selectedValue={details.VoluntaryMethodologyId}
             options={voluntaryMethodology}
-            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_METHODOLOGY + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_METHODOLOGY}
+            parentId={details.MitigationDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Voluntary gold standard:"
             selectedValue={details.VoluntaryGoldStandardId}
             options={voluntaryGoldStandard}
-            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_GOLD_STANDARD + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
+            parentId={details.MitigationDetailId}
           />
         </div>
 
@@ -239,21 +245,24 @@ class MitigationDetailsItem extends React.Component {
             label="CDM project number:"
             id="txtCDMProjectNumber"
             value={details.CDMProjectNumber}
-            setValueKey={SET_MITIGATION_CDM_PROJECT_NUMBER + "|" + details.MitigationDetailId}
+            setValueKey={SET_MITIGATION_CDM_PROJECT_NUMBER}
+            parentId={details.MitigationDetailId}
           />
           <TextComponent
             col="col-md-4"
             label="Other description:"
             id="txtOtherDescription"
             value={details.OtherDescription}
-            setValueKey={SET_MITIGATION_OTHER_DESCR + "|" + details.MitigationDetailId}
+            setValueKey={SET_MITIGATION_OTHER_DESCR}
+            parentId={details.MitigationDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
             options={sector}
-            setSelectedValueKey={SET_MITIGATION_SECTOR + "|" + details.MitigationDetailId}
+            setSelectedValueKey={SET_MITIGATION_SECTOR}
+            parentId={details.MitigationDetailId}
           />
         </div>
 

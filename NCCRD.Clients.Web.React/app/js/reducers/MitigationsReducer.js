@@ -27,11 +27,10 @@ export default function MitigationsReducer(state = {}, action) {
     let { type, payload } = action
     let id = 0
 
-    //Check id ID embedded in type
-    if (type.includes("|")) {
-        let res = type.split("|")
-        type = res[0]
-        id = parseInt(res[1])
+    //Check if ID embedded in payload
+    if (typeof payload !== 'undefined' && typeof payload.value !== 'undefined') {
+        id = parseInt(payload.id)
+        payload = payload.value
     }
 
     switch (type) {

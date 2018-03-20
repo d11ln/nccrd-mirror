@@ -107,21 +107,24 @@ class ResearchDetailsItem extends React.Component {
             label="Author:"
             id="txtAuthor"
             value={details.Author}
-            setValueKey={SET_RESEARCH_AUTHOR + "|" + details.ResearchDetailId}
+            setValueKey={SET_RESEARCH_AUTHOR}
+            parentId={details.ResearchDetailId}
           />
           <TextComponent
             col="col-md-4"
             label="Paper link:"
             id="txtPaperLink"
             value={details.PaperLink}
-            setValueKey={SET_RESEARCH_PAPER_LINK + "|" + details.ResearchDetailId}
+            setValueKey={SET_RESEARCH_PAPER_LINK}
+            parentId={details.ResearchDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Research type:"
             selectedValue={details.ResearchTypeId}
             options={researchType}
-            setSelectedValueKey={SET_RESEARCH_RESEARCH_TYPE + "|" + details.ResearchDetailId}
+            setSelectedValueKey={SET_RESEARCH_RESEARCH_TYPE}
+            parentId={details.ResearchDetailId}
           />
         </div>
 
@@ -133,14 +136,16 @@ class ResearchDetailsItem extends React.Component {
             label="Target audience::"
             selectedValue={details.TargetAudienceId}
             options={targetAudience}
-            setSelectedValueKey={SET_RESEARCH_TARGET_AUDIENCE + "|" + details.ResearchDetailId}
+            setSelectedValueKey={SET_RESEARCH_TARGET_AUDIENCE}
+            parentId={details.ResearchDetailId}
           />
           <SelectComponent
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
             options={sector}
-            setSelectedValueKey={SET_RESEARCH_SECTOR + "|" + details.ResearchDetailId}
+            setSelectedValueKey={SET_RESEARCH_SECTOR}
+            parentId={details.ResearchDetailId}
           />
         </div>
 

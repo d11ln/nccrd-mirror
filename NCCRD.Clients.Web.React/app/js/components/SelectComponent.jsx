@@ -60,7 +60,7 @@ class SelectComponent extends React.Component {
     //Dispatch to store
     let { setSelectedValueKey, setSelectedValue } = this.props
     if (typeof this.props.setSelectedValueKey !== 'undefined') {
-      setSelectedValue(setSelectedValueKey, selectedValue)
+      setSelectedValue(setSelectedValueKey, { value: selectedValue, id: this.props.parentId})
     }
   }
 

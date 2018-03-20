@@ -85,13 +85,13 @@ class RangeComponent extends React.Component {
 
   valueFromChange(event) {
     if (typeof this.props.setValueFromKey !== 'undefined' && !isNaN(event.target.value)) {
-      this.props.setValueFrom(this.props.setValueFromKey, event.target.value)
+      this.props.setValueFrom(this.props.setValueFromKey, { value: event.target.value, id: this.props.parentId})
     }
   }
 
   valueToChange(event) {
     if (typeof this.props.setValueToKey !== 'undefined' && !isNaN(event.target.value)) {
-      this.props.setValueTo(this.props.setValueToKey, event.target.value)
+      this.props.setValueTo(this.props.setValueToKey, { value: event.target.value, id: this.props.parentId})
     }
   }
 
