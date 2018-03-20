@@ -1,20 +1,24 @@
 'use strict'
 
 import React from 'react'
+import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { LOAD_MITIGATION_EMISSIONS, SET_LOADING } from "../constants/action-types"
+import { LOAD_MITIGATION_EMISSIONS, SET_LOADING, ADD_MITIGATION_EMISSIONS } from "../constants/action-types"
 import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { projectData: { emissionsData } } = state
-  return { emissionsData }
+  let { projectData: { emissionsData, editMode } } = state
+  return { emissionsData, editMode }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     loadMitigationEmissions: payload => {
       dispatch({ type: LOAD_MITIGATION_EMISSIONS, payload })
+    },
+    addMitigationDetails: payload => {
+      dispatch({ type: ADD_MITIGATION_EMISSIONS, payload })
     },
     setLoading: payload => {
         dispatch({ type: SET_LOADING, payload })
@@ -26,6 +30,8 @@ class MitigationEmissionsDataTab extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.addClick = this.addClick.bind(this)
   }
 
   componentDidMount() {
@@ -53,7 +59,7 @@ class MitigationEmissionsDataTab extends React.Component {
 
     if (typeof emissionsData !== 'undefined') {
 
-      for (let i of emissionsData) {
+      for (let i of emissionsData.sort((a, b) => parseInt(a.MitigationEmissionsDataId) - parseInt(b.MitigationEmissionsDataId))) {
         details.push(<MitigationEmissionsDataItem key={i.MitigationEmissionsDataId} details={i} />)
       }
 
@@ -62,10 +68,27 @@ class MitigationEmissionsDataTab extends React.Component {
     return <div />
   }
 
+  addClick() {
+
+    let { addMitigationDetails } = this.props
+    addMitigationDetails("")
+  }
+
   render() {
+
+    let { editMode } = this.props
+
     return (
       <div>
+
+        <Button hidden={!editMode} style={{ marginLeft: "0px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
+          <i className="fa fa-plus-circle" aria-hidden="true" />
+          &nbsp;&nbsp;
+          Add Mitigation Details
+        </Button>
+
         {this.loadDetails()}
+
       </div>
     )
   }
