@@ -79,6 +79,8 @@ class ProjectDetails extends React.Component {
 
     editClick() {
 
+        //Will require access right in the future...
+
         let { setEditMode } = this.props
         setEditMode(true)
     }
@@ -93,6 +95,8 @@ class ProjectDetails extends React.Component {
 
         let { setEditMode } = this.props
         setEditMode(false)
+
+        //location.hash = "/projects"
     }
 
     render() {

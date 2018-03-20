@@ -9,8 +9,9 @@ import AdaptationDetailsItem from './AdaptationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
   let { adaptationData: { adaptationDetails } } = state
+  let { projectData: { projectDetails } } = state
   let { globalData: { editMode } } = state
-  return { adaptationDetails, editMode }
+  return { adaptationDetails, editMode, projectDetails }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -68,8 +69,8 @@ class AdaptationDetailsTab extends React.Component {
   }
 
   addClick(){
-    let { addAdaptationDetails } = this.props
-    addAdaptationDetails("");
+    let { addAdaptationDetails, projectDetails } = this.props
+    addAdaptationDetails(projectDetails.ProjectId);
   }
 
   render() {

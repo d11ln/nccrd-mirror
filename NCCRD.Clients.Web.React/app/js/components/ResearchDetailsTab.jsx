@@ -9,8 +9,9 @@ import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
   let { researchData: { researchDetails } } = state
+  let { projectData: { projectDetails } } = state
   let { globalData: { editMode } } = state
-  return { researchDetails, editMode }
+  return { researchDetails, editMode, projectDetails }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -71,8 +72,8 @@ class ResearchDetailsTab extends React.Component {
 
   addClick() {
 
-    let { addResearchDetails } = this.props
-    addResearchDetails("")
+    let { addResearchDetails, projectDetails } = this.props
+    addResearchDetails(projectDetails.ProjectId)
   }
 
   render() {

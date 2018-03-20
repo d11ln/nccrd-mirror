@@ -46,7 +46,7 @@ export default function AdaptationsReducer(state = {}, action) {
                 "AdaptationDetailId": getUID(),
                 "Description": "",
                 "AdaptationPurposeId": 0,
-                "ProjectId": projectDetails.ProjectId,
+                "ProjectId": payload,
                 "SectorId": 0
             }
 

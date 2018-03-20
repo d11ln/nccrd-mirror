@@ -48,7 +48,7 @@ export default function ResearchReducerr(state = {}, action) {
                 "PaperLink": "",
                 "ResearchTypeId": 0,
                 "TargetAudienceId": 0,
-                "ProjectId": projectDetails.ProjectId,
+                "ProjectId": payload,
                 "SectorId": 0
               }
 

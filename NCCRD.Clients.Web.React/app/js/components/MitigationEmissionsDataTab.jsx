@@ -9,8 +9,9 @@ import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
   let { emissionData: { emissionsData } } = state
+  let { projectData: { projectDetails } } = state
   let { globalData: { editMode } } = state
-  return { emissionsData, editMode }
+  return { emissionsData, editMode, projectDetails }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -71,8 +72,8 @@ class MitigationEmissionsDataTab extends React.Component {
 
   addClick() {
 
-    let { addMitigationDetails } = this.props
-    addMitigationDetails("")
+    let { addMitigationDetails, projectDetails } = this.props
+    addMitigationDetails(projectDetails.ProjectId)
   }
 
   render() {

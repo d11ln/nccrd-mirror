@@ -56,7 +56,7 @@ export default function MitigationsReducer(state = {}, action) {
                 "CDMMethodologyId": 0,
                 "VoluntaryMethodologyId": 0,
                 "VoluntaryGoldStandardId": 0,
-                "ProjectId": projectDetails.ProjectId,
+                "ProjectId": payload,
                 "SectorId": 0
             }
 

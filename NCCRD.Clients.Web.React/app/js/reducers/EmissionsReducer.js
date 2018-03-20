@@ -74,7 +74,7 @@ export default function EmissionsReducer(state = {}, action) {
                 "BioWaste_CO2e": 0,
                 "Geothermal": 0,
                 "Geothermal_CO2e": 0,
-                "ProjectId": projectDetails.ProjectId
+                "ProjectId": payload
             }
 
             return { ...state, emissionsData: [...emissionsData, newItem] }
