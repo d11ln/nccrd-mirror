@@ -33,7 +33,7 @@ const mapStateToProps = (state, props) => {
     let { emissionData: { emissionsData } } = state
     let { researchData: { researchDetails } } = state
     let { globalData: { loading, editMode } } = state
-    return { projectDetails, adaptationData, mitigationData, emissionData, researchData, editMode, loading }
+    return { projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -125,187 +125,249 @@ class ProjectDetails extends React.Component {
         this.state = { ...this.state, projectId, discardModal: false, saveModal: false }
     }
 
+    loadProjectType(loadProjectTypes) {
+        return fetch(apiBaseURL + 'api/ProjectType/GetAll', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadProjectTypes(res)
+        })
+    }
+
+    loadProjectSubType(loadProjectSubTypes) {
+        return fetch(apiBaseURL + 'api/ProjectSubType/GetAll', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadProjectSubTypes(res)
+        })
+    }
+
+    loadProjectStatus(loadProjectStatus) {
+        return fetch(apiBaseURL + 'api/ProjectStatus/GetAll', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadProjectStatus(res)
+        })
+    }
+
+    loadProjectManager(loadProjectManagers) {
+        return fetch(apiBaseURL + 'api/AppUsr/GetAllBasic', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadProjectManagers(res)
+        })
+    }
+
+    loadValidationStatus(loadValidationStatus) {
+        return fetch(apiBaseURL + 'api/ValidationStatus/GetAll', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadValidationStatus(res)
+        })
+    }
+
+    loadMAOption(loadMAOptions) {
+        return fetch(apiBaseURL + 'api/MAOptions/GetAll', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadMAOptions(res)
+        })
+    }
+
+    loadProjects(loadProjectDetails) {
+        return fetch(apiBaseURL + 'api/Projects/GetById/' + this.state.projectId, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadProjectDetails(res)
+        })
+    }
+
+    loadAdaptationDetails(loadAdaptationDetails) {
+        return fetch(apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + this.state.projectId, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadAdaptationDetails(res)
+        })
+    }
+
+    loadMitigationDetails(loadMitigationDetails) {
+        return fetch(apiBaseURL + 'api/MitigationDetails/GetByProjectId/' + this.state.projectId, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadMitigationDetails(res)
+        })
+    }
+
+    loadMitigationEmissionsData(loadMitigationEmissions) {
+        return fetch(apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID//' + this.state.projectId, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadMitigationEmissions(res)
+        })
+    }
+
+    loadResearchDetails(loadResearchDetails) {
+        return fetch(apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + this.state.projectId, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadResearchDetails(res)
+        })
+    }
+
+    loadAdaptationPurpose(loadAdaptationPurpose) {
+        return fetch(apiBaseURL + 'api/AdaptationPurpose/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadAdaptationPurpose(res)
+        })
+    }
+
+    loadSector(loadSectors) {
+        return fetch(apiBaseURL + 'api/Sector/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadSectors(res)
+        })
+    }
+
+    loadCarbonCredit(loadCarbonCredit) {
+        return fetch(apiBaseURL + 'api/CarbonCredit/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadCarbonCredit(res)
+        })
+    }
+
+    loadCarbonCreditMarket(loadCarbonCreditMarket) {
+        return fetch(apiBaseURL + 'api/CarbonCreditMarket/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadCarbonCreditMarket(res)
+        })
+    }
+
+    loadCDMStatus(loadCDMStatus) {
+        return fetch(apiBaseURL + 'api/CDMStatus/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadCDMStatus(res)
+        })
+    }
+
+    loadCDMMethodology(loadCDMMethodology) {
+        return fetch(apiBaseURL + 'api/CDMMethodology/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadCDMMethodology(res)
+        })
+    }
+
+    loadVoluntaryMethodology(loadVoluntaryMethodology) {
+        return fetch(apiBaseURL + 'api/VoluntaryMethodology/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadVoluntaryMethodology(res)
+        })
+    }
+
+    loadVoluntaryGoldStandard(loadVoluntaryGoldStandard) {
+        return fetch(apiBaseURL + 'api/VoluntaryGoldStandard/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadVoluntaryGoldStandard(res)
+        })
+    }
+
+    loadResearchType(loadResearchType) {
+        return fetch(apiBaseURL + 'api/ResearchType/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadResearchType(res)
+        })
+    }
+
+    loadTargetAudience(loadTargetAudience) {
+        return fetch(apiBaseURL + 'api/TargetAudience/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadTargetAudience(res)
+        })
+    }
+
     loadData() {
 
-        let { setLoading, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadProjectManagers, loadValidationStatus,
-            loadProjectDetails, projectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions,
+        let { setLoading, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadProjectManagers, loadValidationStatus,
+            loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions,
             loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadCarbonCredit,
             loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
             loadResearchType, loadTargetAudience } = this.props
 
         setLoading(true)
 
-        $.when(
-
-            fetch(apiBaseURL + 'api/ProjectType/GetAll', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadProjectTypes(res)
-            }),
-
-            fetch(apiBaseURL + 'api/ProjectSubType/GetAll', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadProjectSubTypes(res)
-            }),
-
-            fetch(apiBaseURL + 'api/ProjectStatus/GetAll', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadProjectStatus(res)
-            }),
-
-            fetch(apiBaseURL + 'api/AppUsr/GetAllBasic', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadProjectManagers(res)
-            }),
-
-            fetch(apiBaseURL + 'api/ValidationStatus/GetAll', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadValidationStatus(res)
-            }),
-
-            fetch(apiBaseURL + 'api/ValidationStatus/GetAll', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadMAOptions(res)
-            }),
-
-            fetch(apiBaseURL + 'api/Projects/GetById/' + this.state.projectId, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadProjectDetails(res)
-            }),
-
-            fetch(apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + this.state.projectId, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadAdaptationDetails(res)
-            }),
-
-            fetch(apiBaseURL + 'api/MitigationDetails/GetByProjectId/' + this.state.projectId, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadMitigationDetails(res)
-            }),
-
-            fetch(apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID//' + this.state.projectId, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadMitigationEmissions(res)
-            }),
-
-            fetch(apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + this.state.projectId, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadResearchDetails(res)
-            }),
-
-            fetch(apiBaseURL + 'api/AdaptationPurpose/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadAdaptationPurpose(res)
-            }),
-
-            fetch(apiBaseURL + 'api/Sector/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadSectors(res)
-            }),
-
-            fetch(apiBaseURL + 'api/CarbonCredit/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadCarbonCredit(res)
-            }),
-
-            fetch(apiBaseURL + 'api/CarbonCreditMarket/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadCarbonCreditMarket(res)
-            }),
-
-            fetch(apiBaseURL + 'api/CDMStatus/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadCDMStatus(res)
-            }),
-
-            fetch(apiBaseURL + 'api/CDMMethodology/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadCDMMethodology(res)
-            }),
-
-            fetch(apiBaseURL + 'api/VoluntaryMethodology/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadVoluntaryMethodology(res)
-            }),
-
-            fetch(apiBaseURL + 'api/VoluntaryGoldStandard/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadVoluntaryGoldStandard(res)
-            }),
-
-            fetch(apiBaseURL + 'api/ResearchType/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadResearchType(res)
-            }),
-
-            fetch(apiBaseURL + 'api/TargetAudience/GetAll/', {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(res => res.json()).then(res => {
-                loadTargetAudience(res)
-            })
-
-        ).done(() => { setLoading(false) })
+        Promise.all([
+            this.loadProjectType(loadProjectTypes),
+            this.loadProjectSubType(loadProjectSubTypes),
+            this.loadProjectStatus(loadProjectStatus),
+            this.loadProjectManager(loadProjectManagers),
+            this.loadValidationStatus(loadValidationStatus),
+            this.loadMAOption(loadMAOptions),
+            this.loadProjects(loadProjectDetails),
+            this.loadAdaptationDetails(loadAdaptationDetails),
+            this.loadMitigationDetails(loadMitigationDetails),
+            this.loadMitigationEmissionsData(loadMitigationEmissions),
+            this.loadResearchDetails(loadResearchDetails),
+            this.loadAdaptationPurpose(loadAdaptationPurpose),
+            this.loadSector(loadSectors),
+            this.loadCarbonCredit(loadCarbonCredit),
+            this.loadCarbonCreditMarket(loadCarbonCreditMarket),
+            this.loadCDMStatus(loadCDMStatus),
+            this.loadCDMMethodology(loadCDMMethodology),
+            this.loadVoluntaryMethodology(loadVoluntaryMethodology),
+            this.loadVoluntaryGoldStandard(loadVoluntaryGoldStandard),
+            this.loadResearchType(loadResearchType),
+            this.loadTargetAudience(loadTargetAudience)
+        ]).then(() => { setLoading(false) })
     }
 
     componentDidMount() {
@@ -326,26 +388,28 @@ class ProjectDetails extends React.Component {
 
     saveChanges() {
 
+        let { setEditMode, setLoading } = this.props
+        
+        setEditMode(false)
         this.setState({ saveModal: false })
 
-        let { setEditMode } = this.props
-        setEditMode(false)
-
         //Save changes to DB
-        this.SaveProjectChanges()
-        this.SaveAdaptationChanges()
-        this.SaveMitigationChanges()
-        this.SaveEmissionsChanges()
-        this.SaveResearchChanges()
+        setLoading(true)
+
+        Promise.all([
+            this.SaveProjectChanges(),
+            this.SaveAdaptationChanges(),
+            this.SaveMitigationChanges(),
+            this.SaveEmissionsChanges(),
+            this.SaveResearchChanges()
+        ]).then(() => {setLoading(false)})
     }
 
     SaveProjectChanges() {
 
-        let { setLoading, projectDetails } = this.props
+        let { projectDetails } = this.props
 
         //Validate data...
-
-        setLoading(true)
 
         let strPostData = JSON.stringify(projectDetails)
         let url = apiBaseURL + "api/Projects/AddOrUpdate"
@@ -357,9 +421,6 @@ class ProjectDetails extends React.Component {
         })
             .then(res => res.json())
             .then((res) => {
-
-                setLoading(false)
-
                 if (res !== true) {
                     alert("Unable to save project data. See log for errors.")
                     console.log('Error:', res)
@@ -369,13 +430,11 @@ class ProjectDetails extends React.Component {
 
     SaveAdaptationChanges() {
 
-        let { setLoading, adaptationDetails } = this.props
+        let { adaptationDetails } = this.props
 
         adaptationDetails.forEach(element => {
 
             //Validate data...
-
-            setLoading(true)
 
             let strPostData = JSON.stringify(element)
             let url = apiBaseURL + "api/AdaptationDetails/AddOrUpdate"
@@ -387,9 +446,6 @@ class ProjectDetails extends React.Component {
             })
                 .then(res => res.json())
                 .then((res) => {
-
-                    setLoading(false)
-
                     if (res !== true) {
                         alert("Unable to save adaptation data. See log for errors.")
                         console.log('Error:', res)
@@ -400,13 +456,11 @@ class ProjectDetails extends React.Component {
 
     SaveMitigationChanges() {
 
-        let { setLoading, mitigationDetails } = this.props
+        let { mitigationDetails } = this.props
 
         mitigationDetails.forEach(element => {
 
             //Validate data...
-
-            setLoading(true)
 
             let strPostData = JSON.stringify(element)
             let url = apiBaseURL + "api/MitigationDetails/AddOrUpdate"
@@ -418,9 +472,6 @@ class ProjectDetails extends React.Component {
             })
                 .then(res => res.json())
                 .then((res) => {
-
-                    setLoading(false)
-
                     if (res !== true) {
                         alert("Unable to save mitigation data. See log for errors.")
                         console.log('Error:', res)
@@ -430,13 +481,11 @@ class ProjectDetails extends React.Component {
     }
 
     SaveEmissionsChanges() {
-        let { setLoading, emissionsData } = this.props
+        let { emissionsData } = this.props
 
         emissionsData.forEach(element => {
 
             //Validate data...
-
-            setLoading(true)
 
             let strPostData = JSON.stringify(element)
             let url = apiBaseURL + "api/MitigationEmissionsData/AddOrUpdate"
@@ -448,9 +497,6 @@ class ProjectDetails extends React.Component {
             })
                 .then(res => res.json())
                 .then((res) => {
-
-                    setLoading(false)
-
                     if (res !== true) {
                         alert("Unable to save emissions data. See log for errors.")
                         console.log('Error:', res)
@@ -460,13 +506,11 @@ class ProjectDetails extends React.Component {
     }
 
     SaveResearchChanges() {
-        let { setLoading, researchDetails } = this.props
+        let { researchDetails } = this.props
 
         researchDetails.forEach(element => {
 
             //Validate data...
-
-            setLoading(true)
 
             let strPostData = JSON.stringify(element)
             let url = apiBaseURL + "api/ResearchDetails/AddOrUpdate"
@@ -478,17 +522,12 @@ class ProjectDetails extends React.Component {
             })
                 .then(res => res.json())
                 .then((res) => {
-
-                    setLoading(false)
-
                     if (res !== true) {
                         alert("Unable to save research data. See log for errors.")
                         console.log('Error:', res)
                     }
                 })
         });
-
-
     }
 
     discardClick() {
