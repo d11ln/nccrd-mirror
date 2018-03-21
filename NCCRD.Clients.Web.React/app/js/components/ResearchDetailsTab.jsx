@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { LOAD_RESEARCH_DETAILS, SET_LOADING, ADD_RESEARCH_DETAILS } from "../constants/action-types"
+import { ADD_RESEARCH_DETAILS } from "../constants/action-types"
 import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -16,14 +16,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadResearchDetails: payload => {
-      dispatch({ type: LOAD_RESEARCH_DETAILS, payload })
-    },
     addResearchDetails: payload => {
       dispatch({ type: ADD_RESEARCH_DETAILS, payload })
-    },
-    setLoading: payload => {
-        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -34,24 +28,6 @@ class ResearchDetailsTab extends React.Component {
     super(props)
 
     this.addClick = this.addClick.bind(this)
-  }
-
-  componentDidMount() {
-
-    //Load ResearchDetails
-    let { loadResearchDetails, setLoading, projectId } = this.props
-
-    setLoading(true)
-
-    fetch(apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + projectId, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => res.json()).then(res => {
-      loadResearchDetails(res)
-      setLoading(false)
-    })
-
   }
 
   loadDetails() {

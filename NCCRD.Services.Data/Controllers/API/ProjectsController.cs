@@ -19,24 +19,6 @@ namespace NCCRD.Services.Data.Controllers.API
     //[Authorize(Roles = "Administrator,Project Owner")]
     public class ProjectsController : ApiController
     {
-        ///// <summary>
-        ///// Get all Projects
-        ///// </summary>
-        ///// <returns>Projects data as JSON</returns>
-        //[HttpGet]
-        //[Route("api/Projects/GetAll")]
-        //public IEnumerable<Project> GetAll()
-        //{
-        //    List<Project> projectList = new List<Project>();
-
-        //    using (var context = new SQLDBContext())
-        //    {
-        //        projectList = context.Project.OrderBy(p => p.ProjectTitle).ToList();
-        //    }
-
-        //    return projectList;
-        //}
-
         /// <summary>
         /// Get all Projects filtered on query params
         /// </summary>
@@ -210,53 +192,55 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>Project data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetByID/{id}")]
-        public ProjectDetailsViewModel GetByID(int id)
+        public Project GetByID(int id)
         {
-            ProjectDetailsViewModel project = null;
+            Project project = null;
 
             using (var context = new SQLDBContext())
             {
-                project = new ProjectDetailsViewModel(context.Project.FirstOrDefault(x => x.ProjectId == id));
+                project = context.Project.FirstOrDefault(x => x.ProjectId == id);
 
-                if(project.BudgetLower == null)
-                {
-                    project.BudgetLower = 0.00M;
-                }
-                if (project.BudgetUpper == null)
-                {
-                    project.BudgetUpper = 0.00M;
-                }
-                if (project.Link == "")
-                {
-                    project.Link = "#";
-                }
+                //project = new ProjectDetailsViewModel(context.Project.FirstOrDefault(x => x.ProjectId == id));
 
-                project.Link = project.Link.Trim();
-                if(project.Link.StartsWith("www"))
-                {
-                    project.Link = "http://" + project.Link;
-                }
+                //if(project.BudgetLower == null)
+                //{
+                //    project.BudgetLower = 0.00M;
+                //}
+                //if (project.BudgetUpper == null)
+                //{
+                //    project.BudgetUpper = 0.00M;
+                //}
+                //if (project.Link == "")
+                //{
+                //    project.Link = "#";
+                //}
 
-                project.ProjectTypeName = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == project.ProjectTypeId).Value;
+                //project.Link = project.Link.Trim();
+                //if(project.Link.StartsWith("www"))
+                //{
+                //    project.Link = "http://" + project.Link;
+                //}
 
-                if (project.ProjectSubTypeId != null)
-                {
-                    project.ProjectSubTypeName = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == project.ProjectSubTypeId).Value;
-                }
+                //project.ProjectTypeName = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == project.ProjectTypeId).Value;
 
-                project.ProjectStatusName = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == project.ProjectStatusId).Value;
+                //if (project.ProjectSubTypeId != null)
+                //{
+                //    project.ProjectSubTypeName = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == project.ProjectSubTypeId).Value;
+                //}
 
-                project.ProjectManagerName = context.Users.Select(x => new { x.UserId, Name = (x.FirstName + " " + x.Surname) }).FirstOrDefault(x => x.UserId == project.ProjectManagerId).Name;
+                //project.ProjectStatusName = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == project.ProjectStatusId).Value;
 
-                if (project.ValidationStatusId != null)
-                {
-                    project.ValidationStatusName = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == project.ValidationStatusId).Value;
-                }
+                //project.ProjectManagerName = context.Users.Select(x => new { x.UserId, Name = (x.FirstName + " " + x.Surname) }).FirstOrDefault(x => x.UserId == project.ProjectManagerId).Name;
 
-                if (project.MAOptionId != null)
-                {
-                    project.MAOptionName = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId).Name;
-                }
+                //if (project.ValidationStatusId != null)
+                //{
+                //    project.ValidationStatusName = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == project.ValidationStatusId).Value;
+                //}
+
+                //if (project.MAOptionId != null)
+                //{
+                //    project.MAOptionName = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId).Name;
+                //}
             }
 
             return project;

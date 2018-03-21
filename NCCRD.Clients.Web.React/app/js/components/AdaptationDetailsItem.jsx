@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import TextAreaComponent from './TextAreaComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
 import {
-  LOAD_ADAPTATION_PURPOSE, LOAD_SECTOR, SET_LOADING, SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE,
+  SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE,
   SET_ADAPTATION_DETAILS_SECTOR
 } from "../constants/action-types"
 
@@ -15,64 +15,10 @@ const mapStateToProps = (state, props) => {
   return { adaptationPurpose, sector }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadAdaptationPurpose: payload => {
-      dispatch({ type: LOAD_ADAPTATION_PURPOSE, payload })
-    },
-    loadSectors: payload => {
-      dispatch({ type: LOAD_SECTOR, payload })
-    },
-    setLoading: payload => {
-      dispatch({ type: SET_LOADING, payload })
-    }
-  }
-}
-
 class AdaptationDetailsItem extends React.Component {
 
   constructor(props) {
     super(props)
-  }
-
-  loadAdaptationPurpose() {
-
-    //Load AdaptationPurpose
-    let { loadAdaptationPurpose } = this.props
-
-    fetch(apiBaseURL + 'api/AdaptationPurpose/GetAll/', {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => res.json()).then(res => {
-      loadAdaptationPurpose(res)
-    })
-  }
-
-  loadSectors() {
-
-    //Load Sectors
-    let { loadSectors } = this.props
-
-    fetch(apiBaseURL + 'api/Sector/GetAll/', {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => res.json()).then(res => {
-      loadSectors(res)
-    })
-  }
-
-  componentDidMount() {
-
-    let { setLoading } = this.props
-
-    setLoading(true)
-
-    $.when(
-      this.loadAdaptationPurpose(),
-      this.loadSectors()
-    ).done(() => { setLoading(false) })
   }
 
   render() {
@@ -123,4 +69,4 @@ class AdaptationDetailsItem extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdaptationDetailsItem)
+export default connect(mapStateToProps)(AdaptationDetailsItem)

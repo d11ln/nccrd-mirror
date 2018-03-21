@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { LOAD_MITIGATION_EMISSIONS, SET_LOADING, ADD_MITIGATION_EMISSIONS } from "../constants/action-types"
+import { ADD_MITIGATION_EMISSIONS } from "../constants/action-types"
 import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -16,14 +16,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadMitigationEmissions: payload => {
-      dispatch({ type: LOAD_MITIGATION_EMISSIONS, payload })
-    },
     addMitigationDetails: payload => {
       dispatch({ type: ADD_MITIGATION_EMISSIONS, payload })
-    },
-    setLoading: payload => {
-        dispatch({ type: SET_LOADING, payload })
     }
   }
 }
@@ -34,24 +28,6 @@ class MitigationEmissionsDataTab extends React.Component {
     super(props)
 
     this.addClick = this.addClick.bind(this)
-  }
-
-  componentDidMount() {
-
-    //Load MitigationDetails
-    let { loadMitigationEmissions, setLoading, projectId } = this.props
-
-    setLoading(true);
-
-    fetch(apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID//' + projectId, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => res.json()).then(res => {
-      loadMitigationEmissions(res)
-      setLoading(false)
-    })
-
   }
 
   loadDetails() {
