@@ -30,7 +30,7 @@ class Projects extends React.Component {
     }
 
     addProject() {
-        console.log("add project")
+        location.hash = '/projects/add'
     }
 
     render() {

@@ -2,7 +2,7 @@
 
 import {
     LOAD_RESEARCH_DETAILS, ADD_RESEARCH_DETAILS, SET_RESEARCH_AUTHOR, SET_RESEARCH_PAPER_LINK, 
-    SET_RESEARCH_RESEARCH_TYPE, SET_RESEARCH_TARGET_AUDIENCE, SET_RESEARCH_SECTOR
+    SET_RESEARCH_RESEARCH_TYPE, SET_RESEARCH_TARGET_AUDIENCE, SET_RESEARCH_SECTOR, RESET_RESEARCH_STATE
 } from "../constants/action-types";
 
 const _ = require('lodash')
@@ -20,7 +20,7 @@ function getUID() {
     return new Date().valueOf();
 }
 
-export default function ResearchReducerr(state = {}, action) {
+export default function ResearchReducer(state = {}, action) {
 
     let { type, payload } = action
     let id = 0
@@ -37,6 +37,18 @@ export default function ResearchReducerr(state = {}, action) {
             return { ...state, researchDetails: payload }
         }
 
+        case RESET_RESEARCH_STATE: {
+            let { researchDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(researchDetails, "ResearchDetailId", payload.ResearchDetailId)
+            //Remove item from array
+            researchDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, state: "original" }] }
+        }
+
         case ADD_RESEARCH_DETAILS: {
 
             let { researchDetails, projectDetails } = state
@@ -48,7 +60,8 @@ export default function ResearchReducerr(state = {}, action) {
                 "ResearchTypeId": 0,
                 "TargetAudienceId": 0,
                 "ProjectId": payload,
-                "SectorId": 0
+                "SectorId": 0,
+                "state": "modified"
               }
 
             return { ...state, researchDetails: [...researchDetails, newItem] }
@@ -63,7 +76,7 @@ export default function ResearchReducerr(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, Author: payload }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, Author: payload, state: "modified" }] }
         }
 
         case SET_RESEARCH_PAPER_LINK: {
@@ -75,7 +88,7 @@ export default function ResearchReducerr(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, PaperLink: payload }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, PaperLink: payload, state: "modified" }] }
         }
 
         case SET_RESEARCH_RESEARCH_TYPE: {
@@ -87,7 +100,7 @@ export default function ResearchReducerr(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, ResearchTypeId: payload }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, ResearchTypeId: payload, state: "modified" }] }
         }
 
         case SET_RESEARCH_TARGET_AUDIENCE: {
@@ -99,7 +112,7 @@ export default function ResearchReducerr(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, TargetAudienceId: payload }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, TargetAudienceId: payload, state: "modified" }] }
         }
 
         case SET_RESEARCH_SECTOR: {
@@ -111,7 +124,7 @@ export default function ResearchReducerr(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, SectorId: payload }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, SectorId: payload, state: "modified" }] }
         }
 
         default: {

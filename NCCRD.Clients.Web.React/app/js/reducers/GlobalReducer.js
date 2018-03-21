@@ -1,8 +1,6 @@
 'use strict'
 
-import {
-    SET_LOADING, SET_EDIT_MODE
-} from "../constants/action-types";
+import { SET_LOADING, SET_EDIT_MODE, SET_DATA_STATE } from "../constants/action-types";
 
 export default function GlobalReducer(state = {}, action) {
 

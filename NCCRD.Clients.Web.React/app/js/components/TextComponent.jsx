@@ -4,66 +4,66 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { editMode } } = state
-  return { editMode }
+    let { globalData: { editMode } } = state
+    return { editMode }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    setValue: (key, payload) => {
-      dispatch({ type: key, payload })
+    return {
+        setValue: (key, payload) => {
+            dispatch({ type: key, payload })
+        }
     }
-  }
 }
 
 class TextComponent extends React.Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    let { value } = props
-    this.state = { ...this.state, value }
-  }
-
-  fixUndefinedValue(value) {
-
-    if (typeof value === 'undefined') {
-      value = ""
+        let { value } = props
+        this.state = { ...this.state, value }
     }
 
-    return value
-  }
+    fixUndefinedValue(value) {
 
-  getFontColour() {
-    if (this.props.editMode) {
-      return "steelblue"
+        if (typeof value === 'undefined') {
+            value = ""
+        }
+
+        return value
     }
-    else {
-      return "black"
+
+    getFontColour() {
+        if (this.props.editMode) {
+            return "steelblue"
+        }
+        else {
+            return "black"
+        }
     }
-  }
 
-  valueChange(event) {
-    if (typeof this.props.setValueKey !== 'undefined') {
-      this.props.setValue(this.props.setValueKey, { value: event.target.value, id: this.props.parentId})
+    valueChange(event) {
+        if (typeof this.props.setValueKey !== 'undefined') {
+            this.props.setValue(this.props.setValueKey, { value: event.target.value, id: this.props.parentId })
+        }
     }
-  }
 
-  render() {
+    render() {
 
-    let { col, label, id, editMode, value } = this.props
-    value = this.fixUndefinedValue(value)
+        let { col, label, id, editMode, value } = this.props
+        value = this.fixUndefinedValue(value)
 
-    return (
-      <div className={col}>
-        <label style={{ fontWeight: "bold" }}>{label}</label>
-        <input
-          id={id} type="text" readOnly={!editMode} value={value} onChange={this.valueChange.bind(this)}
-          style={{ color: this.getFontColour() }}
-        />
-      </div>
-    )
-  }
+        return (
+            <div className={col}>
+                <label style={{ fontWeight: "bold" }}>{label}</label>
+                <input
+                    id={id} type="text" readOnly={!editMode} value={value} onChange={this.valueChange.bind(this)}
+                    style={{ color: this.getFontColour() }}
+                />
+            </div>
+        )
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextComponent)

@@ -16,7 +16,8 @@ const store = createStore(
         globalData:
             {
                 loading: true,
-                editMode: false
+                editMode: false,
+                dataState: "original"
             },
 
         projectData:

@@ -4,7 +4,7 @@ import {
     LOAD_MITIGATION_DETAILS, ADD_MITIGATION_DETAILS, SET_MITIGATION_CARBON_CREDIT, SET_MITIGATION_CARBON_CREDIT_MARKET,
     SET_MITIGATION_CDM_STATUS, SET_MITIGATION_CDM_METHODOLOGY, SET_MITIGATION_VOLUNTARY_METHODOLOGY,
     SET_MITIGATION_VOLUNTARY_GOLD_STANDARD, SET_MITIGATION_CDM_PROJECT_NUMBER, SET_MITIGATION_OTHER_DESCR,
-    SET_MITIGATION_SECTOR
+    SET_MITIGATION_SECTOR, RESET_MITIGATION_STATE
 } from "../constants/action-types";
 
 const _ = require('lodash')
@@ -39,6 +39,18 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: payload }
         }
 
+        case RESET_MITIGATION_STATE: {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", payload.MitigationDetailId)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, state: "original" }] }
+        }
+
         case ADD_MITIGATION_DETAILS: {
 
             let { mitigationDetails, projectDetails } = state
@@ -56,7 +68,8 @@ export default function MitigationsReducer(state = {}, action) {
                 "VoluntaryMethodologyId": 0,
                 "VoluntaryGoldStandardId": 0,
                 "ProjectId": payload,
-                "SectorId": 0
+                "SectorId": 0,
+                "state": "modified"
             }
 
             return { ...state, mitigationDetails: [...mitigationDetails, newItem] }
@@ -71,7 +84,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditId: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_CARBON_CREDIT_MARKET: {
@@ -83,7 +96,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditMarketId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditMarketId: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_CDM_STATUS: {
@@ -95,7 +108,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMStatusId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMStatusId: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_CDM_METHODOLOGY: {
@@ -107,7 +120,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMMethodologyId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMMethodologyId: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_VOLUNTARY_METHODOLOGY: {
@@ -119,7 +132,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryMethodologyId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryMethodologyId: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_VOLUNTARY_GOLD_STANDARD: {
@@ -131,7 +144,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryGoldStandardId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryGoldStandardId: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_CDM_PROJECT_NUMBER: {
@@ -143,7 +156,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMProjectNumber: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMProjectNumber: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_OTHER_DESCR: {
@@ -155,7 +168,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, OtherDescription: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, OtherDescription: payload, state: "modified" }] }
         }
 
         case SET_MITIGATION_SECTOR: {
@@ -167,7 +180,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, SectorId: payload }] }
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, SectorId: payload, state: "modified" }] }
         }
 
         default: {

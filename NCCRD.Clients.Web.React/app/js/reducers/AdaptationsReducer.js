@@ -2,7 +2,7 @@
 
 import {
     LOAD_ADAPTATION_DETAILS, SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE, SET_ADAPTATION_DETAILS_SECTOR,
-    ADD_ADAPTATION_DETAILS
+    ADD_ADAPTATION_DETAILS, RESET_ADAPTATION_STATE
 } from "../constants/action-types";
 
 const _ = require('lodash')
@@ -37,6 +37,18 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: payload }
         }
 
+        case RESET_ADAPTATION_STATE: {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", payload.AdaptationDetailId)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, state: "original" }] }
+        }
+
         case ADD_ADAPTATION_DETAILS: {
 
             let { adaptationDetails, projectDetails } = state
@@ -46,7 +58,8 @@ export default function AdaptationsReducer(state = {}, action) {
                 "Description": "",
                 "AdaptationPurposeId": 0,
                 "ProjectId": payload,
-                "SectorId": 0
+                "SectorId": 0,
+                "state": "modified"
             }
 
             return { ...state, adaptationDetails: [...adaptationDetails, newItem] }
@@ -61,7 +74,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload }] }
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload, state: "modified" }] }
         }
 
         case SET_ADAPTATION_DETAILS_PURPOSE: {
@@ -73,7 +86,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, AdaptationPurposeId: payload }] }
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, AdaptationPurposeId: payload, state: "modified" }] }
         }
 
         case SET_ADAPTATION_DETAILS_SECTOR: {
@@ -85,7 +98,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, SectorId: payload }] }
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, SectorId: payload, state: "modified" }] }
         }
 
         default: {

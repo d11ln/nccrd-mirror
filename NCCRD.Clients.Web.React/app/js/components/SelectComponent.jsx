@@ -6,98 +6,98 @@ import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { editMode } } = state
-  return { editMode }
+    let { globalData: { editMode } } = state
+    return { editMode }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    setSelectedValue: (key, payload) => {
-      dispatch({ type: key, payload })
+    return {
+        setSelectedValue: (key, payload) => {
+            dispatch({ type: key, payload })
+        }
     }
-  }
 }
 
 class SelectComponent extends React.Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.onSelect = this.onSelect.bind(this)
-    this.getDisabledState = this.getDisabledState.bind(this)
-  }
-
-  selectOptions() {
-
-    const { options } = this.props
-    let ar = []
-
-    if (typeof options !== 'undefined') {
-      for (let i of options) {
-        ar.push({ value: i.id, label: i.value })
-      }
+        this.onSelect = this.onSelect.bind(this)
+        this.getDisabledState = this.getDisabledState.bind(this)
     }
 
-    return ar
-  }
+    selectOptions() {
 
-  getFontColour() {
-    if (this.props.editMode) {
-      return "steelblue"
-    }
-    else {
-      return "black"
-    }
-  }
+        const { options } = this.props
+        let ar = []
 
-  onSelect(selectedOption) {
+        if (typeof options !== 'undefined') {
+            for (let i of options) {
+                ar.push({ value: i.id, label: i.value })
+            }
+        }
 
-    let selectedValue = 0
-    if (selectedOption !== null) {
-      selectedValue = selectedOption.value
+        return ar
     }
 
-    //Dispatch to store
-    let { setSelectedValueKey, setSelectedValue } = this.props
-    if (typeof this.props.setSelectedValueKey !== 'undefined') {
-      setSelectedValue(setSelectedValueKey, { value: selectedValue, id: this.props.parentId})
-    }
-  }
-
-  getDisabledState() {
-    let { editMode, editModeOverride } = this.props
-
-    let disabledState = true
-
-    if (typeof editModeOverride !== "undefined" && editModeOverride === true) {
-      disabledState = false
-    }
-    else if(typeof editMode !== "undefined" && editMode === true) {
-      disabledState = false
+    getFontColour() {
+        if (this.props.editMode) {
+            return "steelblue"
+        }
+        else {
+            return "black"
+        }
     }
 
-    return disabledState
-  }
+    onSelect(selectedOption) {
 
-  render() {
+        let selectedValue = 0
+        if (selectedOption !== null) {
+            selectedValue = selectedOption.value
+        }
 
-    let { col, label, id, onChange, selectedValue } = this.props
+        //Dispatch to store
+        let { setSelectedValueKey, setSelectedValue } = this.props
+        if (typeof this.props.setSelectedValueKey !== 'undefined') {
+            setSelectedValue(setSelectedValueKey, { value: selectedValue, id: this.props.parentId })
+        }
+    }
 
-    return (
-      <div className={col}>
-        <label style={{ fontWeight: "bold" }}>{label}</label>
+    getDisabledState() {
+        let { editMode, editModeOverride } = this.props
 
-        <Select id={id}
-          disabled={this.getDisabledState()}
-          name={id}
-          value={selectedValue}
-          options={this.selectOptions()}
-          onChange={this.onSelect}
-        />
+        let disabledState = true
 
-      </div>
-    )
-  }
+        if (typeof editModeOverride !== "undefined" && editModeOverride === true) {
+            disabledState = false
+        }
+        else if (typeof editMode !== "undefined" && editMode === true) {
+            disabledState = false
+        }
+
+        return disabledState
+    }
+
+    render() {
+
+        let { col, label, id, onChange, selectedValue } = this.props
+
+        return (
+            <div className={col}>
+                <label style={{ fontWeight: "bold" }}>{label}</label>
+
+                <Select id={id}
+                    disabled={this.getDisabledState()}
+                    name={id}
+                    value={selectedValue}
+                    options={this.selectOptions()}
+                    onChange={this.onSelect}
+                />
+
+            </div>
+        )
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectComponent)
