@@ -152,59 +152,5 @@ namespace NCCRD.Services.Data.Controllers.API
 
             return result;
         }
-
-        /*/// <summary>
-        /// Delete AdaptationDetail
-        /// </summary>
-        /// <param name="adaptationDetail">AdaptationDetail to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/AdaptationDetails/Delete")]
-        public bool Delete([FromBody]AdaptationDetail adaptationDetail)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptationDetail.AdaptationDetailId);
-                if (existAD != null)
-                {
-                    context.AdaptationDetails.Remove(existAD);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete AdaptationDetail by Id
-        /// </summary>
-        /// <param name="id">Id of AdaptationDetail to delete</param>
-        /// <returns>True/False</returns>
-        [HttpGet]
-        [Route("api/AdaptationDetails/DeleteById/{id}")]
-        public bool DeleteById(int id)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var existAD = context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == id);
-                if (existAD != null)
-                {
-                    context.AdaptationDetails.Remove(existAD);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
     }
 }
