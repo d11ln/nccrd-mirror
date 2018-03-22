@@ -3,20 +3,22 @@
 import React from 'react'
 import { Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
-import { LOAD_TITLE_FILTER } from "../../constants/action-types";
+import { LOAD_TITLE_FILTER, LOAD_TITLE_FILTER_INTERNAL } from "../../constants/action-types";
 
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-    let { filterData: { titleFilter } } = state
-
-    return { titleFilter }
+    let { filterData: { titleFilter, titleFilterInternal } } = state
+    return { titleFilter, titleFilterInternal }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         loadTitleFilter: payload => {
             dispatch({ type: LOAD_TITLE_FILTER, payload })
+        },
+        loadTitleFilterInternal: payload => {
+            dispatch({ type: LOAD_TITLE_FILTER_INTERNAL, payload })
         }
     }
 }
@@ -26,36 +28,33 @@ class TitleFilter extends React.Component {
     constructor(props) {
         super(props);
 
-        //Set initial local
-        this.state = {titleFilter: ""}
-
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
         if (typeof parsedHash.title !== 'undefined') {
 
-            //Update local state
-            this.state = {titleFilter: parsedHash.title}
+            //Update internal state
+            this.props.loadTitleFilterInternal(parsedHash.title)
             this.onTouchTap()
         }
     }
 
     onChange(event) {
 
-        //Update local state
-        this.setState({titleFilter: event.target.value})
+        //Update internal state
+        this.props.loadTitleFilterInternal(event.target.value)
     }
 
-    onTouchTap() {  
+    onTouchTap() {
 
-        //Dispatch to store
+        //Update global state
         let { loadTitleFilter } = this.props
-        loadTitleFilter(this.state.titleFilter)
+        loadTitleFilter(this.props.titleFilterInternal)
     }
 
     render() {
 
-        let { titleFilter } = this.state
-
+        let { titleFilterInternal } = this.props
+        
         return (
             <div className="col-md-4">
                 <label style={{ fontWeight: "bold" }}>Title:</label>
@@ -69,9 +68,9 @@ class TitleFilter extends React.Component {
                         Apply
                     </Button>
 
-                    <div style={{overflow: "hidden", paddingRight: "5px"}}>
+                    <div style={{ overflow: "hidden", paddingRight: "5px" }}>
                         <input type="text" style={{ marginTop: "-4px", fontSize: "14px", fontWeight: "300", width: "100%" }}
-                            value={titleFilter} onChange={this.onChange.bind(this)} />
+                            value={titleFilterInternal} onChange={this.onChange.bind(this)} />
                     </div>
                 </div>
             </div>

@@ -59,6 +59,7 @@ const store = createStore(
                 maOptions: [],
                 adaptationPurpose: [],
                 sector: [],
+                region: [],
                 carbonCredit: [],
                 carbonCreditMarket: [],
                 cdmStatus: [],
@@ -72,6 +73,7 @@ const store = createStore(
         filterData:
             {
                 titleFilter: "",
+                titleFilterInternal: "",
                 statusFilter: 0,
                 typologyFilter: 0,
                 regionFilter: 0,

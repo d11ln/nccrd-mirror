@@ -4,7 +4,7 @@ import React from 'react'
 import ProjectList from './ProjectList.jsx'
 import ProjectFilters from './ProjectFilters.jsx'
 import { connect } from 'react-redux'
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners'
 import { Button } from 'mdbreact'
 
 const mapStateToProps = (state, props) => {
@@ -60,13 +60,13 @@ class Projects extends React.Component {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-md-12">
-                            <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99"}}>
-                                <Button style={{width: "150px"}} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
+                            <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
+                                <Button style={{ width: "150px" }} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
                                     <i className="fa fa-plus-circle" aria-hidden="true" />
                                     &nbsp;&nbsp;
                                     Add project
                                 </Button>
-                                <Button style={{width: "150px"}} color="secondary" className="btn-sm" onTouchTap={this.backToTop} >
+                                <Button style={{ width: "150px" }} color="secondary" className="btn-sm" onTouchTap={this.backToTop} >
                                     <i className="fa fa-arrow-circle-up" aria-hidden="true" />
                                     &nbsp;&nbsp;
                                     Back to top

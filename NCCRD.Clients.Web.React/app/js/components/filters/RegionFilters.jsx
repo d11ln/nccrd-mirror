@@ -4,14 +4,14 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../../constants/apiBaseURL";
 import { connect } from 'react-redux'
-import { LOAD_REGION_TREE, LOAD_REGION_FILTER } from "../../constants/action-types"
+import { LOAD_REGION_TREE, LOAD_REGION_FILTER, LOAD_REGION } from "../../constants/action-types"
 
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-    let { lookupData: { regionTree } } = state
+    let { lookupData: { regionTree, region } } = state
     let { filterData: { regionFilter } } = state
-    return { regionTree, regionFilter }
+    return { regionTree, regionFilter, region }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -21,6 +21,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadRegionFilter: payload => {
             dispatch({ type: LOAD_REGION_FILTER, payload })
+        },
+        loadRegions: payload => {
+            dispatch({ type: LOAD_REGION, payload })
         }
     }
 }
@@ -36,14 +39,11 @@ class RegionFilters extends React.Component {
         this.collapseAllNodes = this.collapseAllNodes.bind(this)
 
         //Set initial local
-        this.state = { regionFilter: 0, selectedValue: "All", eventsAdded: 0 }
+        this.state = { eventsAdded: 0 }
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
         if (typeof parsedHash.region !== 'undefined') {
-
-            //Update local state
-            this.state = { ...this.state, regionFilter: parsedHash.region }
 
             //Dispatch to store
             let { loadRegionFilter } = this.props
@@ -54,14 +54,25 @@ class RegionFilters extends React.Component {
     componentDidMount() {
 
         //Load data
-        let { loadData } = this.props
+        let { loadData, loadRegions } = this.props
         fetch(apiBaseURL + 'api/region/GetAllTree', {
             headers: {
                 "Content-Type": "application/json"
             }
-        }).then(res => res.json())
+        })
+            .then(res => res.json())
             .then(res => {
                 loadData(res)
+            })
+
+        fetch(apiBaseURL + 'api/Region/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                loadRegions(res)
             })
     }
 
@@ -75,19 +86,12 @@ class RegionFilters extends React.Component {
             //Get node data
             let nodeData = tree.getDataById(selectedNodeId)
 
-            //Update internal state
-            this.setState({ regionFilter: nodeData.id, selectedValue: nodeData.text })
-
             //Dispatch to store
             if (dispatch === true) {
-
                 loadRegionFilter(nodeData.id)
             }
         }
         else {
-
-            //Update internal state
-            this.setState({ regionFilter: 0, selectedValue: "All" })
 
             if (dispatch === true) {
 
@@ -167,7 +171,12 @@ class RegionFilters extends React.Component {
 
     render() {
 
-        let { regionFilter, selectedValue } = this.state
+        let { region, regionFilter } = this.props
+        let selectedValue = "All"
+
+        if (regionFilter !== 0) {
+            selectedValue = region.filter(x => x.id === regionFilter)[0].value
+        }
 
         return (
             <div>

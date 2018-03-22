@@ -4,7 +4,8 @@ import {
     LOAD_PROJECT_STATUS, LOAD_TYPOLOGY, LOAD_REGION_TREE, LOAD_SECTOR_TREE, LOAD_PROJECT_TYPE,
     LOAD_PROJECT_SUBTYPE, LOAD_USERS, LOAD_VALIDATION_STATUS, LOAD_MA_OPTIONS, LOAD_ADAPTATION_PURPOSE,
     LOAD_SECTOR, LOAD_CARBON_CREDIT, LOAD_CARBON_CREDIT_MARKET, LOAD_CDM_STATUS, LOAD_CDM_METHODOLOGY,
-    LOAD_VOLUNTARY_METHODOLOGY, LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE
+    LOAD_VOLUNTARY_METHODOLOGY, LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE,
+    LOAD_REGION
 } from "../constants/action-types";
 
 export default function LookupsReducer(state = {}, action) {
@@ -120,6 +121,17 @@ export default function LookupsReducer(state = {}, action) {
             })
 
             return { ...state, sector: data }
+        }
+
+        case LOAD_REGION: {
+
+            const data = payload.map((x) => {
+                return {
+                    id: x.RegionId, value: x.RegionName
+                }
+            })
+
+            return { ...state, region: data }
         }
 
         case LOAD_CARBON_CREDIT: {

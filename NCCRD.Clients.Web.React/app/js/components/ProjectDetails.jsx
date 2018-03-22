@@ -11,7 +11,7 @@ import {
     LOAD_CDM_METHODOLOGY, LOAD_VOLUNTARY_METHODOLOGY, LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_RESEARCH_TYPE,
     LOAD_TARGET_AUDIENCE, LOAD_PROJECT_TYPE, LOAD_PROJECT_SUBTYPE, LOAD_PROJECT_STATUS, LOAD_USERS,
     LOAD_VALIDATION_STATUS, LOAD_MA_OPTIONS, RESET_PROJECT_STATE, RESET_ADAPTATION_STATE, RESET_MITIGATION_STATE,
-    RESET_EMISSION_STATE, RESET_RESEARCH_STATE
+    RESET_EMISSION_STATE, RESET_RESEARCH_STATE, LOAD_REGION
 } from "../constants/action-types"
 
 import { apiBaseURL } from "../constants/apiBaseURL"
@@ -438,7 +438,7 @@ class ProjectDetails extends React.Component {
             loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions,
             loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadCarbonCredit,
             loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-            loadResearchType, loadTargetAudience } = this.props
+            loadResearchType, loadTargetAudience, loadRegions } = this.props
 
         setLoading(true)
 
@@ -456,6 +456,7 @@ class ProjectDetails extends React.Component {
             this.loadResearchDetails(loadResearchDetails),
             this.loadAdaptationPurpose(loadAdaptationPurpose),
             this.loadSector(loadSectors),
+            this.loadRegion(loadRegions),
             this.loadCarbonCredit(loadCarbonCredit),
             this.loadCarbonCreditMarket(loadCarbonCreditMarket),
             this.loadCDMStatus(loadCDMStatus),

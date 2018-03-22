@@ -334,7 +334,8 @@ function LoadRegionFilters() {
     fetch(apiBaseURL + 'api/region/GetAllTree')
         .then((resp) => resp.json()) // Transform the data into json
         .then(function (data) {
-            
+            
+
             var tree = $('#regionTree').tree();
 
             tree.on('select', function (e, node, id) {

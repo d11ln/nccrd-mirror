@@ -2,6 +2,7 @@
 
 import {
     LOAD_TITLE_FILTER,
+    LOAD_TITLE_FILTER_INTERNAL,
     LOAD_STATUS_FILTER,
     LOAD_TYPOLOGY_FILTER,
     LOAD_REGION_FILTER,
@@ -17,19 +18,23 @@ export default function FilterReducer(state = {}, action) {
     switch (type) {
 
         case LOAD_TITLE_FILTER: {
-            return { ...state, titleFilter: payload }
+            return { ...state, titleFilterInternal: payload, titleFilter: payload }
+        }
+
+        case LOAD_TITLE_FILTER_INTERNAL: {
+            return { ...state, titleFilterInternal: payload }
         }
 
         case LOAD_STATUS_FILTER: {
-            return { ...state, statusFilter: payload }
+            return { ...state, statusFilter: payload.value }
         }
 
         case LOAD_TYPOLOGY_FILTER: {
-            return { ...state, typologyFilter: payload }
+            return { ...state, typologyFilter: payload.value }
         }
 
         case LOAD_REGION_FILTER: {
-            return { ...state, regionFilter: payload }
+            return { ...state, regionFilter: payload}
         }
 
         case LOAD_SECTOR_FILTER: {

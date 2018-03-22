@@ -40,8 +40,6 @@ class ProjectList extends React.Component {
 
     getProjectList() {
 
-        console.log("loading projects")
-
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
 
         this.setState({
