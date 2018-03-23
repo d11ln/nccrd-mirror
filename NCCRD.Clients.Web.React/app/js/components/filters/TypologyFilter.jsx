@@ -5,7 +5,7 @@ import { Button } from 'mdbreact'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
-import { LOAD_TYPOLOGY, LOAD_TYPOLOGY_FILTER } from "../../constants/action-types"
+import * as ACTION_TYPES from "../../constants/action-types"
 import { apiBaseURL } from "../../constants/apiBaseURL";
 import SelectComponent from '../SelectComponent.jsx'
 
@@ -20,10 +20,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadData: payload => {
-            dispatch({ type: LOAD_TYPOLOGY, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY, payload })
         },
         loadTypologyFilter: payload => {
-            dispatch({ type: LOAD_TYPOLOGY_FILTER, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY_FILTER, payload })
         }
     }
 }
@@ -68,7 +68,7 @@ class TypologyFilter extends React.Component {
                 selectedValue={typologyFilter} 
                 options={this.props.typology}
                 selectCallback={this.selectCallbackHandler}
-                setSelectedValueKey={LOAD_TYPOLOGY_FILTER}
+                setSelectedValueKey={ACTION_TYPES.LOAD_TYPOLOGY_FILTER}
                 editModeOverride={true}
             />
         )

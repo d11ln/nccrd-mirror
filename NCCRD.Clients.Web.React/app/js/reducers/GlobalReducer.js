@@ -1,6 +1,6 @@
 'use strict'
 
-import { SET_LOADING, SET_EDIT_MODE, SET_DATA_STATE } from "../constants/action-types";
+import * as ACTION_TYPES from "../constants/action-types"
 
 export default function GlobalReducer(state = {}, action) {
 
@@ -8,12 +8,16 @@ export default function GlobalReducer(state = {}, action) {
 
     switch (type) {
 
-        case SET_LOADING: {
+        case ACTION_TYPES.SET_LOADING: {
             return { ...state, loading: payload }
         }
 
-        case SET_EDIT_MODE: {
+        case ACTION_TYPES.SET_EDIT_MODE: {
             return { ...state, editMode: payload }
+        }
+
+        case ACTION_TYPES.TOGGLE_EDIT_LIST_MODAL: {
+            return { ...state, showEditListModal: payload }
         }
 
         default: {

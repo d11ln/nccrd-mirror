@@ -70,40 +70,14 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /*/// <summary>
-        /// Add ProjectType
-        /// </summary>
-        /// <param name="projectType">The ProjectType to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectType/Add")]
-        public bool Add([FromBody]ProjectType projectType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.ProjectType.Count(x => x.ProjectTypeId == projectType.ProjectTypeId) == 0)
-                {
-                    //Add ProjectSubType entry
-                    context.ProjectType.Add(projectType);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update ProjectType
+        /// <summary>
+        /// Add or Update ProjectType
         /// </summary>
         /// <param name="projectType">ProjectType to update</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/ProjectType/Update")]
-        public bool Update([FromBody]ProjectType projectType)
+        [Route("api/ProjectType/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]ProjectType projectType)
         {
             bool result = false;
 
@@ -113,43 +87,22 @@ namespace NCCRD.Services.Data.Controllers.API
                 var data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == projectType.ProjectTypeId);
                 if (data != null)
                 {
+                    //Update
                     data.Value = projectType.Value;
                     data.Description = projectType.Description;
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete ProjectType
-        /// </summary>
-        /// <param name="projectType">ProjectType to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectType/Delete")]
-        public bool Delete([FromBody]ProjectType projectType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == projectType.ProjectTypeId);
-                if (data != null)
+                else
                 {
-                    context.ProjectType.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
+                    //Add
+                    context.ProjectType.Add(projectType);
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
-        }*/
+        }
 
         /*/// <summary>
         /// Delete ProjectType by Id

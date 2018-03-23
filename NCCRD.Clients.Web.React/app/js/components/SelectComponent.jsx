@@ -4,6 +4,7 @@ import React from 'react'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
+import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -14,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setSelectedValue: (key, payload) => {
             dispatch({ type: key, payload })
+        },
+        setEditList: (payload) => {
+            dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
         }
     }
 }
@@ -57,10 +61,17 @@ class SelectComponent extends React.Component {
             selectedValue = selectedOption.value
         }
 
-        //Dispatch to store
-        let { setSelectedValueKey, setSelectedValue } = this.props
-        if (typeof this.props.setSelectedValueKey !== 'undefined') {
-            setSelectedValue(setSelectedValueKey, { value: selectedValue, id: this.props.parentId })
+        if (selectedValue === -1) {       
+            //Setup and Show EditListModal
+            let { setEditList, options, dispatch, persist } = this.props
+            setEditList({ show: true, items: options, dispatch: dispatch, persist: persist })
+        }
+        else {
+            //Dispatch to store
+            let { setSelectedValueKey, setSelectedValue } = this.props
+            if (typeof this.props.setSelectedValueKey !== 'undefined') {
+                setSelectedValue(setSelectedValueKey, { value: selectedValue, id: this.props.parentId })
+            }
         }
     }
 
@@ -94,7 +105,6 @@ class SelectComponent extends React.Component {
                     options={this.selectOptions()}
                     onChange={this.onSelect}
                 />
-
             </div>
         )
     }

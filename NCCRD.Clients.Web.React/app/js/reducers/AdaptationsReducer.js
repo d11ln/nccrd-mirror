@@ -1,9 +1,6 @@
 'use strict'
 
-import {
-    LOAD_ADAPTATION_DETAILS, SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE, SET_ADAPTATION_DETAILS_SECTOR,
-    ADD_ADAPTATION_DETAILS, RESET_ADAPTATION_STATE
-} from "../constants/action-types";
+import * as ACTION_TYPES from "../constants/action-types"
 
 const _ = require('lodash')
 
@@ -33,11 +30,11 @@ export default function AdaptationsReducer(state = {}, action) {
 
     switch (type) {
 
-        case LOAD_ADAPTATION_DETAILS: {
+        case ACTION_TYPES.LOAD_ADAPTATION_DETAILS: {
             return { ...state, adaptationDetails: payload }
         }
 
-        case RESET_ADAPTATION_STATE: {
+        case ACTION_TYPES.RESET_ADAPTATION_STATE: {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -49,7 +46,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, state: "original" }] }
         }
 
-        case ADD_ADAPTATION_DETAILS: {
+        case ACTION_TYPES.ADD_ADAPTATION_DETAILS: {
 
             let { adaptationDetails, projectDetails } = state
 
@@ -65,7 +62,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, newItem] }
         }
 
-        case SET_ADAPTATION_DETAILS_DESCR: {
+        case ACTION_TYPES.SET_ADAPTATION_DETAILS_DESCR: {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -77,7 +74,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload, state: "modified" }] }
         }
 
-        case SET_ADAPTATION_DETAILS_PURPOSE: {
+        case ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE: {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -89,7 +86,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, AdaptationPurposeId: payload, state: "modified" }] }
         }
 
-        case SET_ADAPTATION_DETAILS_SECTOR: {
+        case ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR: {
             let { adaptationDetails } = state
 
             //Get item and Id

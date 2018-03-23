@@ -13,72 +13,71 @@ const store = createStore(
     combineReducers({ ...reducers, router: routerReducer }), {
         ...applyMiddleware(middleware),
 
-        globalData:
-            {
-                loading: true,
-                editMode: false,
-                dataState: "original"
-            },
+        globalData: {
+            isAuthenticated: true,
+            loading: true,
+            editMode: false
+        },
 
-        projectData:
-            {
-                projects: [],
-                projectDetails: {}
-            },
+        editListModalData: {
+            show: false,
+            items: [],
+            dispatch: "",
+            persist: ""
+        },
 
-        adaptationData:
-            {
-                adaptationDetails: []
-            },
+        projectData: {
+            projects: [],
+            projectDetails: {}
+        },
 
-        mitigationData:
-            {
-                mitigationDetails: []
-            },
+        adaptationData: {
+            adaptationDetails: []
+        },
 
-        emissionData:
-            {
-                emissionsData: []
-            },
+        mitigationData: {
+            mitigationDetails: []
+        },
 
-        researchData:
-            {
-                researchDetails: []
-            },
+        emissionData: {
+            emissionsData: []
+        },
 
-        lookupData:
-            {
-                projectTypes: [],
-                projectSubTypes: [],
-                projectStatus: [],
-                users: [],
-                validationStatus: [],
-                typology: [],
-                regionTree: [],
-                sectorTree: [],
-                maOptions: [],
-                adaptationPurpose: [],
-                sector: [],
-                region: [],
-                carbonCredit: [],
-                carbonCreditMarket: [],
-                cdmStatus: [],
-                cdmMethodology: [],
-                voluntaryMethodology: [],
-                voluntaryGoldStandard: [],
-                researchType: [],
-                targetAudience: []
-            },
+        researchData: {
+            researchDetails: []
+        },
 
-        filterData:
-            {
-                titleFilter: "",
-                titleFilterInternal: "",
-                statusFilter: 0,
-                typologyFilter: 0,
-                regionFilter: 0,
-                sectorFilter: 0
-            }
+        lookupData: {
+            projectTypes: [],
+            projectSubTypes: [],
+            projectStatus: [],
+            users: [],
+            validationStatus: [],
+            typology: [],
+            regionTree: [],
+            sectorTree: [],
+            maOptions: [],
+            adaptationPurpose: [],
+            sector: [],
+            region: [],
+            carbonCredit: [],
+            carbonCreditMarket: [],
+            cdmStatus: [],
+            cdmMethodology: [],
+            voluntaryMethodology: [],
+            voluntaryGoldStandard: [],
+            researchType: [],
+            targetAudience: []
+        },
+
+        filterData: {
+            titleFilter: "",
+            titleFilterInternal: "",
+            statusFilter: 0,
+            typologyFilter: 0,
+            regionFilter: 0,
+            sectorFilter: 0
+        }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )

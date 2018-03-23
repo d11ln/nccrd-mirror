@@ -114,3 +114,10 @@ export const LOAD_SECTOR_TREE = "LOAD_SECTOR_TREE";
 //Global
 export const SET_LOADING = "SET_LOADING";
 export const SET_EDIT_MODE = "SET_EDIT_MODE";
+
+//Edit List Modal
+export const SET_EDIT_LIST = "SET_EDIT_LIST";
+// export const SET_EDIT_LIST_SHOW = "SET_EDIT_LIST_SHOW";
+// export const SET_EDIT_LIST_ITEMS = "SET_EDIT_LIST_ITEMS";
+// export const SET_EDIT_LIST_DISPATCH = "SET_EDIT_LIST_DISPATCH";
+// export const SET_EDIT_LIST_PERSIST = "SET_EDIT_LIST_PERSIST";

@@ -5,10 +5,7 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextAreaComponent from './TextAreaComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import {
-  SET_ADAPTATION_DETAILS_DESCR, SET_ADAPTATION_DETAILS_PURPOSE,
-  SET_ADAPTATION_DETAILS_SECTOR
-} from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { adaptationPurpose, sector } } = state
@@ -35,7 +32,7 @@ class AdaptationDetailsItem extends React.Component {
             label="Description:"
             id="txtDescription"
             value={details.Description}
-            setValueKey={SET_ADAPTATION_DETAILS_DESCR}
+            setValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_DESCR}
             parentId={details.AdaptationDetailId}
           />
         </div>
@@ -49,7 +46,7 @@ class AdaptationDetailsItem extends React.Component {
             readOnly="true"
             selectedValue={details.AdaptationPurposeId}
             options={adaptationPurpose}
-            setSelectedValueKey={SET_ADAPTATION_DETAILS_PURPOSE}
+            setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE}
             parentId={details.AdaptationDetailId}
           />
           <SelectComponent
@@ -57,7 +54,7 @@ class AdaptationDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             options={sector}
-            setSelectedValueKey={SET_ADAPTATION_DETAILS_SECTOR}
+            setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR}
             parentId={details.AdaptationDetailId}
           />
         </div>

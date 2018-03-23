@@ -8,7 +8,7 @@ import EmissionsReducer from './EmissionsReducer'
 import ResearchReducer from './ResearchReducer'
 import LookupsReducer from './LookupsReducer'
 import FilterReducer from './FilterReducer'
-
+import EditListModalReducer from './EditListModalReducer'
 
 export default {
     globalData: GlobalReducer,
@@ -18,5 +18,6 @@ export default {
     emissionData: EmissionsReducer,
     researchData: ResearchReducer ,
     lookupData: LookupsReducer,
-    filterData: FilterReducer
+    filterData: FilterReducer,
+    editListModalData: EditListModalReducer
 }

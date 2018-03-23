@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { ADD_RESEARCH_DETAILS } from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -17,7 +17,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addResearchDetails: payload => {
-      dispatch({ type: ADD_RESEARCH_DETAILS, payload })
+      dispatch({ type: ACTION_TYPES.ADD_RESEARCH_DETAILS, payload })
     }
   }
 }

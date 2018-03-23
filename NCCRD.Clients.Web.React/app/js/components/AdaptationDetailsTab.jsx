@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { ADD_ADAPTATION_DETAILS } from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 import AdaptationDetailsItem from './AdaptationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -17,7 +17,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addAdaptationDetails: payload => {
-      dispatch({ type: ADD_ADAPTATION_DETAILS, payload })
+      dispatch({ type: ACTION_TYPES.ADD_ADAPTATION_DETAILS, payload })
     }
   }
 }

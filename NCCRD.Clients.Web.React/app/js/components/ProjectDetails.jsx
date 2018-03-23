@@ -3,17 +3,8 @@
 import React from 'react'
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
 import { connect } from 'react-redux'
-
-import {
-    LOAD_PROJECT_DETAILS, SET_LOADING, SET_EDIT_MODE, SET_PROJECT_DETAILS_YEAR_FROM, SET_PROJECT_DETAILS_YEAR_TO,
-    LOAD_ADAPTATION_DETAILS, LOAD_MITIGATION_DETAILS, LOAD_MITIGATION_EMISSIONS, LOAD_RESEARCH_DETAILS,
-    LOAD_ADAPTATION_PURPOSE, LOAD_SECTOR, LOAD_CARBON_CREDIT, LOAD_CARBON_CREDIT_MARKET, LOAD_CDM_STATUS,
-    LOAD_CDM_METHODOLOGY, LOAD_VOLUNTARY_METHODOLOGY, LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_RESEARCH_TYPE,
-    LOAD_TARGET_AUDIENCE, LOAD_PROJECT_TYPE, LOAD_PROJECT_SUBTYPE, LOAD_PROJECT_STATUS, LOAD_USERS,
-    LOAD_VALIDATION_STATUS, LOAD_MA_OPTIONS, RESET_PROJECT_STATE, RESET_ADAPTATION_STATE, RESET_MITIGATION_STATE,
-    RESET_EMISSION_STATE, RESET_RESEARCH_STATE, LOAD_REGION
-} from "../constants/action-types"
-
+import EditListModal from './EditListModal.jsx'
+import * as ACTION_TYPES from "../constants/action-types"
 import { apiBaseURL } from "../constants/apiBaseURL"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
@@ -28,100 +19,108 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 const mapStateToProps = (state, props) => {
+
     let { projectData: { projectDetails } } = state
     let { adaptationData: { adaptationDetails } } = state
     let { mitigationData: { mitigationDetails } } = state
     let { emissionData: { emissionsData } } = state
     let { researchData: { researchDetails } } = state
-    let { globalData: { loading, editMode } } = state
-    return { projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading }
+    let { globalData: { loading, editMode, isAuthenticated } } = state
+
+    let editListModalShow = state.editListModalData.show
+    let editListModalItems = state.editListModalData.items
+
+    return {
+        projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading, isAuthenticated,
+        editListModalShow, editListModalItems
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         loadProjectDetails: payload => {
-            dispatch({ type: LOAD_PROJECT_DETAILS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_DETAILS, payload })
         },
         loadAdaptationDetails: payload => {
-            dispatch({ type: LOAD_ADAPTATION_DETAILS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_DETAILS, payload })
         },
         loadMitigationDetails: payload => {
-            dispatch({ type: LOAD_MITIGATION_DETAILS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_DETAILS, payload })
         },
         loadMitigationEmissions: payload => {
-            dispatch({ type: LOAD_MITIGATION_EMISSIONS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_EMISSIONS, payload })
         },
         loadResearchDetails: payload => {
-            dispatch({ type: LOAD_RESEARCH_DETAILS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_DETAILS, payload })
         },
         setLoading: payload => {
-            dispatch({ type: SET_LOADING, payload })
+            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
         },
         setEditMode: payload => {
-            dispatch({ type: SET_EDIT_MODE, payload })
+            dispatch({ type: ACTION_TYPES.SET_EDIT_MODE, payload })
         },
         loadProjectTypes: payload => {
-            dispatch({ type: LOAD_PROJECT_TYPE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_TYPE, payload })
         },
         loadProjectSubTypes: payload => {
-            dispatch({ type: LOAD_PROJECT_SUBTYPE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_SUBTYPE, payload })
         },
         loadProjectStatus: payload => {
-            dispatch({ type: LOAD_PROJECT_STATUS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_STATUS, payload })
         },
         loadProjectManagers: payload => {
-            dispatch({ type: LOAD_USERS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_USERS, payload })
         },
         loadValidationStatus: payload => {
-            dispatch({ type: LOAD_VALIDATION_STATUS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_VALIDATION_STATUS, payload })
         },
         loadMAOptions: payload => {
-            dispatch({ type: LOAD_MA_OPTIONS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_MA_OPTIONS, payload })
         },
         loadAdaptationPurpose: payload => {
-            dispatch({ type: LOAD_ADAPTATION_PURPOSE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_PURPOSE, payload })
         },
         loadSectors: payload => {
-            dispatch({ type: LOAD_SECTOR, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR, payload })
         },
         loadCarbonCredit: payload => {
-            dispatch({ type: LOAD_CARBON_CREDIT, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_CARBON_CREDIT, payload })
         },
         loadCarbonCreditMarket: payload => {
-            dispatch({ type: LOAD_CARBON_CREDIT_MARKET, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET, payload })
         },
         loadCDMStatus: payload => {
-            dispatch({ type: LOAD_CDM_STATUS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_CDM_STATUS, payload })
         },
         loadCDMMethodology: payload => {
-            dispatch({ type: LOAD_CDM_METHODOLOGY, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_CDM_METHODOLOGY, payload })
         },
         loadVoluntaryMethodology: payload => {
-            dispatch({ type: LOAD_VOLUNTARY_METHODOLOGY, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY, payload })
         },
         loadVoluntaryGoldStandard: payload => {
-            dispatch({ type: LOAD_VOLUNTARY_GOLD_STANDARD, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD, payload })
         },
         loadResearchType: payload => {
-            dispatch({ type: LOAD_RESEARCH_TYPE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_TYPE, payload })
         },
         loadTargetAudience: payload => {
-            dispatch({ type: LOAD_TARGET_AUDIENCE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_TARGET_AUDIENCE, payload })
         },
         resetProjectState: payload => {
-            dispatch({ type: RESET_PROJECT_STATE, payload })
+            dispatch({ type: ACTION_TYPES.RESET_PROJECT_STATE, payload })
         },
         resetAdaptationState: payload => {
-            dispatch({ type: RESET_ADAPTATION_STATE, payload })
+            dispatch({ type: ACTION_TYPES.RESET_ADAPTATION_STATE, payload })
         },
         resetMitigationState: payload => {
-            dispatch({ type: RESET_MITIGATION_STATE, payload })
+            dispatch({ type: ACTION_TYPES.RESET_MITIGATION_STATE, payload })
         },
         resetEmissionState: payload => {
-            dispatch({ type: RESET_EMISSION_STATE, payload })
+            dispatch({ type: ACTION_TYPES.RESET_EMISSION_STATE, payload })
         },
         resetResearchState: payload => {
-            dispatch({ type: RESET_RESEARCH_STATE, payload })
+            dispatch({ type: ACTION_TYPES.RESET_RESEARCH_STATE, payload })
         }
     }
 }
@@ -148,6 +147,13 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
+
+            res.splice(0, 0, {
+                "ProjectTypeId": -1,
+                "Value": "[Edit list values...]",
+                "Description": ""
+            })
+
             loadProjectTypes(res)
         })
     }
@@ -438,7 +444,7 @@ class ProjectDetails extends React.Component {
             loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions,
             loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadCarbonCredit,
             loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-            loadResearchType, loadTargetAudience, loadRegions } = this.props
+            loadResearchType, loadTargetAudience } = this.props
 
         setLoading(true)
 
@@ -456,7 +462,6 @@ class ProjectDetails extends React.Component {
             this.loadResearchDetails(loadResearchDetails),
             this.loadAdaptationPurpose(loadAdaptationPurpose),
             this.loadSector(loadSectors),
-            this.loadRegion(loadRegions),
             this.loadCarbonCredit(loadCarbonCredit),
             this.loadCarbonCreditMarket(loadCarbonCreditMarket),
             this.loadCDMStatus(loadCDMStatus),
@@ -731,8 +736,6 @@ class ProjectDetails extends React.Component {
         this.setState({ discardModal: false })
         setEditMode(false)
 
-        //setDataState("original")
-
         if (this.state.navBack === true) {
             this.navBack()
         }
@@ -743,23 +746,46 @@ class ProjectDetails extends React.Component {
     }
 
     navBack() {
+        this.props.setLoading(true)
         location.hash = "/projects"
     }
 
     backToList() {
 
-        //if (this.props.dataState === "original") {
-        //    this.navBack()
-        //}
-        //else {
-        //    this.setState({ navBack: true })
-        //    this.discardClick()
-        //}
+        let { projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails } = this.props
+        let dataState = "original"
+
+        if (projectDetails.state !== 'original') {
+            dataState = projectDetails.state
+        }
+
+        let arraySources = [adaptationDetails, mitigationDetails, emissionsData, researchDetails]
+        arraySources.map((source) => {
+            if (dataState === "original") {
+                source.map((item) => {
+                    if (item.state !== 'original') {
+                        dataState = item.state
+                    }
+                })
+            }
+        })
+
+        if (dataState === "original") {
+            this.navBack()
+        }
+        else {
+            this.setState({ navBack: true })
+            this.discardClick()
+        }
+    }
+
+    componentDidUpdate() {
+
     }
 
     render() {
 
-        const { projectDetails, editMode } = this.props
+        const { projectDetails, editMode, isAuthenticated, editListModalShow, editListModalItems } = this.props
 
         return (
             <div>
@@ -807,20 +833,20 @@ class ProjectDetails extends React.Component {
                         label=""
                         inputWidth="75px"
                         valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
-                        setValueFromKey={SET_PROJECT_DETAILS_YEAR_FROM}
-                        setValueToKey={SET_PROJECT_DETAILS_YEAR_TO}
+                        setValueFromKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM}
+                        setValueToKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO}
                     />
                 </div>
 
                 <br />
 
-                <Tabs>
+                <Tabs forceRenderTabPanel={true}>
                     <TabList>
-                        <Tab><b style={{ color: "steelblue" }}>Project Details</b></Tab>
-                        <Tab><b style={{ color: "steelblue" }}>Adaptation Details</b></Tab>
-                        <Tab><b style={{ color: "steelblue" }}>Mitigation Details</b></Tab>
-                        <Tab><b style={{ color: "steelblue" }}>Mitigation Emissions Data</b></Tab>
-                        <Tab><b style={{ color: "steelblue" }}>Research Details</b></Tab>
+                        <Tab><b style={{ color: "#1565c0" }}>Project Details</b></Tab>
+                        <Tab><b style={{ color: "#1565c0" }}>Adaptation Details</b></Tab>
+                        <Tab><b style={{ color: "#1565c0" }}>Mitigation Details</b></Tab>
+                        <Tab><b style={{ color: "#1565c0" }}>Mitigation Emissions Data</b></Tab>
+                        <Tab><b style={{ color: "#1565c0" }}>Research Details</b></Tab>
                     </TabList>
 
                     <TabPanel>
@@ -855,7 +881,7 @@ class ProjectDetails extends React.Component {
                     </TabPanel>
                 </Tabs>
 
-                <div className="container-fluid">
+                <div className="container-fluid" hidden={!isAuthenticated}>
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
@@ -900,6 +926,8 @@ class ProjectDetails extends React.Component {
                         <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
                     </ModalFooter>
                 </Modal>
+
+                <EditListModal />
 
             </div>
         )

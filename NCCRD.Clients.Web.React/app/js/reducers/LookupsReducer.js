@@ -1,12 +1,14 @@
 'use strict'
 
-import {
-    LOAD_PROJECT_STATUS, LOAD_TYPOLOGY, LOAD_REGION_TREE, LOAD_SECTOR_TREE, LOAD_PROJECT_TYPE,
-    LOAD_PROJECT_SUBTYPE, LOAD_USERS, LOAD_VALIDATION_STATUS, LOAD_MA_OPTIONS, LOAD_ADAPTATION_PURPOSE,
-    LOAD_SECTOR, LOAD_CARBON_CREDIT, LOAD_CARBON_CREDIT_MARKET, LOAD_CDM_STATUS, LOAD_CDM_METHODOLOGY,
-    LOAD_VOLUNTARY_METHODOLOGY, LOAD_VOLUNTARY_GOLD_STANDARD, LOAD_RESEARCH_TYPE, LOAD_TARGET_AUDIENCE,
-    LOAD_REGION
-} from "../constants/action-types";
+import * as ACTION_TYPES from "../constants/action-types"
+
+function convertPayload(payload){
+    return payload.map((x) => {
+        return {
+            id: x[Object.keys(x)[0]], value: x[Object.keys(x)[1]]
+        }
+    })
+}
 
 export default function LookupsReducer(state = {}, action) {
 
@@ -14,211 +16,121 @@ export default function LookupsReducer(state = {}, action) {
 
     switch (type) {
 
-        case LOAD_PROJECT_STATUS: {
+        case ACTION_TYPES.LOAD_PROJECT_STATUS: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.ProjectStatusId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, projectStatus: data }
         }
 
-        case LOAD_TYPOLOGY: {
+        case ACTION_TYPES.LOAD_TYPOLOGY: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.TypologyId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, typology: data }
         }
 
-        case LOAD_REGION_TREE: {
+        case ACTION_TYPES.LOAD_REGION_TREE: {
 
             return { ...state, regionTree: payload }
         }
 
-        case LOAD_SECTOR_TREE: {
+        case ACTION_TYPES.LOAD_SECTOR_TREE: {
 
             return { ...state, sectorTree: payload }
         }
 
-        case LOAD_PROJECT_TYPE: {
+        case ACTION_TYPES.LOAD_PROJECT_TYPE: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.ProjectTypeId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, projectTypes: data }
         }
 
-        case LOAD_PROJECT_SUBTYPE: {
+        case ACTION_TYPES.LOAD_PROJECT_SUBTYPE: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.ProjectSubTypeId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, projectSubTypes: data }
         }
 
-        case LOAD_USERS: {
+        case ACTION_TYPES.LOAD_USERS: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.UserId, value: x.DisplayName
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, users: data }
         }
 
-        case LOAD_VALIDATION_STATUS: {
+        case ACTION_TYPES.LOAD_VALIDATION_STATUS: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.ValidationStatusId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, validationStatus: data }
         }
 
-        case LOAD_MA_OPTIONS: {
+        case ACTION_TYPES.LOAD_MA_OPTIONS: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.MAOptionID, value: x.Name
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, maOptions: data }
         }
 
-        case LOAD_ADAPTATION_PURPOSE: {
+        case ACTION_TYPES.LOAD_ADAPTATION_PURPOSE: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.AdaptationPurposeId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, adaptationPurpose: data }
         }
 
-        case LOAD_SECTOR: {
+        case ACTION_TYPES.LOAD_SECTOR: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.SectorId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, sector: data }
         }
 
-        case LOAD_REGION: {
+        case ACTION_TYPES.LOAD_REGION: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.RegionId, value: x.RegionName
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, region: data }
         }
 
-        case LOAD_CARBON_CREDIT: {
+        case ACTION_TYPES.LOAD_CARBON_CREDIT: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.CarbonCreditId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, carbonCredit: data }
         }
 
-        case LOAD_CARBON_CREDIT_MARKET: {
+        case ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.CarbonCreditMarketId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, carbonCreditMarket: data }
         }
 
-        case LOAD_CDM_STATUS: {
+        case ACTION_TYPES.LOAD_CDM_STATUS: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.CDMStatusId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, cdmStatus: data }
         }
 
-        case LOAD_CDM_METHODOLOGY: {
+        case ACTION_TYPES.LOAD_CDM_METHODOLOGY: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.CDMMethodologyId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, cdmMethodology: data }
         }
 
-        case LOAD_VOLUNTARY_METHODOLOGY: {
+        case ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.VoluntaryMethodologyId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, voluntaryMethodology: data }
         }
 
-        case LOAD_VOLUNTARY_GOLD_STANDARD: {
+        case ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.VoluntaryGoldStandardId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, voluntaryGoldStandard: data }
         }
 
-        case LOAD_RESEARCH_TYPE: {
+        case ACTION_TYPES.LOAD_RESEARCH_TYPE: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.ResearchTypeId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, researchType: data }
         }
 
-        case LOAD_TARGET_AUDIENCE: {
+        case ACTION_TYPES.LOAD_TARGET_AUDIENCE: {
 
-            const data = payload.map((x) => {
-                return {
-                    id: x.TargetAudienceId, value: x.Value
-                }
-            })
-
+            const data = convertPayload(payload)
             return { ...state, targetAudience: data }
         }
 

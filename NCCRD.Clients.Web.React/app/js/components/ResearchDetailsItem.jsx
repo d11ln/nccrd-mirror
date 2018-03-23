@@ -5,9 +5,7 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextComponent from './TextComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import {
-  SET_RESEARCH_AUTHOR, SET_RESEARCH_PAPER_LINK, SET_RESEARCH_RESEARCH_TYPE, SET_RESEARCH_TARGET_AUDIENCE, SET_RESEARCH_SECTOR
-} from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { researchType, targetAudience, sector } } = state
@@ -34,7 +32,7 @@ class ResearchDetailsItem extends React.Component {
             label="Author:"
             id="txtAuthor"
             value={details.Author}
-            setValueKey={SET_RESEARCH_AUTHOR}
+            setValueKey={ACTION_TYPES.SET_RESEARCH_AUTHOR}
             parentId={details.ResearchDetailId}
           />
           <TextComponent
@@ -42,7 +40,7 @@ class ResearchDetailsItem extends React.Component {
             label="Paper link:"
             id="txtPaperLink"
             value={details.PaperLink}
-            setValueKey={SET_RESEARCH_PAPER_LINK}
+            setValueKey={ACTION_TYPES.SET_RESEARCH_PAPER_LINK}
             parentId={details.ResearchDetailId}
           />
           <SelectComponent
@@ -50,7 +48,7 @@ class ResearchDetailsItem extends React.Component {
             label="Research type:"
             selectedValue={details.ResearchTypeId}
             options={researchType}
-            setSelectedValueKey={SET_RESEARCH_RESEARCH_TYPE}
+            setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE}
             parentId={details.ResearchDetailId}
           />
         </div>
@@ -63,7 +61,7 @@ class ResearchDetailsItem extends React.Component {
             label="Target audience::"
             selectedValue={details.TargetAudienceId}
             options={targetAudience}
-            setSelectedValueKey={SET_RESEARCH_TARGET_AUDIENCE}
+            setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
             parentId={details.ResearchDetailId}
           />
           <SelectComponent
@@ -71,7 +69,7 @@ class ResearchDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             options={sector}
-            setSelectedValueKey={SET_RESEARCH_SECTOR}
+            setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
             parentId={details.ResearchDetailId}
           />
         </div>

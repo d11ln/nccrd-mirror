@@ -3,7 +3,7 @@
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
-import { LOAD_PROJECTS, SET_LOADING } from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 import { apiBaseURL } from "../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
@@ -15,10 +15,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadProjects: payload => {
-            dispatch({ type: LOAD_PROJECTS, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_PROJECTS, payload })
         },
         setLoading: payload => {
-            dispatch({ type: SET_LOADING, payload })
+            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
         }
     }
 }

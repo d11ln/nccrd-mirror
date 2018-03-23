@@ -1,14 +1,6 @@
 'use strict'
 
-import {
-    LOAD_MITIGATION_EMISSIONS, ADD_MITIGATION_EMISSIONS, SET_EMISSIONS_YEAR, SET_EMISSIONS_CO2, SET_EMISSIONS_CH4,
-    SET_EMISSIONS_CH4_CO2e, SET_EMISSIONS_N2O, SET_EMISSIONS_N2O_CO2e, SET_EMISSIONS_HFC, SET_EMISSIONS_HFC_CO2e,
-    SET_EMISSIONS_PFC, SET_EMISSIONS_PFC_CO2e, SET_EMISSIONS_SF6, SET_EMISSIONS_SF6_CO2e, SET_EMISSIONS_Hydro,
-    SET_EMISSIONS_Hydro_CO2e, SET_EMISSIONS_Tidal, SET_EMISSIONS_Tidal_CO2e, SET_EMISSIONS_Wind, SET_EMISSIONS_Wind_CO2e,
-    SET_EMISSIONS_Solar, SET_EMISSIONS_Solar_CO2e, SET_EMISSIONS_FossilFuelElecRed, SET_EMISSIONS_FossilFuelElecRed_CO2e,
-    SET_EMISSIONS_BioWaste, SET_EMISSIONS_BioWaste_CO2e, SET_EMISSIONS_Geothermal, SET_EMISSIONS_Geothermal_CO2e,
-    RESET_EMISSION_STATE
-} from "../constants/action-types";
+import * as ACTION_TYPES from "../constants/action-types"
 
 const _ = require('lodash')
 
@@ -38,11 +30,11 @@ export default function EmissionsReducer(state = {}, action) {
 
     switch (type) {
 
-        case LOAD_MITIGATION_EMISSIONS: {
+        case ACTION_TYPES.LOAD_MITIGATION_EMISSIONS: {
             return { ...state, emissionsData: payload }
         }
 
-        case RESET_EMISSION_STATE: {
+        case ACTION_TYPES.RESET_EMISSION_STATE: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -54,7 +46,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, state: "original" }] }
         }
 
-        case ADD_MITIGATION_EMISSIONS: {
+        case ACTION_TYPES.ADD_MITIGATION_EMISSIONS: {
 
             let { emissionsData, projectDetails } = state
 
@@ -93,7 +85,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, newItem] }
         }
 
-        case SET_EMISSIONS_YEAR: {
+        case ACTION_TYPES.SET_EMISSIONS_YEAR: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -105,7 +97,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Year: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_CO2: {
+        case ACTION_TYPES.SET_EMISSIONS_CO2: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -117,7 +109,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, CO2: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_CH4: {
+        case ACTION_TYPES.SET_EMISSIONS_CH4: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -129,7 +121,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, CH4: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_CH4_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_CH4_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -141,7 +133,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, CH4_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_N2O: {
+        case ACTION_TYPES.SET_EMISSIONS_N2O: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -153,7 +145,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, N2O: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_N2O_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_N2O_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -165,7 +157,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, N2O_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_HFC: {
+        case ACTION_TYPES.SET_EMISSIONS_HFC: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -177,7 +169,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, HFC: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_HFC_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_HFC_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -189,7 +181,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, HFC_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_PFC: {
+        case ACTION_TYPES.SET_EMISSIONS_PFC: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -201,7 +193,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, PFC: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_PFC_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_PFC_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -213,7 +205,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, PFC_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_SF6: {
+        case ACTION_TYPES.SET_EMISSIONS_SF6: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -225,7 +217,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, SF6: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_SF6_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_SF6_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -237,7 +229,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, SF6_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Hydro: {
+        case ACTION_TYPES.SET_EMISSIONS_Hydro: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -249,7 +241,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Hydro: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Hydro_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_Hydro_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -261,7 +253,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Hydro_CO2e: payload, state: "modified" }] }
         }   
         
-        case SET_EMISSIONS_Tidal: {
+        case ACTION_TYPES.SET_EMISSIONS_Tidal: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -273,7 +265,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Tidal: payload, state: "modified" }] }
         } 
 
-        case SET_EMISSIONS_Tidal_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_Tidal_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -285,7 +277,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Tidal_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Wind: {
+        case ACTION_TYPES.SET_EMISSIONS_Wind: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -297,7 +289,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Wind: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Wind_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_Wind_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -309,7 +301,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Wind_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Solar: {
+        case ACTION_TYPES.SET_EMISSIONS_Solar: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -321,7 +313,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Solar: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Solar_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_Solar_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -333,7 +325,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Solar_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_FossilFuelElecRed: {
+        case ACTION_TYPES.SET_EMISSIONS_FossilFuelElecRed: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -345,7 +337,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, FossilFuelElecRed: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_FossilFuelElecRed_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_FossilFuelElecRed_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -357,7 +349,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, FossilFuelElecRed_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_BioWaste: {
+        case ACTION_TYPES.SET_EMISSIONS_BioWaste: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -369,7 +361,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, BioWaste: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_BioWaste_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_BioWaste_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -381,7 +373,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, BioWaste_CO2e: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Geothermal: {
+        case ACTION_TYPES.SET_EMISSIONS_Geothermal: {
             let { emissionsData } = state
 
             //Get item and Id
@@ -393,7 +385,7 @@ export default function EmissionsReducer(state = {}, action) {
             return { ...state, emissionsData: [...emissionsData, { ...details.item, Geothermal: payload, state: "modified" }] }
         }
 
-        case SET_EMISSIONS_Geothermal_CO2e: {
+        case ACTION_TYPES.SET_EMISSIONS_Geothermal_CO2e: {
             let { emissionsData } = state
 
             //Get item and Id

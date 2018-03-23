@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import { ADD_MITIGATION_DETAILS } from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 import MitigationDetailsItem from './MitigationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {
@@ -17,7 +17,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addMitigationDetails: payload => {
-      dispatch({ type: ADD_MITIGATION_DETAILS, payload })
+      dispatch({ type: ACTION_TYPES.ADD_MITIGATION_DETAILS, payload })
     }
   }
 }

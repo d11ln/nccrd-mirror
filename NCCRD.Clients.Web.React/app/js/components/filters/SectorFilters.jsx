@@ -4,7 +4,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../../constants/apiBaseURL";
 import { connect } from 'react-redux'
-import { LOAD_SECTOR_TREE, LOAD_SECTOR_FILTER, LOAD_SECTOR } from "../../constants/action-types"
+import * as ACTION_TYPES from "../../constants/action-types"
 
 const queryString = require('query-string')
 
@@ -17,13 +17,13 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadData: payload => {
-            dispatch({ type: LOAD_SECTOR_TREE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TREE, payload })
         },
         loadSectorFilter: payload => {
-            dispatch({ type: LOAD_SECTOR_FILTER, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_FILTER, payload })
         },
         loadSectors: payload => {
-            dispatch({ type: LOAD_SECTOR, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR, payload })
         }
     }
 }

@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
-import { LOAD_TITLE_FILTER, LOAD_TITLE_FILTER_INTERNAL } from "../../constants/action-types";
+import * as ACTION_TYPES from "../../constants/action-types"
 
 const queryString = require('query-string')
 
@@ -15,10 +15,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadTitleFilter: payload => {
-            dispatch({ type: LOAD_TITLE_FILTER, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER, payload })
         },
         loadTitleFilterInternal: payload => {
-            dispatch({ type: LOAD_TITLE_FILTER_INTERNAL, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER_INTERNAL, payload })
         }
     }
 }

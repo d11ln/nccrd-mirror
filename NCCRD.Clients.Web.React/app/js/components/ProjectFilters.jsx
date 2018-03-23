@@ -4,9 +4,7 @@ import React from 'react'
 import { Button, Collapse } from 'mdbreact'
 import { connect } from 'react-redux'
 import { Chip } from 'material-ui'
-import {
-    CLEAR_FILTERS, LOAD_TITLE_FILTER, LOAD_STATUS_FILTER, LOAD_TYPOLOGY_FILTER, LOAD_REGION_FILTER, LOAD_SECTOR_FILTER
-} from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 
 //Filters
 import GeneralFilters from './filters/GeneralFilters.jsx';
@@ -22,22 +20,22 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         clearFilters: payload => {
-            dispatch({ type: CLEAR_FILTERS, payload })
+            dispatch({ type: ACTION_TYPES.CLEAR_FILTERS, payload })
         },
         clearTitleFilter: () => {
-            dispatch({ type: LOAD_TITLE_FILTER, payload: "" })
+            dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER, payload: "" })
         },
         clearStatusFilter: () => {
-            dispatch({ type: LOAD_STATUS_FILTER, payload: { id: 0, value: 0 }})
+            dispatch({ type: ACTION_TYPES.LOAD_STATUS_FILTER, payload: { id: 0, value: 0 }})
         },
         clearTypologyFilter: () => {
-            dispatch({ type: LOAD_TYPOLOGY_FILTER, payload: { id: 0, value: 0 } })
+            dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY_FILTER, payload: { id: 0, value: 0 } })
         },
         clearRegionFilter: () => {
-            dispatch({ type: LOAD_REGION_FILTER, payload: 0 })
+            dispatch({ type: ACTION_TYPES.LOAD_REGION_FILTER, payload: 0 })
         },
         clearSectorFilter: () => {
-            dispatch({ type: LOAD_SECTOR_FILTER, payload: 0 })
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_FILTER, payload: 0 })
         }
     }
 }

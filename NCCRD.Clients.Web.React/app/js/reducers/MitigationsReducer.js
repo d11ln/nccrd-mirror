@@ -1,11 +1,6 @@
 'use strict'
 
-import {
-    LOAD_MITIGATION_DETAILS, ADD_MITIGATION_DETAILS, SET_MITIGATION_CARBON_CREDIT, SET_MITIGATION_CARBON_CREDIT_MARKET,
-    SET_MITIGATION_CDM_STATUS, SET_MITIGATION_CDM_METHODOLOGY, SET_MITIGATION_VOLUNTARY_METHODOLOGY,
-    SET_MITIGATION_VOLUNTARY_GOLD_STANDARD, SET_MITIGATION_CDM_PROJECT_NUMBER, SET_MITIGATION_OTHER_DESCR,
-    SET_MITIGATION_SECTOR, RESET_MITIGATION_STATE
-} from "../constants/action-types";
+import * as ACTION_TYPES from "../constants/action-types"
 
 const _ = require('lodash')
 
@@ -35,11 +30,11 @@ export default function MitigationsReducer(state = {}, action) {
 
     switch (type) {
 
-        case LOAD_MITIGATION_DETAILS: {
+        case ACTION_TYPES.LOAD_MITIGATION_DETAILS: {
             return { ...state, mitigationDetails: payload }
         }
 
-        case RESET_MITIGATION_STATE: {
+        case ACTION_TYPES.RESET_MITIGATION_STATE: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -51,7 +46,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, state: "original" }] }
         }
 
-        case ADD_MITIGATION_DETAILS: {
+        case ACTION_TYPES.ADD_MITIGATION_DETAILS: {
 
             let { mitigationDetails, projectDetails } = state
 
@@ -75,7 +70,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, newItem] }
         }
 
-        case SET_MITIGATION_CARBON_CREDIT: {
+        case ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -87,7 +82,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditId: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_CARBON_CREDIT_MARKET: {
+        case ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT_MARKET: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -99,7 +94,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CarbonCreditMarketId: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_CDM_STATUS: {
+        case ACTION_TYPES.SET_MITIGATION_CDM_STATUS: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -111,7 +106,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMStatusId: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_CDM_METHODOLOGY: {
+        case ACTION_TYPES.SET_MITIGATION_CDM_METHODOLOGY: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -123,7 +118,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMMethodologyId: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_VOLUNTARY_METHODOLOGY: {
+        case ACTION_TYPES.SET_MITIGATION_VOLUNTARY_METHODOLOGY: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -135,7 +130,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryMethodologyId: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_VOLUNTARY_GOLD_STANDARD: {
+        case ACTION_TYPES.SET_MITIGATION_VOLUNTARY_GOLD_STANDARD: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -147,7 +142,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, VoluntaryGoldStandardId: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_CDM_PROJECT_NUMBER: {
+        case ACTION_TYPES.SET_MITIGATION_CDM_PROJECT_NUMBER: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -159,7 +154,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, CDMProjectNumber: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_OTHER_DESCR: {
+        case ACTION_TYPES.SET_MITIGATION_OTHER_DESCR: {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -171,7 +166,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, OtherDescription: payload, state: "modified" }] }
         }
 
-        case SET_MITIGATION_SECTOR: {
+        case ACTION_TYPES.SET_MITIGATION_SECTOR: {
             let { mitigationDetails } = state
 
             //Get item and Id

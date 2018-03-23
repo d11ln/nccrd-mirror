@@ -5,12 +5,7 @@ import { apiBaseURL } from "../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextComponent from './TextComponent.jsx'
 import SelectComponent from './SelectComponent.jsx'
-import {
-  SET_MITIGATION_CARBON_CREDIT, SET_MITIGATION_CARBON_CREDIT_MARKET,
-  SET_MITIGATION_CDM_STATUS, SET_MITIGATION_CDM_METHODOLOGY, SET_MITIGATION_VOLUNTARY_METHODOLOGY,
-  SET_MITIGATION_VOLUNTARY_GOLD_STANDARD, SET_MITIGATION_CDM_PROJECT_NUMBER, SET_MITIGATION_OTHER_DESCR,
-  SET_MITIGATION_SECTOR
-} from "../constants/action-types"
+import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
@@ -42,7 +37,7 @@ class MitigationDetailsItem extends React.Component {
             label="Carbon credit:"
             selectedValue={details.CarbonCreditId}
             options={carbonCredit}
-            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT}
             parentId={details.MitigationDetailId}
           />
           <SelectComponent
@@ -50,7 +45,7 @@ class MitigationDetailsItem extends React.Component {
             label="Carbon credit market:"
             selectedValue={details.CarbonCreditMarketId}
             options={carbonCreditMarket}
-            setSelectedValueKey={SET_MITIGATION_CARBON_CREDIT_MARKET}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT_MARKET}
             parentId={details.MitigationDetailId}
           />
           <SelectComponent
@@ -58,7 +53,7 @@ class MitigationDetailsItem extends React.Component {
             label="CDM status:"
             selectedValue={details.CDMStatusId}
             options={cdmStatus}
-            setSelectedValueKey={SET_MITIGATION_CDM_STATUS}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_STATUS}
             parentId={details.MitigationDetailId}
           />
         </div>
@@ -71,7 +66,7 @@ class MitigationDetailsItem extends React.Component {
             label="CDM methodology:"
             selectedValue={details.CDMMethodologyId}
             options={cdmMethodology}
-            setSelectedValueKey={SET_MITIGATION_CDM_METHODOLOGY}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_METHODOLOGY}
             parentId={details.MitigationDetailId}
           />
           <SelectComponent
@@ -79,7 +74,7 @@ class MitigationDetailsItem extends React.Component {
             label="Voluntary methodology:"
             selectedValue={details.VoluntaryMethodologyId}
             options={voluntaryMethodology}
-            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_METHODOLOGY}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_METHODOLOGY}
             parentId={details.MitigationDetailId}
           />
           <SelectComponent
@@ -87,7 +82,7 @@ class MitigationDetailsItem extends React.Component {
             label="Voluntary gold standard:"
             selectedValue={details.VoluntaryGoldStandardId}
             options={voluntaryGoldStandard}
-            setSelectedValueKey={SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
             parentId={details.MitigationDetailId}
           />
         </div>
@@ -100,7 +95,7 @@ class MitigationDetailsItem extends React.Component {
             label="CDM project number:"
             id="txtCDMProjectNumber"
             value={details.CDMProjectNumber}
-            setValueKey={SET_MITIGATION_CDM_PROJECT_NUMBER}
+            setValueKey={ACTION_TYPES.SET_MITIGATION_CDM_PROJECT_NUMBER}
             parentId={details.MitigationDetailId}
           />
           <TextComponent
@@ -108,7 +103,7 @@ class MitigationDetailsItem extends React.Component {
             label="Other description:"
             id="txtOtherDescription"
             value={details.OtherDescription}
-            setValueKey={SET_MITIGATION_OTHER_DESCR}
+            setValueKey={ACTION_TYPES.SET_MITIGATION_OTHER_DESCR}
             parentId={details.MitigationDetailId}
           />
           <SelectComponent
@@ -116,7 +111,7 @@ class MitigationDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             options={sector}
-            setSelectedValueKey={SET_MITIGATION_SECTOR}
+            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_SECTOR}
             parentId={details.MitigationDetailId}
           />
         </div>
