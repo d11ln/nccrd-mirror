@@ -30,31 +30,44 @@ class TitleFilter extends React.Component {
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+
         if (typeof parsedHash.title !== 'undefined') {
 
             //Update internal state
-            this.props.loadTitleFilterInternal(parsedHash.title)
-            this.onTouchTap()
+            //this.props.loadTitleFilterInternal(parsedHash.title)
+            this.onTouchTap(parsedHash.title)
         }
     }
 
     onChange(event) {
 
+        console.log("loadTitleFilterInternal", event.target.value)
+
         //Update internal state
         this.props.loadTitleFilterInternal(event.target.value)
     }
 
-    onTouchTap() {
+    onTouchTap(filterValue, e) {
 
         //Update global state
-        let { loadTitleFilter } = this.props
-        loadTitleFilter(this.props.titleFilterInternal)
+        let { loadTitleFilter, titleFilterInternal } = this.props
+
+        console.log("filterValue:", filterValue)
+
+        loadTitleFilter(filterValue)
+
+        // if (typeof filterValue === 'undefined') {
+        //     loadTitleFilter(titleFilterInternal)
+        // }
+        // else{
+        //     loadTitleFilter(filterValue)
+        // }  
     }
 
     render() {
 
         let { titleFilterInternal } = this.props
-        
+
         return (
             <div className="col-md-4">
                 <label style={{ fontWeight: "bold" }}>Title:</label>
@@ -64,7 +77,7 @@ class TitleFilter extends React.Component {
                         color="primary"
                         size="sm"
                         style={{ height: "35px", marginLeft: "3px", marginTop: "2px", float: "right" }}
-                        onTouchTap={this.onTouchTap.bind(this)} >
+                        onTouchTap={this.onTouchTap.bind(this, titleFilterInternal)} >
                         Apply
                     </Button>
 

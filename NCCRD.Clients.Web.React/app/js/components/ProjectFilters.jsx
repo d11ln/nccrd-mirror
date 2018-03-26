@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER, payload: "" })
         },
         clearStatusFilter: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_STATUS_FILTER, payload: { id: 0, value: 0 }})
+            dispatch({ type: ACTION_TYPES.LOAD_STATUS_FILTER, payload: { id: 0, value: 0 } })
         },
         clearTypologyFilter: () => {
             dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY_FILTER, payload: { id: 0, value: 0 } })
@@ -106,10 +106,10 @@ class ProjectFilters extends React.Component {
                 )
             }
 
-            if (statusFilter !== 0) {
+            if (statusFilter > 0 && projectStatus.length > 0) {
                 filterChips.push(
                     <Chip
-                        label={"Status: " + projectStatus.filter(x => x.id === statusFilter )[0].value}
+                        label={"Status: " + projectStatus.filter(x => x.id === parseInt(statusFilter))[0].value}
                         onDelete={() => this.deleteFilterChip("status")}
                         style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
                         key="statusFilterChip"
@@ -117,10 +117,10 @@ class ProjectFilters extends React.Component {
                 )
             }
 
-            if (typologyFilter !== 0) {
+            if (typologyFilter > 0 && typology.length > 0) {
                 filterChips.push(
                     <Chip
-                        label={"Typology: " + typology.filter(x => x.id === typologyFilter)[0].value}
+                        label={"Typology: " + typology.filter(x => x.id === parseInt(typologyFilter))[0].value}
                         onDelete={() => this.deleteFilterChip("typology")}
                         style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
                         key="typologyFilterChip"
@@ -128,10 +128,11 @@ class ProjectFilters extends React.Component {
                 )
             }
 
-            if (regionFilter !== 0) {
+            if (regionFilter > 0 && region.length > 0) {
+
                 filterChips.push(
                     <Chip
-                        label={"Region: " + region.filter(x => x.id === regionFilter)[0].value}
+                        label={"Region: " + region.filter(x => x.id === parseInt(regionFilter))[0].value}
                         onDelete={() => this.deleteFilterChip("region")}
                         style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
                         key="regionFilterChip"
@@ -139,10 +140,10 @@ class ProjectFilters extends React.Component {
                 )
             }
 
-            if (sectorFilter !== 0) {
+            if (sectorFilter > 0 && sector.length > 0) {
                 filterChips.push(
                     <Chip
-                        label={"Sector: " + sector.filter(x => x.id === sectorFilter)[0].value}
+                        label={"Sector: " + sector.filter(x => x.id === parseInt(sectorFilter))[0].value}
                         onDelete={() => this.deleteFilterChip("sector")}
                         style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
                         key="sectorFilterChip"

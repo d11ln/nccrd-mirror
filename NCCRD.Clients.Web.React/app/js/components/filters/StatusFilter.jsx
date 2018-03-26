@@ -35,11 +35,12 @@ class StatusFilter extends React.Component {
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+
         if (typeof parsedHash.status !== 'undefined') {
 
             //Dispatch to store
             let { loadStatusFilter } = this.props
-            loadStatusFilter(parsedHash.status)
+            loadStatusFilter({value: parsedHash.status})
         }
     }
 

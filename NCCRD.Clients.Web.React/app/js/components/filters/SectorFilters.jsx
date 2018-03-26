@@ -173,8 +173,8 @@ class SectorFilters extends React.Component {
         let { sector, sectorFilter } = this.props
         let selectedValue = "All"
 
-        if (sectorFilter !== 0) {
-            selectedValue = sector.filter(x => x.id === sectorFilter)[0].value
+        if (sectorFilter > 0 && sector.length > 0) {
+            selectedValue = sector.filter(x => x.id === parseInt(sectorFilter))[0].value
         }
         return (
             <div>

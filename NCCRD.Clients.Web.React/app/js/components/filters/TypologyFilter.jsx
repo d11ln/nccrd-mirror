@@ -39,7 +39,7 @@ class TypologyFilter extends React.Component {
 
             //Dispatch to store
             let { loadTypologyFilter } = this.props
-            loadTypologyFilter(parsedHash.typology)
+            loadTypologyFilter({value: parsedHash.typology})
         }
     }
 

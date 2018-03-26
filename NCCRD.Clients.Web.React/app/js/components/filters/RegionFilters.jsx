@@ -174,8 +174,8 @@ class RegionFilters extends React.Component {
         let { region, regionFilter } = this.props
         let selectedValue = "All"
 
-        if (regionFilter !== 0) {
-            selectedValue = region.filter(x => x.id === regionFilter)[0].value
+        if (regionFilter > 0 && region.length > 0) {
+            selectedValue = region.filter(x => x.id === parseInt(regionFilter))[0].value
         }
 
         return (
