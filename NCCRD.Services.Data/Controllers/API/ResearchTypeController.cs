@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,138 +21,68 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ResearchType data as JSON</returns>
         [HttpGet]
         [Route("api/ResearchType/GetAll")]
-        public IEnumerable<ResearchType> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<ResearchType> data = new List<ResearchType>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.ResearchType.ToList();
+                data = context.ResearchType
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.ResearchTypeId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get ResearchType by Id
+        /// Add/Update ResearchType
         /// </summary>
-        /// <param name="id">The Id of the ResearchType to get</param>
-        /// <returns>ResearchType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ResearchType/GetByID/{id}")]
-        public ResearchType GetByID(int id)
+        /// <param name="items">list to add/update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/ResearchType/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
         {
-            ResearchType data = null;
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                data = context.ResearchType.FirstOrDefault(x => x.ResearchTypeId == id);
+                foreach (var item in items)
+                {
+                    //Check if exists
+                    var data = context.ResearchType.FirstOrDefault(x => x.ResearchTypeId == item.id);
+                    if (data != null)
+                    {
+                        //Update entry
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add entry
+                        context.ResearchType.Add(new ResearchType()
+                        {
+                            ResearchTypeId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
-            return data;
+            return result;
         }
 
         /// <summary>
-        /// Get ResearchType by Value
-        /// </summary>
-        /// <param name="value">The Value of the ResearchType to get</param>
-        /// <returns>ResearchType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ResearchType/GetByValue/{value}")]
-        public ResearchType GetByValue(string value)
-        {
-            ResearchType data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ResearchType.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add ResearchType
-        /// </summary>
-        /// <param name="researchType">The ResearchType to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ResearchType/Add")]
-        public bool Add([FromBody]ResearchType researchType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.ResearchType.Count(x => x.ResearchTypeId == researchType.ResearchTypeId) == 0)
-                {
-                    //Add Region entry
-                    context.ResearchType.Add(researchType);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update ResearchType
-        /// </summary>
-        /// <param name="researchType">ResearchType to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ResearchType/Update")]
-        public bool Update([FromBody]ResearchType researchType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ResearchType.FirstOrDefault(x => x.ResearchTypeId == researchType.ResearchTypeId);
-                if (data != null)
-                {
-                    data.Value = researchType.Value;
-                    data.Description = researchType.Description;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete ResearchType
-        /// </summary>
-        /// <param name="researchType">ResearchType to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ResearchType/Delete")]
-        public bool Delete([FromBody]ResearchType researchType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ResearchType.FirstOrDefault(x => x.ResearchTypeId == researchType.ResearchTypeId);
-                if (data != null)
-                {
-                    context.ResearchType.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
         /// Delete ResearchType by Id
         /// </summary>
         /// <param name="id">Id of ResearchType to delete</param>
@@ -176,6 +107,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

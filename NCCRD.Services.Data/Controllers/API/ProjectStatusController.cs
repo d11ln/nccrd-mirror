@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,152 +21,68 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ProjectStatus data as JSON</returns>
         [HttpGet]
         [Route("api/ProjectStatus/GetAll")]
-        public IEnumerable<ProjectStatus> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<ProjectStatus> data = new List<ProjectStatus>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                //if (allOption)
-                //{
-                //    data.Add(new ProjectStatus()
-                //    {
-                //        ProjectStatusId = 0,
-                //        Value = "All"
-                //    });
-                //}
-
-                //if(sorted)
-                //{
-                //    data = data.OrderBy(d => d.Value).ToList();
-                //}
-
-                data.AddRange(context.ProjectStatus.OrderBy(x => x.Value).ToList());
+                data = context.ProjectStatus
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.ProjectStatusId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get ProjectStatus by Id
+        /// Add/Update ProjectStatus
         /// </summary>
-        /// <param name="id">The Id of the ProjectStatus to get</param>
-        /// <returns>ProjectStatus data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectStatus/GetByID/{id}")]
-        public ProjectStatus GetByID(int id)
+        /// <param name="items">ProjectStatus to update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/ProjectStatus/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
         {
-            ProjectStatus data = null;
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                data = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == id);
+                foreach (var item in items)
+                {
+                    //Check if exists
+                    var data = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == item.id);
+                    if (data != null)
+                    {
+                        //Update ProjectStatus entry
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add ProjectStatus entry
+                        context.ProjectStatus.Add(new ProjectStatus()
+                        {
+                            ProjectStatusId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
-            return data;
+            return result;
         }
 
         /// <summary>
-        /// Get ProjectStatus by Value
-        /// </summary>
-        /// <param name="value">The Value of the ProjectStatus to get</param>
-        /// <returns>ProjectStatus data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectStatus/GetByValue/{value}")]
-        public ProjectStatus GetByValue(string value)
-        {
-            ProjectStatus data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ProjectStatus.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add ProjectStatus
-        /// </summary>
-        /// <param name="projectStatus">The ProjectStatus to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectStatus/Add")]
-        public bool Add([FromBody]ProjectStatus projectStatus)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.ProjectStatus.Count(x => x.ProjectStatusId == projectStatus.ProjectStatusId) == 0)
-                {
-                    //Add ProjectStatus entry
-                    context.ProjectStatus.Add(projectStatus);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update ProjectStatus
-        /// </summary>
-        /// <param name="projectStatus">ProjectStatus to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectStatus/Update")]
-        public bool Update([FromBody]ProjectStatus projectStatus)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == projectStatus.ProjectStatusId);
-                if (data != null)
-                {
-                    data.Value = projectStatus.Value;
-                    data.Description = projectStatus.Description;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete ProjectStatus
-        /// </summary>
-        /// <param name="projectStatus">ProjectStatus to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectStatus/Delete")]
-        public bool Delete([FromBody]ProjectStatus projectStatus)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ProjectStatus.FirstOrDefault(x => x.ProjectStatusId == projectStatus.ProjectStatusId);
-                if (data != null)
-                {
-                    context.ProjectStatus.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
         /// Delete ProjectStatus by Id
         /// </summary>
         /// <param name="id">Id of ProjectStatus to delete</param>
@@ -190,6 +107,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

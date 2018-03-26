@@ -39,6 +39,8 @@ class MitigationDetailsItem extends React.Component {
             options={carbonCredit}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT}
             parentId={details.MitigationDetailId}
+            dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT}
+            persist={"api/CarbonCredit/AddOrUpdate"}
           />
           <SelectComponent
             col="col-md-4"
@@ -47,6 +49,8 @@ class MitigationDetailsItem extends React.Component {
             options={carbonCreditMarket}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT_MARKET}
             parentId={details.MitigationDetailId}
+            dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET}
+            persist={"api/CarbonCreditMarket/AddOrUpdate"}
           />
           <SelectComponent
             col="col-md-4"
@@ -55,6 +59,8 @@ class MitigationDetailsItem extends React.Component {
             options={cdmStatus}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_STATUS}
             parentId={details.MitigationDetailId}
+            dispatch={ACTION_TYPES.LOAD_CDM_STATUS}
+            persist={"api/CDMStatus/AddOrUpdate"}
           />
         </div>
 
@@ -68,6 +74,8 @@ class MitigationDetailsItem extends React.Component {
             options={cdmMethodology}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_METHODOLOGY}
             parentId={details.MitigationDetailId}
+            dispatch={ACTION_TYPES.LOAD_CDM_METHODOLOGY}
+            persist={"api/CDMMethodology/AddOrUpdate"}
           />
           <SelectComponent
             col="col-md-4"
@@ -76,6 +84,8 @@ class MitigationDetailsItem extends React.Component {
             options={voluntaryMethodology}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_METHODOLOGY}
             parentId={details.MitigationDetailId}
+            dispatch={ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY}
+            persist={"api/VoluntaryMethodology/AddOrUpdate"}
           />
           <SelectComponent
             col="col-md-4"
@@ -84,6 +94,8 @@ class MitigationDetailsItem extends React.Component {
             options={voluntaryGoldStandard}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
             parentId={details.MitigationDetailId}
+            dispatch={ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD}
+            persist={"api/VoluntaryGoldStandard/AddOrUpdate"}
           />
         </div>
 
@@ -113,6 +125,8 @@ class MitigationDetailsItem extends React.Component {
             options={sector}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_SECTOR}
             parentId={details.MitigationDetailId}
+            // dispatch={ACTION_TYPES.LOAD_SECTOR}
+            // persist={"api/Sector/AddOrUpdate"}
           />
         </div>
 

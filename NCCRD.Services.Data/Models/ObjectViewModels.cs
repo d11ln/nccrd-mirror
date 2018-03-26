@@ -205,4 +205,21 @@ namespace NCCRD.Services.Data.Models
         public double LatCalculated { get; set; }
         public double LonCalculated { get; set; }
     }
+
+    public class LookupDataViewModel
+    {
+        public LookupDataViewModel()
+        {
+          
+        }
+
+        public LookupDataViewModel(int id, string value)
+        {
+            this.id = id;
+            this.value = value;
+        }
+
+        public int id { get; set; }
+        public string value { get; set; }
+    }
 }

@@ -94,40 +94,14 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /*/// <summary>
-        /// Add User
-        /// </summary>
-        /// <param name="user">The User to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/AppUsr/Add")]
-        public bool Add([FromBody]User user)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.Users.Count(x => x.UserId == user.UserId) == 0)
-                {
-                    //Add Title entry
-                    context.Users.Add(user);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update User
+        /// <summary>
+        /// Add/Update User
         /// </summary>
         /// <param name="user">User to update</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/AppUsr/Update")]
-        public bool Update([FromBody]User user)
+        [Route("api/AppUsr/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]User user)
         {
             bool result = false;
 
@@ -137,7 +111,7 @@ namespace NCCRD.Services.Data.Controllers.API
                 var data = context.Users.FirstOrDefault(x => x.UserId == user.UserId);
                 if (data != null)
                 {
-                    //add properties to update here
+                    //Update
                     data.Username = user.Username;
                     data.Password = user.Password;
                     data.Blocked = user.Blocked;
@@ -163,43 +137,21 @@ namespace NCCRD.Services.Data.Controllers.API
                     data.FaxNumber = user.FaxNumber;
                     data.UserRoleId = user.UserRoleId;
                     data.TitleId = user.TitleId;
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete User
-        /// </summary>
-        /// <param name="user">User to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/AppUsr/Delete")]
-        public bool Delete([FromBody]User user)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.Users.FirstOrDefault(x => x.UserId == user.UserId);
-                if (data != null)
+                else
                 {
-                    context.Users.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
+                    //Add
+                    context.Users.Add(user);
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
-        }*/
+        }
 
-        /*/// <summary>
+        /// <summary>
         /// Delete User by Id
         /// </summary>
         /// <param name="id">Id of User to delete</param>
@@ -224,6 +176,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

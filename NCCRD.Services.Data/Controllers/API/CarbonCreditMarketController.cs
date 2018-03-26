@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,138 +21,68 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>CarbonCreditMarket data as JSON</returns>
         [HttpGet]
         [Route("api/CarbonCreditMarket/GetAll")]
-        public IEnumerable<CarbonCreditMarket> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<CarbonCreditMarket> data = new List<CarbonCreditMarket>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.CarbonCreditMarket.ToList();
+                data = context.CarbonCreditMarket
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.CarbonCreditMarketId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get CarbonCreditMarket by Id
+        /// Add/Update CarbonCreditMarket
         /// </summary>
-        /// <param name="id">The Id of the CarbonCreditMarket to get</param>
-        /// <returns>CarbonCreditMarket data as JSON</returns>
-        [HttpGet]
-        [Route("api/CarbonCreditMarket/GetByID/{id}")]
-        public CarbonCreditMarket GetByID(int id)
+        /// <param name="items">list to add/update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/CarbonCreditMarket/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
         {
-            CarbonCreditMarket data = null;
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                data = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == id);
+                foreach (var item in items)
+                {
+                    //Check if exists
+                    var data = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == item.id);
+                    if (data != null)
+                    {
+                        //Update CarbonCreditMarket entry
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add CarbonCreditMarket entry
+                        context.CarbonCreditMarket.Add(new CarbonCreditMarket()
+                        {
+                            CarbonCreditMarketId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
-            return data;
+            return result;
         }
 
         /// <summary>
-        /// Get CarbonCreditMarket by Value
-        /// </summary>
-        /// <param name="value">The Value of the CarbonCreditMarket to get</param>
-        /// <returns>CarbonCreditMarket data as JSON</returns>
-        [HttpGet]
-        [Route("api/CarbonCreditMarket/GetByValue/{value}")]
-        public CarbonCreditMarket GetByValue(string value)
-        {
-            CarbonCreditMarket data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.CarbonCreditMarket.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add CarbonCreditMarket
-        /// </summary>
-        /// <param name="carbonCreditMarket">The CarbonCreditMarket to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CarbonCreditMarket/Add")]
-        public bool Add([FromBody]CarbonCreditMarket carbonCreditMarket)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.CarbonCreditMarket.Count(x => x.CarbonCreditMarketId == carbonCreditMarket.CarbonCreditMarketId) == 0)
-                {
-                    //Add CarbonCreditMarket entry
-                    context.CarbonCreditMarket.Add(carbonCreditMarket);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update CarbonCreditMarket
-        /// </summary>
-        /// <param name="carbonCreditMarket">CarbonCreditMarket to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CarbonCreditMarket/Update")]
-        public bool Update([FromBody]CarbonCreditMarket carbonCreditMarket)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == carbonCreditMarket.CarbonCreditMarketId);
-                if (data != null)
-                {
-                    data.Value = carbonCreditMarket.Value;
-                    data.Description = carbonCreditMarket.Description;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete CarbonCreditMarket
-        /// </summary>
-        /// <param name="carbonCreditMarket">CarbonCreditMarket to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CarbonCreditMarket/Delete")]
-        public bool Delete([FromBody]CarbonCreditMarket carbonCreditMarket)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == carbonCreditMarket.CarbonCreditMarketId);
-                if (data != null)
-                {
-                    context.CarbonCreditMarket.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
         /// Delete CarbonCreditMarket by Id
         /// </summary>
         /// <param name="id">Id of CarbonCreditMarket to delete</param>
@@ -176,6 +107,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

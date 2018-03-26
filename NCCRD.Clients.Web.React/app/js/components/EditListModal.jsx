@@ -3,7 +3,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
-import { SET_EDIT_LIST } from "../constants/action-types"
+import { apiBaseURL } from "../constants/apiBaseURL"
+import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { editListModalData: { show, items, dispatch, persist } } = state
@@ -13,7 +14,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setEditList: (payload) => {
-            dispatch({ type: SET_EDIT_LIST, payload })
+            dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+        },
+        setLoading: (payload) => {
+            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
         },
         dispatchToStore: (key, payload) => {
             dispatch({ type: key, payload })
@@ -42,7 +46,7 @@ class EditListModal extends React.Component {
             })
 
             //Clear items from store
-            setEditList({items: []})
+            setEditList({ items: [] })
 
             //Update local state
             this.setState({ items: newItems })
@@ -72,23 +76,48 @@ class EditListModal extends React.Component {
 
     confirmSave() {
 
-        let { dispatchToStore, dispatch, persist } = this.props
+        let { dispatchToStore, dispatch, persist, setLoading } = this.props
         let { items } = this.state
 
-        //Toggle confirm save 
-        this.setState({ confirmSave: false })
+        setLoading(true)
 
-        //Save items...
-        console.log("persist to", persist)
+        let strPostData = JSON.stringify(items.filter(x => x.id > 0))
+        let url = apiBaseURL + persist
 
-        //Dispatch to store
-        dispatchToStore(dispatch, items)
+        //Save items to DB
+        return fetch(url, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: strPostData
+        })
+            .then((res) => res.json())
+            .then((res) => {
 
-        //Save to DB
+                setLoading(false)
 
-        //Close modal
-        let { setEditList } = this.props
-        setEditList({show: false})
+                if (res === true) {
+
+                    //Saved successully...
+
+                    //Toggle confirm save 
+                    this.setState({ confirmSave: false })
+                   
+                    //Dispatch to store
+                    dispatchToStore(dispatch, items)
+
+                    //Close modal
+                    let { setEditList } = this.props
+                    setEditList({ show: false })
+
+                }
+                else {
+
+                    //Save failed...
+
+                    alert("Unable to save changes. See log for details.")
+                    console.log("ERROR:", res)
+                }
+            })
     }
 
     cancelConfirm() {
@@ -99,7 +128,7 @@ class EditListModal extends React.Component {
 
         //Close modal
         let { setEditList } = this.props
-        setEditList({show: false})
+        setEditList({ show: false })
     }
 
     renderItems() {

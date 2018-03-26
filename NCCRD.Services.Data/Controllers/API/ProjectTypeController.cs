@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,51 +21,20 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ProjectType data as JSON</returns>
         [HttpGet]
         [Route("api/ProjectType/GetAll")]
-        public IEnumerable<ProjectType> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<ProjectType> data = new List<ProjectType>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.ProjectType.OrderBy(x => x.Value.Trim()).ToList();
-            }
-
-            return data;
-        }
-
-        /// <summary>
-        /// Get ProjectType by Id
-        /// </summary>
-        /// <param name="id">The Id of the ProjectType to get</param>
-        /// <returns>ProjectType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectType/GetByID/{id}")]
-        public ProjectType GetByID(int id)
-        {
-            ProjectType data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == id);
-            }
-
-            return data;
-        }
-
-        /// <summary>
-        /// Get ProjectType by Value
-        /// </summary>
-        /// <param name="value">The Value of the ProjectType to get</param>
-        /// <returns>ProjectType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectType/GetByValue/{value}")]
-        public ProjectType GetByValue(string value)
-        {
-            ProjectType data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ProjectType.FirstOrDefault(x => x.Value == value);
+                data = context.ProjectType
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.ProjectTypeId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
@@ -73,38 +43,48 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <summary>
         /// Add or Update ProjectType
         /// </summary>
-        /// <param name="projectType">ProjectType to update</param>
+        /// <param name="items">list to add/update</param>
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ProjectType/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]ProjectType projectType)
+        public bool AddOrUpdate([FromBody] List<LookupDataViewModel> items)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                //Check if exists
-                var data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == projectType.ProjectTypeId);
-                if (data != null)
+                foreach (var item in items)
                 {
-                    //Update
-                    data.Value = projectType.Value;
-                    data.Description = projectType.Description;
-                }
-                else
-                {
-                    //Add
-                    context.ProjectType.Add(projectType);
+                    //Check if exists
+                    var data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == item.id);
+                    if (data != null)
+                    {
+                        //Update
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add
+                        context.ProjectType.Add(new ProjectType()
+                        {
+                            ProjectTypeId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+
                 }
 
                 context.SaveChanges();
                 result = true;
+
             }
 
             return result;
         }
 
-        /*/// <summary>
+        /// <summary>
         /// Delete ProjectType by Id
         /// </summary>
         /// <param name="id">Id of ProjectType to delete</param>
@@ -129,6 +109,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

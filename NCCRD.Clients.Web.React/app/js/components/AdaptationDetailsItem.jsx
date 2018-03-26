@@ -48,6 +48,8 @@ class AdaptationDetailsItem extends React.Component {
             options={adaptationPurpose}
             setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE}
             parentId={details.AdaptationDetailId}
+            dispatch={ACTION_TYPES.LOAD_ADAPTATION_PURPOSE}
+            persist={"api/AdaptationPurpose/AddOrUpdate"}
           />
           <SelectComponent
             col="col-md-4"
@@ -56,11 +58,13 @@ class AdaptationDetailsItem extends React.Component {
             options={sector}
             setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR}
             parentId={details.AdaptationDetailId}
+            // dispatch={ACTION_TYPES.LOAD_SECTOR}
+            // persist={"api/Sector/AddOrUpdate"}
           />
         </div>
 
-        <br/>
-        <hr/>
+        <br />
+        <hr />
       </div>
     )
   }

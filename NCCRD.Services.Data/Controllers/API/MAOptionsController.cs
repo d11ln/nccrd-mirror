@@ -108,40 +108,14 @@ namespace NCCRD.Services.Data.Controllers.API
             return data;
         }
 
-        /*/// <summary>
-        /// Add MAOption
-        /// </summary>
-        /// <param name="maOption">The MAOption to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/MAOptions/Add")]
-        public bool Add([FromBody]MAOption maOption)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.MAOptions.Count(x => x.MAOptionId == maOption.MAOptionId) == 0)
-                {
-                    //Add Driver entry
-                    context.MAOptions.Add(maOption);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update MAOption
+        /// <summary>
+        /// Add/Update MAOption
         /// </summary>
         /// <param name="maOption">MAOption to update</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/MAOptions/Update")]
-        public bool Update([FromBody]MAOption maOption)
+        [Route("api/MAOptions/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]MAOption maOption)
         {
             bool result = false;
 
@@ -151,45 +125,23 @@ namespace NCCRD.Services.Data.Controllers.API
                 var data = context.MAOptions.FirstOrDefault(x => x.MAOptionId == maOption.MAOptionId);
                 if (data != null)
                 {
-                    //add properties to update here
-                    //..
-                    context.SaveChanges();
-
-                    result = true;
+                    //Update MAOptions entry
+                    //..             
                 }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete MAOption
-        /// </summary>
-        /// <param name="maOption">MAOption to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/MAOptions/Delete")]
-        public bool Delete([FromBody]MAOption maOption)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MAOptions.FirstOrDefault(x => x.MAOptionId == maOption.MAOptionId);
-                if (data != null)
+                else
                 {
-                    context.MAOptions.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
+                    //Add MAOptions entry
+                    context.MAOptions.Add(maOption);
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
-        }*/
+        }
 
-        /*/// <summary>
+        /// <summary>
         /// Delete MAOption by Id
         /// </summary>
         /// <param name="id">Id of MAOption to delete</param>
@@ -214,6 +166,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

@@ -50,6 +50,8 @@ class ResearchDetailsItem extends React.Component {
             options={researchType}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE}
             parentId={details.ResearchDetailId}
+            dispatch={ACTION_TYPES.LOAD_RESEARCH_TYPE}
+            persist={"api/ResearchType/AddOrUpdate"}
           />
         </div>
 
@@ -63,6 +65,8 @@ class ResearchDetailsItem extends React.Component {
             options={targetAudience}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
             parentId={details.ResearchDetailId}
+            dispatch={ACTION_TYPES.LOAD_TARGET_AUDIENCE}
+            persist={"api/TargetAudience/AddOrUpdate"}
           />
           <SelectComponent
             col="col-md-4"
@@ -71,6 +75,8 @@ class ResearchDetailsItem extends React.Component {
             options={sector}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
             parentId={details.ResearchDetailId}
+            // dispatch={ACTION_TYPES.LOAD_SECTOR}
+            // persist={"api/Sector/AddOrUpdate"}
           />
         </div>
 

@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,139 +21,67 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>TargetAudience data as JSON</returns>
         [HttpGet]
         [Route("api/TargetAudience/GetAll")]
-        public IEnumerable<TargetAudience> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<TargetAudience> data = new List<TargetAudience>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.TargetAudience.ToList();
+                data = context.TargetAudience
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.TargetAudienceId,
+                        value = x.Value
+                    }).ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get TargetAudience by Id
+        /// Add/Update TargetAudience
         /// </summary>
-        /// <param name="id">The Id of the TargetAudience to get</param>
-        /// <returns>TargetAudience data as JSON</returns>
-        [HttpGet]
-        [Route("api/TargetAudience/GetByID/{id}")]
-        public TargetAudience GetByID(int id)
+        /// <param name="items">TargetAudience to update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/TargetAudience/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
         {
-            TargetAudience data = null;
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                data = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == id);
+                foreach (var item in items)
+                {
+                    //Check if exists
+                    var data = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == item.id);
+                    if (data != null)
+                    {
+                        //Update TargetAudience entry
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add TargetAudience entry
+                        context.TargetAudience.Add(new TargetAudience()
+                        {
+                            TargetAudienceId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
-            return data;
+            return result;
         }
 
         /// <summary>
-        /// Get TargetAudience by Value
-        /// </summary>
-        /// <param name="value">The Value of the TargetAudience to get</param>
-        /// <returns>TargetAudience data as JSON</returns>
-        [HttpGet]
-        [Route("api/TargetAudience/GetByValue/{value}")]
-        public TargetAudience GetByValue(string value)
-        {
-            TargetAudience data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.TargetAudience.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add TargetAudience
-        /// </summary>
-        /// <param name="targetAudience">The TargetAudience to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/TargetAudience/Add")]
-        public bool Add([FromBody]TargetAudience targetAudience)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.TargetAudience.Count(x => x.TargetAudienceId == targetAudience.TargetAudienceId) == 0)
-                {
-                    //Add TargetAudience entry
-                    context.TargetAudience.Add(targetAudience);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update TargetAudience
-        /// </summary>
-        /// <param name="targetAudience">TargetAudience to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/TargetAudience/Update")]
-        public bool Update([FromBody]TargetAudience targetAudience)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == targetAudience.TargetAudienceId);
-                if (data != null)
-                {
-                    //add properties to update here
-                    data.Value = targetAudience.Value;
-                    data.Description = targetAudience.Description;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete TargetAudience
-        /// </summary>
-        /// <param name="targetAudience">TargetAudience to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/TargetAudience/Delete")]
-        public bool Delete([FromBody]TargetAudience targetAudience)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == targetAudience.TargetAudienceId);
-                if (data != null)
-                {
-                    context.TargetAudience.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
         /// Delete TargetAudience by Id
         /// </summary>
         /// <param name="id">Id of TargetAudience to delete</param>
@@ -177,6 +106,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,138 +21,68 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>CarbonCredit data as JSON</returns>
         [HttpGet]
         [Route("api/CarbonCredit/GetAll")]
-        public IEnumerable<CarbonCredit> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<CarbonCredit> data = new List<CarbonCredit>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.CarbonCredit.ToList();
+                data = context.CarbonCredit
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.CarbonCreditId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get CarbonCredit by Id
+        /// Add/Update CarbonCredit
         /// </summary>
-        /// <param name="id">The Id of the CarbonCredit to get</param>
-        /// <returns>CarbonCredit data as JSON</returns>
-        [HttpGet]
-        [Route("api/CarbonCredit/GetByID/{id}")]
-        public CarbonCredit GetByID(int id)
+        /// <param name="items">list to add/update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/CarbonCredit/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
         {
-            CarbonCredit data = null;
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                data = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == id);
+                foreach (var item in items)
+                {
+                    //Check if exists
+                    var data = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == item.id);
+                    if (data != null)
+                    {
+                        //Update AdaptationPurpose entry
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add AdaptationPurpose entry
+                        context.CarbonCredit.Add(new CarbonCredit()
+                        {
+                            CarbonCreditId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
-            return data;
+            return result;
         }
 
         /// <summary>
-        /// Get CarbonCredit by Value
-        /// </summary>
-        /// <param name="value">The Value of the CarbonCredit to get</param>
-        /// <returns>CarbonCredit data as JSON</returns>
-        [HttpGet]
-        [Route("api/CarbonCredit/GetByValue/{value}")]
-        public CarbonCredit GetByValue(string value)
-        {
-            CarbonCredit data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.CarbonCredit.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add CarbonCredit
-        /// </summary>
-        /// <param name="carbonCredit">The CarbonCredit to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CarbonCredit/Add")]
-        public bool Add([FromBody]CarbonCredit carbonCredit)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.CarbonCredit.Count(x => x.CarbonCreditId == carbonCredit.CarbonCreditId) == 0)
-                {
-                    //Add AdaptationPurpose entry
-                    context.CarbonCredit.Add(carbonCredit);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update CarbonCredit
-        /// </summary>
-        /// <param name="carbonCredit">CarbonCredit to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CarbonCredit/Update")]
-        public bool Update([FromBody]CarbonCredit carbonCredit)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == carbonCredit.CarbonCreditId);
-                if (data != null)
-                {
-                    data.Value = carbonCredit.Value;
-                    data.Description = carbonCredit.Description;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete CarbonCredit
-        /// </summary>
-        /// <param name="carbonCredit">CarbonCredit to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CarbonCredit/Delete")]
-        public bool Delete([FromBody]CarbonCredit carbonCredit)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.CarbonCredit.FirstOrDefault(x => x.CarbonCreditId == carbonCredit.CarbonCreditId);
-                if (data != null)
-                {
-                    context.CarbonCredit.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
         /// Delete CarbonCredit by Id
         /// </summary>
         /// <param name="id">Id of CarbonCredit to delete</param>
@@ -176,6 +107,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

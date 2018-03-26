@@ -142,6 +142,8 @@ class ProjectDetailsTab extends React.Component {
                         selectedValue={projectDetails.ProjectSubTypeId}
                         options={this.props.projectSubTypes}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE}
+                        // dispatch={ACTION_TYPES.LOAD_PROJECT_SUBTYPE}
+                        // persist={"api/ProjectSubType/AddOrUpdate"}
                     />
                     <SelectComponent
                         col="col-md-4"
@@ -149,6 +151,8 @@ class ProjectDetailsTab extends React.Component {
                         selectedValue={projectDetails.ProjectStatusId}
                         options={this.props.projectStatus}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_STATUS}
+                        dispatch={ACTION_TYPES.LOAD_PROJECT_STATUS}
+                        persist={"api/ProjectStatus/AddOrUpdate"}
                     />
                 </div>
 
@@ -161,6 +165,8 @@ class ProjectDetailsTab extends React.Component {
                         selectedValue={projectDetails.ProjectManagerId}
                         options={this.props.users}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER}
+                        // dispatch={ACTION_TYPES.LOAD_PROJECT_MANAGER}
+                        // persist={"api/AppUsr/AddOrUpdate"}
                     />
                     <SelectComponent
                         col="col-md-4"
@@ -168,6 +174,8 @@ class ProjectDetailsTab extends React.Component {
                         selectedValue={projectDetails.ValidationStatusId}
                         options={this.props.validationStatus}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_STATUS}
+                        dispatch={ACTION_TYPES.LOAD_VALIDATION_STATUS}
+                        persist={"api/ValidationStatus/AddOrUpdate"}
                     />
                     <SelectComponent
                         col="col-md-4"
@@ -175,6 +183,8 @@ class ProjectDetailsTab extends React.Component {
                         selectedValue={projectDetails.MAOptionId}
                         options={this.props.maOptions}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION}
+                        // dispatch={ACTION_TYPES.LOAD_MA_OPTIONS}
+                        // persist={"api/MAOptions/AddOrUpdate"}
                     />
                 </div>
 

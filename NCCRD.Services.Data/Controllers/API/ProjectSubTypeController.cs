@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,109 +21,33 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ProjectSubType data as JSON</returns>
         [HttpGet]
         [Route("api/ProjectSubType/GetAll")]
-        public IEnumerable<ProjectSubType> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<ProjectSubType> data = new List<ProjectSubType>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.ProjectSubType.OrderBy(x => x.Value.Trim()).ToList();
+                data = context.ProjectSubType
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.ProjectSubTypeId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get ProjectSubType by Id
-        /// </summary>
-        /// <param name="id">The Id of the ProjectSubType to get</param>
-        /// <returns>ProjectSubType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectSubType/GetByID/{id}")]
-        public ProjectSubType GetByID(int id)
-        {
-            ProjectSubType data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == id);
-            }
-
-            return data;
-        }
-
-        /// <summary>
-        /// Get ProjectSubType by Value
-        /// </summary>
-        /// <param name="value">The Value of the ProjectSubType to get</param>
-        /// <returns>ProjectSubType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectSubType/GetByValue/{value}")]
-        public ProjectSubType GetByValue(string value)
-        {
-            ProjectSubType data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ProjectSubType.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /// <summary>
-        /// Get ProjectSubType by ProjectTypeId
-        /// </summary>
-        /// <param name="projectTypeId">The ProjectTypeId of the ProjectSubType to get</param>
-        /// <returns>ProjectSubType data as JSON</returns>
-        [HttpGet]
-        [Route("api/ProjectSubType/GetByProjectTypeID/{projectTypeId}")]
-        public ProjectSubType GetByProjectTypeID(int projectTypeId)
-        {
-            ProjectSubType data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.ProjectSubType.FirstOrDefault(x => x.ProjectTypeId == projectTypeId);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add ProjectSubType
-        /// </summary>
-        /// <param name="projectSubType">The ProjectSubType to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectSubType/Add")]
-        public bool Add([FromBody]ProjectSubType projectSubType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.ProjectSubType.Count(x => x.ProjectSubTypeId == projectSubType.ProjectSubTypeId) == 0)
-                {
-                    //Add ProjectSubType entry
-                    context.ProjectSubType.Add(projectSubType);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update ProjectSubType
+        /// Add/Update ProjectSubType
         /// </summary>
         /// <param name="projectSubType">ProjectSubType to update</param>
         /// <returns>True/False</returns>
         [HttpPost]
-        [Route("api/ProjectSubType/Update")]
-        public bool Update([FromBody]ProjectSubType projectSubType)
+        [Route("api/ProjectSubType/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]ProjectSubType projectSubType)
         {
             bool result = false;
 
@@ -132,46 +57,25 @@ namespace NCCRD.Services.Data.Controllers.API
                 var data = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == projectSubType.ProjectSubTypeId);
                 if (data != null)
                 {
+                    //Update ProjectSubType entry
                     data.Value = projectSubType.Value;
                     data.Description = projectSubType.Description;
                     data.ProjectTypeId = projectSubType.ProjectTypeId;
-                    context.SaveChanges();
-
-                    result = true;
                 }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete ProjectSubType
-        /// </summary>
-        /// <param name="projectSubType">ProjectSubType to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ProjectSubType/Delete")]
-        public bool Delete([FromBody]ProjectSubType projectSubType)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == projectSubType.ProjectSubTypeId);
-                if (data != null)
+                else
                 {
-                    context.ProjectSubType.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
+                    //Add ProjectSubType entry
+                    context.ProjectSubType.Add(projectSubType);
                 }
+
+                context.SaveChanges();
+                result = true;
             }
 
             return result;
-        }*/
+        }
 
-        /*/// <summary>
+        /// <summary>
         /// Delete ProjectSubType by Id
         /// </summary>
         /// <param name="id">Id of ProjectSubType to delete</param>
@@ -196,6 +100,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,138 +21,68 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>CDMMethodology data as JSON</returns>
         [HttpGet]
         [Route("api/CDMMethodology/GetAll")]
-        public IEnumerable<CDMMethodology> GetAll()
+        public IEnumerable<LookupDataViewModel> GetAll()
         {
-            List<CDMMethodology> data = new List<CDMMethodology>();
+            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
 
             using (var context = new SQLDBContext())
             {
-                data = context.CDMMethodology.ToList();
+                data = context.CDMMethodology
+                    .OrderBy(x => x.Value.Trim())
+                    .Select(x => new LookupDataViewModel()
+                    {
+                        id = x.CDMMethodologyId,
+                        value = x.Value
+                    })
+                    .ToList();
             }
 
             return data;
         }
 
         /// <summary>
-        /// Get CDMMethodology by Id
+        /// Add/Update CDMMethodology
         /// </summary>
-        /// <param name="id">The Id of the CDMMethodology to get</param>
-        /// <returns>CDMMethodology data as JSON</returns>
-        [HttpGet]
-        [Route("api/CDMMethodology/GetByID/{id}")]
-        public CDMMethodology GetByID(int id)
+        /// <param name="items">list to add/update</param>
+        /// <returns>True/False</returns>
+        [HttpPost]
+        [Route("api/CDMMethodology/AddOrUpdate")]
+        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
         {
-            CDMMethodology data = null;
+            bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                data = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == id);
+                foreach (var item in items)
+                {
+                    //Check if exists
+                    var data = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == item.id);
+                    if (data != null)
+                    {
+                        //Update CDMMethodology entry
+                        data.Value = item.value;
+                        //data.Description = item.description;
+                    }
+                    else
+                    {
+                        //Add CDMMethodology entry
+                        context.CDMMethodology.Add(new CDMMethodology()
+                        {
+                            CDMMethodologyId = 0,
+                            Value = item.value,
+                            Description = "" //item.description
+                        });
+                    }
+                }
+
+                context.SaveChanges();
+                result = true;
             }
 
-            return data;
+            return result;
         }
 
         /// <summary>
-        /// Get CDMMethodology by Value
-        /// </summary>
-        /// <param name="value">The Value of the CDMMethodology to get</param>
-        /// <returns>CDMMethodology data as JSON</returns>
-        [HttpGet]
-        [Route("api/CDMMethodology/GetByValue/{value}")]
-        public CDMMethodology GetByValue(string value)
-        {
-            CDMMethodology data = null;
-
-            using (var context = new SQLDBContext())
-            {
-                data = context.CDMMethodology.FirstOrDefault(x => x.Value == value);
-            }
-
-            return data;
-        }
-
-        /*/// <summary>
-        /// Add CDMMethodology
-        /// </summary>
-        /// <param name="cdmMethodology">The CDMMethodology to add</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CDMMethodology/Add")]
-        public bool Add([FromBody]CDMMethodology cdmMethodology)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                if (context.CDMMethodology.Count(x => x.CDMMethodologyId == cdmMethodology.CDMMethodologyId) == 0)
-                {
-                    //Add CDMMethodology entry
-                    context.CDMMethodology.Add(cdmMethodology);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Update CDMMethodology
-        /// </summary>
-        /// <param name="cdmMethodology">CDMMethodology to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CDMMethodology/Update")]
-        public bool Update([FromBody]CDMMethodology cdmMethodology)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == cdmMethodology.CDMMethodologyId);
-                if (data != null)
-                {
-                    data.Value = cdmMethodology.Value;
-                    data.Description = cdmMethodology.Description;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete CDMMethodology
-        /// </summary>
-        /// <param name="cdmMethodology">CDMMethodology to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/CDMMethodology/Delete")]
-        public bool Delete([FromBody]CDMMethodology cdmMethodology)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == cdmMethodology.CDMMethodologyId);
-                if (data != null)
-                {
-                    context.CDMMethodology.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
         /// Delete CDMMethodology by Id
         /// </summary>
         /// <param name="id">Id of CDMMethodology to delete</param>
@@ -176,6 +107,6 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
-        }*/
+        }
     }
 }
