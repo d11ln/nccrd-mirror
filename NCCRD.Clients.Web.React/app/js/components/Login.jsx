@@ -53,7 +53,7 @@ class Login extends React.Component {
                     </div>
                 </div>
 
-                <div className="row" style={{ marginTop: "15%" }}>
+                <div className="row" style={{ marginTop: "10%" }}>
 
                     <div className="col-md-4">
                     </div>

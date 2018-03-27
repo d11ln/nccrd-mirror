@@ -584,11 +584,11 @@ class ProjectDetails extends React.Component {
         })
     }
 
-    componentWillMount() {
-        if (this.props.isAuthenticated === false) {
-            location.hash = "/login"
-        }
-    }
+    // componentWillMount() {
+    //     if (this.props.isAuthenticated === false) {
+    //         location.hash = "/login"
+    //     }
+    // }
 
     componentDidMount() {
         this.loadData()
@@ -896,7 +896,7 @@ class ProjectDetails extends React.Component {
 
         return (
 
-            <div hidden={!isAuthenticated}>
+            <div>
 
                 <div
                     hidden={!this.props.loading}

@@ -79,6 +79,13 @@ class App extends React.Component {
                     <a className="nav-link" href="#/projects">Projects</a>
                   </NavItem>
                 </NavbarNav>
+
+                <NavbarNav right>
+                  <NavItem>
+                    <a className="nav-link" href="#/login">Login</a>
+                  </NavItem>
+                </NavbarNav>
+                
               </Collapse>
             </Navbar>
 
