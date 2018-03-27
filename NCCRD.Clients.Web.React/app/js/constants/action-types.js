@@ -114,6 +114,7 @@ export const LOAD_SECTOR_TREE = "LOAD_SECTOR_TREE";
 //Global
 export const SET_LOADING = "SET_LOADING";
 export const SET_EDIT_MODE = "SET_EDIT_MODE";
+export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
 
 //Edit List Modal
 export const SET_EDIT_LIST = "SET_EDIT_LIST";

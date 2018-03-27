@@ -19,8 +19,8 @@ import Home from './components/Home.jsx'
 import Projects from './components/Projects.jsx'
 import ProjectDetails from './components/ProjectDetails.jsx'
 import Login from './components/Login.jsx'
-
-import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact';
+import Logout from './components/Logout.jsx'
+import CustomNavbar from './components/CustomNavbar.jsx'
 
 /**
  * Tap Event
@@ -35,26 +35,6 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      collapse: false,
-      isWideEnough: false,
-      dropdownOpen: false
-    }
-
-    this.onClick = this.onClick.bind(this);
-    this.toggle = this.toggle.bind(this);
-  }
-
-  onClick() {
-    this.setState({
-      collapse: !this.state.collapse,
-    });
-  }
-
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
   }
 
   render() {
@@ -63,31 +43,7 @@ class App extends React.Component {
         <Router>
           <div>
 
-            <Navbar size="sm" color="indigo" expand="md" dark >
-              {!this.state.isWideEnough && <NavbarToggler onClick={this.onClick} />}
-              <Collapse isOpen={this.state.collapse} navbar>
-
-                <NavbarBrand tag="span">
-                  NCCRD
-                </NavbarBrand>
-
-                <NavbarNav left>
-                  <NavItem>
-                    <a className="nav-link" href="#">Home</a>
-                  </NavItem>
-                  <NavItem>
-                    <a className="nav-link" href="#/projects">Projects</a>
-                  </NavItem>
-                </NavbarNav>
-
-                <NavbarNav right>
-                  <NavItem>
-                    <a className="nav-link" href="#/login">Login</a>
-                  </NavItem>
-                </NavbarNav>
-                
-              </Collapse>
-            </Navbar>
+            <CustomNavbar />
 
             <Switch>
               {/* <Redirect from="/" to="/projects" exact /> */}
@@ -95,6 +51,7 @@ class App extends React.Component {
               <Route path="/projects" component={Projects} exact />
               <Route path="/projects/:id" component={ProjectDetails} exact />
               <Route path="/login" component={Login} exact />
+              <Route path="/logout" component={Logout} exact />
             </Switch>
 
           </div>

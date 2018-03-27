@@ -14,7 +14,7 @@ const store = createStore(
         ...applyMiddleware(middleware),
 
         globalData: {
-            isAuthenticated: false,
+            isAuthenticated: true,
             loading: true,
             editMode: false
         },
