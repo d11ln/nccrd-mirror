@@ -6,10 +6,19 @@ import ProjectFilters from './ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
 import { Button } from 'mdbreact'
+import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { loading } } = state
     return { loading }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setLoading: payload => {
+            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+        }
+    }
 }
 
 class Projects extends React.Component {
@@ -32,6 +41,11 @@ class Projects extends React.Component {
     addProject() {
         location.hash = '/projects/add'
     }
+
+    componentWillMount(){
+        this.props.setLoading(true)
+    }
+
 
     render() {
 
@@ -83,4 +97,4 @@ class Projects extends React.Component {
     }
 }
 
-export default connect(mapStateToProps)(Projects)
+export default connect(mapStateToProps, mapDispatchToProps)(Projects)

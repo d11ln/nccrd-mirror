@@ -584,6 +584,12 @@ class ProjectDetails extends React.Component {
         })
     }
 
+    componentWillMount() {
+        if (this.props.isAuthenticated === false) {
+            location.hash = "/login"
+        }
+    }
+
     componentDidMount() {
         this.loadData()
     }
@@ -889,7 +895,8 @@ class ProjectDetails extends React.Component {
         const { projectDetails, editMode, isAuthenticated, editListModalShow, editListModalItems } = this.props
 
         return (
-            <div>
+
+            <div hidden={!isAuthenticated}>
 
                 <div
                     hidden={!this.props.loading}
