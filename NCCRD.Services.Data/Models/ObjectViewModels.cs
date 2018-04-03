@@ -206,20 +206,29 @@ namespace NCCRD.Services.Data.Models
         public double LonCalculated { get; set; }
     }
 
-    public class LookupDataViewModel
-    {
-        public LookupDataViewModel()
-        {
+    //public class LookupDataViewModel
+    //{
+    //    public LookupDataViewModel()
+    //    {
           
-        }
+    //    }
 
-        public LookupDataViewModel(int id, string value)
-        {
-            this.id = id;
-            this.value = value;
-        }
+    //    //public LookupDataViewModel(int id, string value)
+    //    //{
+    //    //    this.id = id;
+    //    //    this.value = value;
+    //    //    this.parentId = null;
+    //    //}
 
-        public int id { get; set; }
-        public string value { get; set; }
-    }
+    //    //public LookupDataViewModel(int id, string value, int parentId)
+    //    //{
+    //    //    this.id = id;
+    //    //    this.value = value;
+    //    //    this.parentId = parentId;
+    //    //}
+
+    //    public int id { get; set; }
+    //    public string value { get; set; }
+    //    public int? parentId { get; set; }
+    //}
 }

@@ -21,19 +21,15 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>TargetAudience data as JSON</returns>
         [HttpGet]
         [Route("api/TargetAudience/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<TargetAudience> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<TargetAudience> data = new List<TargetAudience>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.TargetAudience
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.TargetAudienceId,
-                        value = x.Value
-                    }).ToList();
+                    .ToList();
             }
 
             return data;
@@ -46,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/TargetAudience/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<TargetAudience> items)
         {
             bool result = false;
 
@@ -55,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == item.id);
+                    var data = context.TargetAudience.FirstOrDefault(x => x.TargetAudienceId == item.TargetAudienceId);
                     if (data != null)
                     {
                         //Update TargetAudience entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add TargetAudience entry
-                        context.TargetAudience.Add(new TargetAudience()
-                        {
-                            TargetAudienceId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.TargetAudience.Add(item);
                     }
                 }
 

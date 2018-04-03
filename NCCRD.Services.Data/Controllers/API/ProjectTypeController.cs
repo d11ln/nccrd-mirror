@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ProjectType data as JSON</returns>
         [HttpGet]
         [Route("api/ProjectType/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<ProjectType> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<ProjectType> data = new List<ProjectType>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.ProjectType
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.ProjectTypeId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -47,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ProjectType/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody] List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody] List<ProjectType> items)
         {
             bool result = false;
 
@@ -56,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == item.id);
+                    var data = context.ProjectType.FirstOrDefault(x => x.ProjectTypeId == item.ProjectTypeId);
                     if (data != null)
                     {
                         //Update
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add
-                        context.ProjectType.Add(new ProjectType()
-                        {
-                            ProjectTypeId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.ProjectType.Add(item);
                     }
 
                 }

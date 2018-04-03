@@ -16,14 +16,17 @@ const store = createStore(
         globalData: {
             isAuthenticated: true,
             loading: true,
-            editMode: false
+            editMode: true
         },
 
         editListModalData: {
             show: false,
-            items: [],
+            data: [],
+            treeData: [],
             dispatch: "",
-            persist: ""
+            persist: "",
+            type: "std",
+            dependencies: []
         },
 
         projectData: {

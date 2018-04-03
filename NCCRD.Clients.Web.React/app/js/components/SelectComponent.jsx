@@ -31,13 +31,54 @@ class SelectComponent extends React.Component {
         this.getDisabledState = this.getDisabledState.bind(this)
     }
 
+    preProcessData(data) {
+
+        let preProcessedItems = []
+
+        //Pre-process items
+        data.map(item => {
+
+            let parentKeys = Object.keys(item).filter(key => key.startsWith("Parent") && key.endsWith("Id"))
+
+            if (parentKeys.length > 0) {
+                //Push item with parentId
+                preProcessedItems.push({
+                    id: item[Object.keys(item)[0]],
+                    value: item[Object.keys(item)[1]],
+                    parentId: item[parentKeys[0]]
+                })
+            }
+            else {
+                //Push item without parentId
+                preProcessedItems.push({
+                    id: item[Object.keys(item)[0]],
+                    value: item[Object.keys(item)[1]],
+                    parentId: null
+                })
+            }
+        })
+
+        return preProcessedItems
+    }
+
     selectOptions() {
 
-        const { options } = this.props
+        const { data } = this.props
         let ar = []
 
-        if (typeof options !== 'undefined') {
-            for (let i of options) {
+        if (typeof data !== 'undefined') {
+
+            let procData = this.preProcessData(data) //data
+
+            //Insert "[Edit list values...]" entry
+            if (procData.filter(x => x.value === "[Edit list values...]").length === 0) {
+                procData.splice(0, 0, {
+                    "id": -1,
+                    "value": "[Edit list values...]",
+                })
+            }
+
+            for (let i of procData) {
                 ar.push({ value: i.id, label: i.value })
             }
         }
@@ -61,10 +102,21 @@ class SelectComponent extends React.Component {
             selectedValue = selectedOption.value
         }
 
-        if (selectedValue === -1) {       
+        if (selectedValue === -1) {
             //Setup and Show EditListModal
-            let { setEditList, options, dispatch, persist } = this.props
-            setEditList({ show: true, items: options, dispatch: dispatch, persist: persist })
+            let { setEditList, data, treeData, dispatch, persist, type, dependencies } = this.props
+
+            if (typeof type === 'undefined') {
+                type = "std"
+            }
+            if (typeof dependencies === 'undefined') {
+                dependencies = []
+            }
+
+            setEditList({
+                show: true, data: data, treeData: treeData, dispatch: dispatch, persist: persist, type: type,
+                dependencies: dependencies
+            })
         }
         else {
             //Dispatch to store
@@ -97,7 +149,6 @@ class SelectComponent extends React.Component {
         return (
             <div className={col}>
                 <label style={{ fontWeight: "bold" }}>{label}</label>
-
                 <Select id={id}
                     disabled={this.getDisabledState()}
                     name={id}

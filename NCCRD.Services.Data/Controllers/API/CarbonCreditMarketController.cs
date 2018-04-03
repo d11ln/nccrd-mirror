@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>CarbonCreditMarket data as JSON</returns>
         [HttpGet]
         [Route("api/CarbonCreditMarket/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<CarbonCreditMarket> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<CarbonCreditMarket> data = new List<CarbonCreditMarket>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.CarbonCreditMarket
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.CarbonCreditMarketId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -47,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/CarbonCreditMarket/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<CarbonCreditMarket> items)
         {
             bool result = false;
 
@@ -56,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == item.id);
+                    var data = context.CarbonCreditMarket.FirstOrDefault(x => x.CarbonCreditMarketId == item.CarbonCreditMarketId);
                     if (data != null)
                     {
                         //Update CarbonCreditMarket entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add CarbonCreditMarket entry
-                        context.CarbonCreditMarket.Add(new CarbonCreditMarket()
-                        {
-                            CarbonCreditMarketId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.CarbonCreditMarket.Add(item);
                     }
                 }
 

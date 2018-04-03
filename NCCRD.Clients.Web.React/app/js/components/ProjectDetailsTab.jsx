@@ -131,7 +131,7 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="Project type:"
                         selectedValue={projectDetails.ProjectTypeId}
-                        options={this.props.projectTypes}
+                        data={this.props.projectTypes}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_TYPE}
                         dispatch={ACTION_TYPES.LOAD_PROJECT_TYPE}
                         persist={"api/ProjectType/AddOrUpdate"}
@@ -140,7 +140,7 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="Project sub-type:"
                         selectedValue={projectDetails.ProjectSubTypeId}
-                        options={this.props.projectSubTypes}
+                        data={this.props.projectSubTypes}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE}
                         // dispatch={ACTION_TYPES.LOAD_PROJECT_SUBTYPE}
                         // persist={"api/ProjectSubType/AddOrUpdate"}
@@ -149,7 +149,7 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="Project status:"
                         selectedValue={projectDetails.ProjectStatusId}
-                        options={this.props.projectStatus}
+                        data={this.props.projectStatus}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_STATUS}
                         dispatch={ACTION_TYPES.LOAD_PROJECT_STATUS}
                         persist={"api/ProjectStatus/AddOrUpdate"}
@@ -163,7 +163,7 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="Project manager:"
                         selectedValue={projectDetails.ProjectManagerId}
-                        options={this.props.users}
+                        data={this.props.users}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER}
                         // dispatch={ACTION_TYPES.LOAD_PROJECT_MANAGER}
                         // persist={"api/AppUsr/AddOrUpdate"}
@@ -172,7 +172,7 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="Validation status:"
                         selectedValue={projectDetails.ValidationStatusId}
-                        options={this.props.validationStatus}
+                        data={this.props.validationStatus}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_STATUS}
                         dispatch={ACTION_TYPES.LOAD_VALIDATION_STATUS}
                         persist={"api/ValidationStatus/AddOrUpdate"}
@@ -181,7 +181,7 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="MAOptions:"
                         selectedValue={projectDetails.MAOptionId}
-                        options={this.props.maOptions}
+                        data={this.props.maOptions}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION}
                         // dispatch={ACTION_TYPES.LOAD_MA_OPTIONS}
                         // persist={"api/MAOptions/AddOrUpdate"}

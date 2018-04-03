@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>CDMStatus data as JSON</returns>
         [HttpGet]
         [Route("api/CDMStatus/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<CDMStatus> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<CDMStatus> data = new List<CDMStatus>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.CDMStatus
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.CDMStatusId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -47,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/CDMStatus/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<CDMStatus> items)
         {
             bool result = false;
 
@@ -56,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.CDMStatus.FirstOrDefault(x => x.CDMStatusId == item.id);
+                    var data = context.CDMStatus.FirstOrDefault(x => x.CDMStatusId == item.CDMStatusId);
                     if (data != null)
                     {
                         //Update CDMStatus entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add CDMStatus entry
-                        context.CDMStatus.Add(new CDMStatus()
-                        {
-                            CDMStatusId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.CDMStatus.Add(item);
                     }
                 }
 

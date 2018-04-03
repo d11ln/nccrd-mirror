@@ -27,7 +27,7 @@ namespace NCCRD.Database.Models
 
         //FK - ParentSector
         [ForeignKey("ParentSector")]
-        public int? ParentSectorID { get; set; }
+        public int? ParentSectorId { get; set; }
         [IgnoreDataMember]
         public Sector ParentSector { get; set; }
 

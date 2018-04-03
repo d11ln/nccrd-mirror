@@ -47,7 +47,7 @@ class ResearchDetailsItem extends React.Component {
             col="col-md-4"
             label="Research type:"
             selectedValue={details.ResearchTypeId}
-            options={researchType}
+            data={researchType}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_RESEARCH_TYPE}
@@ -62,7 +62,7 @@ class ResearchDetailsItem extends React.Component {
             col="col-md-4"
             label="Target audience::"
             selectedValue={details.TargetAudienceId}
-            options={targetAudience}
+            data={targetAudience}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_TARGET_AUDIENCE}
@@ -72,11 +72,11 @@ class ResearchDetailsItem extends React.Component {
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
-            options={sector}
+            data={sector}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
             parentId={details.ResearchDetailId}
-            // dispatch={ACTION_TYPES.LOAD_SECTOR}
-            // persist={"api/Sector/AddOrUpdate"}
+            dispatch={ACTION_TYPES.LOAD_SECTOR}
+            persist={"api/Sector/AddOrUpdate"}
           />
         </div>
 

@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ProjectSubType data as JSON</returns>
         [HttpGet]
         [Route("api/ProjectSubType/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<ProjectSubType> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<ProjectSubType> data = new List<ProjectSubType>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.ProjectSubType
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.ProjectSubTypeId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -43,33 +38,36 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <summary>
         /// Add/Update ProjectSubType
         /// </summary>
-        /// <param name="projectSubType">ProjectSubType to update</param>
+        /// <param name="items">List to update</param>
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ProjectSubType/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]ProjectSubType projectSubType)
+        public bool AddOrUpdate([FromBody]List<ProjectSubType> items)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                //Check if exists
-                var data = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == projectSubType.ProjectSubTypeId);
-                if (data != null)
+                foreach (var item in items)
                 {
-                    //Update ProjectSubType entry
-                    data.Value = projectSubType.Value;
-                    data.Description = projectSubType.Description;
-                    data.ProjectTypeId = projectSubType.ProjectTypeId;
-                }
-                else
-                {
-                    //Add ProjectSubType entry
-                    context.ProjectSubType.Add(projectSubType);
-                }
+                    //Check if exists
+                    var data = context.ProjectSubType.FirstOrDefault(x => x.ProjectSubTypeId == item.ProjectSubTypeId);
+                    if (data != null)
+                    {
+                        //Update ProjectSubType entry
+                        data.Value = item.Value;
+                        data.Description = item.Description;
+                        data.ProjectTypeId = item.ProjectTypeId;
+                    }
+                    else
+                    {
+                        //Add ProjectSubType entry
+                        context.ProjectSubType.Add(item);
+                    }
 
-                context.SaveChanges();
-                result = true;
+                    context.SaveChanges();
+                    result = true;
+                }
             }
 
             return result;

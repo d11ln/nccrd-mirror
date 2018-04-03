@@ -41,8 +41,6 @@ class TitleFilter extends React.Component {
 
     onChange(event) {
 
-        console.log("loadTitleFilterInternal", event.target.value)
-
         //Update internal state
         this.props.loadTitleFilterInternal(event.target.value)
     }
@@ -51,8 +49,6 @@ class TitleFilter extends React.Component {
 
         //Update global state
         let { loadTitleFilter, titleFilterInternal } = this.props
-
-        console.log("filterValue:", filterValue)
 
         loadTitleFilter(filterValue)
 

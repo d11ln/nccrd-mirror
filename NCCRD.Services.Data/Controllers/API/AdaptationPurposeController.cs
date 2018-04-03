@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>AdaptationPurpose data as JSON</returns>
         [HttpGet]
         [Route("api/AdaptationPurpose/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<AdaptationPurpose> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<AdaptationPurpose> data = new List<AdaptationPurpose>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.AdaptationPurpose
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.AdaptationPurposeId,
-                        value = x.Value
-                    })
                     .ToList();
 
             }
@@ -48,7 +43,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/AdaptationPurpose/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<AdaptationPurpose> items)
         {
             bool result = false;
 
@@ -57,22 +52,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.AdaptationPurpose.FirstOrDefault(x => x.AdaptationPurposeId == item.id);
+                    var data = context.AdaptationPurpose.FirstOrDefault(x => x.AdaptationPurposeId == item.AdaptationPurposeId);
                     if (data != null)
                     {
                         //Update AdaptationPurpose entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add AdaptationPurpose entry
-                        context.AdaptationPurpose.Add(new AdaptationPurpose()
-                        {
-                            AdaptationPurposeId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.AdaptationPurpose.Add(item);
                     }
                 }
 

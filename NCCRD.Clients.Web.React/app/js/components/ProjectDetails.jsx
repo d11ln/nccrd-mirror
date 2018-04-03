@@ -147,14 +147,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "ProjectTypeId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadProjectTypes(res)
         })
     }
@@ -165,14 +157,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            // res.splice(0, 0, {
-            //     "ProjectSubTypeId": -1,
-            //     "Value": "[Edit list values...]",
-            //     "Description": ""
-            // })
-
             loadProjectSubTypes(res)
         })
     }
@@ -183,14 +167,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "ProjectStatusId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadProjectStatus(res)
         })
     }
@@ -211,14 +187,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "ValidationStatusId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadValidationStatus(res)
         })
     }
@@ -229,14 +197,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            // res.splice(0, 0, {
-            //     "MAOptionId": -1,
-            //     "Value": "[Edit list values...]",
-            //     "Description": ""
-            // })
-
             loadMAOptions(res)
         })
     }
@@ -247,14 +207,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "AdaptationPurposeId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadAdaptationPurpose(res)
         })
     }
@@ -275,14 +227,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "CarbonCreditId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadCarbonCredit(res)
         })
     }
@@ -293,14 +237,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "CarbonCreditMarketId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadCarbonCreditMarket(res)
         })
     }
@@ -311,14 +247,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "CDMStatusId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadCDMStatus(res)
         })
     }
@@ -329,14 +257,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "CDMMethodologyId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadCDMMethodology(res)
         })
     }
@@ -347,14 +267,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "VoluntaryMethodologyId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadVoluntaryMethodology(res)
         })
     }
@@ -365,14 +277,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "VoluntaryGoldStandardId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadVoluntaryGoldStandard(res)
         })
     }
@@ -383,14 +287,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "ResearchTypeId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadResearchType(res)
         })
     }
@@ -401,14 +297,6 @@ class ProjectDetails extends React.Component {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json()).then(res => {
-
-            //Insert "[Edit list values...]" entry
-            res.splice(0, 0, {
-                "TargetAudienceId": -1,
-                "Value": "[Edit list values...]",
-                "Description": ""
-            })
-
             loadTargetAudience(res)
         })
     }
