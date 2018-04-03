@@ -904,7 +904,7 @@ class ProjectDetails extends React.Component {
                 <Modal isOpen={this.state.discardModal}>
                     <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
                     <ModalBody>
-                        Are you want to discard all changes?
+                        Are you sure you want to discard all changes?
                     </ModalBody>
                     <ModalFooter>
                         <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>{' '}
@@ -915,7 +915,7 @@ class ProjectDetails extends React.Component {
                 <Modal isOpen={this.state.saveModal}>
                     <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
                     <ModalBody>
-                        Are you want to save all changes?
+                        Are you sure you want to save all changes?
                     </ModalBody>
                     <ModalFooter>
                         <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>{' '}

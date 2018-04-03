@@ -10,8 +10,8 @@ import Select from 'react-select'
 const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
-  let { editListModalData: { show, data, dispatch, persist } } = state
-  return { show, data, dispatch, persist }
+  let { editListModalData: { show, data, treeData, dispatch, persist, type, dependencies } } = state
+  return { show, data, treeData, dispatch, persist, type, dependencies }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch) => {
 
 let changedItems = []
 
-class EditListModal extends React.Component {
+class EditTreeModal extends React.Component {
 
   constructor(props) {
     super(props)
@@ -73,52 +73,56 @@ class EditListModal extends React.Component {
     }
   }
 
+  // componentDidUpdate() {
+  //   this.fillTree()
+  // }
+
   confirmSave() {
 
-    let { dispatchToStore, dispatch, persist, setLoading, data } = this.props
+    let { dispatchToStore, dispatch, persist, setLoading } = this.props
 
     //Update items
     setLoading(true)
 
-    let strPostData = JSON.stringify(changedItems)
-    let url = apiBaseURL + persist
+    console.log("changedItems:", changedItems)
+
+    //let strPostData = JSON.stringify(items.filter(x => x.id > 0))
+    //let url = apiBaseURL + persist
 
     //Save items to DB
-    return fetch(url, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: strPostData
-    })
-      .then((res) => res.json())
-      .then((res) => {
+    // return fetch(url, {
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: strPostData
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
 
-        setLoading(false)
+    //     setLoading(false)
 
-        if (res === true) {
+    //     if (res === true) {
 
-          //Saved successully...
+    //       //Saved successully...
 
-          //Toggle confirm save 
-          this.setState({ confirmSave: false })
+    //       //Toggle confirm save 
+    //       this.setState({ confirmSave: false })
 
-          //Merge changes into props
-          let merged = _.merge(data, changedItems)
+    //       //Dispatch to store
+    //       dispatchToStore(dispatch, items)
 
-          //Dispatch to store
-          dispatchToStore(dispatch, merged)
+    //       //Close modal
+    //       let { setEditList } = this.props
+    //       setEditList({ show: false })
 
-          //Close modal
-          let { setEditList } = this.props
-          setEditList({ show: false })
+    //     }
+    //     else {
 
-        }
-        else {
+    //       //Save failed...
 
-          //Save failed...
-          alert("Unable to save changes. See log for details.")
-          console.log("ERROR:", res)
-        }
-      })
+    //       alert("Unable to save changes. See log for details.")
+    //       console.log("ERROR:", res)
+    //     }
+    //   })
   }
 
   cancelConfirm() {
@@ -135,6 +139,13 @@ class EditListModal extends React.Component {
     let { setEditList } = this.props
     setEditList({ show: false })
   }
+
+  // GetUID() {
+  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  //     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+  //     return v.toString(16);
+  //   });
+  // }
 
   listItemClick(id, e) {
     this.setState({ selectedItemId: id })
@@ -157,29 +168,96 @@ class EditListModal extends React.Component {
     return processedItems
   }
 
+  // getDependencyItems(options, e) {
+  //   let items = []
+
+  //   if (typeof options !== 'undefined' && options !== null)
+  //     options.map(item => {
+  //       items.push({
+  //         value: item[Object.keys(item)[0]],
+  //         label: item[Object.keys(item)[1]]
+  //       })
+  //     })
+
+  //   return items
+  // }
+
+  // treeItemClick(tree, dispatch = true) {
+
+  //   let selectedNodeId = tree.getSelections()[0]
+  //   let { loadSectorFilter } = this.props
+
+  //   if (typeof selectedNodeId !== 'undefined') {
+
+  //     //Get node data
+  //     let nodeData = tree.getDataById(selectedNodeId)
+
+  //     //Dispatch to store
+  //     if (dispatch === true) {
+  //       loadSectorFilter(nodeData.id)
+  //     }
+  //   }
+  //   else {
+
+  //     if (dispatch === true) {
+
+  //       //Dispatch to store
+  //       loadSectorFilter(0)
+  //     }
+  //   }
+  // }
+
+  // fillTree() {
+
+  //   const { treeData } = this.props
+
+  //   if (typeof treeData !== 'undefined' && typeof treeData.dataSource !== 'undefined') {
+
+  //     $('#treeList').tree(treeData)
+
+  //     //Setup tree events
+  //     // let tree = $('#treeList').tree()
+
+  //     // if (this.state.eventsAdded === 0 && typeof tree !== 'undefined') {
+  //     //     this.state.eventsAdded = 1
+  //     //     tree.on("click", () => this.onClick(tree))
+
+  //     //     this.setSelectedNode(tree)
+  //     //     this.onClick(tree, false)
+
+  //     //     //Save tree to state - for later reference/use
+  //     //     this.setState({ tree: tree })
+  //     // }
+  //   }
+  // }
+
   renderList(processedItems) {
 
-    let listItems = []
+    let { type } = this.props
 
-    //Render standard list items
-    processedItems.map(item => {
-      if (item.id > 0) {
-        let { selectedItemId } = this.state
-        listItems.push(<ListGroupItem style={{ cursor: "pointer" }}
-          hover="true"
-          onClick={this.listItemClick.bind(this, item.id)}
-          key={item.id}
-          active={selectedItemId === item.id}
-        >&nbsp;{item.value}</ListGroupItem>)
-      }
-    })
+    if (type === 'std') {
+      let listItems = []
 
-    return (<ListGroup>{listItems}</ListGroup>)
+      //Render standard list items
+      processedItems.map(item => {
+        if (item.id > 0) {
+          let { selectedItemId } = this.state
+          listItems.push(<ListGroupItem style={{ cursor: "pointer" }}
+            hover="true"
+            onClick={this.listItemClick.bind(this, item.id)}
+            key={item.id}
+            active={selectedItemId === item.id}
+          >&nbsp;{item.value}</ListGroupItem>)
+        }
+      })
+
+      return (<ListGroup>{listItems}</ListGroup>)
+    }
   }
 
   renderDetails() {
 
-    let { type, data } = this.props
+    let { type, dependencies, data } = this.props
     let { selectedItemId } = this.state
 
     let filteredItems = data.filter(x => x[Object.keys(x)[0]] === selectedItemId)
@@ -209,10 +287,26 @@ class EditListModal extends React.Component {
           item.value = ""
         }
 
-        //If not match found - render input
-        detailElements.push(
-          <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
-            onChange={this.valueChange.bind(this, item.id, item.key)} />)
+        //Look for dependency matches
+        let deps = dependencies.filter(d => d.key === item.key)
+        if (deps.length > 0) {
+
+          //If match found - render select
+          // detailElements.push(<label key={this.GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
+          // detailElements.push(<Select key={this.GetUID()}
+          //   value={item.value.toString()}
+          //   options={this.selectOptions(deps[0].value)}
+          //   // onChange={this.onSelect}
+          //   style={{ marginBottom: "20px" }}
+          // />)
+        }
+        else {
+
+          //If not match found - render input
+          detailElements.push(
+            <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
+              onChange={this.valueChange.bind(this, item.id, item.key)} />)
+        }
       }
     })
 
@@ -221,7 +315,7 @@ class EditListModal extends React.Component {
 
   render() {
 
-    let { show, data } = this.props
+    let { show, data, type } = this.props
     let { confirmSave, editDetails } = this.state
     let processedItems = this.processData(data)
 
@@ -233,9 +327,13 @@ class EditListModal extends React.Component {
 
           <ModalBody height="80%">
             <div className="row">
-              <div className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
+              <div hidden={type !== "std"} className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
                 <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
                 {this.renderList(processedItems)}
+              </div>
+
+              <div id="treeList" hidden={type !== "tree"} className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
+                {/* tree data here */}
               </div>
 
               <div className="col-md-8" style={{ borderLeft: "solid 1px", overflowY: "auto", height: "65vh" }}>
@@ -262,4 +360,4 @@ class EditListModal extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditListModal)
+export default connect(mapStateToProps, mapDispatchToProps)(EditTreeModal)

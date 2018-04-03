@@ -8,7 +8,8 @@ import * as ACTION_TYPES from "../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
-    return { editMode }
+    let editListModalStateChanged = state.editListModalData.show
+    return { editMode, editListModalStateChanged }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -61,9 +62,9 @@ class SelectComponent extends React.Component {
         return preProcessedItems
     }
 
-    selectOptions() {
+    selectOptions(data) {
 
-        const { data } = this.props
+        //const { data } = this.props
         let ar = []
 
         if (typeof data !== 'undefined') {
@@ -144,7 +145,7 @@ class SelectComponent extends React.Component {
 
     render() {
 
-        let { col, label, id, onChange, selectedValue } = this.props
+        let { col, label, id, onChange, selectedValue, data } = this.props
 
         return (
             <div className={col}>
@@ -153,7 +154,7 @@ class SelectComponent extends React.Component {
                     disabled={this.getDisabledState()}
                     name={id}
                     value={selectedValue}
-                    options={this.selectOptions()}
+                    options={this.selectOptions(data)}
                     onChange={this.onSelect}
                 />
             </div>
