@@ -53,6 +53,7 @@ class AdaptationDetailsItem extends React.Component {
             parentId={details.AdaptationDetailId}
             dispatch={ACTION_TYPES.LOAD_ADAPTATION_PURPOSE}
             persist={"api/AdaptationPurpose/AddOrUpdate"}
+            allowEdit={true}
           />
 
           <SelectComponent
@@ -71,6 +72,7 @@ class AdaptationDetailsItem extends React.Component {
               {key: "ParentSectorId", value: sector},
               {key: "TypologyId", value: typology}
             ]}
+            allowEdit={false}
           />
 
         </div>

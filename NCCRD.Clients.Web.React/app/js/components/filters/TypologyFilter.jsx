@@ -70,6 +70,7 @@ class TypologyFilter extends React.Component {
                 selectCallback={this.selectCallbackHandler}
                 setSelectedValueKey={ACTION_TYPES.LOAD_TYPOLOGY_FILTER}
                 editModeOverride={true}
+                allowEdit={false}
             />
         )
     }

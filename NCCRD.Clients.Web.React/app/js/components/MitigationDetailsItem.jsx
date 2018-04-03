@@ -41,6 +41,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT}
             persist={"api/CarbonCredit/AddOrUpdate"}
+            allowEdit={true}
           />
           <SelectComponent
             col="col-md-4"
@@ -51,6 +52,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET}
             persist={"api/CarbonCreditMarket/AddOrUpdate"}
+            allowEdit={true}
           />
           <SelectComponent
             col="col-md-4"
@@ -61,6 +63,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CDM_STATUS}
             persist={"api/CDMStatus/AddOrUpdate"}
+            allowEdit={true}
           />
         </div>
 
@@ -76,6 +79,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CDM_METHODOLOGY}
             persist={"api/CDMMethodology/AddOrUpdate"}
+            allowEdit={true}
           />
           <SelectComponent
             col="col-md-4"
@@ -86,6 +90,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY}
             persist={"api/VoluntaryMethodology/AddOrUpdate"}
+            allowEdit={true}
           />
           <SelectComponent
             col="col-md-4"
@@ -96,6 +101,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD}
             persist={"api/VoluntaryGoldStandard/AddOrUpdate"}
+            allowEdit={true}
           />
         </div>
 
@@ -127,6 +133,7 @@ class MitigationDetailsItem extends React.Component {
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
             persist={"api/Sector/AddOrUpdate"}
+            allowEdit={false}
           />
         </div>
 
