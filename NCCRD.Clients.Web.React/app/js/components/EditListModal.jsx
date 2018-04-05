@@ -28,8 +28,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-let changedItems = []
-
 class EditListModal extends React.Component {
 
   constructor(props) {
@@ -38,10 +36,59 @@ class EditListModal extends React.Component {
     this.cancel = this.cancel.bind(this)
     this.renderList = this.renderList.bind(this)
     this.renderDetails = this.renderDetails.bind(this)
-    // this.fillTree = this.fillTree.bind(this)
 
-    changedItems = []
-    this.state = { selectedItemId: 0, confirmSave: false }
+    this.state = { _data: [], selectedItemId: 0, confirmSave: false }
+  }
+
+  GetUID() {
+    // return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    //   var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    //   return v.toString(16);
+    // })
+
+    return new Date().valueOf()
+  }
+
+  componentDidUpdate() {
+
+    let { data, setEditList } = this.props
+
+    if (data.length > 0) {
+
+      let tmpData = [] //_.clone(data)
+      data.map(item => {
+        tmpData.push(_.clone(item))
+      })
+
+      //Clear items from store
+      setEditList({ data: [] })
+
+      //Update local state
+      this.setState({ _data: tmpData })
+    }
+  }
+
+  add() {
+
+    //Add new item
+    let { _data } = this.state
+
+    //Clone existing item
+    let newItem = _.clone(_data[0])
+
+    //Clear values
+    Object.keys(newItem).map(key => {
+      newItem[key] = ""
+    })
+
+    //Set Id to GUID
+    let newItemId = this.GetUID()
+    newItem[Object.keys(newItem)[0]] = newItemId
+    newItem[Object.keys(newItem)[1]] = "ENTER VALUE HERE"
+
+    //Update state
+    _data.splice(0, 0, newItem)
+    this.setState({ _data: _data, selectedItemId: newItemId })
   }
 
   save() {
@@ -51,74 +98,81 @@ class EditListModal extends React.Component {
 
   valueChange(id, key, e) {
 
-    let { data } = this.props
+    let { _data } = this.state
     let newValue = e.target.value
 
     //Update changed item
-    let filteredItems = data.filter(x => x[Object.keys(x)[0]] === id)
+    let filteredItems = _data.filter(x => x[Object.keys(x)[0]] === id)
     if (filteredItems.length > 0) {
 
-      //Clone source item
-      let changedItem = changedItems.filter(x => x[Object.keys(x)[0]] === id)[0]
-      if (typeof changedItem === 'undefined') {
-        changedItem = _.clone(filteredItems[0])
-      }
-
       //Update with changed value
-      changedItem[key.toString()] = newValue
+      filteredItems[0][key.toString()] = newValue
+      filteredItems[0].changed = true
 
-      //Merge with existing changes
-      changedItems = changedItems.filter(x => x[Object.keys(x)[0]] !== id)
-      changedItems.push(changedItem)
+      //Update state
+      this.setState({ _data: _data })
     }
   }
 
   confirmSave() {
 
     let { dispatchToStore, dispatch, persist, setLoading, data } = this.props
+    let { _data } = this.state
 
     //Update items
     setLoading(true)
 
-    let strPostData = JSON.stringify(changedItems)
-    let url = apiBaseURL + persist
-
-    //Save items to DB
-    return fetch(url, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: strPostData
+    //Get changed items
+    let changedItems = []
+    _data.map(item => {
+      
+      let pItem = data.filter(x => x[Object.keys(x)[0]])[0]
+      if(typeof pItem === 'undefined' || !_.isEqual(item, pItem)){
+        changedItems.push(item)
+      }
     })
-      .then((res) => res.json())
-      .then((res) => {
 
-        setLoading(false)
+    console.log("changedItems:", changedItems)
 
-        if (res === true) {
+    // let strPostData = JSON.stringify(_data)
+    // let url = apiBaseURL + persist
 
-          //Saved successully...
+    // //Save items to DB
+    // return fetch(url, {
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: strPostData
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
 
-          //Toggle confirm save 
-          this.setState({ confirmSave: false })
+    //     setLoading(false)
 
-          //Merge changes into props
-          let merged = _.merge(data, changedItems)
+    //     if (res === true) {
 
-          //Dispatch to store
-          dispatchToStore(dispatch, merged)
+    //       //Saved successully...
 
-          //Close modal
-          let { setEditList } = this.props
-          setEditList({ show: false })
+    //       //Toggle confirm save 
+    //       this.setState({ confirmSave: false })
 
-        }
-        else {
+    //       //Merge changes into props
+    //       let merged = _.merge(_data)
 
-          //Save failed...
-          alert("Unable to save changes. See log for details.")
-          console.log("ERROR:", res)
-        }
-      })
+    //       //Dispatch to store
+    //       dispatchToStore(dispatch, merged)
+
+    //       //Close modal
+    //       let { setEditList } = this.props
+    //       setEditList({ show: false })
+
+    //     }
+    //     else {
+
+    //       //Save failed...
+    //       alert("Unable to save changes. See log for details.")
+    //       console.log("ERROR:", res)
+    //     }
+    //   })
   }
 
   cancelConfirm() {
@@ -128,8 +182,7 @@ class EditListModal extends React.Component {
   cancel() {
 
     //Reset state
-    changedItems = []
-    this.setState({ selectedItemId: 0, confirmSave: false })
+    this.setState({ selectedItemId: 0, confirmSave: false, _data: [] })
 
     //Close modal
     let { setEditList } = this.props
@@ -157,8 +210,9 @@ class EditListModal extends React.Component {
     return processedItems
   }
 
-  renderList(processedItems) {
+  renderList() {
 
+    let processedItems = this.processData(this.state._data)
     let listItems = []
 
     //Render standard list items
@@ -179,10 +233,10 @@ class EditListModal extends React.Component {
 
   renderDetails() {
 
-    let { type, data } = this.props
-    let { selectedItemId } = this.state
+    let { type } = this.props
+    let { selectedItemId, _data } = this.state
 
-    let filteredItems = data.filter(x => x[Object.keys(x)[0]] === selectedItemId)
+    let filteredItems = _data.filter(x => x[Object.keys(x)[0]] === selectedItemId)
     let editDetails = []
     let detailElements = []
 
@@ -197,12 +251,6 @@ class EditListModal extends React.Component {
     //Render "editDetails"
     editDetails.map(item => {
       if (item.key !== editDetails[0].key) {
-
-        //Transpose changes
-        let tChanges = changedItems.filter(x => x[Object.keys(x)[0]].toString() === selectedItemId.toString())
-        if (tChanges.length > 0) {
-          item.value = tChanges[0][item.key]
-        }
 
         //Fix nulls
         if (item.value === null) {
@@ -221,9 +269,8 @@ class EditListModal extends React.Component {
 
   render() {
 
-    let { show, data } = this.props
-    let { confirmSave, editDetails } = this.state
-    let processedItems = this.processData(data)
+    let { show } = this.props
+    let { confirmSave, editDetails, _data } = this.state
 
     return (
       <div>
@@ -235,7 +282,7 @@ class EditListModal extends React.Component {
             <div className="row">
               <div className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
                 <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
-                {this.renderList(processedItems)}
+                {this.renderList()}
               </div>
 
               <div className="col-md-8" style={{ borderLeft: "solid 1px", overflowY: "auto", height: "65vh" }}>
@@ -246,14 +293,20 @@ class EditListModal extends React.Component {
           </ModalBody>
 
           <ModalFooter>
-            <div hidden={confirmSave} style={{ float: "right" }}>
-              <Button size="sm" color="warning" onClick={this.save.bind(this)}>&nbsp;&nbsp;Save&nbsp;&nbsp;</Button>
-              <Button size="sm" color="secondary" onClick={this.cancel.bind(this)}>Cancel</Button>
+            <div className="col-md-2" hidden={confirmSave}>
+              <Button size="sm" color="primary" onClick={this.add.bind(this)}>&nbsp;&nbsp;Add&nbsp;&nbsp;</Button>
             </div>
-            <div hidden={!confirmSave} style={{ float: "right" }}>
-              <label>Please confirm to save changes?&nbsp;</label>
-              <Button size="sm" color="warning" onClick={this.confirmSave.bind(this)}>Confirm</Button>
-              <Button size="sm" color="secondary" onClick={this.cancelConfirm.bind(this)}>Cancel</Button>
+
+            <div className="col-md-10">
+              <div hidden={confirmSave} style={{ float: "right" }}>
+                <Button size="sm" color="warning" onClick={this.save.bind(this)}>&nbsp;&nbsp;Save&nbsp;&nbsp;</Button>
+                <Button size="sm" color="secondary" onClick={this.cancel.bind(this)}>Cancel</Button>
+              </div>
+              <div hidden={!confirmSave} style={{ float: "right" }}>
+                <label>Please confirm to save changes?&nbsp;</label>
+                <Button size="sm" color="warning" onClick={this.confirmSave.bind(this)}>Confirm</Button>
+                <Button size="sm" color="secondary" onClick={this.cancelConfirm.bind(this)}>Cancel</Button>
+              </div>
             </div>
           </ModalFooter>
         </Modal>
