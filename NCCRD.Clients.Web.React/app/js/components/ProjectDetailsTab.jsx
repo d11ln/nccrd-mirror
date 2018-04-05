@@ -136,16 +136,30 @@ class ProjectDetailsTab extends React.Component {
                         dispatch={ACTION_TYPES.LOAD_PROJECT_TYPE}
                         persist={"api/ProjectType/AddOrUpdate"}
                         allowEdit={true}
+                        newItemTemplate={{
+                            "ProjectTypeId": 0,
+                            "Value": "",
+                            "Description": ""
+                        }}
                     />
                     <SelectComponent
                         col="col-md-4"
                         label="Project sub-type:"
                         selectedValue={projectDetails.ProjectSubTypeId}
-                        data={this.props.projectSubTypes}
+                        data={this.props.projectSubTypes.filter(x => x.ProjectTypeId === projectDetails.ProjectTypeId)}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE}
                         dispatch={ACTION_TYPES.LOAD_PROJECT_SUBTYPE}
                         persist={"api/ProjectSubType/AddOrUpdate"}
-                        allowEdit={false}
+                        allowEdit={true}
+                        dependencies={[
+                            { key: "ProjectTypeId", value: this.props.projectTypes }
+                        ]}
+                        newItemTemplate={{
+                            "ProjectSubTypeId": 0,
+                            "Value": "",
+                            "Description": "",
+                            "ProjectTypeId": 0
+                        }}
                     />
                     <SelectComponent
                         col="col-md-4"
@@ -156,6 +170,11 @@ class ProjectDetailsTab extends React.Component {
                         dispatch={ACTION_TYPES.LOAD_PROJECT_STATUS}
                         persist={"api/ProjectStatus/AddOrUpdate"}
                         allowEdit={true}
+                        newItemTemplate={{
+                            "ProjectStatusId": 0,
+                            "Value": "",
+                            "Description": ""
+                        }}
                     />
                 </div>
 
@@ -179,6 +198,11 @@ class ProjectDetailsTab extends React.Component {
                         dispatch={ACTION_TYPES.LOAD_VALIDATION_STATUS}
                         persist={"api/ValidationStatus/AddOrUpdate"}
                         allowEdit={true}
+                        newItemTemplate={{
+                            "ValidationStatusId": 0,
+                            "Value": "",
+                            "Description": ""
+                        }}
                     />
                     <SelectComponent
                         col="col-md-4"

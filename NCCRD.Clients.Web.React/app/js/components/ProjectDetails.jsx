@@ -554,6 +554,8 @@ class ProjectDetails extends React.Component {
 
             //Validate data...
 
+            //Corrections
+
             let strPostData = JSON.stringify(projectDetails)
             let url = apiBaseURL + "api/Projects/AddOrUpdate"
 

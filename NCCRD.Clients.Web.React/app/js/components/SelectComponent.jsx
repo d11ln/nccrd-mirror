@@ -32,6 +32,15 @@ class SelectComponent extends React.Component {
     this.getDisabledState = this.getDisabledState.bind(this)
   }
 
+  componentDidUpdate(){
+
+    let { selectedValue, data } = this.props
+
+    if(selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0){
+      this.onSelect(null)
+    }
+  }
+
   preProcessData(data) {
 
     let preProcessedItems = []
@@ -108,7 +117,7 @@ class SelectComponent extends React.Component {
 
     if (selectedValue === -1) {
       //Setup and Show EditListModal
-      let { setEditList, data, treeData, dispatch, persist, type, dependencies } = this.props
+      let { setEditList, data, treeData, dispatch, persist, type, dependencies, newItemTemplate } = this.props
 
       if (typeof type === 'undefined') {
         type = "std"
@@ -119,7 +128,7 @@ class SelectComponent extends React.Component {
 
       setEditList({
         show: true, data: data, treeData: treeData, dispatch: dispatch, persist: persist, type: type,
-        dependencies: dependencies
+        dependencies: dependencies, newItemTemplate: newItemTemplate
       })
     }
     else {

@@ -42,6 +42,11 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT}
             persist={"api/CarbonCredit/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "CarbonCreditId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
@@ -53,6 +58,11 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET}
             persist={"api/CarbonCreditMarket/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "CarbonCreditMarketId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
@@ -64,6 +74,11 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_CDM_STATUS}
             persist={"api/CDMStatus/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "CDMStatusId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
         </div>
 
@@ -80,6 +95,11 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_CDM_METHODOLOGY}
             persist={"api/CDMMethodology/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "CDMMethodologyId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
@@ -91,6 +111,11 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY}
             persist={"api/VoluntaryMethodology/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "VoluntaryMethodologyId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
@@ -102,6 +127,11 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD}
             persist={"api/VoluntaryGoldStandard/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "VoluntaryGoldStandardId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
         </div>
 
@@ -134,6 +164,13 @@ class MitigationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_SECTOR}
             persist={"api/Sector/AddOrUpdate"}
             allowEdit={false}
+            newItemTemplate={{
+              "SectorId": 0,
+              "Value": "",
+              "SectorTypeId": 0,
+              "ParentSectorId": 0,
+              "TypologyId": 0
+            }}
           />
         </div>
 

@@ -10,8 +10,8 @@ import Select from 'react-select'
 const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
-  let { editListModalData: { show, data, dispatch, persist } } = state
-  return { show, data, dispatch, persist }
+  let { editListModalData: { show, data, dispatch, persist, dependencies, newItemTemplate } } = state
+  return { show, data, dispatch, persist, dependencies, newItemTemplate }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -36,6 +36,7 @@ class EditListModal extends React.Component {
     this.cancel = this.cancel.bind(this)
     this.renderList = this.renderList.bind(this)
     this.renderDetails = this.renderDetails.bind(this)
+    this.dependencySelect = this.dependencySelect.bind(this)    
 
     this.state = { _data: [], selectedItemId: 0, confirmSave: false }
   }
@@ -71,10 +72,11 @@ class EditListModal extends React.Component {
   add() {
 
     //Add new item
+    let { newItemTemplate } = this.props
     let { _data } = this.state
 
     //Clone existing item
-    let newItem = _.clone(_data[0])
+    let newItem = _.clone(newItemTemplate)
 
     //Clear values
     Object.keys(newItem).map(key => {
@@ -85,6 +87,7 @@ class EditListModal extends React.Component {
     let newItemId = this.GetUID()
     newItem[Object.keys(newItem)[0]] = newItemId
     newItem[Object.keys(newItem)[1]] = "ENTER VALUE HERE"
+    newItem.modifiedState = true
 
     //Update state
     _data.splice(0, 0, newItem)
@@ -107,11 +110,33 @@ class EditListModal extends React.Component {
 
       //Update with changed value
       filteredItems[0][key.toString()] = newValue
-      filteredItems[0].changed = true
+      filteredItems[0].modifiedState = true
 
       //Update state
       this.setState({ _data: _data })
     }
+  }
+
+  dependencySelect(key, selectedOption) {
+
+    let selectedValue = 0
+    let { _data, selectedItemId } = this.state
+
+    if (selectedOption !== null) {
+      selectedValue = selectedOption.value
+    }
+
+    let currentItem = _data.filter(x => x[Object.keys(x)[0]] === selectedItemId)[0]
+    if(typeof currentItem !== 'undefined'){
+
+      //Update with changed value
+      currentItem[key] = selectedValue
+      currentItem.modifiedState = true
+
+      //Update state
+      this.setState({ _data: _data })
+    }
+
   }
 
   confirmSave() {
@@ -123,56 +148,48 @@ class EditListModal extends React.Component {
     setLoading(true)
 
     //Get changed items
-    let changedItems = []
-    _data.map(item => {
-      
-      let pItem = data.filter(x => x[Object.keys(x)[0]])[0]
-      if(typeof pItem === 'undefined' || !_.isEqual(item, pItem)){
-        changedItems.push(item)
-      }
+    let changedItems = _data.filter(x => x.modifiedState === true)
+
+    //Prep post params
+    let strPostData = JSON.stringify(changedItems)
+    let url = apiBaseURL + persist
+
+    //Save items to DB
+    return fetch(url, {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: strPostData
     })
+      .then((res) => res.json())
+      .then((res) => {
 
-    console.log("changedItems:", changedItems)
+        setLoading(false)
 
-    // let strPostData = JSON.stringify(_data)
-    // let url = apiBaseURL + persist
+        if (res === true) {
 
-    // //Save items to DB
-    // return fetch(url, {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: strPostData
-    // })
-    //   .then((res) => res.json())
-    //   .then((res) => {
+          //Saved successully...
 
-    //     setLoading(false)
+          //Toggle confirm save 
+          this.setState({ confirmSave: false })
 
-    //     if (res === true) {
+          //Merge changes into props
+          let merged = _.merge(_data)
 
-    //       //Saved successully...
+          //Dispatch to store
+          dispatchToStore(dispatch, merged)
 
-    //       //Toggle confirm save 
-    //       this.setState({ confirmSave: false })
+          //Close modal
+          let { setEditList } = this.props
+          setEditList({ show: false })
 
-    //       //Merge changes into props
-    //       let merged = _.merge(_data)
+        }
+        else {
 
-    //       //Dispatch to store
-    //       dispatchToStore(dispatch, merged)
-
-    //       //Close modal
-    //       let { setEditList } = this.props
-    //       setEditList({ show: false })
-
-    //     }
-    //     else {
-
-    //       //Save failed...
-    //       alert("Unable to save changes. See log for details.")
-    //       console.log("ERROR:", res)
-    //     }
-    //   })
+          //Save failed...
+          alert("Unable to save changes. See log for details.")
+          console.log("ERROR:", res)
+        }
+      })
   }
 
   cancelConfirm() {
@@ -210,6 +227,21 @@ class EditListModal extends React.Component {
     return processedItems
   }
 
+  renderSelectOptions(data) {
+
+    let ar = []
+
+    if (typeof data !== 'undefined') {
+
+      let procData = this.processData(data)
+      for (let i of procData) {
+        ar.push({ value: i.id, label: i.value })
+      }
+    }
+
+    return ar
+  }
+
   renderList() {
 
     let processedItems = this.processData(this.state._data)
@@ -233,7 +265,7 @@ class EditListModal extends React.Component {
 
   renderDetails() {
 
-    let { type } = this.props
+    let { type, dependencies } = this.props
     let { selectedItemId, _data } = this.state
 
     let filteredItems = _data.filter(x => x[Object.keys(x)[0]] === selectedItemId)
@@ -249,7 +281,7 @@ class EditListModal extends React.Component {
     }
 
     //Render "editDetails"
-    editDetails.map(item => {
+    editDetails.filter(x => x.key !== 'modifiedState').map(item => {
       if (item.key !== editDetails[0].key) {
 
         //Fix nulls
@@ -257,10 +289,26 @@ class EditListModal extends React.Component {
           item.value = ""
         }
 
-        //If not match found - render input
-        detailElements.push(
-          <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
-            onChange={this.valueChange.bind(this, item.id, item.key)} />)
+        //Look for dependencies
+        let deps = dependencies.filter(d => d.key === item.key)
+        if (deps.length > 0) {
+
+          //If dependency found - render select
+          detailElements.push(<label key={this.GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
+          detailElements.push(<Select key={item.id + "_" + item.key + "_select"}
+            value={item.value.toString()}
+            options={this.renderSelectOptions(deps[0].value)}
+            onChange={this.dependencySelect.bind(this, item.key)}
+            style={{ marginBottom: "25px" }}
+          />)
+        }
+        else {
+
+          //If no dependency found - render input
+          detailElements.push(
+            <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
+              onChange={this.valueChange.bind(this, item.id, item.key)} />)
+        }
       }
     })
 

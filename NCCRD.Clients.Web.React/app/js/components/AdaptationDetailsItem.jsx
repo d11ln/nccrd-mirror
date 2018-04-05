@@ -54,6 +54,11 @@ class AdaptationDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_ADAPTATION_PURPOSE}
             persist={"api/AdaptationPurpose/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "AdaptationPurposeId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
 
           <SelectComponent
@@ -68,11 +73,18 @@ class AdaptationDetailsItem extends React.Component {
             persist="api/Sector/AddOrUpdate"
             type="tree"
             dependencies={[
-              {key: "SectorTypeId", value: sectorType},
-              {key: "ParentSectorId", value: sector},
-              {key: "TypologyId", value: typology}
+              { key: "SectorTypeId", value: sectorType },
+              { key: "ParentSectorId", value: sector },
+              { key: "TypologyId", value: typology }
             ]}
             allowEdit={false}
+            newItemTemplate={{
+              "SectorId": 0,
+              "Value": "",
+              "SectorTypeId": 0,
+              "ParentSectorId": 0,
+              "TypologyId": 0
+            }}
           />
 
         </div>

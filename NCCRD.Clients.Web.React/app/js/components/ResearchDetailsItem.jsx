@@ -53,6 +53,11 @@ class ResearchDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_RESEARCH_TYPE}
             persist={"api/ResearchType/AddOrUpdate"}
             allowEdit={true}
+            newItemTemplate={{
+              "ResearchTypeId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
         </div>
 
@@ -69,7 +74,12 @@ class ResearchDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_TARGET_AUDIENCE}
             persist={"api/TargetAudience/AddOrUpdate"}
             allowEdit={true}
-          />
+            newItemTemplate={{
+              "TargetAudienceId": 0,
+              "Value": "",
+              "Description": ""
+            }}
+        />
           <SelectComponent
             col="col-md-4"
             label="Sector:"
@@ -80,6 +90,13 @@ class ResearchDetailsItem extends React.Component {
             dispatch={ACTION_TYPES.LOAD_SECTOR}
             persist={"api/Sector/AddOrUpdate"}
             allowEdit={false}
+            newItemTemplate={{
+              "SectorId": 0,
+              "Value": "",
+              "SectorTypeId": 0,
+              "ParentSectorId": 0,
+              "TypologyId": 0
+            }}
           />
         </div>
 

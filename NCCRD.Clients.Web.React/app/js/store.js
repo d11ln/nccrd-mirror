@@ -26,7 +26,8 @@ const store = createStore(
             dispatch: "",
             persist: "",
             type: "std",
-            dependencies: []
+            dependencies: [],
+            newItemTemplate: {}
         },
 
         projectData: {

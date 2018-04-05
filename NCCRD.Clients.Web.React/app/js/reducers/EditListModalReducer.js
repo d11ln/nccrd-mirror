@@ -16,10 +16,11 @@ export default function GlobalReducer(state = {}, action) {
             if (typeof payload.persist === 'undefined') { payload.persist = state.persist }
             if (typeof payload.type === 'undefined') { payload.type = state.type }
             if (typeof payload.dependencies === 'undefined') { payload.dependencies = state.dependencies }
+            if (typeof payload.newItemTemplate === 'undefined') { payload.newItemTemplate = state.newItemTemplate }
 
             return {
                 ...state, show: payload.show, data: payload.data, treeData: payload.treeData, dispatch: payload.dispatch, persist: payload.persist,
-                type: payload.type, dependencies: payload.dependencies 
+                type: payload.type, dependencies: payload.dependencies , newItemTemplate: payload.newItemTemplate
             }
         }
 
