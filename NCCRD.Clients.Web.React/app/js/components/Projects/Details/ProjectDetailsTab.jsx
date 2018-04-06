@@ -3,12 +3,12 @@
 import React from 'react'
 import { Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
-import TextComponent from './TextComponent.jsx'
-import TextAreaComponent from './TextAreaComponent.jsx'
-import RangeComponent from './RangeComponent.jsx'
-import SelectComponent from './SelectComponent.jsx'
-import { apiBaseURL } from "../constants/apiBaseURL"
-import * as ACTION_TYPES from "../constants/action-types"
+import TextComponent from '../../Shared/TextComponent.jsx'
+import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
+import RangeComponent from '../../Shared/RangeComponent.jsx'
+import SelectComponent from '../../Shared/SelectComponent.jsx'
+import { apiBaseURL } from "../../../constants/apiBaseURL"
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projectDetails } } = state

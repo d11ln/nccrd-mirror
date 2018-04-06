@@ -2,11 +2,11 @@
 
 import React from 'react'
 import ProjectList from './ProjectList.jsx'
-import ProjectFilters from './ProjectFilters.jsx'
+import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
 import { Button, Footer, Container } from 'mdbreact'
-import * as ACTION_TYPES from "../constants/action-types"
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { loading, isAuthenticated } } = state

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../constants/action-types"
+import * as ACTION_TYPES from "../../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     return { }

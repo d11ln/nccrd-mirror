@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { Button } from 'mdbreact'
-import { apiBaseURL } from "../constants/apiBaseURL"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../constants/action-types"
+import * as ACTION_TYPES from "../../../constants/action-types"
 import MitigationDetailsItem from './MitigationDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {

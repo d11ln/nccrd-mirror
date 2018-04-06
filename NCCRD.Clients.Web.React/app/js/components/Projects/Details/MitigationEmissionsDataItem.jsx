@@ -1,9 +1,9 @@
 'use strict'
 
 import React from 'react'
-import { apiBaseURL } from "../constants/apiBaseURL"
-import TextComponent from './TextComponent.jsx'
-import * as ACTION_TYPES from "../constants/action-types"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
+import TextComponent from '../../Shared/TextComponent.jsx'
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 class MitigationEmissionsDataItem extends React.Component {
 

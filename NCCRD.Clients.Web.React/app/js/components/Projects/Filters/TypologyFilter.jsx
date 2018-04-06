@@ -5,9 +5,9 @@ import { Button } from 'mdbreact'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../constants/action-types"
-import { apiBaseURL } from "../../constants/apiBaseURL";
-import SelectComponent from '../SelectComponent.jsx'
+import * as ACTION_TYPES from "../../../constants/action-types"
+import { apiBaseURL } from "../../../constants/apiBaseURL";
+import SelectComponent from '../../Shared/SelectComponent.jsx'
 
 const queryString = require('query-string')
 
