@@ -2,14 +2,6 @@
 
 import * as ACTION_TYPES from "../constants/action-types"
 
-function convertPayload(payload){
-    return payload.map((x) => {
-        return {
-            id: x[Object.keys(x)[0]], value: x[Object.keys(x)[1]]
-        }
-    })
-}
-
 export default function LookupsReducer(state = {}, action) {
 
     const { type, payload } = action
@@ -17,121 +9,84 @@ export default function LookupsReducer(state = {}, action) {
     switch (type) {
 
         case ACTION_TYPES.LOAD_PROJECT_STATUS: {
-
-            const data = convertPayload(payload)
-            return { ...state, projectStatus: data }
+            return { ...state, projectStatus: payload }
         }
 
         case ACTION_TYPES.LOAD_TYPOLOGY: {
-
-            const data = convertPayload(payload)
-            return { ...state, typology: data }
+            return { ...state, typology: payload }
         }
 
         case ACTION_TYPES.LOAD_REGION_TREE: {
-
             return { ...state, regionTree: payload }
         }
 
         case ACTION_TYPES.LOAD_SECTOR_TREE: {
-
             return { ...state, sectorTree: payload }
         }
 
         case ACTION_TYPES.LOAD_PROJECT_TYPE: {
-
-            const data = convertPayload(payload)
-            return { ...state, projectTypes: data }
+            return { ...state, projectTypes: payload }
         }
 
         case ACTION_TYPES.LOAD_PROJECT_SUBTYPE: {
-
-            const data = convertPayload(payload)
-            return { ...state, projectSubTypes: data }
+            return { ...state, projectSubTypes: payload }
         }
 
         case ACTION_TYPES.LOAD_USERS: {
-
-            const data = convertPayload(payload)
-            return { ...state, users: data }
+            return { ...state, users: payload }
         }
 
         case ACTION_TYPES.LOAD_VALIDATION_STATUS: {
-
-            const data = convertPayload(payload)
-            return { ...state, validationStatus: data }
+            return { ...state, validationStatus: payload }
         }
 
         case ACTION_TYPES.LOAD_MA_OPTIONS: {
-
-            const data = convertPayload(payload)
-            return { ...state, maOptions: data }
+            return { ...state, maOptions: payload }
         }
 
         case ACTION_TYPES.LOAD_ADAPTATION_PURPOSE: {
-
-            const data = convertPayload(payload)
-            return { ...state, adaptationPurpose: data }
+            return { ...state, adaptationPurpose: payload }
         }
 
         case ACTION_TYPES.LOAD_SECTOR: {
-
-            const data = convertPayload(payload)
-            return { ...state, sector: data }
+            return { ...state, sector: payload }
         }
 
         case ACTION_TYPES.LOAD_REGION: {
-
-            const data = convertPayload(payload)
-            return { ...state, region: data }
+            return { ...state, region: payload }
         }
 
         case ACTION_TYPES.LOAD_CARBON_CREDIT: {
-
-            const data = convertPayload(payload)
-            return { ...state, carbonCredit: data }
+            return { ...state, carbonCredit: payload }
         }
 
         case ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET: {
 
-            const data = convertPayload(payload)
-            return { ...state, carbonCreditMarket: data }
+            return { ...state, carbonCreditMarket: payload }
         }
 
         case ACTION_TYPES.LOAD_CDM_STATUS: {
-
-            const data = convertPayload(payload)
-            return { ...state, cdmStatus: data }
+            return { ...state, cdmStatus: payload }
         }
 
         case ACTION_TYPES.LOAD_CDM_METHODOLOGY: {
-
-            const data = convertPayload(payload)
-            return { ...state, cdmMethodology: data }
+            return { ...state, cdmMethodology: payload }
         }
 
         case ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY: {
-
-            const data = convertPayload(payload)
-            return { ...state, voluntaryMethodology: data }
+            return { ...state, voluntaryMethodology: payload }
         }
 
         case ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD: {
-
-            const data = convertPayload(payload)
-            return { ...state, voluntaryGoldStandard: data }
+            return { ...state, voluntaryGoldStandard: payload }
         }
 
         case ACTION_TYPES.LOAD_RESEARCH_TYPE: {
-
-            const data = convertPayload(payload)
-            return { ...state, researchType: data }
+            return { ...state, researchType: payload }
         }
 
         case ACTION_TYPES.LOAD_TARGET_AUDIENCE: {
-
-            const data = convertPayload(payload)
-            return { ...state, targetAudience: data }
+            return { ...state, targetAudience: payload }
         }
 
         default: {

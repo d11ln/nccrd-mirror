@@ -27,7 +27,9 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                data = context.Sector.OrderBy(x => x.Value).ToList();
+                data = context.Sector
+                    .OrderBy(x => x.Value.Trim())
+                    .ToList();
             }
 
             return data;
@@ -53,14 +55,14 @@ namespace NCCRD.Services.Data.Controllers.API
                     hostSecNode.id = hostSec.SectorId;
                     hostSecNode.text = hostSec.Value;
 
-                    var mainSectors = context.Sector.Where(x => x.ParentSectorID == hostSec.SectorId).OrderBy(m => m.Value).ToList();
+                    var mainSectors = context.Sector.Where(x => x.ParentSectorId == hostSec.SectorId).OrderBy(m => m.Value).ToList();
                     foreach (var mainSec in mainSectors)
                     {
                         var mainSecNode = new TreeNodeViewModel();
                         mainSecNode.id = mainSec.SectorId;
                         mainSecNode.text = mainSec.Value;
 
-                        var subSectors = context.Sector.Where(x => x.ParentSectorID == mainSec.SectorId).OrderBy(l => l.Value).ToList();
+                        var subSectors = context.Sector.Where(x => x.ParentSectorId == mainSec.SectorId).OrderBy(l => l.Value).ToList();
                         foreach (var subSec in subSectors)
                         {
                             var sunSecNode = new TreeNodeViewModel();
@@ -91,33 +93,42 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <summary>
         /// Add/Update Sector
         /// </summary>
-        /// <param name="sector">Sector to update</param>
+        /// <param name="items">List to add/update</param>
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/Sector/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]Sector sector)
+        public bool AddOrUpdate([FromBody]List<Sector> items)
         {
             bool result = false;
 
             using (var context = new SQLDBContext())
             {
-                //Check if exists
-                var data = context.Sector.FirstOrDefault(x => x.SectorId == sector.SectorId);
-                if (data != null)
+                foreach (var item in items)
                 {
-                    //Update Sector entry
-                    data.Value = sector.Value;
-                    data.SectorTypeId = sector.SectorTypeId;
-                    data.ParentSectorID = sector.ParentSectorID;
-                    data.TypologyId = sector.TypologyId;
-                    context.SaveChanges();
+                    //Check if exists
+                    var data = context.Sector
+                        .Include("SectorType")
+                        .Include("Typology")
+                        .FirstOrDefault(x => x.SectorId == item.SectorId);
+                    if (data != null)
+                    {
+                        //Update Sector entry
+                        data.Value = item.Value;
+                        data.SectorTypeId = item.SectorTypeId;
+                        data.SectorType = item.SectorType;
+                        data.ParentSectorId = item.ParentSectorId;
+                        data.ParentSector = item.ParentSector;
+                        data.TypologyId = item.TypologyId;
+                        data.Typology = item.Typology;
+                    }
+                    else
+                    {
+                        //Add Sector entry
+                        context.Sector.Add(item);
+                    }
 
+                    context.SaveChanges();
                     result = true;
-                }
-                else
-                {
-                    //Add Sector entry
-                    context.Sector.Add(sector);
                 }
             }
 

@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>VoluntaryGoldStandard data as JSON</returns>
         [HttpGet]
         [Route("api/VoluntaryGoldStandard/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<VoluntaryGoldStandard> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<VoluntaryGoldStandard> data = new List<VoluntaryGoldStandard>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.VoluntaryGoldStandard
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.VoluntaryGoldStandardId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -47,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/VoluntaryGoldStandard/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<VoluntaryGoldStandard> items)
         {
             bool result = false;
 
@@ -56,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.VoluntaryGoldStandard.FirstOrDefault(x => x.VoluntaryGoldStandardId == item.id);
+                    var data = context.VoluntaryGoldStandard.FirstOrDefault(x => x.VoluntaryGoldStandardId == item.VoluntaryGoldStandardId);
                     if (data != null)
                     {
                         //Update entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add entry
-                        context.VoluntaryGoldStandard.Add(new VoluntaryGoldStandard()
-                        {
-                            VoluntaryGoldStandardId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.VoluntaryGoldStandard.Add(item);
                     }
                 }
 

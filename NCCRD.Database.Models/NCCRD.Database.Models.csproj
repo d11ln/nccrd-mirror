@@ -62,6 +62,10 @@
     <Compile Include="Migrations\201803052211137_AddedPolygonFilter.Designer.cs">
       <DependentUpon>201803052211137_AddedPolygonFilter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804021101217_201804021300_UpdatedModels.cs" />
+    <Compile Include="Migrations\201804021101217_201804021300_UpdatedModels.Designer.cs">
+      <DependentUpon>201804021101217_201804021300_UpdatedModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\AdaptationDetail.cs" />
@@ -129,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803052211137_AddedPolygonFilter.resx">
       <DependentUpon>201803052211137_AddedPolygonFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804021101217_201804021300_UpdatedModels.resx">
+      <DependentUpon>201804021101217_201804021300_UpdatedModels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

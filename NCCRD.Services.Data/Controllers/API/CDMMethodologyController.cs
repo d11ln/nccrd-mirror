@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>CDMMethodology data as JSON</returns>
         [HttpGet]
         [Route("api/CDMMethodology/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<CDMMethodology> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<CDMMethodology> data = new List<CDMMethodology>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.CDMMethodology
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.CDMMethodologyId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -47,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/CDMMethodology/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<CDMMethodology> items)
         {
             bool result = false;
 
@@ -56,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == item.id);
+                    var data = context.CDMMethodology.FirstOrDefault(x => x.CDMMethodologyId == item.CDMMethodologyId);
                     if (data != null)
                     {
                         //Update CDMMethodology entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add CDMMethodology entry
-                        context.CDMMethodology.Add(new CDMMethodology()
-                        {
-                            CDMMethodologyId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.CDMMethodology.Add(item);
                     }
                 }
 

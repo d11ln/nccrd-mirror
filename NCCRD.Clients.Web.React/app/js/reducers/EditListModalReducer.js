@@ -10,13 +10,19 @@ export default function GlobalReducer(state = {}, action) {
 
         case ACTION_TYPES.SET_EDIT_LIST: {
 
-            if(typeof payload.show === 'undefined'){ payload.show = state.show }
-            if(typeof payload.items === 'undefined'){ payload.items = state.items }
-            if(typeof payload.dispatch === 'undefined'){ payload.dispatch = state.dispatch }
-            if(typeof payload.persist === 'undefined'){ payload.persist = state.persist }
+            if (typeof payload.show === 'undefined') { payload.show = state.show }
+            if (typeof payload.data === 'undefined') { payload.data = state.data }
+            if (typeof payload.dispatch === 'undefined') { payload.dispatch = state.dispatch }
+            if (typeof payload.persist === 'undefined') { payload.persist = state.persist }
+            if (typeof payload.type === 'undefined') { payload.type = state.type }
+            if (typeof payload.dependencies === 'undefined') { payload.dependencies = state.dependencies }
+            if (typeof payload.newItemTemplate === 'undefined') { payload.newItemTemplate = state.newItemTemplate }
 
-            return { ...state, show: payload.show, items: payload.items, dispatch: payload.dispatch, persist: payload.persist }
-        }     
+            return {
+                ...state, show: payload.show, data: payload.data, treeData: payload.treeData, dispatch: payload.dispatch, persist: payload.persist,
+                type: payload.type, dependencies: payload.dependencies , newItemTemplate: payload.newItemTemplate
+            }
+        }
 
         default: {
             return state

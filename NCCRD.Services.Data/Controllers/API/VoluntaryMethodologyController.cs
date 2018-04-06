@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>VoluntaryMethodology data as JSON</returns>
         [HttpGet]
         [Route("api/VoluntaryMethodology/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<VoluntaryMethodology> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<VoluntaryMethodology> data = new List<VoluntaryMethodology>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.VoluntaryMethodology
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.VoluntaryMethodologyId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -48,7 +43,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/VoluntaryMethodology/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<VoluntaryMethodology> items)
         {
             bool result = false;
 
@@ -57,22 +52,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.VoluntaryMethodology.FirstOrDefault(x => x.VoluntaryMethodologyId == item.id);
+                    var data = context.VoluntaryMethodology.FirstOrDefault(x => x.VoluntaryMethodologyId == item.VoluntaryMethodologyId);
                     if (data != null)
                     {
                         //Update
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         //Add
-                        context.VoluntaryMethodology.Add(new VoluntaryMethodology()
-                        {
-                            VoluntaryMethodologyId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.VoluntaryMethodology.Add(item);
                     }
                 }
 

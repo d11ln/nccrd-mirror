@@ -36,31 +36,49 @@ class MitigationDetailsItem extends React.Component {
             col="col-md-4"
             label="Carbon credit:"
             selectedValue={details.CarbonCreditId}
-            options={carbonCredit}
+            data={carbonCredit}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT}
             persist={"api/CarbonCredit/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "CarbonCreditId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
             label="Carbon credit market:"
             selectedValue={details.CarbonCreditMarketId}
-            options={carbonCreditMarket}
+            data={carbonCreditMarket}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT_MARKET}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET}
             persist={"api/CarbonCreditMarket/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "CarbonCreditMarketId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
             label="CDM status:"
             selectedValue={details.CDMStatusId}
-            options={cdmStatus}
+            data={cdmStatus}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_STATUS}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CDM_STATUS}
             persist={"api/CDMStatus/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "CDMStatusId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
         </div>
 
@@ -71,31 +89,49 @@ class MitigationDetailsItem extends React.Component {
             col="col-md-4"
             label="CDM methodology:"
             selectedValue={details.CDMMethodologyId}
-            options={cdmMethodology}
+            data={cdmMethodology}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_METHODOLOGY}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CDM_METHODOLOGY}
             persist={"api/CDMMethodology/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "CDMMethodologyId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
             label="Voluntary methodology:"
             selectedValue={details.VoluntaryMethodologyId}
-            options={voluntaryMethodology}
+            data={voluntaryMethodology}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_METHODOLOGY}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY}
             persist={"api/VoluntaryMethodology/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "VoluntaryMethodologyId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
           <SelectComponent
             col="col-md-4"
             label="Voluntary gold standard:"
             selectedValue={details.VoluntaryGoldStandardId}
-            options={voluntaryGoldStandard}
+            data={voluntaryGoldStandard}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD}
             persist={"api/VoluntaryGoldStandard/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "VoluntaryGoldStandardId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
         </div>
 
@@ -122,11 +158,19 @@ class MitigationDetailsItem extends React.Component {
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
-            options={sector}
+            data={sector}
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_SECTOR}
             parentId={details.MitigationDetailId}
-            // dispatch={ACTION_TYPES.LOAD_SECTOR}
-            // persist={"api/Sector/AddOrUpdate"}
+            dispatch={ACTION_TYPES.LOAD_SECTOR}
+            persist={"api/Sector/AddOrUpdate"}
+            allowEdit={false}
+            newItemTemplate={{
+              "SectorId": 0,
+              "Value": "",
+              "SectorTypeId": 0,
+              "ParentSectorId": 0,
+              "TypologyId": 0
+            }}
           />
         </div>
 

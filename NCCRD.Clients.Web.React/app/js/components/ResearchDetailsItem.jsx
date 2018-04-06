@@ -47,11 +47,17 @@ class ResearchDetailsItem extends React.Component {
             col="col-md-4"
             label="Research type:"
             selectedValue={details.ResearchTypeId}
-            options={researchType}
+            data={researchType}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_RESEARCH_TYPE}
             persist={"api/ResearchType/AddOrUpdate"}
+            allowEdit={true}
+            newItemTemplate={{
+              "ResearchTypeId": 0,
+              "Value": "",
+              "Description": ""
+            }}
           />
         </div>
 
@@ -62,21 +68,35 @@ class ResearchDetailsItem extends React.Component {
             col="col-md-4"
             label="Target audience::"
             selectedValue={details.TargetAudienceId}
-            options={targetAudience}
+            data={targetAudience}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_TARGET_AUDIENCE}
             persist={"api/TargetAudience/AddOrUpdate"}
-          />
+            allowEdit={true}
+            newItemTemplate={{
+              "TargetAudienceId": 0,
+              "Value": "",
+              "Description": ""
+            }}
+        />
           <SelectComponent
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
-            options={sector}
+            data={sector}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
             parentId={details.ResearchDetailId}
-            // dispatch={ACTION_TYPES.LOAD_SECTOR}
-            // persist={"api/Sector/AddOrUpdate"}
+            dispatch={ACTION_TYPES.LOAD_SECTOR}
+            persist={"api/Sector/AddOrUpdate"}
+            allowEdit={false}
+            newItemTemplate={{
+              "SectorId": 0,
+              "Value": "",
+              "SectorTypeId": 0,
+              "ParentSectorId": 0,
+              "TypologyId": 0
+            }}
           />
         </div>
 

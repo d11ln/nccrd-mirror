@@ -66,10 +66,11 @@ class TypologyFilter extends React.Component {
                 col="col-md-4" 
                 label="Typology:" 
                 selectedValue={typologyFilter} 
-                options={this.props.typology}
+                data={this.props.typology}
                 selectCallback={this.selectCallbackHandler}
                 setSelectedValueKey={ACTION_TYPES.LOAD_TYPOLOGY_FILTER}
                 editModeOverride={true}
+                allowEdit={false}
             />
         )
     }

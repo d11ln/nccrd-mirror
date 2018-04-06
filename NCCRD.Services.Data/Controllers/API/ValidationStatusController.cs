@@ -21,19 +21,14 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>ValidationStatus data as JSON</returns>
         [HttpGet]
         [Route("api/ValidationStatus/GetAll")]
-        public IEnumerable<LookupDataViewModel> GetAll()
+        public IEnumerable<ValidationStatus> GetAll()
         {
-            List<LookupDataViewModel> data = new List<LookupDataViewModel>();
+            List<ValidationStatus> data = new List<ValidationStatus>();
 
             using (var context = new SQLDBContext())
             {
                 data = context.ValidationStatus
                     .OrderBy(x => x.Value.Trim())
-                    .Select(x => new LookupDataViewModel()
-                    {
-                        id = x.ValidationStatusId,
-                        value = x.Value
-                    })
                     .ToList();
             }
 
@@ -47,7 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ValidationStatus/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]List<LookupDataViewModel> items)
+        public bool AddOrUpdate([FromBody]List<ValidationStatus> items)
         {
             bool result = false;
 
@@ -56,22 +51,17 @@ namespace NCCRD.Services.Data.Controllers.API
                 foreach (var item in items)
                 {
                     //Check if exists
-                    var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == item.id);
+                    var data = context.ValidationStatus.FirstOrDefault(x => x.ValidationStatusId == item.ValidationStatusId);
                     if (data != null)
                     {
                         // Update ValidationStatus entry
-                        data.Value = item.value;
-                        //data.Description = item.description;
+                        data.Value = item.Value;
+                        data.Description = item.Description;
                     }
                     else
                     {
                         // Add ValidationStatus entry
-                        context.ValidationStatus.Add(new ValidationStatus()
-                        {
-                            ValidationStatusId = 0,
-                            Value = item.value,
-                            Description = "" //item.description
-                        });
+                        context.ValidationStatus.Add(item);
                     }
                 }
 
