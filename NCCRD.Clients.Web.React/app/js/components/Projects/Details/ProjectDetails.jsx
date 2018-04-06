@@ -463,20 +463,19 @@ class ProjectDetails extends React.Component {
             this.loadVoluntaryGoldStandard(loadVoluntaryGoldStandard),
             this.loadResearchType(loadResearchType),
             this.loadTargetAudience(loadTargetAudience)
-        ]).then(() => {
+        ])
+        .then(() => {
             setLoading(false)
-
             if (this.state.projectId === 'add') {
                 setEditMode(true)
             }
         })
+        .catch(res => {
+            setLoading(false)
+            console.log("Error details:", res)
+            alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+        })
     }
-
-    // componentWillMount() {
-    //     if (this.props.isAuthenticated === false) {
-    //         location.hash = "/login"
-    //     }
-    // }
 
     componentDidMount() {
         this.loadData()

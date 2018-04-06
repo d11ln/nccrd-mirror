@@ -53,15 +53,21 @@ class ProjectList extends React.Component {
         setLoading(true)
 
         fetch(apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
-            '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter, {
-
+            '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter,
+            {
                 headers: {
                     "Content-Type": "application/json"
                 }
-
-            }).then(res => res.json()).then(res => {
+            })
+            .then(res => res.json())
+            .then(res => {
                 loadProjects(res)
                 setLoading(false)
+            })
+            .catch(res => {
+                setLoading(false)
+                console.log("Error details:", res)
+                alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
             })
     }
 
