@@ -3,8 +3,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { ListGroup, ListGroupItem, Input, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
-import { apiBaseURL } from "../constants/apiBaseURL"
-import * as ACTION_TYPES from "../constants/action-types"
+import { apiBaseURL } from "../../../../constants/apiBaseURL"
+import * as ACTION_TYPES from "../../../../constants/action-types"
 import Select from 'react-select'
 
 const _ = require('lodash')

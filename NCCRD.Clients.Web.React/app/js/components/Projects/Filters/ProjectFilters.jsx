@@ -4,12 +4,12 @@ import React from 'react'
 import { Button, Collapse } from 'mdbreact'
 import { connect } from 'react-redux'
 import { Chip } from 'material-ui'
-import * as ACTION_TYPES from "../constants/action-types"
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 //Filters
-import GeneralFilters from './filters/GeneralFilters.jsx';
-import RegionFilters from './filters/RegionFilters.jsx';
-import SectorFilters from './filters/SectorFilters.jsx';
+import GeneralFilters from './GeneralFilters.jsx';
+import RegionFilters from './RegionFilters.jsx';
+import SectorFilters from './SectorFilters.jsx';
 
 const mapStateToProps = (state, props) => {
     let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter } } = state

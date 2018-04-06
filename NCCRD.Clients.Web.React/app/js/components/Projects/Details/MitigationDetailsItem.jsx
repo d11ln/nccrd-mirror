@@ -1,11 +1,11 @@
 'use strict'
 
 import React from 'react'
-import { apiBaseURL } from "../constants/apiBaseURL"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
 import { connect } from 'react-redux'
-import TextComponent from './TextComponent.jsx'
-import SelectComponent from './SelectComponent.jsx'
-import * as ACTION_TYPES from "../constants/action-types"
+import TextComponent from '../../Shared/TextComponent.jsx'
+import SelectComponent from '../../Shared/SelectComponent.jsx'
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,

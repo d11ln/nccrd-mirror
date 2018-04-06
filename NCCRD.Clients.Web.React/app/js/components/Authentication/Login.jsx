@@ -4,7 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
 import { Button, Input } from 'mdbreact'
-import * as ACTION_TYPES from "../constants/action-types"
+import * as ACTION_TYPES from "../../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { loading } } = state

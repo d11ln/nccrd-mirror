@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../constants/action-types"
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 const queryString = require('query-string')
 

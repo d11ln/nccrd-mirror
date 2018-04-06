@@ -3,8 +3,8 @@
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../constants/action-types"
-import { apiBaseURL } from "../constants/apiBaseURL"
+import * as ACTION_TYPES from "../../../constants/action-types"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projects } } = state

@@ -2,33 +2,33 @@
 
 import React from 'react'
 import { Button } from 'mdbreact'
-import { apiBaseURL } from "../../constants/apiBaseURL";
+import { apiBaseURL } from "../../../constants/apiBaseURL";
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../constants/action-types"
+import * as ACTION_TYPES from "../../../constants/action-types"
 
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-    let { lookupData: { sectorTree, sector } } = state
-    let { filterData: { sectorFilter } } = state
-    return { sectorTree, sectorFilter, sector }
+    let { lookupData: { regionTree, region } } = state
+    let { filterData: { regionFilter } } = state
+    return { regionTree, regionFilter, region }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         loadData: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TREE, payload })
+            dispatch({ type: ACTION_TYPES.LOAD_REGION_TREE, payload })
         },
-        loadSectorFilter: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_FILTER, payload })
+        loadRegionFilter: payload => {
+            dispatch({ type: ACTION_TYPES.LOAD_REGION_FILTER, payload })
         },
-        loadSectors: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_SECTOR, payload })
+        loadRegions: payload => {
+            dispatch({ type: ACTION_TYPES.LOAD_REGION, payload })
         }
     }
 }
 
-class SectorFilters extends React.Component {
+class RegionFilters extends React.Component {
 
     constructor(props) {
         super(props);
@@ -43,18 +43,19 @@ class SectorFilters extends React.Component {
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
-        if (typeof parsedHash.sector !== 'undefined') {
+        if (typeof parsedHash.region !== 'undefined') {
 
             //Dispatch to store
-            let { loadSectorFilter } = this.props
-            loadSectorFilter(parsedHash.sector)
+            let { loadRegionFilter } = this.props
+            loadRegionFilter(parsedHash.region)
         }
     }
 
     componentDidMount() {
 
-        let { loadData, loadSectors } = this.props
-        fetch(apiBaseURL + 'api/sector/GetAllTree', {
+        //Load data
+        let { loadData, loadRegions } = this.props
+        fetch(apiBaseURL + 'api/region/GetAllTree', {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -64,21 +65,21 @@ class SectorFilters extends React.Component {
                 loadData(res)
             })
 
-        fetch(apiBaseURL + 'api/Sector/GetAll/', {
+        fetch(apiBaseURL + 'api/Region/GetAll/', {
             headers: {
                 "Content-Type": "application/json"
             }
         })
             .then(res => res.json())
             .then(res => {
-                loadSectors(res)
+                loadRegions(res)
             })
     }
 
     onClick(tree, dispatch = true) {
 
         let selectedNodeId = tree.getSelections()[0]
-        let { loadSectorFilter } = this.props
+        let { loadRegionFilter } = this.props
 
         if (typeof selectedNodeId !== 'undefined') {
 
@@ -87,7 +88,7 @@ class SectorFilters extends React.Component {
 
             //Dispatch to store
             if (dispatch === true) {
-                loadSectorFilter(nodeData.id)
+                loadRegionFilter(nodeData.id)
             }
         }
         else {
@@ -95,21 +96,21 @@ class SectorFilters extends React.Component {
             if (dispatch === true) {
 
                 //Dispatch to store
-                loadSectorFilter(0)
+                loadRegionFilter(0)
             }
         }
     }
 
     fillTree() {
 
-        const { sectorTree } = this.props
+        const { regionTree } = this.props
 
-        if (typeof sectorTree.dataSource !== 'undefined') {
+        if (typeof regionTree.dataSource !== 'undefined') {
 
-            $('#sectorTree').tree(sectorTree)
+            $('#regionTree').tree(regionTree)
 
             //Setup tree events
-            let tree = $('#sectorTree').tree()
+            let tree = $('#regionTree').tree()
 
             if (this.state.eventsAdded === 0 && typeof tree !== 'undefined') {
                 this.state.eventsAdded = 1
@@ -134,14 +135,14 @@ class SectorFilters extends React.Component {
         //Get tree
         if (typeof tree !== 'undefined') {
 
-            let { sectorTree, sectorFilter } = this.props
+            let { regionTree, regionFilter } = this.props
 
-            if (typeof sectorTree.dataSource !== 'undefined' && typeof sectorFilter !== 'undefined' && sectorFilter !== 0) {
+            if (typeof regionTree.dataSource !== 'undefined' && typeof regionFilter !== 'undefined' && regionFilter !== 0) {
 
-                let selectedSector = sectorTree.dataSource.find((item) => item.id.toString() === sectorFilter.toString());
+                let selectedRegion = regionTree.dataSource.find((item) => item.id.toString() === regionFilter.toString());
 
-                if (typeof selectedSector !== 'undefined') {
-                    let selectNode = tree.getNodeByText(selectedSector.text)
+                if (typeof selectedRegion !== 'undefined') {
+                    let selectNode = tree.getNodeByText(selectedRegion.text)
 
                     if (typeof selectNode !== 'undefined') {
                         tree.select(selectNode)
@@ -170,17 +171,18 @@ class SectorFilters extends React.Component {
 
     render() {
 
-        let { sector, sectorFilter } = this.props
+        let { region, regionFilter } = this.props
         let selectedValue = "All"
 
-        if (sectorFilter > 0 && sector.length > 0) {
-            selectedValue = sector.filter(x => x.id === parseInt(sectorFilter))[0].value
+        if (regionFilter > 0 && region.length > 0) {
+            selectedValue = region.filter(x => x.id === parseInt(regionFilter))[0].value
         }
+
         return (
             <div>
                 <div className="row">
                     <div className="col-md-12">
-                        <label style={{ fontSize: "large" }}>Sector filters:&nbsp;&nbsp;</label>
+                        <label style={{ fontSize: "large" }}>Region filter:&nbsp;&nbsp;</label>
                         <label style={{ fontSize: "large" }}>{selectedValue}</label>
                     </div>
                 </div>
@@ -198,7 +200,7 @@ class SectorFilters extends React.Component {
                 <br />
 
                 <div className="row">
-                    <div className="col-md-12" key="sectorTree" id="sectorTree">
+                    <div className="col-md-12" key="regionTree" id="regionTree">
                     </div>
                 </div>
             </div>
@@ -206,4 +208,4 @@ class SectorFilters extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SectorFilters)
+export default connect(mapStateToProps, mapDispatchToProps)(RegionFilters)

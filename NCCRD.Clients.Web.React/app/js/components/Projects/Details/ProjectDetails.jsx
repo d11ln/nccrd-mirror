@@ -3,15 +3,15 @@
 import React from 'react'
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
 import { connect } from 'react-redux'
-import EditListModal from './EditListModal.jsx'
-import * as ACTION_TYPES from "../constants/action-types"
-import { apiBaseURL } from "../constants/apiBaseURL"
+import EditListModal from './ListEditing/EditListModal.jsx'
+import * as ACTION_TYPES from "../../../constants/action-types"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
 import MitigationDetailsTab from './MitigationDetailsTab.jsx'
 import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
 import ResearchDetailsTab from './ResearchDetailsTab.jsx'
-import RangeComponent from './RangeComponent.jsx'
+import RangeComponent from '../../Shared/RangeComponent.jsx'
 import { BeatLoader } from 'react-spinners';
 
 //react-tabs
