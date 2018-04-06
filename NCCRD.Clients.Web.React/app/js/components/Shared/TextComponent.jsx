@@ -44,8 +44,11 @@ class TextComponent extends React.Component {
     }
 
     valueChange(event) {
-        if (typeof this.props.setValueKey !== 'undefined') {
-            this.props.setValue(this.props.setValueKey, { value: event.target.value, id: this.props.parentId })
+
+        let { setValue, setValueKey, parentId, editMode } = this.props
+
+        if (typeof setValueKey !== 'undefined') {
+            setValue(setValueKey, { value: event.target.value, id: parentId, state: editMode === true ? "modified" : "original" })
         }
     }
 

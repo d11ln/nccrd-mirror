@@ -17,18 +17,28 @@ export default function ProjectsReducer(state = {}, action) {
 
     let { type, payload } = action
     let id = 0
+    let modState = "original"
 
-    //Check if ID embedded in payload
-    if (typeof payload !== 'undefined' && typeof payload.value !== 'undefined') {
-        id = parseInt(payload.id)
-        payload = payload.value
+    //Check if additional data embedded in payload
+    if (typeof payload !== 'undefined') {
+        if (typeof payload.id !== 'undefined') {
+            id = parseInt(payload.id)
+        }
+        if (typeof payload.state !== 'undefined') {
+            modState = payload.state
+        }
+        if (typeof payload.value !== 'undefined') {
+            payload = payload.value
+        }
     }
+
 
     switch (type) {
 
         case ACTION_TYPES.RESET_PROJECT_STATE: {
             return {
-                ...state, projectDetails: { ...payload, state: "original" }}
+                ...state, projectDetails: { ...payload, state: "original" }
+            }
         }
 
         case ACTION_TYPES.LOAD_PROJECTS: {
@@ -36,97 +46,97 @@ export default function ProjectsReducer(state = {}, action) {
         }
 
         case ACTION_TYPES.LOAD_PROJECT_DETAILS: {
-            return { ...state, projectDetails: { ...payload, state: "original" } }
+            return { ...state, projectDetails: { ...payload } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, StartYear: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, StartYear: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, EndYear: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, EndYear: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_BUDGET_FROM: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, BudgetLower: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, BudgetLower: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_BUDGET_TO: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, BudgetUpper: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, BudgetUpper: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_DESCRIPTION: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ProjectDescription: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ProjectDescription: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_LEAD_AGENT: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, LeadAgent: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, LeadAgent: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_HOST_PARTNER: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, HostPartner: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, HostPartner: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_HOST_ORG: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, HostOrganisation: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, HostOrganisation: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, AlternativeContact: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, AlternativeContact: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT_EMAIL: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, AlternativeContactEmail: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, AlternativeContactEmail: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_LINK: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, Link: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, Link: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_COMMENTS: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ValidationComments: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ValidationComments: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_TYPE: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ProjectTypeId: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ProjectTypeId: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ProjectSubTypeId: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ProjectSubTypeId: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_STATUS: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ProjectStatusId: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ProjectStatusId: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ProjectManagerId: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ProjectManagerId: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_STATUS: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ValidationStatusId: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, ValidationStatusId: payload, state: modState } }
         }
 
         case ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION: {
             let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, MAOptionId: payload, state: "modified" } }
+            return { ...state, projectDetails: { ...projectDetails, MAOptionId: payload, state: modState } }
         }
 
         default: {

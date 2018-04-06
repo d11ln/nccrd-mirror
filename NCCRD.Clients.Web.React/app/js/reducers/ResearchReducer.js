@@ -21,11 +21,19 @@ export default function ResearchReducer(state = {}, action) {
 
     let { type, payload } = action
     let id = 0
+    let modState = "original"
 
-    //Check if ID embedded in payload
-    if (typeof payload !== 'undefined' && typeof payload.value !== 'undefined') {
-        id = parseInt(payload.id)
-        payload = payload.value
+    //Check if additional data embedded in payload
+    if (typeof payload !== 'undefined') {
+        if (typeof payload.id !== 'undefined') {
+            id = parseInt(payload.id)
+        }
+        if (typeof payload.state !== 'undefined') {
+            modState = payload.state
+        }
+        if (typeof payload.value !== 'undefined') {
+            payload = payload.value
+        }
     }
 
     switch (type) {
@@ -73,7 +81,7 @@ export default function ResearchReducer(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, Author: payload, state: "modified" }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, Author: payload, state: modState }] }
         }
 
         case ACTION_TYPES.SET_RESEARCH_PAPER_LINK: {
@@ -85,7 +93,7 @@ export default function ResearchReducer(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, PaperLink: payload, state: "modified" }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, PaperLink: payload, state: modState }] }
         }
 
         case ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE: {
@@ -97,7 +105,7 @@ export default function ResearchReducer(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, ResearchTypeId: payload, state: "modified" }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, ResearchTypeId: payload, state: modState }] }
         }
 
         case ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE: {
@@ -109,7 +117,7 @@ export default function ResearchReducer(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, TargetAudienceId: payload, state: "modified" }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, TargetAudienceId: payload, state: modState }] }
         }
 
         case ACTION_TYPES.SET_RESEARCH_SECTOR: {
@@ -121,7 +129,7 @@ export default function ResearchReducer(state = {}, action) {
             researchDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, researchDetails: [...researchDetails, { ...details.item, SectorId: payload, state: "modified" }] }
+            return { ...state, researchDetails: [...researchDetails, { ...details.item, SectorId: payload, state: modState }] }
         }
 
         default: {

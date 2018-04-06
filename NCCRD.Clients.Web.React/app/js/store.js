@@ -16,7 +16,7 @@ const store = createStore(
         globalData: {
             isAuthenticated: true,
             loading: true,
-            editMode: true
+            editMode: false
         },
 
         editListModalData: {

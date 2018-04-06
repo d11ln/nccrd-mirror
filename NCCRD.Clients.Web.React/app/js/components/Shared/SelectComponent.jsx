@@ -110,6 +110,8 @@ class SelectComponent extends React.Component {
 
   onSelect(selectedOption) {
 
+    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, treeData, dispatch, persist, type, dependencies, newItemTemplate } = this.props
+
     let selectedValue = 0
     if (selectedOption !== null) {
       selectedValue = selectedOption.value
@@ -117,8 +119,6 @@ class SelectComponent extends React.Component {
 
     if (selectedValue === -1) {
       //Setup and Show EditListModal
-      let { setEditList, data, treeData, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-
       if (typeof type === 'undefined') {
         type = "std"
       }
@@ -133,9 +133,8 @@ class SelectComponent extends React.Component {
     }
     else {
       //Dispatch to store
-      let { setSelectedValueKey, setSelectedValue } = this.props
-      if (typeof this.props.setSelectedValueKey !== 'undefined') {
-        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: this.props.parentId })
+      if (typeof setSelectedValueKey !== 'undefined') {
+        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
       }
     }
   }

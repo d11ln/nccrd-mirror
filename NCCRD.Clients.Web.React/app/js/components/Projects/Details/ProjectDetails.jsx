@@ -495,7 +495,7 @@ class ProjectDetails extends React.Component {
 
     saveChanges() {
 
-        let { setEditMode, setLoading, setDataState } = this.props
+        let { setEditMode, setLoading } = this.props
 
         //Close modal
         this.setState({ saveModal: false })
@@ -731,7 +731,7 @@ class ProjectDetails extends React.Component {
 
     discardChanges() {
 
-        let { setEditMode, projectDetails, setDataState } = this.props
+        let { setEditMode, projectDetails } = this.props
 
         this.setState({ discardModal: false })
         setEditMode(false)

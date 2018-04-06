@@ -19,6 +19,21 @@ const mapDispatchToProps = (dispatch) => {
         },
         setLoading: payload => {
             dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+        },
+        clearProjectDetails: () => {
+            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_DETAILS, payload: [] })
+        },
+        clearAdaptationDetails: () => {
+            dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_DETAILS, payload: [] })
+        },
+        clearMitigationDetails: () => {
+            dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_DETAILS, payload: [] })
+        },
+        clearEmissionsData: () => {
+            dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_EMISSIONS, payload: [] })
+        },
+        clearResearchDetails: () => {
+            dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_DETAILS, payload: [] })
         }
     }
 }
@@ -40,7 +55,9 @@ class ProjectList extends React.Component {
 
     getProjectList() {
 
-        let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
+        let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
+                clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, 
+                clearResearchDetails } = this.props
 
         this.setState({
             titleFilter: titleFilter,
@@ -52,6 +69,14 @@ class ProjectList extends React.Component {
 
         setLoading(true)
 
+        //Clear details data
+        clearProjectDetails()
+        clearAdaptationDetails()
+        clearMitigationDetails()
+        clearEmissionsData()
+        clearResearchDetails()
+
+        //Get project list data
         fetch(apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
             '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter,
             {
