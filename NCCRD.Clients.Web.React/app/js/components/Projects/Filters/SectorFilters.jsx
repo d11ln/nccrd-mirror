@@ -174,7 +174,7 @@ class SectorFilters extends React.Component {
         let selectedValue = "All"
 
         if (sectorFilter > 0 && sector.length > 0) {
-            selectedValue = sector.filter(x => x.id === parseInt(sectorFilter))[0].value
+            selectedValue = sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value
         }
         return (
             <div>
