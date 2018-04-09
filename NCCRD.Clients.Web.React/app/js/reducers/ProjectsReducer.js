@@ -139,6 +139,13 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, projectDetails: { ...projectDetails, MAOptionId: payload, state: modState } }
         }
 
+        case ACTION_TYPES.LOAD_MORE_PROJECTS: {
+            const { start, end  } = state
+            let newend = end + 10
+            let newstart = start
+            return { ...state, start: newstart, end: newend }
+        }
+
         default: {
             return state
         }

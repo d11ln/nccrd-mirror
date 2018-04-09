@@ -7,9 +7,9 @@ import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
-    let { projectData: { projects } } = state
+    let { projectData: { projects, start, end } } = state
     let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } } = state
-    return { projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter }
+    return { projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, start, end }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -34,6 +34,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         clearResearchDetails: () => {
             dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_DETAILS, payload: [] })
+        },
+        loadMoreProjects: () => {
+            dispatch({type: ACTION_TYPES.LOAD_MORE_PROJECTS })
         }
     }
 }
@@ -49,14 +52,33 @@ class ProjectList extends React.Component {
             statusFilter: 0,
             typologyFilter: 0,
             regionFilter: 0,
-            sectorFilter: 0
+            sectorFilter: 0,
+            start:0,
+            end:10
         }
+        this.handleScroll = this.handleScroll.bind(this);
     }
+
+    handleScroll() {
+        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+        const body = document.body;
+        const html = document.documentElement;
+        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+        const windowBottom = windowHeight + window.pageYOffset;
+        const { loadMoreProjects } = this.props
+        if (Math.ceil(windowBottom) >= docHeight) {
+            console.log(1)
+            loadMoreProjects()
+        }
+
+        console.log("windowBottom:", windowBottom)
+        console.log("docHeight:", docHeight)
+      }
 
     getProjectList() {
 
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
-                clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, 
+                clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
                 clearResearchDetails } = this.props
 
         this.setState({
@@ -98,7 +120,12 @@ class ProjectList extends React.Component {
 
     componentDidMount() {
         this.getProjectList()
+        window.addEventListener("scroll", this.handleScroll);
     }
+
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.handleScroll);
+      }
 
     componentDidUpdate() {
 
@@ -107,7 +134,6 @@ class ProjectList extends React.Component {
         let pTypologyFilter = this.props.typologyFilter
         let pRegionFilter = this.props.regionFilter
         let pSectorFilter = this.props.sectorFilter
-
         let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.state
 
         //If any filters changed...refetch projects
@@ -122,21 +148,25 @@ class ProjectList extends React.Component {
 
         const { projects } = this.props
         let ar = []
-
         if (typeof projects !== 'undefined') {
             for (let i of projects) {
                 ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
             }
-
             return ar
         }
         return <div />
     }
-
+      
     render() {
+        const ar = this.buildList()
+        let projectlist = []
+        projectlist = (
+            ar.slice(this.props.start,this.props.end)
+        )
+
         return (
             <div>
-                {this.buildList()}
+                {projectlist}
             </div>
         )
     }

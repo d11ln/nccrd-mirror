@@ -118,3 +118,6 @@ export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
 
 //Edit List Modal
 export const SET_EDIT_LIST = "SET_EDIT_LIST";
+
+//General
+export const LOAD_MORE_PROJECTS = "LOAD_MORE_PROJECTS";
