@@ -32,7 +32,9 @@ const store = createStore(
 
         projectData: {
             projects: [],
-            projectDetails: {}
+            projectDetails: {},
+            start: 0,
+            end: 10
         },
 
         adaptationData: {
