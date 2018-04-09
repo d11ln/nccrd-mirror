@@ -122,12 +122,14 @@ class ProjectList extends React.Component {
 
         const { projects } = this.props
         let ar = []
-
         if (typeof projects !== 'undefined') {
             for (let i of projects) {
+                // Limit amount of projects shown on page
+                if(ar.length == 10){
+                    return ar
+                }
                 ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
             }
-
             return ar
         }
         return <div />
