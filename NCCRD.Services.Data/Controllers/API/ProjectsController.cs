@@ -27,10 +27,12 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="regionId">RegionId to filter on</param>
         /// <param name="sectorId">RegionId to filter on</param>
         /// <param name="typologyId">TypologyId to filter on</param>
+        /// <param name="batchSize">Download batch size</param>
+        /// <param name="batchCount">Download batch number</param>
         /// <returns>Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAll")]
-        public IEnumerable<Project> GetAll(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
+        public IEnumerable<Project> GetAll(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0, int batchSize = 0, int batchCount = 0)
         {
             List<Project> projectList = new List<Project>();
 
@@ -58,15 +60,27 @@ namespace NCCRD.Services.Data.Controllers.API
                     sectorTypologyProjectIds = sectorTypologyProjectIds.Distinct().ToList();
                 }
 
+                if (batchSize <= 0)
+                {
+                    batchSize = context.Project.Count();
+                }
+
+                if (batchCount <= 0)
+                {
+                    batchCount = 1;
+                }
+
                 //GET PORJECTS FILTERED//
                 //Retrieve project details and filter on query params
-                projectList = context.Project.OrderBy(p => p.ProjectTitle).
-                    Where(p => 
-                        (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
-                        (statusId == 0 || p.ProjectStatusId == statusId) &&
-                        (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
-                        ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId))).
-                    ToList();
+                projectList = context.Project.OrderBy(p => p.ProjectTitle)
+                                .Where(p =>
+                                    (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
+                                    (statusId == 0 || p.ProjectStatusId == statusId) &&
+                                    (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
+                                    ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId)))
+                                .Skip((batchCount -1) * batchSize)
+                                .Take(batchSize)
+                                .ToList();
             }
 
             return projectList;
@@ -80,18 +94,24 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="regionId">RegionId to filter on</param>
         /// <param name="sectorId">RegionId to filter on</param>
         /// <param name="typologyId">TypologyId to filter on</param>
+        /// <param name="batchSize">Download batch size</param>
+        /// <param name="batchCount">Download batch number</param>
         /// <returns>Minimal Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAll/List")]
-        public IEnumerable<ProjectListViewModel> GetAllList(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
+        public IEnumerable<ProjectListViewModel> GetAllList(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0, int batchSize = 0, int batchCount = 0)
         {
-            return GetAll(titlePart, statusId, regionId,sectorId,typologyId).
-                        Select(x => new ProjectListViewModel()
-                        {
-                            ProjectId = x.ProjectId,
-                            ProjectTitle = x.ProjectTitle,
-                            ProjectDescription = x.ProjectDescription
-                        }).ToList();
+            var projectData = new List<ProjectListViewModel>();
+
+            projectData = GetAll(titlePart, statusId, regionId, sectorId, typologyId, batchSize, batchCount)
+                            .Select(x => new ProjectListViewModel()
+                            {
+                                ProjectId = x.ProjectId,
+                                ProjectTitle = x.ProjectTitle,
+                                ProjectDescription = x.ProjectDescription
+                            }).ToList();
+
+            return projectData;
         }
 
         private List<Region> GetChildRegions(int regionId, List<Region> regionList)
@@ -165,7 +185,7 @@ namespace NCCRD.Services.Data.Controllers.API
                                        loc.LonCalculated
                                    }).ToList();
 
-                foreach(var projDat in projectData)
+                foreach (var projDat in projectData)
                 {
                     ProjectGeoJson item = new ProjectGeoJson();
                     item.type = "Feature";
