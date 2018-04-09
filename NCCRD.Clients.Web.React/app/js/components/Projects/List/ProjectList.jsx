@@ -75,15 +75,19 @@ class ProjectList extends React.Component {
 
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
                 clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
-                clearResearchDetails } = this.props
+                clearResearchDetails, start, end } = this.props
 
         this.setState({
             titleFilter: titleFilter,
             statusFilter: statusFilter,
             typologyFilter: typologyFilter,
             regionFilter: regionFilter,
-            sectorFilter: sectorFilter
+            sectorFilter: sectorFilter,
+            start: start,
+            end: end
         })
+
+        console.log("Load Projects", start, end)
 
         setLoading(true)
 
@@ -94,9 +98,14 @@ class ProjectList extends React.Component {
         clearEmissionsData()
         clearResearchDetails()
 
+        let fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
+        '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
+        '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
+
+        console.log("fetchURL:", fetchURL)
+
         //Get project list data
-        fetch(apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
-            '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter,
+        fetch(fetchURL,
             {
                 headers: {
                     "Content-Type": "application/json"
@@ -130,11 +139,13 @@ class ProjectList extends React.Component {
         let pTypologyFilter = this.props.typologyFilter
         let pRegionFilter = this.props.regionFilter
         let pSectorFilter = this.props.sectorFilter
-        let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.state
+        let pStart = this.props.start
+        let pEnd = this.props.end
+        let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, start, end } = this.state
 
         //If any filters changed...refetch projects
         if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter) {
+            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pStart !== start || pEnd !== end) {
 
             this.getProjectList()
         }
