@@ -2,13 +2,16 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cwd = process.cwd()
+
+const mode = 'development'
+
 /**
  * Config
  */
 module.exports = {
   context: path.join(cwd, 'app'),
   devtool: 'inline-source-map',
-  mode: 'development',
+  mode,
   entry: {
     app: ['./js/index.jsx'],
     react: ['react', 'react-dom', 'react-router-dom', 'react-router', 'redux', 'react-redux', 'react-router-redux', 'react-tap-event-plugin', 'history'],
@@ -73,6 +76,11 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.ejs',
+    }),
+    new webpack.DefinePlugin({
+      CONSTANTS: {
+        PRODUCTION: mode === 'production'
+      }
     }),
     new webpack.IgnorePlugin(/^(fs|ipc)$/)
   ]
