@@ -67,12 +67,8 @@ class ProjectList extends React.Component {
         const windowBottom = windowHeight + window.pageYOffset;
         const { loadMoreProjects } = this.props
         if (Math.ceil(windowBottom) >= docHeight) {
-            console.log(1)
             loadMoreProjects()
         }
-
-        console.log("windowBottom:", windowBottom)
-        console.log("docHeight:", docHeight)
       }
 
     getProjectList() {
