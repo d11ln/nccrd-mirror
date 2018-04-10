@@ -320,7 +320,7 @@ class EditTreeModal extends React.Component {
     let processedItems = this.processData(data)
 
     return (
-      <div>
+      <>
         <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
 
           <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
@@ -355,7 +355,7 @@ class EditTreeModal extends React.Component {
             </div>
           </ModalFooter>
         </Modal>
-      </div>
+      </>
     )
   }
 }

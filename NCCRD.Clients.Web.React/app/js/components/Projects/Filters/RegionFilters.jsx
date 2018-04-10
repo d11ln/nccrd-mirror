@@ -179,7 +179,7 @@ class RegionFilters extends React.Component {
         }
 
         return (
-            <div>
+            <>
                 <div className="row">
                     <div className="col-md-12">
                         <label style={{ fontSize: "large" }}>Region filter:&nbsp;&nbsp;</label>
@@ -203,7 +203,7 @@ class RegionFilters extends React.Component {
                     <div className="col-md-12" key="regionTree" id="regionTree">
                     </div>
                 </div>
-            </div>
+            </>
         )
     }
 }

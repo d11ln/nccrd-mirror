@@ -57,7 +57,7 @@ class MitigationEmissionsDataTab extends React.Component {
     let { editMode } = this.props
 
     return (
-      <div>
+      <>
 
         <Button hidden={!editMode} style={{ marginLeft: "0px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
           <i className="fa fa-plus-circle" aria-hidden="true" />
@@ -67,7 +67,7 @@ class MitigationEmissionsDataTab extends React.Component {
 
         {this.loadDetails()}
 
-      </div>
+      </>
     )
   }
 }

@@ -28,7 +28,7 @@ class ProjectDetailsTab extends React.Component {
 
         return (
 
-            <div>
+            <>
 
                 <br />
 
@@ -216,7 +216,7 @@ class ProjectDetailsTab extends React.Component {
                     />
                 </div>
 
-            </div>
+            </>
 
 
         )

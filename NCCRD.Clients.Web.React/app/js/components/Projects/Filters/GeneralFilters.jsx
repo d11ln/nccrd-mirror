@@ -18,7 +18,7 @@ class GeneralFilters extends React.Component {
     render() {
 
         return (
-            <div>
+            <>
                 <div className="row">
                     <div className="col-md-12">
                         <p style={{ fontSize: "large" }}>General filters:</p>
@@ -31,7 +31,7 @@ class GeneralFilters extends React.Component {
                     <TypologyFilter />
                 </div>
 
-            </div>
+            </>
         )
     }
 }

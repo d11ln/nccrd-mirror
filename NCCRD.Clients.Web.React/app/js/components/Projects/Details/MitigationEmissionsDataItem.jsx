@@ -16,7 +16,7 @@ class MitigationEmissionsDataItem extends React.Component {
     let { details } = this.props
 
     return (
-      <div>
+      <>
         <br />
 
         <div className="row">
@@ -262,7 +262,7 @@ class MitigationEmissionsDataItem extends React.Component {
         <br />
         <hr />
 
-      </div>
+      </>
     )
   }
 }
