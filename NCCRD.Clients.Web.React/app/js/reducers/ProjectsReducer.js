@@ -42,7 +42,8 @@ export default function ProjectsReducer(state = {}, action) {
         }
 
         case ACTION_TYPES.LOAD_PROJECTS: {
-            return { ...state, projects: payload }
+            let { projects } = state
+            return { ...state, projects: [...projects, ...payload] }
         }
 
         case ACTION_TYPES.LOAD_PROJECT_DETAILS: {
@@ -137,6 +138,13 @@ export default function ProjectsReducer(state = {}, action) {
         case ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION: {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, MAOptionId: payload, state: modState } }
+        }
+
+        case ACTION_TYPES.LOAD_MORE_PROJECTS: {
+            const { start, end  } = state
+            let newend = end + 10
+            let newstart = start
+            return { ...state, start: newstart, end: newend }
         }
 
         default: {
