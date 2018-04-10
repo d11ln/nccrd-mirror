@@ -36,7 +36,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_DETAILS, payload: [] })
         },
         loadMoreProjects: () => {
-            dispatch({type: ACTION_TYPES.LOAD_MORE_PROJECTS })
+            dispatch({ type: ACTION_TYPES.LOAD_MORE_PROJECTS })
+        },
+        resetProjectCounts: () => {
+            dispatch({ type: ACTION_TYPES.RESET_PROJECT_COUNTS })
         }
     }
 }
@@ -53,8 +56,8 @@ class ProjectList extends React.Component {
             typologyFilter: 0,
             regionFilter: 0,
             sectorFilter: 0,
-            start:0,
-            end:10
+            start: 0,
+            end: 10
         }
         this.handleScroll = this.handleScroll.bind(this);
     }
@@ -63,19 +66,25 @@ class ProjectList extends React.Component {
         const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
         const body = document.body;
         const html = document.documentElement;
-        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
         const windowBottom = windowHeight + window.pageYOffset;
         const { loadMoreProjects } = this.props
         if (Math.ceil(windowBottom) >= docHeight) {
             loadMoreProjects()
         }
-      }
+    }
 
-    getProjectList() {
+    getProjectList(resetCounts) {
 
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
-                clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
-                clearResearchDetails, start, end } = this.props
+            clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
+            clearResearchDetails, start, end, resetProjectCounts } = this.props
+
+        if(resetCounts === true){
+            start = 0
+            end = 10
+            resetProjectCounts()
+        }
 
         this.setState({
             titleFilter: titleFilter,
@@ -99,8 +108,8 @@ class ProjectList extends React.Component {
         clearResearchDetails()
 
         let fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
-        '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
-        '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
+            '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
+            '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
 
         console.log("fetchURL:", fetchURL)
 
@@ -130,7 +139,7 @@ class ProjectList extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener("scroll", this.handleScroll);
-      }
+    }
 
     componentDidUpdate() {
 
@@ -144,10 +153,21 @@ class ProjectList extends React.Component {
         let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, start, end } = this.state
 
         //If any filters changed...refetch projects
+        let filtersChanged = false
         if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pStart !== start || pEnd !== end) {
+            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter) {
 
-            this.getProjectList()
+            filtersChanged = true
+        }
+
+        //If next batch needed
+        let nextBatchNeeded = false
+        if (pStart !== start || pEnd !== end) {
+            nextBatchNeeded = true
+        }
+
+        if (filtersChanged === true || nextBatchNeeded === true) {
+            this.getProjectList(filtersChanged)
         }
     }
 
@@ -163,12 +183,12 @@ class ProjectList extends React.Component {
         }
         return <div />
     }
-      
+
     render() {
         const ar = this.buildList()
         let projectlist = []
         projectlist = (
-            ar.slice(this.props.start,this.props.end)
+            ar.slice(this.props.start, this.props.end)
         )
 
         return (

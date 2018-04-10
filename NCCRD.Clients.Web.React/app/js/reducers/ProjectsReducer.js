@@ -42,8 +42,16 @@ export default function ProjectsReducer(state = {}, action) {
         }
 
         case ACTION_TYPES.LOAD_PROJECTS: {
-            let { projects } = state
-            return { ...state, projects: [...projects, ...payload] }
+            let { projects, end } = state
+
+            console.log("end:", end)
+
+            if(end === 10){
+                return { ...state, projects: payload }
+            }
+            else{
+                return { ...state, projects: [...projects, ...payload] }
+            }
         }
 
         case ACTION_TYPES.LOAD_PROJECT_DETAILS: {
@@ -144,7 +152,12 @@ export default function ProjectsReducer(state = {}, action) {
             const { start, end  } = state
             let newend = end + 10
             let newstart = start
+
             return { ...state, start: newstart, end: newend }
+        }
+
+        case ACTION_TYPES.RESET_PROJECT_COUNTS:{
+            return { ...state, start: 0, end: 10 }
         }
 
         default: {
