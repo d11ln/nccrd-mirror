@@ -54,7 +54,7 @@ class AdaptationDetailsTab extends React.Component {
     let { editMode } = this.props
 
     return (
-      <div>
+      <>
 
         <Button hidden={!editMode} style={{ marginLeft: "0px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
           <i className="fa fa-plus-circle" aria-hidden="true" />
@@ -64,7 +64,7 @@ class AdaptationDetailsTab extends React.Component {
 
         {this.loadDetails()}
 
-      </div>
+      </>
     )
   }
 }

@@ -50,7 +50,7 @@ class Projects extends React.Component {
     render() {
 
         return (
-            <div>
+            <>
 
                 <div className="container-fluid">
                     <div className="row">
@@ -95,7 +95,7 @@ class Projects extends React.Component {
 
                 <ProjectFilters />
                 <ProjectList />
-            </div>
+            </>
         )
     }
 }

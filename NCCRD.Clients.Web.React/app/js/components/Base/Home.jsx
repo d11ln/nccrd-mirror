@@ -11,7 +11,7 @@ class Home extends React.Component {
   render() {
 
     return (
-      <div>
+      <>
         <br />
         <div className="jumbotron">
           <h1>NCCRD Data Service</h1>
@@ -25,7 +25,7 @@ class Home extends React.Component {
             <a href="http://www.environment.gov.za/" className="btn btn-primary btn-sm" style={{ width: "150px" }}>DEA</a>
           </p>
         </div>
-      </div>
+      </>
     )
   }
 }

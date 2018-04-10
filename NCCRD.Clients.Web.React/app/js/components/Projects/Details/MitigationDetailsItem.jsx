@@ -28,7 +28,7 @@ class MitigationDetailsItem extends React.Component {
       voluntaryMethodology, voluntaryGoldStandard, sector } = this.props
 
     return (
-      <div>
+      <>
         <br />
 
         <div className="row">
@@ -177,7 +177,7 @@ class MitigationDetailsItem extends React.Component {
         <br />
         <hr />
 
-      </div>
+      </>
     )
   }
 }

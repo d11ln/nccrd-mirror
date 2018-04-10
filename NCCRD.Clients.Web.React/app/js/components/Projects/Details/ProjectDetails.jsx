@@ -785,7 +785,7 @@ class ProjectDetails extends React.Component {
 
         return (
 
-            <div>
+            <>
 
                 <div
                     hidden={!this.props.loading}
@@ -926,7 +926,7 @@ class ProjectDetails extends React.Component {
 
                 <EditListModal />
 
-            </div>
+            </>
         )
     }
 }

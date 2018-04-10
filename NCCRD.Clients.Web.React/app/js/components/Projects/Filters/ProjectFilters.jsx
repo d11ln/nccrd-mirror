@@ -186,7 +186,7 @@ class ProjectFilters extends React.Component {
 
     render() {
         return (
-            <div>
+            <>
 
                 <div className="row">
                     <div className="col-md-12">
@@ -233,7 +233,7 @@ class ProjectFilters extends React.Component {
                     <hr />
                 </Collapse>
 
-            </div>
+            </>
         )
     }
 }

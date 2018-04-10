@@ -177,7 +177,7 @@ class SectorFilters extends React.Component {
             selectedValue = sector.filter(x => x.id === parseInt(sectorFilter))[0].value
         }
         return (
-            <div>
+            <>
                 <div className="row">
                     <div className="col-md-12">
                         <label style={{ fontSize: "large" }}>Sector filters:&nbsp;&nbsp;</label>
@@ -201,7 +201,7 @@ class SectorFilters extends React.Component {
                     <div className="col-md-12" key="sectorTree" id="sectorTree">
                     </div>
                 </div>
-            </div>
+            </>
         )
     }
 }

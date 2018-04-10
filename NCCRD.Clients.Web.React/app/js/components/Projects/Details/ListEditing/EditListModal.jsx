@@ -321,7 +321,7 @@ class EditListModal extends React.Component {
     let { confirmSave, editDetails, _data } = this.state
 
     return (
-      <div>
+      <>
         <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
 
           <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
@@ -358,7 +358,7 @@ class EditListModal extends React.Component {
             </div>
           </ModalFooter>
         </Modal>
-      </div>
+      </>
     )
   }
 }

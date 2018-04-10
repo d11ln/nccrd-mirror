@@ -23,7 +23,7 @@ class ResearchDetailsItem extends React.Component {
     let { details, researchType, targetAudience, sector } = this.props
 
     return (
-      <div>
+      <>
         <br />
 
         <div className="row">
@@ -103,7 +103,7 @@ class ResearchDetailsItem extends React.Component {
         <br />
         <hr />
 
-      </div>
+      </>
     )
   }
 }

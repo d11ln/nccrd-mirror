@@ -23,7 +23,7 @@ class AdaptationDetailsItem extends React.Component {
     let { details, adaptationPurpose, sector, sectorTree, sectorType, typology } = this.props
 
     return (
-      <div>
+      <>
         <br />
 
         <div className="row">
@@ -91,7 +91,7 @@ class AdaptationDetailsItem extends React.Component {
 
         <br />
         <hr />
-      </div>
+      </>
     )
   }
 }

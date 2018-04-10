@@ -15,7 +15,7 @@ class ProjectCard extends React.Component {
 
     render() {
       return (
-        <div>
+        <>
           <Card>
             <CardBody>
               <CardTitle>{this.props.ptitle}</CardTitle>
@@ -24,7 +24,7 @@ class ProjectCard extends React.Component {
             </CardBody>
           </Card>
           <br />
-        </div>
+        </>
       ) 
     }
 }

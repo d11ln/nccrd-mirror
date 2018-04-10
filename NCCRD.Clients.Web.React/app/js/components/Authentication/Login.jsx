@@ -32,7 +32,7 @@ class Login extends React.Component {
     render() {
 
         return (
-            <div>
+            <>
 
                 <div className="container-fluid">
                     <div className="row">
@@ -78,7 +78,7 @@ class Login extends React.Component {
                     <a className="fa-lg p-2 m-2 gplus-ic"><i className="fa fa-google-plus white-text fa-lg"> </i></a>
                 </div> */}
 
-            </div>
+            </>
         )
     }
 }
