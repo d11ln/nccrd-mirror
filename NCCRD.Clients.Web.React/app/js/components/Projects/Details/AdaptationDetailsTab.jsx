@@ -63,7 +63,6 @@ class AdaptationDetailsTab extends React.Component {
         </Button>
 
         {this.loadDetails()}
-
       </>
     )
   }

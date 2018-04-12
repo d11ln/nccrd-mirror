@@ -5,6 +5,7 @@ import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../constants/action-types"
+import { UILookup } from "./ui_config.js"
 
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
@@ -32,11 +33,11 @@ class SelectComponent extends React.Component {
     this.getDisabledState = this.getDisabledState.bind(this)
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
 
     let { selectedValue, data } = this.props
 
-    if(selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0){
+    if (selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0) {
       this.onSelect(null)
     }
   }
@@ -158,9 +159,11 @@ class SelectComponent extends React.Component {
 
     let { col, label, id, onChange, selectedValue, data } = this.props
 
+    let uiconf = UILookup(id, label)
+
     return (
       <div className={col}>
-        <label style={{ fontWeight: "bold" }}>{label}</label>
+        <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
         <Select id={id}
           disabled={this.getDisabledState()}
           name={id}

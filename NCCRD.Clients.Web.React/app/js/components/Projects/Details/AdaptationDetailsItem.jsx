@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import ReactTooltip from 'react-tooltip'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { adaptationPurpose, sector, sectorTree, sectorType, typology } } = state
@@ -31,7 +32,7 @@ class AdaptationDetailsItem extends React.Component {
           <TextAreaComponent
             col="col-md-12"
             label="Description:"
-            id="txtDescription"
+            id="txtAdaptationDescription"
             value={details.Description}
             setValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_DESCR}
             parentId={details.AdaptationDetailId}
@@ -44,6 +45,7 @@ class AdaptationDetailsItem extends React.Component {
         <div className="row">
 
           <SelectComponent
+            id="selAdaptationPurpose"
             col="col-md-4"
             label="Purpose:"
             readOnly="true"
@@ -62,6 +64,7 @@ class AdaptationDetailsItem extends React.Component {
           />
 
           <SelectComponent
+            id="selAdaptationSector"
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
@@ -91,6 +94,8 @@ class AdaptationDetailsItem extends React.Component {
 
         <br />
         <hr />
+
+        <ReactTooltip />
       </>
     )
   }

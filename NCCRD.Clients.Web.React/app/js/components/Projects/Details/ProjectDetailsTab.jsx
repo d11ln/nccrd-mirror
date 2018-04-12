@@ -35,8 +35,8 @@ class ProjectDetailsTab extends React.Component {
                 <div className="row">
                     <TextAreaComponent
                         col="col-md-12"
-                        label="Description:"
-                        id="txtDescription"
+                        label= "Description:"
+                        id="txtProjectDescription"
                         value={projectDetails.ProjectDescription}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_DESCRIPTION}
                     />
@@ -47,23 +47,23 @@ class ProjectDetailsTab extends React.Component {
                 <div className="row">
                     <TextComponent
                         col="col-md-4"
-                        label="Lead agent:"
-                        id="txtLeadAgent"
+                        label= "Lead agent:"
+                        id="txtProjectLeadAgent"
                         value={projectDetails.LeadAgent}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_LEAD_AGENT}
                     />
                     <TextComponent
                         col="col-md-4"
                         readOnly="true"
-                        label="Host partner:"
-                        id="txtHostPartner"
+                        label= "Host partner:"
+                        id="txtProjectHostPartner"
                         value={projectDetails.HostPartner}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_HOST_PARTNER}
                     />
                     <TextComponent
                         col="col-md-4"
                         label="Host organisation:"
-                        id="txtHostOrganisation"
+                        id="txtProjectHostOrganisation"
                         value={projectDetails.HostOrganisation}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_HOST_ORG}
                     />
@@ -75,21 +75,21 @@ class ProjectDetailsTab extends React.Component {
                     <TextComponent
                         col="col-md-4"
                         label="Contact (alt):"
-                        id="txtAlternativeContact"
+                        id="txtProjectAlternativeContact"
                         value={projectDetails.AlternativeContact}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT}
                     />
                     <TextComponent
                         col="col-md-4"
                         label="Contact email (alt):"
-                        id="txtAlternativeContactEmail"
+                        id="txtProjectAlternativeContactEmail"
                         value={projectDetails.AlternativeContactEmail}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT_EMAIL}
                     />
                     <TextComponent
                         col="col-md-4"
                         label="Link:"
-                        id="txtLink"
+                        id="txtProjectLink"
                         value={projectDetails.Link}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_LINK}
                     />
@@ -101,7 +101,7 @@ class ProjectDetailsTab extends React.Component {
                     <TextAreaComponent
                         col="col-md-12"
                         label="Validation comments:"
-                        id="txtValidationComments"
+                        id="txtProjectValidationComments"
                         value={projectDetails.ValidationComments}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_COMMENTS}
                     />
@@ -113,7 +113,7 @@ class ProjectDetailsTab extends React.Component {
                     <RangeComponent
                         col="col-md-12"
                         align="left"
-                        id="txtBudget"
+                        id="txtProjectBudget"
                         label="Budget range:"
                         prefix="R"
                         inputWidth="125px"
@@ -128,6 +128,7 @@ class ProjectDetailsTab extends React.Component {
 
                 <div className="row">
                     <SelectComponent
+                        id="selProjectType"
                         col="col-md-4"
                         label="Project type:"
                         selectedValue={projectDetails.ProjectTypeId}
@@ -143,6 +144,7 @@ class ProjectDetailsTab extends React.Component {
                         }}
                     />
                     <SelectComponent
+                        id="selProjectSubType"
                         col="col-md-4"
                         label="Project sub-type:"
                         selectedValue={projectDetails.ProjectSubTypeId}
@@ -162,6 +164,7 @@ class ProjectDetailsTab extends React.Component {
                         }}
                     />
                     <SelectComponent
+                        id="selProjectStatus"
                         col="col-md-4"
                         label="Project status:"
                         selectedValue={projectDetails.ProjectStatusId}
@@ -182,6 +185,7 @@ class ProjectDetailsTab extends React.Component {
 
                 <div className="row">
                     <SelectComponent
+                        id="selProjectManager"
                         col="col-md-4"
                         label="Project manager:"
                         selectedValue={projectDetails.ProjectManagerId}
@@ -190,6 +194,7 @@ class ProjectDetailsTab extends React.Component {
                         allowEdit={false}
                     />
                     <SelectComponent
+                        id="selProjectValidationStatus"
                         col="col-md-4"
                         label="Validation status:"
                         selectedValue={projectDetails.ValidationStatusId}
@@ -205,6 +210,7 @@ class ProjectDetailsTab extends React.Component {
                         }}
                     />
                     <SelectComponent
+                        id="selProjectMAOptions"
                         col="col-md-4"
                         label="MAOptions:"
                         selectedValue={projectDetails.MAOptionId}
@@ -214,11 +220,8 @@ class ProjectDetailsTab extends React.Component {
                         // persist={"api/MAOptions/AddOrUpdate"}
                         allowEdit={false}
                     />
-                </div>
-
+                </div>    
             </>
-
-
         )
     }
 }

@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import ReactTooltip from 'react-tooltip'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { researchType, targetAudience, sector } } = state
@@ -30,7 +31,7 @@ class ResearchDetailsItem extends React.Component {
           <TextComponent
             col="col-md-4"
             label="Author:"
-            id="txtAuthor"
+            id="txtResearchAuthor"
             value={details.Author}
             setValueKey={ACTION_TYPES.SET_RESEARCH_AUTHOR}
             parentId={details.ResearchDetailId}
@@ -38,12 +39,13 @@ class ResearchDetailsItem extends React.Component {
           <TextComponent
             col="col-md-4"
             label="Paper link:"
-            id="txtPaperLink"
+            id="txtResearchPaperLink"
             value={details.PaperLink}
             setValueKey={ACTION_TYPES.SET_RESEARCH_PAPER_LINK}
             parentId={details.ResearchDetailId}
           />
           <SelectComponent
+            id="selResearchType"
             col="col-md-4"
             label="Research type:"
             selectedValue={details.ResearchTypeId}
@@ -65,8 +67,9 @@ class ResearchDetailsItem extends React.Component {
 
         <div className="row">
           <SelectComponent
+            id="selResearchTargetAudience"
             col="col-md-4"
-            label="Target audience::"
+            label="Target audience:"
             selectedValue={details.TargetAudienceId}
             data={targetAudience}
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
@@ -81,6 +84,7 @@ class ResearchDetailsItem extends React.Component {
             }}
         />
           <SelectComponent
+            id="selResearchSector"
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
@@ -103,6 +107,7 @@ class ResearchDetailsItem extends React.Component {
         <br />
         <hr />
 
+        <ReactTooltip />
       </>
     )
   }

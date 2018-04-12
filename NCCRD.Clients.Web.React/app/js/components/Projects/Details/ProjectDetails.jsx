@@ -13,10 +13,12 @@ import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
 import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import { BeatLoader } from 'react-spinners';
+import ReactTooltip from 'react-tooltip'
 
 //react-tabs
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { UILookup } from '../../Shared/ui_config';
 
 const mapStateToProps = (state, props) => {
 
@@ -464,17 +466,17 @@ class ProjectDetails extends React.Component {
             this.loadResearchType(loadResearchType),
             this.loadTargetAudience(loadTargetAudience)
         ])
-        .then(() => {
-            setLoading(false)
-            if (this.state.projectId === 'add') {
-                setEditMode(true)
-            }
-        })
-        .catch(res => {
-            setLoading(false)
-            console.log("Error details:", res)
-            alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-        })
+            .then(() => {
+                setLoading(false)
+                if (this.state.projectId === 'add') {
+                    setEditMode(true)
+                }
+            })
+            .catch(res => {
+                setLoading(false)
+                console.log("Error details:", res)
+                alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+            })
     }
 
     componentDidMount() {
@@ -786,7 +788,6 @@ class ProjectDetails extends React.Component {
         return (
 
             <>
-
                 <div
                     hidden={!this.props.loading}
                     className="card"
@@ -805,7 +806,7 @@ class ProjectDetails extends React.Component {
                 <br />
                 <div className="row">
 
-                    <div className="col-md-9">
+                    <div className="col-md-8">
                         <table >
                             <tbody>
                                 <tr>
@@ -815,7 +816,14 @@ class ProjectDetails extends React.Component {
                                         </Button>
                                     </td>
                                     <td>
-                                        <p style={{ fontSize: "x-large" }}><b>Project Title: </b>{projectDetails.ProjectTitle}</p>
+                                        <p
+                                            data-tip={UILookup("txtProjectTitle").tooltip}
+                                            style={{ fontStyle: "bold", fontSize: "x-large" }}>
+                                            <span style={{ fontWeight: "bold" }}>
+                                                {UILookup("txtProjectTitle", "Project title:").label}
+                                            </span>
+                                            {projectDetails.ProjectTitle}
+                                        </p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -823,15 +831,17 @@ class ProjectDetails extends React.Component {
                     </div>
 
                     <RangeComponent
-                        col="col-md-3"
+                        col="col-md-4"
                         align="center"
                         size="x-large"
-                        id="txtYear"
+                        id="txtProjectYear"
                         label=""
                         inputWidth="75px"
                         valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
                         setValueFromKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM}
                         setValueToKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO}
+                        labelInline={true}
+                        float="right"
                     />
                 </div>
 
@@ -925,6 +935,7 @@ class ProjectDetails extends React.Component {
                 </Modal>
 
                 <EditListModal />
+                <ReactTooltip />
 
             </>
         )

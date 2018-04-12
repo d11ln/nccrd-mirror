@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
+import { UILookup } from "./ui_config.js"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -49,29 +50,17 @@ class RangeComponent extends React.Component {
     }
 
     getLabel() {
-        let { label } = this.props
-        if (label !== "") {
-            return (
-                <div>
-                    <label style={{ fontWeight: "bold" }}>{label}</label>
-                    <br />
-                </div>
-            )
-        }
-        else {
-            return (
-                <div></div>
-            )
-        }
-    }
 
-    fixUndefinedValue(value) {
+        let { label, id, size } = this.props
 
-        if (typeof value === 'undefined') {
-            value = ""
-        }
+        let uiconf = UILookup(id, label)
 
-        return value
+        return (
+            <div>
+                <label data-tip={uiconf.tooltip} style={{ fontSize: size, fontWeight: "bold" }}>{uiconf.label}&nbsp;</label>
+            </div>
+        )
+
     }
 
     getFontColour() {
@@ -101,33 +90,51 @@ class RangeComponent extends React.Component {
         }
     }
 
+    fixNullOrUndefinedValue(value) {
+
+        if (typeof value === 'undefined' || value === null) {
+            value = ""
+        }
+
+        return value
+    }
+
     render() {
 
-        let { label, inputWidth, col, size, align, valueFrom, valueTo, editMode } = this.props
-        valueFrom = this.fixUndefinedValue(valueFrom)
-        valueTo = this.fixUndefinedValue(valueTo)
+        let { label, labelInline, inputWidth, col, size, align, valueFrom, valueTo, editMode, float } = this.props
+        valueFrom = this.fixNullOrUndefinedValue(valueFrom)
+        valueTo = this.fixNullOrUndefinedValue(valueTo)
+
+        if (typeof labelInline === 'undefined' || labelInline !== true) {
+            labelInline = false
+        }
+
+        if(typeof float === 'undefined' || float !== "right"){
+            float = "left"
+        }
 
         return (
             <div className={col}>
+                <div className={labelInline === true ? "row" : ""} style={{ float: float, marginRight: "3px"}}>
 
-                {this.getLabel()}
+                    {this.getLabel()}
 
-                {this.getPrefix()}
-                <input id={this.getId("from")} type="text" readOnly={!editMode}
-                    style={{ color: this.getFontColour(), width: inputWidth, fontSize: size, textAlign: align }} value={valueFrom}
-                    onChange={this.valueFromChange.bind(this)}
-                />
-                {this.getSuffix()}
+                    {this.getPrefix()}
+                    <input id={this.getId("from")} type="text" readOnly={!editMode}
+                        style={{ color: this.getFontColour(), width: inputWidth, fontSize: size, textAlign: align }} value={this.fixNullOrUndefinedValue(valueFrom)}
+                        onChange={this.valueFromChange.bind(this)}
+                    />
+                    {this.getSuffix()}
 
-                <label style={{ marginLeft: "10px", marginRight: "10px", fontSize: size }}> - </label>
+                    <label style={{ marginLeft: "10px", marginRight: "10px", fontSize: size }}> - </label>
 
-                {this.getPrefix()}
-                <input id={this.getId("to")} type="text" readOnly={!editMode}
-                    style={{ color: this.getFontColour(), width: inputWidth, fontSize: size, textAlign: align }} value={valueTo}
-                    onChange={this.valueToChange.bind(this)}
-                />
-                {this.getSuffix()}
-
+                    {this.getPrefix()}
+                    <input id={this.getId("to")} type="text" readOnly={!editMode}
+                        style={{ color: this.getFontColour(), width: inputWidth, fontSize: size, textAlign: align }} value={this.fixNullOrUndefinedValue(valueTo)}
+                        onChange={this.valueToChange.bind(this)}
+                    />
+                    {this.getSuffix()}
+                </div>
             </div>
         )
     }

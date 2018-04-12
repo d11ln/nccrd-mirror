@@ -96,8 +96,6 @@ class ProjectList extends React.Component {
             end: end
         })
 
-        console.log("Load Projects", start, end)
-
         setLoading(true)
 
         //Clear details data
@@ -110,8 +108,6 @@ class ProjectList extends React.Component {
         let fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
             '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
             '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
-
-        console.log("fetchURL:", fetchURL)
 
         //Get project list data
         fetch(fetchURL,

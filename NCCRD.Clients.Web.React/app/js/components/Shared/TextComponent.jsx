@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
+import { UILookup } from "./ui_config.js"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -25,9 +26,9 @@ class TextComponent extends React.Component {
         this.state = { ...this.state, value }
     }
 
-    fixUndefinedValue(value) {
+    fixNullOrUndefinedValue(value) {
 
-        if (typeof value === 'undefined') {
+        if (typeof value === 'undefined' || value === null) {
             value = ""
         }
 
@@ -55,11 +56,13 @@ class TextComponent extends React.Component {
     render() {
 
         let { col, label, id, editMode, value } = this.props
-        value = this.fixUndefinedValue(value)
+        value = this.fixNullOrUndefinedValue(value)
+
+        let uiconf = UILookup(id, label)
 
         return (
             <div className={col}>
-                <label style={{ fontWeight: "bold" }}>{label}</label>
+                <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
                 <input
                     id={id} type="text" readOnly={!editMode} value={value} onChange={this.valueChange.bind(this)}
                     style={{ color: this.getFontColour() }}
