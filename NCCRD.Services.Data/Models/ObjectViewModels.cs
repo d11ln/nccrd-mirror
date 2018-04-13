@@ -201,6 +201,7 @@ namespace NCCRD.Services.Data.Models
     {
         public int ProjectId { get; set; }
         public string ProjectTitle { get; set; }
+        public string ProjectDescription { get; set; }
         public int LocationId { get; set; }
         public double LatCalculated { get; set; }
         public double LonCalculated { get; set; }

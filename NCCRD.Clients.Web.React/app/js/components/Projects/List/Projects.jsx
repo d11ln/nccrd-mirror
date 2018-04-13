@@ -8,6 +8,8 @@ import { BeatLoader } from 'react-spinners'
 import { Button, Footer, Container } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
 
+const queryString = require('query-string')
+
 const mapStateToProps = (state, props) => {
     let { globalData: { loading, isAuthenticated } } = state
     return { loading, isAuthenticated }
@@ -17,6 +19,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setLoading: payload => {
             dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+        },
+        loadPolygonFilter: payload => {
+            dispatch({ type: ACTION_TYPES.LOAD_POLYGON_FILTER, payload })
         }
     }
 }
@@ -28,6 +33,15 @@ class Projects extends React.Component {
 
         this.backToTop = this.backToTop.bind(this)
         this.addProject = this.addProject.bind(this)
+
+        //Read polygon filter from URL
+        const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+
+        if (typeof parsedHash.polygon !== 'undefined') {
+
+            //Dispatch to store
+            this.props.loadPolygonFilter(parsedHash.polygon)
+        }
     }
 
     backToTop() {
