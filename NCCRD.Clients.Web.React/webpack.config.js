@@ -5,6 +5,14 @@ const cwd = process.cwd()
 
 const mode = 'production'
 
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
+const config = {
+  plugins: [
+    new CopyWebpackPlugin([ { from: 'source', to: 'dest' } ])
+  ]
+}
+
 /**
  * Config
  */
@@ -80,6 +88,13 @@ module.exports = {
         PRODUCTION: mode === 'production'
       }
     }),
-    new webpack.IgnorePlugin(/^(fs|ipc)$/)
+    new webpack.IgnorePlugin(/^(fs|ipc|cfg)$/),
+    new CopyWebpackPlugin([
+      {
+        from: 'js/constants/ui_config.cfg',
+        to: 'ui_config.cfg',
+        toType: 'file'
+      }
+    ])
   ]
 }

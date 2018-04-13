@@ -6,11 +6,7 @@ import { Card, CardBody, CardText, CardTitle, Button } from 'mdbreact'
 class ProjectCard extends React.Component {
 
     constructor(props) {
-        super(props);
-        
-    }
-    onComponentDidMount() {
-
+        super(props);    
     }
 
     render() {

@@ -63,6 +63,7 @@ class TypologyFilter extends React.Component {
 
         return (
             <SelectComponent 
+                id="selTypologyFilter"
                 col="col-md-4" 
                 label="Typology:" 
                 selectedValue={typologyFilter} 

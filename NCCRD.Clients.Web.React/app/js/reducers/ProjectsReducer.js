@@ -44,8 +44,6 @@ export default function ProjectsReducer(state = {}, action) {
         case ACTION_TYPES.LOAD_PROJECTS: {
             let { projects, end } = state
 
-            console.log("end:", end)
-
             if(end === 10){
                 return { ...state, projects: payload }
             }

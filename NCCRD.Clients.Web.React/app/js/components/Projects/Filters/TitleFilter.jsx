@@ -4,6 +4,7 @@ import React from 'react'
 import { Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import { UILookup } from '../../../constants/ui_config';
 
 const queryString = require('query-string')
 
@@ -51,24 +52,18 @@ class TitleFilter extends React.Component {
         let { loadTitleFilter, titleFilterInternal } = this.props
 
         loadTitleFilter(filterValue)
-
-        // if (typeof filterValue === 'undefined') {
-        //     loadTitleFilter(titleFilterInternal)
-        // }
-        // else{
-        //     loadTitleFilter(filterValue)
-        // }  
     }
 
     render() {
 
         let { titleFilterInternal } = this.props
 
+        let uiconf = UILookup("txtTitleFilter", "Title:")
+
         return (
             <div className="col-md-4">
-                <label style={{ fontWeight: "bold" }}>Title:</label>
+                <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
                 <div className="md-form form-sm">
-
                     <Button
                         color="primary"
                         size="sm"

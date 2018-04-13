@@ -130,8 +130,6 @@ class ProjectFilters extends React.Component {
 
             if (regionFilter > 0 && region.length > 0) {
 
-                console.log(region.filter(x => x.RegionId === parseInt(regionFilter))[0])
-
                 filterChips.push(
                     <Chip
                         label={"Region: " + region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName}

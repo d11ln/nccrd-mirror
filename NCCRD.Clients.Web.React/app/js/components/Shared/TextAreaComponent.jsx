@@ -3,6 +3,7 @@
 import React from 'react'
 import TextareaAutosize from "react-textarea-autosize"
 import { connect } from 'react-redux'
+import { UILookup } from "../../constants/ui_config.js"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -23,9 +24,9 @@ class TextAreaComponent extends React.Component {
         super(props);
     }
 
-    fixUndefinedValue(value) {
+    fixNullOrUndefinedValue(value) {
 
-        if (typeof value === 'undefined') {
+        if (typeof value === 'undefined' || value === null) {
             value = ""
         }
 
@@ -53,11 +54,13 @@ class TextAreaComponent extends React.Component {
     render() {
 
         let { col, label, editMode, id, value } = this.props
-        value = this.fixUndefinedValue(value)
+        value = this.fixNullOrUndefinedValue(value)
+
+        let uiconf = UILookup(id, label)
 
         return (
             <div className={col}>
-                <label style={{ fontWeight: "bold" }}>{label}</label>
+                <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
                 <TextareaAutosize
                     readOnly={!editMode}
                     style={{

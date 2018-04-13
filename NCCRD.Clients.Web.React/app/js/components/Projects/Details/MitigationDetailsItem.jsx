@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import ReactTooltip from 'react-tooltip'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
@@ -33,6 +34,7 @@ class MitigationDetailsItem extends React.Component {
 
         <div className="row">
           <SelectComponent
+            id="selMitigationCarbonCredit"
             col="col-md-4"
             label="Carbon credit:"
             selectedValue={details.CarbonCreditId}
@@ -49,6 +51,7 @@ class MitigationDetailsItem extends React.Component {
             }}
           />
           <SelectComponent
+            id="selMitigationCarbonCreditMarket"
             col="col-md-4"
             label="Carbon credit market:"
             selectedValue={details.CarbonCreditMarketId}
@@ -65,6 +68,7 @@ class MitigationDetailsItem extends React.Component {
             }}
           />
           <SelectComponent
+            id="selMitigationCDMStatus"
             col="col-md-4"
             label="CDM status:"
             selectedValue={details.CDMStatusId}
@@ -86,6 +90,7 @@ class MitigationDetailsItem extends React.Component {
 
         <div className="row">
           <SelectComponent
+            id="selMitigationCDMMethodology"
             col="col-md-4"
             label="CDM methodology:"
             selectedValue={details.CDMMethodologyId}
@@ -102,6 +107,7 @@ class MitigationDetailsItem extends React.Component {
             }}
           />
           <SelectComponent
+            id="selMitigationVoluntaryMethodology"
             col="col-md-4"
             label="Voluntary methodology:"
             selectedValue={details.VoluntaryMethodologyId}
@@ -118,6 +124,7 @@ class MitigationDetailsItem extends React.Component {
             }}
           />
           <SelectComponent
+            id="selMitigationVoluntaryGoldStandard"
             col="col-md-4"
             label="Voluntary gold standard:"
             selectedValue={details.VoluntaryGoldStandardId}
@@ -141,7 +148,7 @@ class MitigationDetailsItem extends React.Component {
           <TextComponent
             col="col-md-4"
             label="CDM project number:"
-            id="txtCDMProjectNumber"
+            id="txtMitigationCDMProjectNumber"
             value={details.CDMProjectNumber}
             setValueKey={ACTION_TYPES.SET_MITIGATION_CDM_PROJECT_NUMBER}
             parentId={details.MitigationDetailId}
@@ -149,12 +156,13 @@ class MitigationDetailsItem extends React.Component {
           <TextComponent
             col="col-md-4"
             label="Other description:"
-            id="txtOtherDescription"
+            id="txtMitigationOtherDescription"
             value={details.OtherDescription}
             setValueKey={ACTION_TYPES.SET_MITIGATION_OTHER_DESCR}
             parentId={details.MitigationDetailId}
           />
           <SelectComponent
+            id="selMitigationSector"
             col="col-md-4"
             label="Sector:"
             selectedValue={details.SectorId}
@@ -177,6 +185,7 @@ class MitigationDetailsItem extends React.Component {
         <br />
         <hr />
 
+        <ReactTooltip />
       </>
     )
   }
