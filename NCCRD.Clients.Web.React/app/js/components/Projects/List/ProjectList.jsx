@@ -8,8 +8,8 @@ import { apiBaseURL } from "../../../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projects, start, end } } = state
-    let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } } = state
-    return { projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, start, end }
+    let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter } } = state
+    return { projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -56,6 +56,7 @@ class ProjectList extends React.Component {
             typologyFilter: 0,
             regionFilter: 0,
             sectorFilter: 0,
+            polygonFilter: "",
             start: 0,
             end: 10
         }
@@ -69,7 +70,7 @@ class ProjectList extends React.Component {
         const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
         const windowBottom = windowHeight + window.pageYOffset;
         const { loadMoreProjects } = this.props
-        if (Math.ceil(windowBottom) >= docHeight) {
+        if (Math.ceil(windowBottom) >= docHeight && this.props.polygonFilter === "") {
             loadMoreProjects()
         }
     }
@@ -78,9 +79,9 @@ class ProjectList extends React.Component {
 
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
             clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
-            clearResearchDetails, start, end, resetProjectCounts } = this.props
+            clearResearchDetails, start, end, resetProjectCounts, polygonFilter } = this.props
 
-        if(resetCounts === true){
+        if (resetCounts === true) {
             start = 0
             end = 10
             resetProjectCounts()
@@ -92,6 +93,7 @@ class ProjectList extends React.Component {
             typologyFilter: typologyFilter,
             regionFilter: regionFilter,
             sectorFilter: sectorFilter,
+            polygonFilter: polygonFilter,
             start: start,
             end: end
         })
@@ -105,9 +107,15 @@ class ProjectList extends React.Component {
         clearEmissionsData()
         clearResearchDetails()
 
-        let fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
-            '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
-            '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
+        let fetchURL = ""
+        if (polygonFilter !== "") {
+            fetchURL = apiBaseURL + 'api/Projects/GetByPolygon?polygon=' + polygonFilter
+        }
+        else {
+            fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
+                '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
+                '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
+        }
 
         //Get project list data
         fetch(fetchURL,
@@ -144,14 +152,15 @@ class ProjectList extends React.Component {
         let pTypologyFilter = this.props.typologyFilter
         let pRegionFilter = this.props.regionFilter
         let pSectorFilter = this.props.sectorFilter
+        let pPolygonFilter = this.props.polygonFilter
         let pStart = this.props.start
         let pEnd = this.props.end
-        let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, start, end } = this.state
+        let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end } = this.state
 
         //If any filters changed...refetch projects
         let filtersChanged = false
         if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter) {
+            pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter) {
 
             filtersChanged = true
         }
@@ -171,7 +180,7 @@ class ProjectList extends React.Component {
 
         const { projects } = this.props
         let ar = []
-        if (typeof projects !== 'undefined') {
+        if (typeof projects !== 'undefined' && projects.length > 0) {
             for (let i of projects) {
                 ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
             }
@@ -183,9 +192,12 @@ class ProjectList extends React.Component {
     render() {
         const ar = this.buildList()
         let projectlist = []
-        projectlist = (
-            ar.slice(this.props.start, this.props.end)
-        )
+
+        if (ar.length > 0) {
+            projectlist = (
+                ar.slice(this.props.start, this.props.end)
+            )
+        }
 
         return (
             <div>

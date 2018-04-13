@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCCRD.Services.Data", "NCCR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCCRD.Services.Data.Tests", "NCCRD.Services.Data.Tests\NCCRD.Services.Data.Tests.csproj", "{A527085F-10A8-4D1A-B767-FDE939FEF33B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCCRD.Database.Models", "NCCRD.Database.Models\NCCRD.Database.Models.csproj", "{356C4EE2-1F3A-4E87-9AD1-87C535D9D7E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCCRD.Database.Test.Console", "NCCRD.Database.Test.Console\NCCRD.Database.Test.Console.csproj", "{CCCD1829-3879-45D6-A241-861600768A36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{A527085F-10A8-4D1A-B767-FDE939FEF33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A527085F-10A8-4D1A-B767-FDE939FEF33B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A527085F-10A8-4D1A-B767-FDE939FEF33B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356C4EE2-1F3A-4E87-9AD1-87C535D9D7E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356C4EE2-1F3A-4E87-9AD1-87C535D9D7E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356C4EE2-1F3A-4E87-9AD1-87C535D9D7E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356C4EE2-1F3A-4E87-9AD1-87C535D9D7E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCD1829-3879-45D6-A241-861600768A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCD1829-3879-45D6-A241-861600768A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCD1829-3879-45D6-A241-861600768A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCD1829-3879-45D6-A241-861600768A36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

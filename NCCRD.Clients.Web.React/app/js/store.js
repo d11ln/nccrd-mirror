@@ -82,7 +82,8 @@ const store = createStore(
             statusFilter: 0,
             typologyFilter: 0,
             regionFilter: 0,
-            sectorFilter: 0
+            sectorFilter: 0,
+            polygonFilter: ""
         }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

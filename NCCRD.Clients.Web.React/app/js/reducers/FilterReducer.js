@@ -32,6 +32,10 @@ export default function FilterReducer(state = {}, action) {
             return { ...state, sectorFilter: payload }
         }
 
+        case ACTION_TYPES.LOAD_POLYGON_FILTER: {
+            return { ...state, polygonFilter: payload }
+        }
+
         case ACTION_TYPES.CLEAR_FILTERS: {
             return {
                 ...state,
@@ -39,7 +43,8 @@ export default function FilterReducer(state = {}, action) {
                 statusFilter: 0,
                 typologyFilter: 0,
                 regionFilter: 0,
-                sectorFilter: 0
+                sectorFilter: 0,
+                polygonFilter: ""
             }
         }
 
