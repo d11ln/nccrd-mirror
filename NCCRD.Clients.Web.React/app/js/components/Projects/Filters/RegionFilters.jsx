@@ -5,6 +5,8 @@ import { Button } from 'mdbreact'
 import { apiBaseURL } from "../../../constants/apiBaseURL";
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import ReactTooltip from 'react-tooltip'
+import { UILookup } from '../../../constants/ui_config';
 
 const queryString = require('query-string')
 
@@ -178,12 +180,14 @@ class RegionFilters extends React.Component {
             selectedValue = region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName
         }
 
+        let uiconf = UILookup("treeRegionFilter", "Region filter:")
+
         return (
             <>
                 <div className="row">
                     <div className="col-md-12">
-                        <label style={{ fontSize: "large" }}>Region filter:&nbsp;&nbsp;</label>
-                        <label style={{ fontSize: "large" }}>{selectedValue}</label>
+                        <label data-tip={uiconf.tooltip} style={{ fontSize: "large" }}>{uiconf.label}&nbsp;&nbsp;</label>
+                        <label data-tip={uiconf.tooltip2} style={{ fontSize: "large", fontWeight: "bold" }}>{selectedValue}</label>
                     </div>
                 </div>
 
@@ -203,6 +207,8 @@ class RegionFilters extends React.Component {
                     <div className="col-md-12" key="regionTree" id="regionTree">
                     </div>
                 </div>
+
+                <ReactTooltip />
             </>
         )
     }

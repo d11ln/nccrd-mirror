@@ -14,11 +14,11 @@ import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import { BeatLoader } from 'react-spinners';
 import ReactTooltip from 'react-tooltip'
+import { UILookup } from '../../../constants/ui_config';
 
 //react-tabs
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { UILookup } from '../../Shared/ui_config';
 
 const mapStateToProps = (state, props) => {
 
@@ -816,13 +816,15 @@ class ProjectDetails extends React.Component {
                                         </Button>
                                     </td>
                                     <td>
-                                        <p
-                                            data-tip={UILookup("txtProjectTitle").tooltip}
-                                            style={{ fontStyle: "bold", fontSize: "x-large" }}>
-                                            <span style={{ fontWeight: "bold" }}>
-                                                {UILookup("txtProjectTitle", "Project title:").label}
+                                        <p>
+                                            <span
+                                                data-tip={UILookup("txtProjectTitle").tooltip}
+                                                style={{ fontWeight: "bold", fontSize: "x-large" }}>
+                                                {UILookup("txtProjectTitle", "Project title:").label}&nbsp;
                                             </span>
-                                            {projectDetails.ProjectTitle}
+                                            <span style={{ fontSize: "x-large" }}>
+                                                {projectDetails.ProjectTitle}
+                                            </span>
                                         </p>
                                     </td>
                                 </tr>

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { UILookup } from "./ui_config.js"
+import { UILookup } from "../../constants/ui_config.js"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state

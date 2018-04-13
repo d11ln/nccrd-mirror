@@ -5,6 +5,8 @@ import { Button } from 'mdbreact'
 import { apiBaseURL } from "../../../constants/apiBaseURL";
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import ReactTooltip from 'react-tooltip'
+import { UILookup } from '../../../constants/ui_config';
 
 const queryString = require('query-string')
 
@@ -176,12 +178,15 @@ class SectorFilters extends React.Component {
         if (sectorFilter > 0 && sector.length > 0) {
             selectedValue = sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value
         }
+
+        let uiconf = UILookup("treeSectorFilter", "Sector filter:")
+
         return (
             <>
                 <div className="row">
                     <div className="col-md-12">
-                        <label style={{ fontSize: "large" }}>Sector filters:&nbsp;&nbsp;</label>
-                        <label style={{ fontSize: "large" }}>{selectedValue}</label>
+                        <label data-tip={uiconf.tooltip} style={{ fontSize: "large" }}>{uiconf.label}&nbsp;&nbsp;</label>
+                        <label data-tip={uiconf.tooltip2} style={{ fontSize: "large", fontWeight: "bold" }}>{selectedValue}</label>
                     </div>
                 </div>
 
@@ -201,6 +206,8 @@ class SectorFilters extends React.Component {
                     <div className="col-md-12" key="sectorTree" id="sectorTree">
                     </div>
                 </div>
+
+                <ReactTooltip />
             </>
         )
     }

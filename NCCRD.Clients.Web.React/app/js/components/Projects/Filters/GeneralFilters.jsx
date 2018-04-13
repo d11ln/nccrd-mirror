@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { Button } from 'mdbreact'
+import ReactTooltip from 'react-tooltip'
+import { UILookup } from '../../../constants/ui_config';
 
 //Filters
 import TitleFilter from './TitleFilter.jsx'
@@ -17,11 +19,13 @@ class GeneralFilters extends React.Component {
 
     render() {
 
+        let uiconf = UILookup("txtGeneralFilters", "General filters:")
+
         return (
             <>
                 <div className="row">
                     <div className="col-md-12">
-                        <p style={{ fontSize: "large" }}>General filters:</p>
+                        <p data-tip={uiconf.tooltip} style={{ fontSize: "large" }}>{uiconf.label}</p>
                     </div>
                 </div>
 
@@ -31,6 +35,7 @@ class GeneralFilters extends React.Component {
                     <TypologyFilter />
                 </div>
 
+                <ReactTooltip />
             </>
         )
     }

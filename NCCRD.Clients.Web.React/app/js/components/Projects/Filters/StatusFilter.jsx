@@ -64,6 +64,7 @@ class StatusFilter extends React.Component {
 
         return (
             <SelectComponent 
+                id="selStatusFilter"
                 col="col-md-4" 
                 label="Status:" 
                 selectedValue={statusFilter} 
