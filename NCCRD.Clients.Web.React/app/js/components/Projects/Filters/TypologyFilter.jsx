@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL";
 import SelectComponent from '../../Shared/SelectComponent.jsx'
+import { stripURLParam } from "../../../globalFunctions.js"
 
 const queryString = require('query-string')
 
@@ -40,6 +41,7 @@ class TypologyFilter extends React.Component {
             //Dispatch to store
             let { loadTypologyFilter } = this.props
             loadTypologyFilter({value: parsedHash.typology})
+            stripURLParam("typology=" + parsedHash.typology)
         }
     }
 

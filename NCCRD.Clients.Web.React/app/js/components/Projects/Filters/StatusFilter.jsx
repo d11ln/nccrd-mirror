@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL";
 import SelectComponent from '../../Shared/SelectComponent.jsx'
+import { stripURLParam } from "../../../globalFunctions.js"
 
 const queryString = require('query-string')
 
@@ -41,6 +42,7 @@ class StatusFilter extends React.Component {
             //Dispatch to store
             let { loadStatusFilter } = this.props
             loadStatusFilter({value: parsedHash.status})
+            stripURLParam("status=" + parsedHash.status)
         }
     }
 

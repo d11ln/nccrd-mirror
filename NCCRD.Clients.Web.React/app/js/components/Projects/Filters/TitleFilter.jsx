@@ -5,6 +5,7 @@ import { Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { UILookup } from '../../../constants/ui_config';
+import { stripURLParam } from "../../../globalFunctions.js"
 
 const queryString = require('query-string')
 
@@ -35,8 +36,8 @@ class TitleFilter extends React.Component {
         if (typeof parsedHash.title !== 'undefined') {
 
             //Update internal state
-            //this.props.loadTitleFilterInternal(parsedHash.title)
             this.onTouchTap(parsedHash.title)
+            stripURLParam("title=" + parsedHash.title)
         }
     }
 
