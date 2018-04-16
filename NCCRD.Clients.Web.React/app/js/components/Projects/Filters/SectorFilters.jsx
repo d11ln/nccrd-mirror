@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
+import { stripURLParam } from "../../../globalFunctions.js"
 
 const queryString = require('query-string')
 
@@ -50,6 +51,7 @@ class SectorFilters extends React.Component {
             //Dispatch to store
             let { loadSectorFilter } = this.props
             loadSectorFilter(parsedHash.sector)
+            stripURLParam("sector=" + parsedHash.sector)
         }
     }
 

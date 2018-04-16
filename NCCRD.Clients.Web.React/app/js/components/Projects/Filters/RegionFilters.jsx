@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
+import { stripURLParam } from "../../../globalFunctions.js"
 
 const queryString = require('query-string')
 
@@ -50,6 +51,7 @@ class RegionFilters extends React.Component {
             //Dispatch to store
             let { loadRegionFilter } = this.props
             loadRegionFilter(parsedHash.region)
+            stripURLParam("region=" + parsedHash.region)
         }
     }
 

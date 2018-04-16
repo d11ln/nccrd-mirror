@@ -24,6 +24,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+let allowChange = false
+
 class SelectComponent extends React.Component {
 
   constructor(props) {
@@ -109,34 +111,42 @@ class SelectComponent extends React.Component {
     }
   }
 
-  onSelect(selectedOption) {
+  onSelect(value) {
 
     let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, treeData, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-
     let selectedValue = 0
-    if (selectedOption !== null) {
-      selectedValue = selectedOption.value
+
+    if(value === "reset"){
+      allowChange = true
+    }
+    else if (value !== null) {  
+      selectedValue = value.value
     }
 
-    if (selectedValue === -1) {
-      //Setup and Show EditListModal
-      if (typeof type === 'undefined') {
-        type = "std"
+    if (allowChange === true) {
+
+      if (selectedValue === -1) {
+        //Setup and Show EditListModal
+        if (typeof type === 'undefined') {
+          type = "std"
+        }
+        if (typeof dependencies === 'undefined') {
+          dependencies = []
+        }
+
+        setEditList({
+          show: true, data: data, treeData: treeData, dispatch: dispatch, persist: persist, type: type,
+          dependencies: dependencies, newItemTemplate: newItemTemplate
+        })
       }
-      if (typeof dependencies === 'undefined') {
-        dependencies = []
+      else {
+        //Dispatch to store
+        if (typeof setSelectedValueKey !== 'undefined') {
+          setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        }
       }
 
-      setEditList({
-        show: true, data: data, treeData: treeData, dispatch: dispatch, persist: persist, type: type,
-        dependencies: dependencies, newItemTemplate: newItemTemplate
-      })
-    }
-    else {
-      //Dispatch to store
-      if (typeof setSelectedValueKey !== 'undefined') {
-        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
-      }
+      allowChange = false
     }
   }
 
@@ -155,10 +165,13 @@ class SelectComponent extends React.Component {
     return disabledState
   }
 
+  onClose() {
+    allowChange = true
+  }
+
   render() {
 
-    let { col, label, id, onChange, selectedValue, data } = this.props
-
+    let { col, label, id, selectedValue, data } = this.props
     let uiconf = UILookup(id, label)
 
     return (
@@ -170,6 +183,8 @@ class SelectComponent extends React.Component {
           value={selectedValue}
           options={this.selectOptions()}
           onChange={this.onSelect}
+          onClose={this.onClose}
+          resetValue={"reset"}
         />
       </div>
     )
