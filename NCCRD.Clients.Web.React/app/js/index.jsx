@@ -21,6 +21,7 @@ import ProjectDetails from './components/Projects/Details/ProjectDetails.jsx'
 import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
+import { stripURLParam } from "./globalFunctions.js"
 
 /**
  * Tap Event
@@ -35,6 +36,20 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.getNavbar = this.getNavbar.bind(this)
+
+    this.state = { navbar: true}
+    if(location.toString().includes("navbar=hidden")){
+      this.state = { navbar: false}
+      stripURLParam("navbar=hidden")
+    }
+  }
+
+  getNavbar(){
+    if(this.state.navbar){
+      return <CustomNavbar />
+    }
   }
 
   render() {
@@ -43,7 +58,7 @@ class App extends React.Component {
         <Router>
           <div>
 
-            <CustomNavbar />
+            {this.getNavbar()}
 
             <Switch>
               {/* <Redirect from="/" to="/projects" exact /> */}
