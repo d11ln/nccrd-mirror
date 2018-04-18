@@ -6,6 +6,7 @@ import { ListGroup, ListGroupItem, Input, Button, Modal, ModalBody, ModalHeader,
 import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
 import Select from 'react-select'
+import { GetUID } from "../../../../globalFunctions"
 
 const _ = require('lodash')
 
@@ -40,15 +41,6 @@ class EditListModal extends React.Component {
         this.cloneData = this.cloneData.bind(this)
 
         this.state = { _data: [], selectedItemId: 0, confirmSave: false }
-    }
-
-    GetUID() {
-        // return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        //   var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        //   return v.toString(16);
-        // })
-
-        return new Date().valueOf()
     }
 
     componentDidUpdate() {
@@ -92,7 +84,7 @@ class EditListModal extends React.Component {
         })
 
         //Set Id to GUID
-        let newItemId = this.GetUID()
+        let newItemId = GetUID()
         newItem[Object.keys(newItem)[0]] = newItemId
         newItem[Object.keys(newItem)[1]] = "ENTER VALUE HERE"
         newItem.modifiedState = true
@@ -305,7 +297,7 @@ class EditListModal extends React.Component {
                 if (deps.length > 0) {
 
                     //If dependency found - render select
-                    detailElements.push(<label key={this.GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
+                    detailElements.push(<label key={GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
                     detailElements.push(<Select key={item.id + "_" + item.key + "_select"}
                         value={item.value.toString()}
                         options={this.renderSelectOptions(deps[0].value)}

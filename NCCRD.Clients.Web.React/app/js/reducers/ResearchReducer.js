@@ -1,6 +1,7 @@
 'use strict'
 
 import * as ACTION_TYPES from "../constants/action-types"
+import { GetUID } from "../globalFunctions"
 
 const _ = require('lodash')
 
@@ -13,9 +14,6 @@ function extractItemAndId(array, key, value) {
     return { item, id }
 }
 
-function getUID() {
-    return new Date().valueOf();
-}
 
 export default function ResearchReducer(state = {}, action) {
 

@@ -6,7 +6,7 @@ import { ListGroup, ListGroupItem, Input, Button, Modal, ModalBody, ModalHeader,
 import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
 import Select from 'react-select'
-
+import { GetUID } from '../../../../globalFunctions'
 import Tree from 'antd/lib/tree';
 import 'antd/lib/tree/style/css';
 import '../../../../../css/antd.tree.css';
@@ -72,10 +72,6 @@ class EditTreeModal extends React.Component {
             //Update local state
             this.setState({ _data: tmpData })
         }
-    }
-
-    GetUID() {
-        return Math.random().toString().substr(2, 9)
     }
 
     renderTreeNodes(data) {
@@ -341,7 +337,7 @@ class EditTreeModal extends React.Component {
         })
 
         //Setup and insert data item
-        let newItemId = this.GetUID()
+        let newItemId = GetUID()
         let newItemText = "Item_" + newItemId.toString() //"ENTER VALUE HERE"
         newItem[Object.keys(newItem)[0]] = newItemId
         newItem[Object.keys(newItem)[1]] = newItemText
