@@ -12,6 +12,7 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
+    "antd": "^3.4.1",
     "bootstrap": "^4.0.0",
     "copy-webpack-plugin": "^4.5.1",
     "font-awesome": "^4.7.0",

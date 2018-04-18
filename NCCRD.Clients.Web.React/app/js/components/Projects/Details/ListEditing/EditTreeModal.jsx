@@ -3,361 +3,484 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { ListGroup, ListGroupItem, Input, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
-import { apiBaseURL } from "../constants/apiBaseURL"
-import * as ACTION_TYPES from "../constants/action-types"
+import { apiBaseURL } from "../../../../constants/apiBaseURL"
+import * as ACTION_TYPES from "../../../../constants/action-types"
 import Select from 'react-select'
+
+import Tree from 'antd/lib/tree';
+import 'antd/lib/tree/style/css';
+import '../../../../../css/antd.tree.css';
+const TreeNode = Tree.TreeNode
 
 const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
-  let { editListModalData: { show, data, treeData, dispatch, persist, type, dependencies } } = state
-  return { show, data, treeData, dispatch, persist, type, dependencies }
+    let { editListModalData: { show, data, dispatch, persist, type, dependencies, newItemTemplate } } = state
+    return { show, data, dispatch, persist, type, dependencies, newItemTemplate }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    setEditList: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
-    },
-    setLoading: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
-    },
-    dispatchToStore: (key, payload) => {
-      dispatch({ type: key, payload })
+    return {
+        setEditList: (payload) => {
+            dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+        },
+        setLoading: (payload) => {
+            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+        },
+        dispatchToStore: (key, payload) => {
+            dispatch({ type: key, payload })
+        }
     }
-  }
 }
-
-let changedItems = []
 
 class EditTreeModal extends React.Component {
 
-  constructor(props) {
-    super(props)
-
-    this.cancel = this.cancel.bind(this)
-    this.renderList = this.renderList.bind(this)
-    this.renderDetails = this.renderDetails.bind(this)
-    // this.fillTree = this.fillTree.bind(this)
-
-    changedItems = []
-    this.state = { selectedItemId: 0, confirmSave: false }
-  }
-
-  save() {
-    //Toggle confirm save 
-    this.setState({ confirmSave: true })
-  }
-
-  valueChange(id, key, e) {
-
-    let { data } = this.props
-    let newValue = e.target.value
-
-    //Update changed item
-    let filteredItems = data.filter(x => x[Object.keys(x)[0]] === id)
-    if (filteredItems.length > 0) {
-
-      //Clone source item
-      let changedItem = changedItems.filter(x => x[Object.keys(x)[0]] === id)[0]
-      if (typeof changedItem === 'undefined') {
-        changedItem = _.clone(filteredItems[0])
-      }
-
-      //Update with changed value
-      changedItem[key.toString()] = newValue
-
-      //Merge with existing changes
-      changedItems = changedItems.filter(x => x[Object.keys(x)[0]] !== id)
-      changedItems.push(changedItem)
-    }
-  }
-
-  // componentDidUpdate() {
-  //   this.fillTree()
-  // }
-
-  confirmSave() {
-
-    let { dispatchToStore, dispatch, persist, setLoading } = this.props
-
-    //Update items
-    setLoading(true)
-
-    console.log("changedItems:", changedItems)
-
-    //let strPostData = JSON.stringify(items.filter(x => x.id > 0))
-    //let url = apiBaseURL + persist
-
-    //Save items to DB
-    // return fetch(url, {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: strPostData
-    // })
-    //   .then((res) => res.json())
-    //   .then((res) => {
-
-    //     setLoading(false)
-
-    //     if (res === true) {
-
-    //       //Saved successully...
-
-    //       //Toggle confirm save 
-    //       this.setState({ confirmSave: false })
-
-    //       //Dispatch to store
-    //       dispatchToStore(dispatch, items)
-
-    //       //Close modal
-    //       let { setEditList } = this.props
-    //       setEditList({ show: false })
-
-    //     }
-    //     else {
-
-    //       //Save failed...
-
-    //       alert("Unable to save changes. See log for details.")
-    //       console.log("ERROR:", res)
-    //     }
-    //   })
-  }
-
-  cancelConfirm() {
-    this.setState({ confirmSave: false })
-  }
-
-  cancel() {
-
-    //Reset state
-    changedItems = []
-    this.setState({ selectedItemId: 0, confirmSave: false })
-
-    //Close modal
-    let { setEditList } = this.props
-    setEditList({ show: false })
-  }
-
-  // GetUID() {
-  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-  //     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-  //     return v.toString(16);
-  //   });
-  // }
-
-  listItemClick(id, e) {
-    this.setState({ selectedItemId: id })
-  }
-
-  processData(data) {
-
-    let processedItems = []
-
-    //Pre-process items
-    data.map(item => {
-
-      processedItems.push({
-        id: item[Object.keys(item)[0]],
-        value: item[Object.keys(item)[1]]
-      })
-
-    })
-
-    return processedItems
-  }
-
-  // getDependencyItems(options, e) {
-  //   let items = []
-
-  //   if (typeof options !== 'undefined' && options !== null)
-  //     options.map(item => {
-  //       items.push({
-  //         value: item[Object.keys(item)[0]],
-  //         label: item[Object.keys(item)[1]]
-  //       })
-  //     })
-
-  //   return items
-  // }
-
-  // treeItemClick(tree, dispatch = true) {
-
-  //   let selectedNodeId = tree.getSelections()[0]
-  //   let { loadSectorFilter } = this.props
-
-  //   if (typeof selectedNodeId !== 'undefined') {
-
-  //     //Get node data
-  //     let nodeData = tree.getDataById(selectedNodeId)
-
-  //     //Dispatch to store
-  //     if (dispatch === true) {
-  //       loadSectorFilter(nodeData.id)
-  //     }
-  //   }
-  //   else {
-
-  //     if (dispatch === true) {
-
-  //       //Dispatch to store
-  //       loadSectorFilter(0)
-  //     }
-  //   }
-  // }
-
-  // fillTree() {
-
-  //   const { treeData } = this.props
-
-  //   if (typeof treeData !== 'undefined' && typeof treeData.dataSource !== 'undefined') {
-
-  //     $('#treeList').tree(treeData)
-
-  //     //Setup tree events
-  //     // let tree = $('#treeList').tree()
-
-  //     // if (this.state.eventsAdded === 0 && typeof tree !== 'undefined') {
-  //     //     this.state.eventsAdded = 1
-  //     //     tree.on("click", () => this.onClick(tree))
-
-  //     //     this.setSelectedNode(tree)
-  //     //     this.onClick(tree, false)
-
-  //     //     //Save tree to state - for later reference/use
-  //     //     this.setState({ tree: tree })
-  //     // }
-  //   }
-  // }
-
-  renderList(processedItems) {
-
-    let { type } = this.props
-
-    if (type === 'std') {
-      let listItems = []
-
-      //Render standard list items
-      processedItems.map(item => {
-        if (item.id > 0) {
-          let { selectedItemId } = this.state
-          listItems.push(<ListGroupItem style={{ cursor: "pointer" }}
-            hover="true"
-            onClick={this.listItemClick.bind(this, item.id)}
-            key={item.id}
-            active={selectedItemId === item.id}
-          >&nbsp;{item.value}</ListGroupItem>)
-        }
-      })
-
-      return (<ListGroup>{listItems}</ListGroup>)
-    }
-  }
-
-  renderDetails() {
-
-    let { type, dependencies, data } = this.props
-    let { selectedItemId } = this.state
-
-    let filteredItems = data.filter(x => x[Object.keys(x)[0]] === selectedItemId)
-    let editDetails = []
-    let detailElements = []
-
-    //Fill "editDetail"
-    if (filteredItems.length > 0) {
-      let item = filteredItems[0]
-      Object.keys(item).map(key => {
-        editDetails.push({ id: selectedItemId, key: key, value: item[key] })
-      })
+    constructor(props) {
+        super(props)
+
+        this.onSelect = this.onSelect.bind(this)
+        this.renderDetails = this.renderDetails.bind(this)
+        this.cloneData = this.cloneData.bind(this)
+        this.cancel = this.cancel.bind(this)
+        this.onExpand = this.onExpand.bind(this)
+
+        this.state = { _data: [], selectedItemId: 0, confirmSave: false, expandedKeys: [] }
     }
 
-    //Render "editDetails"
-    editDetails.map(item => {
-      if (item.key !== editDetails[0].key) {
+    componentDidMount() {
+        this.cloneData();
+    }
 
-        //Transpose changes
-        let tChanges = changedItems.filter(x => x[Object.keys(x)[0]].toString() === selectedItemId.toString())
-        if (tChanges.length > 0) {
-          item.value = tChanges[0][item.key]
+    componentDidUpdate() {
+        this.cloneData();
+    }
+
+    cloneData() {
+
+        let { data, setEditList } = this.props
+
+        if (data.length > 0) {
+
+            let tmpData = []
+            data.map(item => {
+                tmpData.push(_.clone(item))
+            })
+
+            //Clear items from store
+            setEditList({ data: [] })
+
+            //Update local state
+            this.setState({ _data: tmpData })
+        }
+    }
+
+    GetUID() {
+        return Math.random().toString().substr(2, 9)
+    }
+
+    renderTreeNodes(data) {
+
+        return data.map((item) => {
+            if (item.children) {
+                return (
+                    <TreeNode title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} dataRef={item}>
+                        {this.renderTreeNodes(item.children)}
+                    </TreeNode>
+                )
+            }
+            return <TreeNode title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} />
+        })
+    }
+
+    renderDetails() {
+
+        let { dependencies } = this.props
+        let { selectedItemId, _data } = this.state
+        let detailElements = []
+
+        if (typeof _data !== 'undefined' && _data.length > 0 && selectedItemId > 0) {
+
+            let idKey = Object.keys(_data[0])[0].toString()
+            let filteredItems = _data.filter(x => x[idKey].toString() === selectedItemId.toString())
+            let editDetails = []
+
+            //Fill "editDetail"
+            if (filteredItems.length > 0) {
+                let item = filteredItems[0]
+                Object.keys(item).map(key => {
+                    editDetails.push({ id: selectedItemId, key: key, value: item[key] })
+                })
+            }
+
+            //Render "editDetails"
+            editDetails.filter(x => x.key !== 'modifiedState').map(item => {
+                if (item.key !== editDetails[0].key) {
+
+                    //Fix nulls
+                    if (item.value === null) {
+                        item.value = ""
+                    }
+
+                    //Look for dependencies
+                    let deps = dependencies.filter(d => d.key === item.key)
+                    if (deps.length > 0) {
+
+                        //If dependency found - render select
+                        detailElements.push(<label key={item.id + "_" + item.key + "_label"} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
+                        detailElements.push(<Select key={item.id + "_" + item.key + "_select"}
+                            value={item.value.toString()}
+                            options={this.renderSelectOptions(deps[0].value)}
+                            onChange={this.dependencySelect.bind(this, item.key)}
+                            style={{ marginBottom: "25px" }}
+                        />)
+                    }
+                    else {
+
+                        // If no dependency found - render input
+                        detailElements.push(
+                            <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
+                                onChange={this.valueChange.bind(this, item.id, item.key)}
+                            />)
+                    }
+                }
+            })
         }
 
-        //Fix nulls
-        if (item.value === null) {
-          item.value = ""
+        return detailElements
+    }
+
+    renderSelectOptions(data) {
+
+        let ar = []
+
+        if (typeof data !== 'undefined') {
+
+            let procData = this.processData(data)
+            for (let i of procData) {
+                ar.push({ value: i.id, label: i.value })
+            }
         }
 
-        //Look for dependency matches
-        let deps = dependencies.filter(d => d.key === item.key)
-        if (deps.length > 0) {
+        return ar
+    }
 
-          //If match found - render select
-          // detailElements.push(<label key={this.GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
-          // detailElements.push(<Select key={this.GetUID()}
-          //   value={item.value.toString()}
-          //   options={this.selectOptions(deps[0].value)}
-          //   // onChange={this.onSelect}
-          //   style={{ marginBottom: "20px" }}
-          // />)
+    processData(data) {
+
+        let processedItems = []
+
+        //Pre-process items
+        data.map(item => {
+            processedItems.push({
+                id: item[Object.keys(item)[0]],
+                value: item[Object.keys(item)[1]]
+            })
+        })
+
+        return processedItems
+    }
+
+    onSelect(selectedKeys, info) {
+
+        let id = selectedKeys[0]
+
+        if (typeof id === 'undefined') {
+            id = 0
+        }
+
+        this.setState({ selectedItemId: id })
+    }
+
+    valueChange(id, key, e) {
+
+        let { _data } = this.state
+        let newValue = e.target.value
+
+        //Update changed data items
+        let filteredItems = _data.filter(x => x[Object.keys(x)[0]].toString() === id.toString())
+        if (filteredItems.length > 0) {
+
+            //Update with changed value
+            filteredItems[0][key.toString()] = newValue
+            filteredItems[0].modifiedState = true
+        }
+
+        //Update state
+        this.setState({ _data: _data })
+    }
+
+    recursiveTreeSearch(nodes, searchId) {
+
+        let searchNodes = nodes.filter(x => x.id.toString() === searchId.toString())
+
+        nodes.map(x => {
+            if (searchNodes.length == 0 && typeof x.children !== 'undefined') {
+
+                let children = this.recursiveTreeSearch(x.children, searchId)
+                if (children.length > 0) {
+                    searchNodes.push(...children)
+                }
+            }
+        })
+
+        return searchNodes
+    }
+
+    dependencySelect(key, selectedOption) {
+
+        let selectedValue = 0
+        let { _data, selectedItemId } = this.state
+
+        if (selectedOption !== null) {
+            selectedValue = selectedOption.value
+        }
+
+        let idKey = Object.keys(_data[0])[0].toString()
+        let currentItem = _data.filter(x => x[idKey].toString() === selectedItemId.toString())[0]
+        if (typeof currentItem !== 'undefined') {
+
+            //Update with changed value
+            currentItem[key] = selectedValue
+            currentItem.modifiedState = true
+
+            //Update state
+            this.setState({ _data: _data })
+        }
+    }
+
+    cancel() {
+
+        //Reset state
+        this.setState({ selectedItemId: 0, confirmSave: false, _data: [] })
+
+        //Close modal
+        let { setEditList } = this.props
+        setEditList({ show: false })
+    }
+
+    save() {
+        //Toggle confirm save 
+        this.setState({ confirmSave: true })
+    }
+
+    cancelConfirm() {
+        //Toggle confirm save 
+        this.setState({ confirmSave: false })
+    }
+
+    confirmSave() {
+
+        let { dispatchToStore, dispatch, persist, setLoading, data } = this.props
+        let { _data } = this.state
+
+        //Update items
+        setLoading(true)
+
+        //Get changed items
+        let changedItems = _data.filter(x => x.modifiedState === true)
+
+        //Prep post params
+        let strPostData = JSON.stringify(changedItems)
+        let url = apiBaseURL + persist
+
+        console.log("changedItems:", changedItems)
+        console.log("strPostData:", strPostData)
+        console.log("url:", url)
+
+        //Save items to DB
+        return fetch(url, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: strPostData
+        })
+            .then((res) => res.json())
+            .then((res) => {
+
+                setLoading(false)
+
+                if (res === true) {
+
+                    //Saved successully...
+
+                    //Toggle confirm save 
+                    this.setState({ confirmSave: false })
+
+                    //Merge changes into props
+                    let merged = _.merge(_data)
+                    let valueKey = Object.keys(merged[0])[1].toString()
+                    merged = _.orderBy(merged, valueKey, 'asc'); // Use Lodash to sort array by 'Value'
+
+                    //Dispatch to store
+                    dispatchToStore(dispatch, merged)
+
+                    //Close modal
+                    let { setEditList } = this.props
+                    setEditList({ show: false })
+
+                }
+                else {
+
+                    //Save failed...
+                    alert("Unable to save changes. See log for details.")
+                    console.log("ERROR:", res)
+                }
+            })
+    }
+
+    add() {
+
+        //Add new item
+        let { newItemTemplate } = this.props
+        let { _data, selectedItemId } = this.state
+
+        //Clone existing item
+        let newItem = _.clone(newItemTemplate)
+
+        //Clear values
+        Object.keys(newItem).map(key => {
+            newItem[key] = 0
+        })
+
+        //Setup and insert data item
+        let newItemId = this.GetUID()
+        let newItemText = "Item_" + newItemId.toString() //"ENTER VALUE HERE"
+        newItem[Object.keys(newItem)[0]] = newItemId
+        newItem[Object.keys(newItem)[1]] = newItemText
+        newItem.modifiedState = true
+
+        if (typeof selectedItemId !== 'undefined' && selectedItemId > 0) {
+            newItem['Parent' + Object.keys(newItem)[0]] = selectedItemId
         }
         else {
-
-          //If not match found - render input
-          detailElements.push(
-            <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
-              onChange={this.valueChange.bind(this, item.id, item.key)} />)
+            newItem['Parent' + Object.keys(newItem)[0]] = null
         }
-      }
-    })
 
-    return detailElements
-  }
+        _data.splice(0, 0, newItem)
 
-  render() {
+        //Update state
+        this.setState({ _data: [..._data], selectedItemId: newItemId })
+    }
 
-    let { show, data, type } = this.props
-    let { confirmSave, editDetails } = this.state
-    let processedItems = this.processData(data)
+    transformDataTree(effectiveData, globalData, level = 0) {
 
-    return (
-      <>
-        <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
 
-          <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
+        let treeNodes = []
+        let parentIdKey = "Parent" + Object.keys(effectiveData[0])[0].toString()
 
-          <ModalBody height="80%">
-            <div className="row">
-              <div hidden={type !== "std"} className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
-                <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
-                {this.renderList(processedItems)}
-              </div>
+        if (typeof globalData === 'undefined') {
+            globalData = effectiveData
+        }
 
-              <div id="treeList" hidden={type !== "tree"} className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
-                {/* tree data here */}
-              </div>
+        if (level === 0) {
+            effectiveData = effectiveData.filter(x => x[parentIdKey] === null)
+        }
 
-              <div className="col-md-8" style={{ borderLeft: "solid 1px", overflowY: "auto", height: "65vh" }}>
-                <h5 style={{ marginBottom: "25px", textDecoration: "underline" }}>Edit item details:</h5>
-                {this.renderDetails()}
-              </div>
-            </div>
-          </ModalBody>
+        //console.log("level " + level + " data:", effectiveData)
 
-          <ModalFooter>
-            <div hidden={confirmSave} style={{ float: "right" }}>
-              <Button size="sm" color="warning" onClick={this.save.bind(this)}>&nbsp;&nbsp;Save&nbsp;&nbsp;</Button>
-              <Button size="sm" color="secondary" onClick={this.cancel.bind(this)}>Cancel</Button>
-            </div>
-            <div hidden={!confirmSave} style={{ float: "right" }}>
-              <label>Please confirm to save changes?&nbsp;</label>
-              <Button size="sm" color="warning" onClick={this.confirmSave.bind(this)}>Confirm</Button>
-              <Button size="sm" color="secondary" onClick={this.cancelConfirm.bind(this)}>Cancel</Button>
-            </div>
-          </ModalFooter>
-        </Modal>
-      </>
-    )
-  }
+        effectiveData.map(item => {
+
+            let newTreeNode = {
+                id: item[Object.keys(item)[0]],
+                text: item[Object.keys(item)[1]],
+                modifiedState: item.modifiedState
+            }
+
+            let children = globalData.filter(x => x[parentIdKey] == newTreeNode.id)
+            if (children.length > 0) {
+                newTreeNode.children = this.transformDataTree(children, globalData, (level + 1))
+            }
+
+            treeNodes.push(newTreeNode)
+        })
+
+        return treeNodes
+    }
+
+    getParentKeys(id, data) {
+
+        let parentKeys = []
+
+        if (data.length > 0 && id > 0) {
+
+            let idKey = Object.keys(data[0])[0].toString()
+            let parentIdKey = "Parent" + idKey
+
+            let selectedItem = data.filter(x => x[idKey] == id)[0]
+
+            if (selectedItem[parentIdKey] !== null) {
+                let parentId = selectedItem[parentIdKey].toString()
+                parentKeys.push(parentId)
+                parentKeys.push(...this.getParentKeys(parentId, data))
+            }
+        }
+
+        return parentKeys
+    }
+
+    onExpand(expandedKeys){
+        this.setState({ expandedKeys: expandedKeys})
+    }
+
+    render() {
+
+        let { show } = this.props
+        let { confirmSave, editDetails, _data, selectedItemId, expandedKeys } = this.state
+
+        let treeData = []
+        if (_data.length > 0) {
+            treeData = this.transformDataTree(_data)
+        }
+
+        return (
+            <>
+                <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
+
+                    <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
+
+                    <ModalBody height="80%">
+                        <div className="row">
+
+                            <div className="col-md-4" style={{ overflowY: "auto", height: "65vh", fontSize: "large" }}>
+                                <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
+                                <Tree key={selectedItemId}
+                                    onSelect={this.onSelect}
+                                    defaultSelectedKeys={[selectedItemId.toString()]}
+                                    defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(selectedItemId, _data), selectedItemId.toString()]}
+                                    onExpand={this.onExpand}
+                                >
+                                    {this.renderTreeNodes(treeData)}
+                                </Tree>
+                            </div>
+
+                            <div className="col-md-8" style={{ borderLeft: "solid 1px", overflowY: "auto", height: "65vh" }}>
+                                <h5 style={{ marginBottom: "25px", textDecoration: "underline" }}>Edit item details:</h5>
+                                {this.renderDetails()}
+                            </div>
+                        </div>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <div className="col-md-4" hidden={confirmSave}>
+                            <Button size="sm" color="primary" onClick={this.add.bind(this)}>
+                                &nbsp;&nbsp;Add {selectedItemId === 0 ? "root item" : "child item"}&nbsp;&nbsp;
+                            </Button>
+                        </div>
+
+                        <div className="col-md-8">
+                            <div hidden={confirmSave} style={{ float: "right" }}>
+                                <Button size="sm" color="warning" onClick={this.save.bind(this)}>&nbsp;&nbsp;Save&nbsp;&nbsp;</Button>
+                                <Button size="sm" color="secondary" onClick={this.cancel.bind(this)}>Cancel</Button>
+                            </div>
+                            <div hidden={!confirmSave} style={{ float: "right" }}>
+                                <label>Please confirm to save changes?&nbsp;</label>
+                                <Button size="sm" color="warning" onClick={this.confirmSave.bind(this)}>Confirm</Button>
+                                <Button size="sm" color="secondary" onClick={this.cancelConfirm.bind(this)}>Cancel</Button>
+                            </div>
+                        </div>
+                    </ModalFooter>
+                </Modal>
+            </>
+        )
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditTreeModal)

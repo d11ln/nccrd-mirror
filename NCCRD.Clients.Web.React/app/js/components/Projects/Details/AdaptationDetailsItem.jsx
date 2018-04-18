@@ -69,7 +69,6 @@ class AdaptationDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             data={sector}
-            treeData={sectorTree}
             setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR}
             parentId={details.AdaptationDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
@@ -80,7 +79,7 @@ class AdaptationDetailsItem extends React.Component {
               { key: "ParentSectorId", value: sector },
               { key: "TypologyId", value: typology }
             ]}
-            allowEdit={false}
+            allowEdit={true}
             newItemTemplate={{
               "SectorId": 0,
               "Value": "",

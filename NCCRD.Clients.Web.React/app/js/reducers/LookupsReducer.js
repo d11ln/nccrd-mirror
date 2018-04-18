@@ -52,6 +52,10 @@ export default function LookupsReducer(state = {}, action) {
             return { ...state, sector: payload }
         }
 
+        case ACTION_TYPES.LOAD_SECTOR_TYPE: {
+            return { ...state, sectorType: payload }
+        }
+
         case ACTION_TYPES.LOAD_REGION: {
             return { ...state, region: payload }
         }
