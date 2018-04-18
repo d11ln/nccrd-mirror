@@ -8,10 +8,10 @@ import SelectComponent from '../../Shared/SelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 
-import TreeSelect from 'antd/lib/tree-select';
-import 'antd/dist/antd.css'
-//import 'antd/lib/style/index.css'
-
+//AntD Tree-Select
+import TreeSelect from 'antd/lib/tree-select'
+import '../../../../css/antd.tree-select.css' //Overrides default antd.tree-select css
+import '../../../../css/antd.select.css' //Overrides default antd.select css
 const TreeNode = TreeSelect.TreeNode;
 
 const mapStateToProps = (state, props) => {

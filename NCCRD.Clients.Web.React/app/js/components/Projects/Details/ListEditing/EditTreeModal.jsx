@@ -7,9 +7,10 @@ import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
 import Select from 'react-select'
 import { GetUID } from '../../../../globalFunctions'
-import Tree from 'antd/lib/tree';
-import 'antd/lib/tree/style/css';
-import '../../../../../css/antd.tree.css';
+
+//AntD Tree
+import Tree from 'antd/lib/tree'
+import '../../../../../css/antd.tree.css' //Overrides default antd.tree css
 const TreeNode = Tree.TreeNode
 
 const _ = require('lodash')
