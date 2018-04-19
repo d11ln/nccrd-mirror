@@ -19,7 +19,7 @@ export default function GlobalReducer(state = {}, action) {
             if (typeof payload.newItemTemplate === 'undefined') { payload.newItemTemplate = state.newItemTemplate }
 
             return {
-                ...state, show: payload.show, data: payload.data, treeData: payload.treeData, dispatch: payload.dispatch, persist: payload.persist,
+                ...state, show: payload.show, data: payload.data, dispatch: payload.dispatch, persist: payload.persist,
                 type: payload.type, dependencies: payload.dependencies , newItemTemplate: payload.newItemTemplate
             }
         }

@@ -110,19 +110,24 @@ namespace NCCRD.Services.Data.Controllers.API
                         .Include("SectorType")
                         .Include("Typology")
                         .FirstOrDefault(x => x.SectorId == item.SectorId);
+
                     if (data != null)
                     {
                         //Update Sector entry
                         data.Value = item.Value;
                         data.SectorTypeId = item.SectorTypeId;
-                        data.SectorType = item.SectorType;
+                        data.SectorType = context.SectorType.FirstOrDefault(x => x.SectorTypeId == item.SectorTypeId);
                         data.ParentSectorId = item.ParentSectorId;
-                        data.ParentSector = item.ParentSector;
+                        data.ParentSector = context.Sector.FirstOrDefault(x => x.SectorId == item.ParentSectorId);
                         data.TypologyId = item.TypologyId;
-                        data.Typology = item.Typology;
+                        data.Typology = context.Typology.FirstOrDefault(x => x.TypologyId == item.TypologyId);
                     }
                     else
                     {
+                        item.SectorType = context.SectorType.FirstOrDefault(x => x.SectorTypeId == item.SectorTypeId);
+                        item.ParentSector = context.Sector.FirstOrDefault(x => x.SectorId == item.ParentSectorId);
+                        item.Typology = context.Typology.FirstOrDefault(x => x.TypologyId == item.TypologyId);
+
                         //Add Sector entry
                         context.Sector.Add(item);
                     }

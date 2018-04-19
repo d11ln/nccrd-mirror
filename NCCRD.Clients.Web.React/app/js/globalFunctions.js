@@ -13,3 +13,7 @@ export function stripURLParam(paramKey){
     location = location.toString().replace("&" + paramKey, "")
   }
 }
+
+export function GetUID() {
+  return Math.random().toString().substr(2, 9)
+}

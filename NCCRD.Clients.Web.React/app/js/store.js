@@ -16,13 +16,12 @@ const store = createStore(
         globalData: {
             isAuthenticated: true,
             loading: true,
-            editMode: false
+            editMode: true
         },
 
         editListModalData: {
             show: false,
             data: [],
-            treeData: [],
             dispatch: "",
             persist: "",
             type: "std",
@@ -61,11 +60,12 @@ const store = createStore(
             validationStatus: [],
             typology: [],
             regionTree: [],
+            region: [],
             sectorTree: [],
+            sector: [],
+            sectorType: [],
             maOptions: [],
             adaptationPurpose: [],
-            sector: [],
-            region: [],
             carbonCredit: [],
             carbonCreditMarket: [],
             cdmStatus: [],

@@ -113,7 +113,7 @@ class SelectComponent extends React.Component {
 
   onSelect(value) {
 
-    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, treeData, dispatch, persist, type, dependencies, newItemTemplate } = this.props
+    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
     let selectedValue = 0
 
     if(value === "reset"){
@@ -135,7 +135,7 @@ class SelectComponent extends React.Component {
         }
 
         setEditList({
-          show: true, data: data, treeData: treeData, dispatch: dispatch, persist: persist, type: type,
+          show: true, data: data, dispatch: dispatch, persist: persist, type: type,
           dependencies: dependencies, newItemTemplate: newItemTemplate
         })
       }

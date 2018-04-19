@@ -7,7 +7,12 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
-import { stripURLParam } from "../../../globalFunctions.js"
+import { stripURLParam, GetUID } from "../../../globalFunctions.js"
+
+//AntD Tree
+import Tree from 'antd/lib/tree'
+import '../../../../css/antd.tree.css' //Overrides default antd.tree css
+const TreeNode = Tree.TreeNode
 
 const queryString = require('query-string')
 
@@ -36,13 +41,13 @@ class RegionFilters extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onClick = this.onClick.bind(this)
-        this.fillTree = this.fillTree.bind(this)
         this.expandAllNodes = this.expandAllNodes.bind(this)
         this.collapseAllNodes = this.collapseAllNodes.bind(this)
+        this.onSelect = this.onSelect.bind(this)
+        this.onExpand = this.onExpand.bind(this)
 
         //Set initial local
-        this.state = { eventsAdded: 0 }
+        this.state = { expandedKeys: [] }
 
         //Read initial filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
@@ -80,103 +85,76 @@ class RegionFilters extends React.Component {
             })
     }
 
-    onClick(tree, dispatch = true) {
-
-        let selectedNodeId = tree.getSelections()[0]
-        let { loadRegionFilter } = this.props
-
-        if (typeof selectedNodeId !== 'undefined') {
-
-            //Get node data
-            let nodeData = tree.getDataById(selectedNodeId)
-
-            //Dispatch to store
-            if (dispatch === true) {
-                loadRegionFilter(nodeData.id)
-            }
-        }
-        else {
-
-            if (dispatch === true) {
-
-                //Dispatch to store
-                loadRegionFilter(0)
-            }
-        }
-    }
-
-    fillTree() {
-
-        const { regionTree } = this.props
-
-        if (typeof regionTree.dataSource !== 'undefined') {
-
-            $('#regionTree').tree(regionTree)
-
-            //Setup tree events
-            let tree = $('#regionTree').tree()
-
-            if (this.state.eventsAdded === 0 && typeof tree !== 'undefined') {
-                this.state.eventsAdded = 1
-                tree.on("click", () => this.onClick(tree))
-
-                this.setSelectedNode(tree)
-                this.onClick(tree, false)
-
-                //Save tree to state - for later reference/use
-                this.setState({ tree: tree })
-            }
-
-        }
-    }
-
-    componentDidUpdate() {
-        this.fillTree()
-    }
-
-    setSelectedNode(tree) {
-
-        //Get tree
-        if (typeof tree !== 'undefined') {
-
-            let { regionTree, regionFilter } = this.props
-
-            if (typeof regionTree.dataSource !== 'undefined' && typeof regionFilter !== 'undefined' && regionFilter !== 0) {
-
-                let selectedRegion = regionTree.dataSource.find((item) => item.id.toString() === regionFilter.toString());
-
-                if (typeof selectedRegion !== 'undefined') {
-                    let selectNode = tree.getNodeByText(selectedRegion.text)
-
-                    if (typeof selectNode !== 'undefined') {
-                        tree.select(selectNode)
-                    }
-                }
-            }
-        }
-        else {
-            return "All"
-        }
-    }
-
     expandAllNodes() {
-        let { tree } = this.state
-        if (typeof tree !== 'undefined') {
-            tree.expandAll()
-        }
+        let expandedKeys = []
+        let { region } = this.props
+
+        region.map(x => expandedKeys.push(x.RegionId.toString()))
+
+        this.setState({ expandedKeys: expandedKeys })
     }
 
     collapseAllNodes() {
-        let { tree } = this.state
-        if (typeof tree !== 'undefined') {
-            tree.collapseAll()
+        this.setState({ expandedKeys: []})
+    }
+
+    renderTreeNodes(data) {
+
+        return data.map((item) => {
+            if (item.children) {
+                return (
+                    <TreeNode title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} dataRef={item}>
+                        {this.renderTreeNodes(item.children)}
+                    </TreeNode>
+                )
+            }
+            return <TreeNode title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} />
+        })
+    }
+
+    onSelect(selectedKeys, info) {
+
+        let { loadRegionFilter } = this.props
+        let id = selectedKeys[0]
+
+        if (typeof id === 'undefined') {
+            id = 0
         }
+
+        loadRegionFilter(id)
+    }
+
+    getParentKeys(id, data) {
+
+        let parentKeys = []
+
+        if (data.length > 0 && id > 0) {
+
+            let idKey = Object.keys(data[0])[0].toString()
+            let parentIdKey = "Parent" + idKey
+
+            let selectedItem = data.filter(x => x[idKey] == id)[0]
+
+            if (selectedItem[parentIdKey] !== null) {
+                let parentId = selectedItem[parentIdKey].toString()
+                parentKeys.push(parentId)
+                parentKeys.push(...this.getParentKeys(parentId, data))
+            }
+        }
+
+        return parentKeys
+    }
+
+    onExpand(expandedKeys) {
+        this.setState({ expandedKeys: expandedKeys })
     }
 
     render() {
 
-        let { region, regionFilter } = this.props
+        let { region, regionTree, regionFilter } = this.props
+        let { expandedKeys } = this.state
         let selectedValue = "All"
+        let treeData = typeof regionTree.dataSource === 'undefined' ? [] : regionTree.dataSource
 
         if (regionFilter > 0 && region.length > 0) {
             selectedValue = region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName
@@ -205,10 +183,15 @@ class RegionFilters extends React.Component {
                 </div>
                 <br />
 
-                <div className="row">
-                    <div className="col-md-12" key="regionTree" id="regionTree">
-                    </div>
-                </div>
+                <Tree key={GetUID()}
+                    autoExpandParent
+                    onSelect={this.onSelect}
+                    defaultSelectedKeys={[regionFilter.toString()]}
+                    defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(regionFilter, region), regionFilter.toString()]}
+                    onExpand={this.onExpand}
+                >
+                    {this.renderTreeNodes(treeData)}
+                </Tree>
 
                 <ReactTooltip />
             </>

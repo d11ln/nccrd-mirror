@@ -4,6 +4,7 @@ import React from 'react'
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
+import EditTreeModal from './ListEditing/EditTreeModal.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
@@ -29,12 +30,12 @@ const mapStateToProps = (state, props) => {
     let { researchData: { researchDetails } } = state
     let { globalData: { loading, editMode, isAuthenticated } } = state
 
+    let editListModalType = state.editListModalData.type
     let editListModalShow = state.editListModalData.show
-    let editListModalItems = state.editListModalData.items
 
     return {
         projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading, isAuthenticated,
-        editListModalShow, editListModalItems
+        editListModalType, editListModalShow
     }
 }
 
@@ -85,6 +86,12 @@ const mapDispatchToProps = (dispatch) => {
         loadSectors: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_SECTOR, payload })
         },
+        loadSectorType: payload => {
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TYPE, payload })
+        },
+        loadSectorTree: payload => {
+            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TREE, payload })
+        },
         loadCarbonCredit: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_CARBON_CREDIT, payload })
         },
@@ -108,6 +115,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadTargetAudience: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_TARGET_AUDIENCE, payload })
+        },
+        loadTypology: payload => {
+            dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY, payload })
         },
         resetProjectState: payload => {
             dispatch({ type: ACTION_TYPES.RESET_PROJECT_STATE, payload })
@@ -138,6 +148,7 @@ class ProjectDetails extends React.Component {
         this.saveChanges = this.saveChanges.bind(this)
         this.discardChanges = this.discardChanges.bind(this)
         this.backToList = this.backToList.bind(this)
+        this.renderListEditor = this.renderListEditor.bind(this)
 
         let projectId = this.props.match.params.id
         this.state = { ...this.state, projectId, discardModal: false, saveModal: false, navBack: false }
@@ -220,6 +231,36 @@ class ProjectDetails extends React.Component {
             }
         }).then(res => res.json()).then(res => {
             loadSectors(res)
+        })
+    }
+
+    loadSectorType(loadSectorType) {
+        return fetch(apiBaseURL + 'api/SectorType/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadSectorType(res)
+        })
+    }
+
+    loadSectorTree(loadSectorTree) {
+        return fetch(apiBaseURL + 'api/Sector/GetAllTree/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadSectorTree(res)
+        })
+    }
+
+    loadTypology(loadTypology) {
+        return fetch(apiBaseURL + 'api/Typology/GetAll/', {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json()).then(res => {
+            loadTypology(res)
         })
     }
 
@@ -436,8 +477,8 @@ class ProjectDetails extends React.Component {
     loadData() {
 
         let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadProjectManagers, loadValidationStatus,
-            loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions,
-            loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadCarbonCredit,
+            loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions, loadSectorType, loadTypology,
+            loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadSectorTree, loadCarbonCredit,
             loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
             loadResearchType, loadTargetAudience } = this.props
 
@@ -457,6 +498,8 @@ class ProjectDetails extends React.Component {
             this.loadResearchDetails(loadResearchDetails),
             this.loadAdaptationPurpose(loadAdaptationPurpose),
             this.loadSector(loadSectors),
+            this.loadSectorType(loadSectorType),
+            this.loadSectorTree(loadSectorTree),
             this.loadCarbonCredit(loadCarbonCredit),
             this.loadCarbonCreditMarket(loadCarbonCreditMarket),
             this.loadCDMStatus(loadCDMStatus),
@@ -464,7 +507,8 @@ class ProjectDetails extends React.Component {
             this.loadVoluntaryMethodology(loadVoluntaryMethodology),
             this.loadVoluntaryGoldStandard(loadVoluntaryGoldStandard),
             this.loadResearchType(loadResearchType),
-            this.loadTargetAudience(loadTargetAudience)
+            this.loadTargetAudience(loadTargetAudience),
+            this.loadTypology(loadTypology)
         ])
             .then(() => {
                 setLoading(false)
@@ -781,9 +825,23 @@ class ProjectDetails extends React.Component {
         }
     }
 
+    renderListEditor() {
+
+        let { editListModalType, editListModalShow } = this.props
+
+        if (editListModalShow === true) {
+            if (editListModalType === "std") {
+                return <EditListModal />
+            }
+            else if (editListModalType === "tree") {
+                return <EditTreeModal />
+            }
+        }
+    }
+
     render() {
 
-        const { projectDetails, editMode, isAuthenticated, editListModalShow, editListModalItems } = this.props
+        const { projectDetails, editMode, isAuthenticated } = this.props
 
         return (
 
@@ -936,7 +994,8 @@ class ProjectDetails extends React.Component {
                     </ModalFooter>
                 </Modal>
 
-                <EditListModal />
+                {this.renderListEditor()}
+
                 <ReactTooltip />
 
             </>
