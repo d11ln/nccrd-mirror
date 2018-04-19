@@ -124,7 +124,7 @@ class AdaptationDetailsItem extends React.Component {
               label= "Sector:"
               style={{ width: 300 }}
               value={this.state.value}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              dropdownStyle={{ maxHeight: 250, overflow: 'auto' }}
               placeholder="Select Sector"
               allowClear
               onChange={this.onChange}

@@ -29,7 +29,7 @@ namespace NCCRD.Database.Models
 
         //FK - ParentRegion
         [ForeignKey("ParentRegion")]
-        public int? ParentRegionID { get; set; }
+        public int? ParentRegionId { get; set; }
         [IgnoreDataMember]
         public Region ParentRegion { get; set; }
     }

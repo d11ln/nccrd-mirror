@@ -130,7 +130,7 @@ namespace NCCRD.Services.Data.Controllers.API
 
         private List<Region> GetChildRegions(int regionId, List<Region> regionList)
         {
-            var regions = regionList.Where(x => x.ParentRegionID == regionId).ToList();
+            var regions = regionList.Where(x => x.ParentRegionId == regionId).ToList();
 
             var childRegions = new List<Region>();
             foreach (var region in regions)

@@ -53,14 +53,14 @@ namespace NCCRD.Services.Data.Controllers.API
                     provNode.id = province.RegionId;
                     provNode.text = province.RegionName;
 
-                    var metros = context.Region.Where(x => x.ParentRegionID == province.RegionId).OrderBy(m => m.RegionName).ToList();
+                    var metros = context.Region.Where(x => x.ParentRegionId == province.RegionId).OrderBy(m => m.RegionName).ToList();
                     foreach(var metro in metros)
                     {
                         var metroNode = new TreeNodeViewModel();
                         metroNode.id = metro.RegionId;
                         metroNode.text = metro.RegionName;
 
-                        var locals = context.Region.Where(x => x.ParentRegionID == metro.RegionId).OrderBy(l => l.RegionName).ToList();
+                        var locals = context.Region.Where(x => x.ParentRegionId == metro.RegionId).OrderBy(l => l.RegionName).ToList();
                         foreach(var local in locals)
                         {
                             var localNode = new TreeNodeViewModel();
