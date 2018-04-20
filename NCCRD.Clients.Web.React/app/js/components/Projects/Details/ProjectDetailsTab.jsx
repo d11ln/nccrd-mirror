@@ -29,13 +29,38 @@ class ProjectDetailsTab extends React.Component {
         return (
 
             <>
+                <br />
+
+                <div className="row">
+                    <TextAreaComponent
+                        col="col-md-12"
+                        label="Project title:"
+                        id="txtProjectTitle"
+                        value={projectDetails.ProjectTitle}
+                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_TITLE}
+                    />
+                </div>
+
+                <br />
+
+                <div className="row">
+                    <RangeComponent
+                        col="col-md-6"
+                        id="txtProjectYear"
+                        label=""
+                        inputWidth="75px"
+                        valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
+                        setValueFromKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM}
+                        setValueToKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO}
+                    />
+                </div>
 
                 <br />
 
                 <div className="row">
                     <TextAreaComponent
                         col="col-md-12"
-                        label= "Description:"
+                        label="Description:"
                         id="txtProjectDescription"
                         value={projectDetails.ProjectDescription}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_DESCRIPTION}
@@ -47,7 +72,7 @@ class ProjectDetailsTab extends React.Component {
                 <div className="row">
                     <TextComponent
                         col="col-md-4"
-                        label= "Lead agent:"
+                        label="Lead agent:"
                         id="txtProjectLeadAgent"
                         value={projectDetails.LeadAgent}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_LEAD_AGENT}
@@ -55,7 +80,7 @@ class ProjectDetailsTab extends React.Component {
                     <TextComponent
                         col="col-md-4"
                         readOnly="true"
-                        label= "Host partner:"
+                        label="Host partner:"
                         id="txtProjectHostPartner"
                         value={projectDetails.HostPartner}
                         setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_HOST_PARTNER}
@@ -112,7 +137,6 @@ class ProjectDetailsTab extends React.Component {
                 <div className="row">
                     <RangeComponent
                         col="col-md-12"
-                        align="left"
                         id="txtProjectBudget"
                         label="Budget range:"
                         prefix="R"
@@ -220,7 +244,7 @@ class ProjectDetailsTab extends React.Component {
                         // persist={"api/MAOptions/AddOrUpdate"}
                         allowEdit={false}
                     />
-                </div>    
+                </div>
             </>
         )
     }
