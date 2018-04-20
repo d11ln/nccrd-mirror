@@ -59,7 +59,7 @@ class MitigationEmissionsDataTab extends React.Component {
     return (
       <>
 
-        <Button hidden={!editMode} style={{ marginLeft: "0px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
+        <Button hidden={!editMode} style={{ marginLeft: "-1px", marginBottom: "8px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
           <i className="fa fa-plus-circle" aria-hidden="true" />
           &nbsp;&nbsp;
           Add Emissions Data

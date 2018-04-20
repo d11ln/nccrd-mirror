@@ -10,8 +10,10 @@ import { GetUID } from '../../../../globalFunctions'
 
 //AntD Tree
 import Tree from 'antd/lib/tree'
+import TreeSelect from 'antd/lib/tree-select'
 import '../../../../../css/antd.tree.css' //Overrides default antd.tree css
 const TreeNode = Tree.TreeNode
+const TreeSelectNode = TreeSelect.TreeNode
 
 const _ = require('lodash')
 
@@ -44,6 +46,7 @@ class EditTreeModal extends React.Component {
         this.cloneData = this.cloneData.bind(this)
         this.cancel = this.cancel.bind(this)
         this.onExpand = this.onExpand.bind(this)
+        this.dependencyTreeSelect = this.dependencyTreeSelect.bind(this)
 
         this.state = { _data: [], selectedItemId: 0, confirmSave: false, expandedKeys: [] }
     }
@@ -89,6 +92,20 @@ class EditTreeModal extends React.Component {
         })
     }
 
+    renderTreeSelectNodes(data) {
+
+        return data.map((item) => {
+            if (item.children) {
+                return (
+                    <TreeSelectNode value={item.text} title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} dataRef={item}>
+                        {this.renderTreeSelectNodes(item.children)}
+                    </TreeSelectNode>
+                )
+            }
+            return <TreeSelectNode value={item.text} title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} />
+        })
+    }
+
     renderDetails() {
 
         let { dependencies } = this.props
@@ -98,6 +115,7 @@ class EditTreeModal extends React.Component {
         if (typeof _data !== 'undefined' && _data.length > 0 && selectedItemId > 0) {
 
             let idKey = Object.keys(_data[0])[0].toString()
+            let valueKey = Object.keys(_data[0])[1].toString()
             let filteredItems = _data.filter(x => x[idKey].toString() === selectedItemId.toString())
             let editDetails = []
 
@@ -122,14 +140,53 @@ class EditTreeModal extends React.Component {
                     let deps = dependencies.filter(d => d.key === item.key)
                     if (deps.length > 0) {
 
-                        //If dependency found - render select
+                        let depItem = deps[0]
+
+                        //Push label
                         detailElements.push(<label key={item.id + "_" + item.key + "_label"} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
-                        detailElements.push(<Select key={item.id + "_" + item.key + "_select"}
-                            value={item.value.toString()}
-                            options={this.renderSelectOptions(deps[0].value)}
-                            onChange={this.dependencySelect.bind(this, item.key)}
-                            style={{ marginBottom: "25px" }}
-                        />)
+
+                        if (depItem.type === "std") {
+                            //If 'std' dependency found - render select
+                            detailElements.push(
+                                <Select
+                                    key={item.id + "_" + item.key + "_select"}
+                                    value={item.value.toString()}
+                                    options={this.renderSelectOptions(depItem.value)}
+                                    onChange={this.dependencySelect.bind(this, item.key)}
+                                    style={{ marginBottom: "25px" }}
+                                />
+                            )
+                        }
+                        else if (depItem.type === "tree") {
+                            //If 'tree' dependency found - render select-tree
+                            let treeData = []
+                            if (_data.length > 0) {
+                                treeData = this.transformDataTree(depItem.value)
+                            }
+
+                            //Get selected value
+                            let valObj = depItem.value.filter(x => x[idKey] == item[valueKey])[0]
+                            let selVal = []
+                            if (typeof valObj !== 'undefined') {
+                                selVal = valObj[valueKey]
+                            }
+
+                            detailElements.push(
+                                <TreeSelect
+                                    key={item.id + "_" + item.key + "_tree_select"}
+                                    showSearch
+                                    searchPlaceholder="Search..."
+                                    style={{ width: "100%", marginBottom: "25px" }}
+                                    value={selVal}
+                                    dropdownStyle={{ maxHeight: 250, overflow: 'auto' }}
+                                    placeholder="Select..."
+                                    allowClear
+                                    onChange={this.dependencyTreeSelect.bind(this, item.key)}
+                                >
+                                    {this.renderTreeSelectNodes(treeData)}
+                                </TreeSelect>
+                            )
+                        }
                     }
                     else {
 
@@ -241,6 +298,28 @@ class EditTreeModal extends React.Component {
 
             //Update state
             this.setState({ _data: _data })
+        }
+    }
+
+    dependencyTreeSelect(key, value, label, extra) {
+
+        let { _data, selectedItemId, expandedKeys } = this.state
+        let selectedId = null
+        let idKey = Object.keys(_data[0])[0].toString()
+        let currentItem = _data.filter(x => x[idKey] == selectedItemId)[0]
+
+        if (typeof extra.triggerNode !== 'undefined') {
+            selectedId = extra.triggerNode.props.eventKey
+        }
+
+        if (typeof currentItem !== 'undefined') {
+
+            //Update with changed value
+            currentItem[key] = selectedId
+            currentItem.modifiedState = true
+
+            //Update state
+            this.setState({ _data: _data, expandedKeys: [...expandedKeys, selectedId !== null ? selectedId : ""] })
         }
     }
 
@@ -413,8 +492,8 @@ class EditTreeModal extends React.Component {
         return parentKeys
     }
 
-    onExpand(expandedKeys){
-        this.setState({ expandedKeys: expandedKeys})
+    onExpand(expandedKeys) {
+        this.setState({ expandedKeys: expandedKeys })
     }
 
     render() {
@@ -438,7 +517,7 @@ class EditTreeModal extends React.Component {
 
                             <div className="col-md-4" style={{ overflowY: "auto", height: "65vh", fontSize: "large" }}>
                                 <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
-                                <Tree key={selectedItemId}
+                                <Tree key={GetUID()}
                                     onSelect={this.onSelect}
                                     defaultSelectedKeys={[selectedItemId.toString()]}
                                     defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(selectedItemId, _data), selectedItemId.toString()]}
