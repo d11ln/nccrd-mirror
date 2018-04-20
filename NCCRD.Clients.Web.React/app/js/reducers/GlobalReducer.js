@@ -21,11 +21,16 @@ export default function GlobalReducer(state = {}, action) {
         }
 
         case ACTION_TYPES.SET_AUTHENTICATED: {
+            
+            //Clear token data here
+            //...
 
-            //Clear token data here...
-
-            return { ...state, isAuthenticated: payload }
-        }        
+            return {
+                ...state,
+                isAuthenticated: payload.isAuthenticated,
+                username: (payload.isAuthenticated === true ? payload.username : "")
+            }
+        }
 
         default: {
             return state

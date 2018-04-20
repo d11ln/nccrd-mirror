@@ -23,14 +23,14 @@ class Logout extends React.Component {
     }
 
     componentDidMount() {
-      Promise.all([ this.props.setAuthenticated(false) ]).then(location.hash = "/")
+      Promise.all([ this.props.setAuthenticated({ isAuthenticated: false }) ]).then(location.hash = "/")
     }
 
     render() {
 
         return (
             <>
-
+                Logging out...
             </>
         )
     }

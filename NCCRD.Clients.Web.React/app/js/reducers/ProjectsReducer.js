@@ -163,6 +163,10 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, start: 0, end: 10 }
         }
 
+        case ACTION_TYPES.SET_PROJECT_SCROLL:{
+            return { ...state, listScrollPos: payload }
+        }
+
         default: {
             return state
         }

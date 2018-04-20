@@ -56,10 +56,13 @@ class Projects extends React.Component {
         location.hash = '/projects/add'
     }
 
+    // componentDidMount() {
+    //     window.scrollTo(0, 0);
+    // }
+
     componentWillMount() {
         this.props.setLoading(true)
     }
-
 
     render() {
 
@@ -85,28 +88,21 @@ class Projects extends React.Component {
                     </div>
                 </div>
 
-                {/* <div className="container-fluid"> */}
-                    {/* <div className="row"> */}
-                        {/* <div className="col-md-12"> */}
-                            <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
+                <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
-                                <Button hidden={!this.props.isAuthenticated} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
-                                    <i className="fa fa-plus-circle" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Add project
+                    <Button hidden={!this.props.isAuthenticated} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
+                        <i className="fa fa-plus-circle" aria-hidden="true" />
+                        &nbsp;&nbsp;
+                        Add project
                                 </Button>
 
-                                <Button color="secondary" className="btn-sm" onTouchTap={this.backToTop} >
-                                    <i className="fa fa-arrow-circle-up" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Back to top
+                    <Button color="secondary" className="btn-sm" onTouchTap={this.backToTop} >
+                        <i className="fa fa-arrow-circle-up" aria-hidden="true" />
+                        &nbsp;&nbsp;
+                        Back to top
                                 </Button>
 
-                            </div>
-                        {/* </div> */}
-                    {/* </div> */}
-                {/* </div> */}
-
+                </div>
                 <ProjectFilters />
                 <ProjectList />
             </>

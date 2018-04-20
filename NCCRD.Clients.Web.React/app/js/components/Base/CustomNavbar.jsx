@@ -8,8 +8,8 @@ import * as ACTION_TYPES from "../../constants/action-types"
 import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact';
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { isAuthenticated } } = state
-  return { isAuthenticated }
+  let { globalData: { isAuthenticated, username } } = state
+  return { isAuthenticated, username }
 }
 
 class CustomNavbar extends React.Component {
@@ -41,23 +41,25 @@ class CustomNavbar extends React.Component {
     });
   }
 
-  Logout(){
+  Logout() {
     console.log("LOGOUT")
   }
 
-  LoginLogout(){
+  LoginLogout() {
 
     let { isAuthenticated } = this.props
 
-    if(isAuthenticated === false){
+    if (isAuthenticated === false) {
       return <a className="nav-link" href="#/login">Login</a>
     }
-    else{
+    else {
       return <a className="nav-link" href="#/logout">Logout</a>
     }
   }
 
   render() {
+
+    let { username } = this.props
 
     return (
       <Navbar size="sm" color="indigo" expand="md" dark >
@@ -78,6 +80,12 @@ class CustomNavbar extends React.Component {
           </NavbarNav>
 
           <NavbarNav right>
+            {/* <NavItem>
+              <p className="nav-link" href="#">654654654654</p>
+            </NavItem> */}
+            <NavItem>
+              <span style={{ color: "#d0d6e2" }} className="nav-link">{ username === "" ? "" : "Hello, " + username }</span>
+            </NavItem>
             <NavItem>
               {this.LoginLogout()}
             </NavItem>

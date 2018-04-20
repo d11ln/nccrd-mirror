@@ -7,13 +7,19 @@ import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL"
 
 const mapStateToProps = (state, props) => {
-    let { projectData: { projects, start, end } } = state
+    let { projectData: { projects, start, end, listScrollPos } } = state
     let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter } } = state
-    return { projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end }
+    return {
+        projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
+        listScrollPos
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setScrollPos: payload => {
+            dispatch({ type: ACTION_TYPES.SET_PROJECT_SCROLL, payload })
+        },
         loadProjects: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_PROJECTS, payload })
         },
@@ -64,6 +70,7 @@ class ProjectList extends React.Component {
     }
 
     handleScroll() {
+
         const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
         const body = document.body;
         const html = document.documentElement;
@@ -139,6 +146,7 @@ class ProjectList extends React.Component {
     componentDidMount() {
         this.getProjectList()
         window.addEventListener("scroll", this.handleScroll);
+        window.scrollTo(0, this.props.listScrollPos);
     }
 
     componentWillUnmount() {

@@ -16,7 +16,8 @@ const store = createStore(
         globalData: {
             isAuthenticated: true,
             loading: true,
-            editMode: true
+            editMode: false,
+            username: ""
         },
 
         editListModalData: {
@@ -33,7 +34,8 @@ const store = createStore(
             projects: [],
             projectDetails: {},
             start: 0,
-            end: 10
+            end: 10,
+            listScrollPos: 0
         },
 
         adaptationData: {
