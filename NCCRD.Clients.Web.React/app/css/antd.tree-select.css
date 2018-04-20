@@ -27,8 +27,8 @@
   }
 }
 .ant-select-tree-checkbox {
-  font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  /* font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+  /* font-size: 16px; */
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
   -webkit-box-sizing: border-box;
@@ -168,8 +168,8 @@
   cursor: not-allowed;
 }
 .ant-select-tree-checkbox-wrapper {
-  font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  /* font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+  /* font-size: 16px; */
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
   -webkit-box-sizing: border-box;
@@ -190,8 +190,8 @@
   padding-right: 8px;
 }
 .ant-select-tree-checkbox-group {
-  font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  /* font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+  /* font-size: 16px; */
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
   -webkit-box-sizing: border-box;
@@ -212,8 +212,8 @@
   margin-left: 0;
 }
 .ant-select-tree {
-  font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  /* font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+  /* font-size: 16px; */
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
   -webkit-box-sizing: border-box;
@@ -290,7 +290,7 @@
   cursor: auto;
 }
 .ant-select-tree li span.ant-select-tree-switcher.ant-select-tree-switcher_open:after {
-  font-size: 16px;
+  /* font-size: 16px; */
   font-size: 7px \9;
   -webkit-transform: scale(0.58333333) rotate(0deg);
       -ms-transform: scale(0.58333333) rotate(0deg);
@@ -308,10 +308,10 @@
   transition: transform .3s, -webkit-transform .3s;
 }
 :root .ant-select-tree li span.ant-select-tree-switcher.ant-select-tree-switcher_open:after {
-  font-size: 16px;
+  /* font-size: 16px; */
 }
 .ant-select-tree li span.ant-select-tree-switcher.ant-select-tree-switcher_close:after {
-  font-size: 16px;
+  /* font-size: 16px; */
   font-size: 7px \9;
   -webkit-transform: scale(0.58333333) rotate(0deg);
       -ms-transform: scale(0.58333333) rotate(0deg);
@@ -329,7 +329,7 @@
   transition: transform .3s, -webkit-transform .3s;
 }
 :root .ant-select-tree li span.ant-select-tree-switcher.ant-select-tree-switcher_close:after {
-  font-size: 16px;
+  /* font-size: 16px; */
 }
 .ant-select-tree li span.ant-select-tree-switcher.ant-select-tree-switcher_close:after {
   -webkit-transform: rotate(270deg) scale(0.59);
@@ -360,8 +360,8 @@ li.ant-select-tree-treenode-disabled > .ant-select-tree-node-content-wrapper:hov
   vertical-align: top;
 }
 .ant-select-tree-dropdown {
-  font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  /* font-family: "Segoe UI", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+  /* font-size: 16px; */
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
   -webkit-box-sizing: border-box;

@@ -32,51 +32,51 @@ class AdaptationDetailsItem extends React.Component {
   }
 
   onChange(value) {
-      console.log(arguments);
-      this.setState({ value });
+    console.log(arguments);
+    this.setState({ value });
   }
 
   componentDidMount() {
     fetch(apiBaseURL + 'api/sector/GetAllTree', {
       headers: {
-          "Content-Type": "application/json"
+        "Content-Type": "application/json"
       }
-  })
+    })
       .then(res => res.json())
       .then(res => {
         let { dataSource } = res
-          this.setState({ treeData: dataSource })
+        this.setState({ treeData: dataSource })
       })
   }
 
   deepMorph(parent) {
     if (parent instanceof Array) {
-        return parent.map(value => {
-          if(value.children){
-            return (
-              <TreeNode value={value.text || 'test'} title={value.text} key={value.id || 0}>
-                {value.children ? this.deepMorph(value.children) : <></>}
-              </TreeNode>
-            )
-          } else {
-            return (
-              <TreeNode value={value.text || 'test'} title={value.text} key={value.id || 0}/>
-            )
-          }
-        })
+      return parent.map(value => {
+        if (value.children) {
+          return (
+            <TreeNode value={value.text || 'test'} title={value.text} key={value.id || 0}>
+              {value.children ? this.deepMorph(value.children) : <></>}
+            </TreeNode>
+          )
+        } else {
+          return (
+            <TreeNode value={value.text || 'test'} title={value.text} key={value.id || 0} />
+          )
+        }
+      })
     }
     else {
-        return (
-          <TreeNode value={parent.text || 'test'} title={parent.text} key={parent.id || 0}/>
-        )
+      return (
+        <TreeNode value={parent.text || 'test'} title={parent.text} key={parent.id || 0} />
+      )
     }
-}
+  }
 
   render() {
 
     let { details, adaptationPurpose, sector, sectorTree, sectorType, typology } = this.props
     let tree = (<div></div>)
-    if(this.state.treeData !== undefined){
+    if (this.state.treeData !== undefined) {
       tree = this.deepMorph(this.state.treeData)
     }
     return (
@@ -118,17 +118,19 @@ class AdaptationDetailsItem extends React.Component {
               "Description": ""
             }}
           />
-          <div className='d-flex flex-column-reverse pb-1'>
+          {/* <div className='d-flex flex-column-reverse pb-1'> */}
+          <div className='col-md-4'>
+            <br /> {/*space reserved for label*/}
             <TreeSelect
               showSearch
-              label= "Sector:"
-              style={{ width: 300 }}
+              label="Sector:"
+              style={{ width: "100%" }}
               value={this.state.value}
               dropdownStyle={{ maxHeight: 250, overflow: 'auto' }}
               placeholder="Select Sector"
               allowClear
               onChange={this.onChange}
-              >
+            >
               {
                 tree
               }
@@ -147,9 +149,9 @@ class AdaptationDetailsItem extends React.Component {
             persist="api/Sector/AddOrUpdate"
             type="tree"
             dependencies={[
-              { key: "SectorTypeId", value: sectorType },
-              { key: "ParentSectorId", value: sector },
-              { key: "TypologyId", value: typology }
+              { key: "SectorTypeId", value: sectorType, type: "std" },
+              { key: "ParentSectorId", value: sector, type: "tree" },
+              { key: "TypologyId", value: typology, type: "std" }
             ]}
             allowEdit={true}
             newItemTemplate={{
