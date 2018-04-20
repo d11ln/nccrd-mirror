@@ -5,14 +5,9 @@ import { apiBaseURL } from "../../../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
+import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
-
-//AntD Tree-Select
-import TreeSelect from 'antd/lib/tree-select'
-import '../../../../css/antd.tree-select.css' //Overrides default antd.tree-select css
-import '../../../../css/antd.select.css' //Overrides default antd.select css
-const TreeNode = TreeSelect.TreeNode;
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { adaptationPurpose, sector, sectorTree, sectorType, typology } } = state
@@ -22,13 +17,6 @@ const mapStateToProps = (state, props) => {
 class AdaptationDetailsItem extends React.Component {
   constructor(props) {
     super(props)
-    this.onChange = this.onChange.bind(this)
-
-    //Set initial state
-    this.state = {
-      value: undefined,
-      treeData: {}
-    }
   }
 
   onChange(value) {
@@ -49,36 +37,10 @@ class AdaptationDetailsItem extends React.Component {
       })
   }
 
-  deepMorph(parent) {
-    if (parent instanceof Array) {
-      return parent.map(value => {
-        if (value.children) {
-          return (
-            <TreeNode value={value.text || 'test'} title={value.text} key={value.id || 0}>
-              {value.children ? this.deepMorph(value.children) : <></>}
-            </TreeNode>
-          )
-        } else {
-          return (
-            <TreeNode value={value.text || 'test'} title={value.text} key={value.id || 0} />
-          )
-        }
-      })
-    }
-    else {
-      return (
-        <TreeNode value={parent.text || 'test'} title={parent.text} key={parent.id || 0} />
-      )
-    }
-  }
-
   render() {
 
     let { details, adaptationPurpose, sector, sectorTree, sectorType, typology } = this.props
-    let tree = (<div></div>)
-    if (this.state.treeData !== undefined) {
-      tree = this.deepMorph(this.state.treeData)
-    }
+    
     return (
       <>
         <br />
@@ -118,26 +80,8 @@ class AdaptationDetailsItem extends React.Component {
               "Description": ""
             }}
           />
-          {/* <div className='d-flex flex-column-reverse pb-1'> */}
-          <div className='col-md-4'>
-            <br /> {/*space reserved for label*/}
-            <TreeSelect
-              showSearch
-              label="Sector:"
-              style={{ width: "100%" }}
-              value={this.state.value}
-              dropdownStyle={{ maxHeight: 250, overflow: 'auto' }}
-              placeholder="Select Sector"
-              allowClear
-              onChange={this.onChange}
-            >
-              {
-                tree
-              }
-            </TreeSelect>
-          </div>
 
-          <SelectComponent
+          <TreeSelectComponent
             id="selAdaptationSector"
             col="col-md-4"
             label="Sector:"

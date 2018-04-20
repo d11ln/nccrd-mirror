@@ -161,7 +161,6 @@
 }
 .ant-select-selection--single {
   height: 36px; 
-  top: 4px;
   position: relative;
   cursor: pointer;
   padding-top: 2px;

@@ -76,15 +76,21 @@ class SelectComponent extends React.Component {
 
   selectOptions() {
 
-    const { data, allowEdit } = this.props
+    const { data, dataFilterKey, dataFilterValue, allowEdit } = this.props
 
     let ar = []
+    let filteredData = data
 
-    if (typeof data !== 'undefined') {
+    if (typeof filteredData !== 'undefined') {
 
-      let procData = this.preProcessData(data) //data
+      if(typeof dataFilterKey !== 'undefined' && typeof dataFilterValue !== 'undefined'){
+        filteredData = data.filter(x => x[dataFilterKey] == dataFilterValue)
+      }
+
+      let procData = this.preProcessData(filteredData)
 
       if (allowEdit === true) {
+
         //Insert "[Edit list values...]" entry
         if (procData.filter(x => x.value === "[Edit list values...]").length === 0) {
           procData.splice(0, 0, {

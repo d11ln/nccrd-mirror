@@ -164,7 +164,8 @@ class EditTreeModal extends React.Component {
                                 treeData = this.transformDataTree(depItem.value)
                             }
 
-                            let valObj = depItem.value.filter(x => x[idKey] == item.value)[0]
+                            //Get selected value
+                            let valObj = depItem.value.filter(x => x[idKey] == item[valueKey])[0]
                             let selVal = []
                             if (typeof valObj !== 'undefined') {
                                 selVal = valObj[valueKey]
@@ -173,13 +174,13 @@ class EditTreeModal extends React.Component {
                             detailElements.push(
                                 <TreeSelect
                                     key={item.id + "_" + item.key + "_tree_select"}
-                                    // showSearch
+                                    showSearch
+                                    searchPlaceholder="Search..."
                                     style={{ width: "100%", marginBottom: "25px" }}
                                     value={selVal}
                                     dropdownStyle={{ maxHeight: 250, overflow: 'auto' }}
                                     placeholder="Select..."
                                     allowClear
-                                    //onSelect={this.dependencyTreeSelect}
                                     onChange={this.dependencyTreeSelect.bind(this, item.key)}
                                 >
                                     {this.renderTreeSelectNodes(treeData)}
