@@ -56,6 +56,11 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, projectDetails: { ...payload } }
         }
 
+        case ACTION_TYPES.SET_PROJECT_DETAILS_TITLE: {
+            let { projectDetails } = state
+            return { ...state, projectDetails: { ...projectDetails, ProjectTitle: payload, state: modState } }
+        }
+
         case ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM: {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, StartYear: payload, state: modState } }

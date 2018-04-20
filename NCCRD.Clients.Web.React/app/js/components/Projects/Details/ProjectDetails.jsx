@@ -13,6 +13,7 @@ import MitigationDetailsTab from './MitigationDetailsTab.jsx'
 import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
 import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
+import TextComponent from '../../Shared/TextComponent.jsx'
 import { BeatLoader } from 'react-spinners';
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
@@ -861,49 +862,9 @@ class ProjectDetails extends React.Component {
                     </div>
                 </div>
 
-                <br />
-                <div className="row">
-
-                    <div className="col-md-8">
-                        <table >
-                            <tbody>
-                                <tr>
-                                    <td valign="top">
-                                        <Button style={{ width: "100px", marginTop: "3px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
-                                            <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
-                                        </Button>
-                                    </td>
-                                    <td>
-                                        <p>
-                                            <span
-                                                data-tip={UILookup("txtProjectTitle").tooltip}
-                                                style={{ fontWeight: "bold", fontSize: "x-large" }}>
-                                                {UILookup("txtProjectTitle", "Project title:").label}&nbsp;
-                                            </span>
-                                            <span style={{ fontSize: "x-large" }}>
-                                                {projectDetails.ProjectTitle}
-                                            </span>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <RangeComponent
-                        col="col-md-4"
-                        align="center"
-                        size="x-large"
-                        id="txtProjectYear"
-                        label=""
-                        inputWidth="75px"
-                        valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
-                        setValueFromKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM}
-                        setValueToKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO}
-                        labelInline={true}
-                        float="right"
-                    />
-                </div>
+                <Button style={{ width: "100px", margin: "8px 0px 8px 0px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
+                </Button>
 
                 <br />
 

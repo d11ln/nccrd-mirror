@@ -30,13 +30,13 @@ class RangeComponent extends React.Component {
 
     getPrefix() {
         if (typeof this.props.prefix !== "undefined") {
-            return <label style={{ fontSize: this.props.size }}>{this.props.prefix}&nbsp;</label>
+            return <label>{this.props.prefix}&nbsp;</label>
         }
     }
 
     getSuffix() {
         if (typeof this.props.suffix !== "undefined") {
-            return <label style={{ fontSize: this.props.size }}>&nbsp;{this.props.suffix}</label>
+            return <label>&nbsp;{this.props.suffix}</label>
         }
     }
 
@@ -101,40 +101,30 @@ class RangeComponent extends React.Component {
 
     render() {
 
-        let { label, labelInline, inputWidth, col, size, align, valueFrom, valueTo, editMode, float } = this.props
+        let { label, inputWidth, col, valueFrom, valueTo, editMode } = this.props
         valueFrom = this.fixNullOrUndefinedValue(valueFrom)
         valueTo = this.fixNullOrUndefinedValue(valueTo)
 
-        if (typeof labelInline === 'undefined' || labelInline !== true) {
-            labelInline = false
-        }
-
-        if(typeof float === 'undefined' || float !== "right"){
-            float = "left"
-        }
-
         return (
             <div className={col}>
-                <div className={labelInline === true ? "row" : ""} style={{ float: float, marginRight: "3px"}}>
 
-                    {this.getLabel()}
+                {this.getLabel()}
 
-                    {this.getPrefix()}
-                    <input id={this.getId("from")} type="text" readOnly={!editMode}
-                        style={{ color: this.getFontColour(), width: inputWidth, fontSize: size, textAlign: align }} value={this.fixNullOrUndefinedValue(valueFrom)}
-                        onChange={this.valueFromChange.bind(this)}
-                    />
-                    {this.getSuffix()}
+                {this.getPrefix()}
+                <input id={this.getId("from")} type="text" readOnly={!editMode}
+                    style={{ color: this.getFontColour(), width: inputWidth }} value={this.fixNullOrUndefinedValue(valueFrom)}
+                    onChange={this.valueFromChange.bind(this)}
+                />
+                {this.getSuffix()}
 
-                    <label style={{ marginLeft: "10px", marginRight: "10px", fontSize: size }}> - </label>
+                <label style={{ marginLeft: "10px", marginRight: "10px" }}> - </label>
 
-                    {this.getPrefix()}
-                    <input id={this.getId("to")} type="text" readOnly={!editMode}
-                        style={{ color: this.getFontColour(), width: inputWidth, fontSize: size, textAlign: align }} value={this.fixNullOrUndefinedValue(valueTo)}
-                        onChange={this.valueToChange.bind(this)}
-                    />
-                    {this.getSuffix()}
-                </div>
+                {this.getPrefix()}
+                <input id={this.getId("to")} type="text" readOnly={!editMode}
+                    style={{ color: this.getFontColour(), width: inputWidth }} value={this.fixNullOrUndefinedValue(valueTo)}
+                    onChange={this.valueToChange.bind(this)}
+                />
+                {this.getSuffix()}
             </div>
         )
     }
