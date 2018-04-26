@@ -35,6 +35,15 @@ class TextComponent extends React.Component {
         return value
     }
 
+    getLabelFontColour(uiconf){
+        if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
+            return "red"
+        }
+        else {
+            return "black"
+        }
+    }
+
     getFontColour() {
         if (this.props.editMode) {
             return "steelblue"
@@ -62,7 +71,7 @@ class TextComponent extends React.Component {
 
         return (
             <div className={col}>
-                <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
+                <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
                 <input
                     id={id} type="text" readOnly={!editMode} value={value} onChange={this.valueChange.bind(this)}
                     style={{ color: this.getFontColour() }}

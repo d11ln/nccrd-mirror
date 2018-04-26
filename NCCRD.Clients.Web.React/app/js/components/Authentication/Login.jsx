@@ -47,7 +47,6 @@ class Login extends React.Component {
         }
 
         if (valid) {
-            //console.log(this.state.username, this.state.password)
             Promise.all([this.props.setAuthenticated({isAuthenticated: true, username: username})]).then(location.hash = "/")
         }
     }

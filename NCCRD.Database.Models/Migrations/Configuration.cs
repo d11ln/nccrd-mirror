@@ -22,18 +22,27 @@ namespace NCCRD.Database.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            context.VersionHistory.AddOrUpdate(new VersionHistory()
-            {
-                VersionNumber = "v1.0.0",
-                UpdateTime = DateTime.Parse("2009-01-31 10:23:21.740")
-            });
+            VersionHistory[] versions = {
+                new VersionHistory()
+                {
+                    VersionNumber = "v1.0.0",
+                    UpdateTime = DateTime.Parse("2009-01-31 10:23:21.740")
+                },
+                new VersionHistory()
+                {
+                    VersionNumber = "v2.0.0",
+                    Comments = "Redesigned database structure (with EntityFramework 6.2.0 - CodeFirst)",
+                    UpdateTime = DateTime.Now
+                }
+            };
 
-            context.VersionHistory.AddOrUpdate(new VersionHistory()
+            foreach(var version in versions)
             {
-                VersionNumber = "v2.0.0",
-                Comments = "Redesigned database structure (with EntityFramework 6.2.0 - CodeFirst)",
-                UpdateTime = DateTime.Now
-            });
+                if (context.VersionHistory.Count(x => x.VersionNumber == version.VersionNumber) == 0)
+                {
+                    context.VersionHistory.Add(version);
+                }
+            }
         }
     }
 }

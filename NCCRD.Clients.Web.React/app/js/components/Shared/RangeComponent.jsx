@@ -57,10 +57,18 @@ class RangeComponent extends React.Component {
 
         return (
             <div>
-                <label data-tip={uiconf.tooltip} style={{ fontSize: size, fontWeight: "bold" }}>{uiconf.label}&nbsp;</label>
+                <label data-tip={uiconf.tooltip} style={{ fontSize: size, fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}&nbsp;</label>
             </div>
         )
+    }
 
+    getLabelFontColour(uiconf){
+        if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
+            return "red"
+        }
+        else {
+            return "black"
+        }
     }
 
     getFontColour() {

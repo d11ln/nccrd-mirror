@@ -10,8 +10,8 @@ import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 
 const mapStateToProps = (state, props) => {
-  let { lookupData: { adaptationPurpose, sector, sectorTree, sectorType, typology } } = state
-  return { adaptationPurpose, sector, sectorTree, sectorType, typology }
+  let { lookupData: { adaptationPurpose, sector, sectorType, typology } } = state
+  return { adaptationPurpose, sector, sectorType, typology }
 }
 
 class AdaptationDetailsItem extends React.Component {
@@ -20,7 +20,6 @@ class AdaptationDetailsItem extends React.Component {
   }
 
   onChange(value) {
-    console.log(arguments);
     this.setState({ value });
   }
 
@@ -39,7 +38,7 @@ class AdaptationDetailsItem extends React.Component {
 
   render() {
 
-    let { details, adaptationPurpose, sector, sectorTree, sectorType, typology } = this.props
+    let { details, adaptationPurpose, sector, sectorType, typology } = this.props
     
     return (
       <>

@@ -56,7 +56,7 @@ export default function AdaptationsReducer(state = {}, action) {
             let { adaptationDetails, projectDetails } = state
 
             let newItem = {
-                "AdaptationDetailId": getUID(),
+                "AdaptationDetailId": parseInt(GetUID()),
                 "Description": "",
                 "AdaptationPurposeId": 0,
                 "ProjectId": payload,
