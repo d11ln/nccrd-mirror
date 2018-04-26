@@ -84,7 +84,7 @@ class EditListModal extends React.Component {
         })
 
         //Set Id to GUID
-        let newItemId = GetUID()
+        let newItemId = parseInt(GetUID())
         newItem[Object.keys(newItem)[0]] = newItemId
         newItem[Object.keys(newItem)[1]] = "ENTER VALUE HERE"
         newItem.modifiedState = true

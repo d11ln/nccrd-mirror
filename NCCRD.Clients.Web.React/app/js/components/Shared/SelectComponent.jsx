@@ -108,6 +108,15 @@ class SelectComponent extends React.Component {
     return ar
   }
 
+  getLabelFontColour(uiconf){
+    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
+        return "red"
+    }
+    else {
+        return "black"
+    }
+}
+
   getFontColour() {
     if (this.props.editMode) {
       return "steelblue"
@@ -182,7 +191,7 @@ class SelectComponent extends React.Component {
 
     return (
       <div className={col}>
-        <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
+        <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
         <Select id={id}
           disabled={this.getDisabledState()}
           name={id}

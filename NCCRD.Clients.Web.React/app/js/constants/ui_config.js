@@ -12,7 +12,8 @@ export function UILookup(key, defaultLabel) {
     return {
       key: key,
       label: typeof defaultLabel === 'undefined' ? "" : defaultLabel,
-      tooltip: ""
+      tooltip: "",
+      required: false
     }
   }
 }

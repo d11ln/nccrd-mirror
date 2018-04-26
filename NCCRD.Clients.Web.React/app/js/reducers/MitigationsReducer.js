@@ -56,7 +56,7 @@ export default function MitigationsReducer(state = {}, action) {
             let { mitigationDetails, projectDetails } = state
 
             let newItem = {
-                "MitigationDetailId": getUID(),
+                "MitigationDetailId": parseInt(GetUID()),
                 "VCS": 0,
                 "Other": 0,
                 "OtherDescription": "",
@@ -72,7 +72,12 @@ export default function MitigationsReducer(state = {}, action) {
                 "state": "modified"
             }
 
-            return { ...state, mitigationDetails: [...mitigationDetails, newItem] }
+            if (mitigationDetails.length > 0) {
+                return { ...state, mitigationDetails: [...mitigationDetails, newItem] }
+            }
+            else {
+                return { ...state, mitigationDetails: [newItem] }
+            }
         }
 
         case ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT: {
@@ -80,6 +85,7 @@ export default function MitigationsReducer(state = {}, action) {
 
             //Get item and Id
             let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+
             //Remove item from array
             mitigationDetails.splice(details.id, 1);
 

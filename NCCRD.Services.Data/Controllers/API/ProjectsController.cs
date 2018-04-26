@@ -1,8 +1,10 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Classes;
 using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -321,9 +323,9 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/Projects/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]Project project)
+        public int AddOrUpdate([FromBody]Project project)
         {
-            bool result = false;
+            int result = 0;
 
             using (var context = new SQLDBContext())
             {
@@ -387,8 +389,16 @@ namespace NCCRD.Services.Data.Controllers.API
                     existProj.MAOption = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId);
                 }
 
-                context.SaveChanges();
-                result = true;
+                try
+                {
+                    context.SaveChanges();
+                    result = project.ProjectId;
+                }
+                catch (DbEntityValidationException e)
+                {
+                    //throw new Exception(Utils.ParseDbEntityValidationException(e));
+                    throw new DbEntityValidationException(Utils.ParseDbEntityValidationException(e));
+                }
             }
 
             return result;

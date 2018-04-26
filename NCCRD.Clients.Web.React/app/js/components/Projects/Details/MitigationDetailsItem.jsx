@@ -7,13 +7,14 @@ import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
+import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
-    voluntaryMethodology, voluntaryGoldStandard, sector } } = state
+    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } } = state
   return {
     carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
-    voluntaryMethodology, voluntaryGoldStandard, sector
+    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology
   }
 }
 
@@ -26,7 +27,7 @@ class MitigationDetailsItem extends React.Component {
   render() {
 
     let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
-      voluntaryMethodology, voluntaryGoldStandard, sector } = this.props
+      voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } = this.props
 
     return (
       <>
@@ -161,7 +162,7 @@ class MitigationDetailsItem extends React.Component {
             setValueKey={ACTION_TYPES.SET_MITIGATION_OTHER_DESCR}
             parentId={details.MitigationDetailId}
           />
-          <SelectComponent
+          <TreeSelectComponent
             id="selMitigationSector"
             col="col-md-4"
             label="Sector:"
@@ -170,8 +171,14 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_SECTOR}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
-            persist={"api/Sector/AddOrUpdate"}
-            allowEdit={false}
+            persist="api/Sector/AddOrUpdate"
+            type="tree"
+            dependencies={[
+              { key: "SectorTypeId", value: sectorType, type: "std" },
+              { key: "ParentSectorId", value: sector, type: "tree" },
+              { key: "TypologyId", value: typology, type: "std" }
+            ]}
+            allowEdit={true}
             newItemTemplate={{
               "SectorId": 0,
               "Value": "",

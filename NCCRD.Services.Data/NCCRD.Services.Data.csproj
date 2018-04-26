@@ -245,6 +245,7 @@
     <Compile Include="App_Start\Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="App_Start\Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Classes\APIClient.cs" />
+    <Compile Include="Classes\Utils.cs" />
     <Compile Include="Classes\SessionExtensions.cs" />
     <Compile Include="Controllers\API\AccessRightsController.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />

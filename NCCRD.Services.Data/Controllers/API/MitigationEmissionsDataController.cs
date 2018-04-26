@@ -1,7 +1,9 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Classes;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -123,8 +125,15 @@ namespace NCCRD.Services.Data.Controllers.API
                     data.Project = mitigationEmissionsData.Project;
                 }
 
-                context.SaveChanges();
-                result = true;
+                try
+                {
+                    context.SaveChanges();
+                    result = true;
+                }
+                catch (DbEntityValidationException e)
+                {
+                    throw new Exception(Utils.ParseDbEntityValidationException(e));
+                }
             }
 
             return result;

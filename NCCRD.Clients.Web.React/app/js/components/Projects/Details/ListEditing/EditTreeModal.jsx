@@ -160,15 +160,21 @@ class EditTreeModal extends React.Component {
                         else if (depItem.type === "tree") {
                             //If 'tree' dependency found - render select-tree
                             let treeData = []
+                            let selVal = []
+
                             if (_data.length > 0) {
                                 treeData = this.transformDataTree(depItem.value)
                             }
 
                             //Get selected value
-                            let valObj = depItem.value.filter(x => x[idKey] == item[valueKey])[0]
-                            let selVal = []
-                            if (typeof valObj !== 'undefined') {
-                                selVal = valObj[valueKey]
+                            let currentItem = _data.filter(x => x[idKey] == this.state.selectedItemId)[0]
+                            if (typeof currentItem !== 'undefined') {
+
+                                let valObj = depItem.value.filter(x => x[idKey] == currentItem[item.key])[0]
+                                if (typeof valObj !== 'undefined') {
+
+                                    selVal = valObj[valueKey]
+                                }
                             }
 
                             detailElements.push(
@@ -306,6 +312,7 @@ class EditTreeModal extends React.Component {
         let { _data, selectedItemId, expandedKeys } = this.state
         let selectedId = null
         let idKey = Object.keys(_data[0])[0].toString()
+        let parentIdKey = 'Parent' + idKey
         let currentItem = _data.filter(x => x[idKey] == selectedItemId)[0]
 
         if (typeof extra.triggerNode !== 'undefined') {
@@ -314,12 +321,21 @@ class EditTreeModal extends React.Component {
 
         if (typeof currentItem !== 'undefined') {
 
-            //Update with changed value
-            currentItem[key] = selectedId
-            currentItem.modifiedState = true
+            //Fix own-parent loop
+            if (key === parentIdKey && selectedId == currentItem[idKey]) {
+                selectedId = null
+            }
+
+            //Update with changed value (if different)
+            if (currentItem[key] != selectedId) {
+                currentItem[key] = selectedId
+                currentItem.modifiedState = true
+            }
 
             //Update state
             this.setState({ _data: _data, expandedKeys: [...expandedKeys, selectedId !== null ? selectedId : ""] })
+
+
         }
     }
 
@@ -357,10 +373,6 @@ class EditTreeModal extends React.Component {
         //Prep post params
         let strPostData = JSON.stringify(changedItems)
         let url = apiBaseURL + persist
-
-        console.log("changedItems:", changedItems)
-        console.log("strPostData:", strPostData)
-        console.log("url:", url)
 
         //Save items to DB
         return fetch(url, {
@@ -417,7 +429,7 @@ class EditTreeModal extends React.Component {
         })
 
         //Setup and insert data item
-        let newItemId = GetUID()
+        let newItemId = parseInt(GetUID())
         let newItemText = "Item_" + newItemId.toString() //"ENTER VALUE HERE"
         newItem[Object.keys(newItem)[0]] = newItemId
         newItem[Object.keys(newItem)[1]] = newItemText
@@ -449,8 +461,6 @@ class EditTreeModal extends React.Component {
         if (level === 0) {
             effectiveData = effectiveData.filter(x => x[parentIdKey] === null)
         }
-
-        //console.log("level " + level + " data:", effectiveData)
 
         effectiveData.map(item => {
 

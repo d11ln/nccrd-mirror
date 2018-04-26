@@ -7,10 +7,11 @@ import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
+import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { lookupData: { researchType, targetAudience, sector } } = state
-  return { researchType, targetAudience, sector }
+  let { lookupData: { researchType, targetAudience, sector, sectorType, typology } } = state
+  return { researchType, targetAudience, sector, sectorType, typology }
 }
 
 class ResearchDetailsItem extends React.Component {
@@ -21,7 +22,7 @@ class ResearchDetailsItem extends React.Component {
 
   render() {
 
-    let { details, researchType, targetAudience, sector } = this.props
+    let { details, researchType, targetAudience, sector, sectorType, typology } = this.props
 
     return (
       <>
@@ -82,8 +83,8 @@ class ResearchDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
-        />
-          <SelectComponent
+          />
+          <TreeSelectComponent
             id="selResearchSector"
             col="col-md-4"
             label="Sector:"
@@ -92,8 +93,14 @@ class ResearchDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
-            persist={"api/Sector/AddOrUpdate"}
-            allowEdit={false}
+            persist="api/Sector/AddOrUpdate"
+            type="tree"
+            dependencies={[
+              { key: "SectorTypeId", value: sectorType, type: "std" },
+              { key: "ParentSectorId", value: sector, type: "tree" },
+              { key: "TypologyId", value: typology, type: "std" }
+            ]}
+            allowEdit={true}
             newItemTemplate={{
               "SectorId": 0,
               "Value": "",

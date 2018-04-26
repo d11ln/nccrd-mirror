@@ -362,7 +362,7 @@ class ProjectDetails extends React.Component {
                 "EndYear": 0,
                 "AlternativeContact": "",
                 "AlternativeContactEmail": "",
-                "Link": "string",
+                "Link": "",
                 "ValidationComments": "",
                 "BudgetLower": 0,
                 "BudgetUpper": 0,
@@ -543,7 +543,7 @@ class ProjectDetails extends React.Component {
 
     saveChanges() {
 
-        let { setEditMode, setLoading } = this.props
+        let { setEditMode, setLoading, loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMitigationEmissions, loadResearchDetails } = this.props
 
         //Close modal
         this.setState({ saveModal: false })
@@ -559,34 +559,50 @@ class ProjectDetails extends React.Component {
             this.SaveResearchChanges()
         ]).then(([project, adaptations, mitigations, emissions, research]) => {
 
-            //console.log("project: ", project)
-            //console.log("adaptations: ", adaptations)
-            //console.log("mitigations: ", mitigations)
-            //console.log("emissions: ", emissions)
-            //console.log("research: ", research)
+            let alertMsg = ""
 
-            if (project === true && adaptations === true && mitigations === true && emissions === true && research === true) {
+            if ((!isNaN(project) && project > 0) && adaptations === true && mitigations === true && emissions === true && research === true) {
                 setEditMode(false)
+                this.loadProjects(loadProjectDetails)
+                this.loadAdaptationDetails(loadAdaptationDetails)
+                this.loadMitigationDetails(loadMitigationDetails)
+                this.loadMitigationEmissionsData(loadMitigationEmissions)
+                this.loadResearchDetails(loadResearchDetails)
             }
-            else if (project === false) {
-                alert("Unable to save project data. See log for errors.")
-                console.log('Error:', res)
+            else if (isNaN(project) || project < 1) {
+                alertMsg = "Unable to save project data."
+                if (typeof project.ExceptionMessage !== 'undefined' && project.ExceptionMessage.toString().includes("validation errors")) {
+                    alertMsg += "\n\nError(s):\n\n" + project.ExceptionMessage
+                }
             }
-            else if (adaptations === false) {
-                alert("Unable to save adaptation data. See log for errors.")
-                console.log('Error:', res)
+            else if (adaptations !== true) {
+                alertMsg = "Unable to save adaptations data."
+                if (typeof adaptations.ExceptionMessage !== 'undefined' && adaptations.ExceptionMessage.toString().includes("validation errors")) {
+                    alertMsg += "\n\nError(s):\n\n" + adaptations.ExceptionMessage
+                }
             }
-            else if (mitigations === false) {
-                alert("Unable to save mitigation data. See log for errors.")
-                console.log('Error:', res)
+            else if (mitigations !== true) {
+                alertMsg = "Unable to save mitigations data."
+                if (typeof mitigations.ExceptionMessage !== 'undefined' && mitigations.ExceptionMessage.toString().includes("validation errors")) {
+                    alertMsg += "\n\nError(s):\n\n" + mitigations.ExceptionMessage
+                }
             }
-            else if (emissions === false) {
-                alert("Unable to save emissions data. See log for errors.")
-                console.log('Error:', res)
+            else if (emissions !== true) {
+                alertMsg = "Unable to save emissions data."
+                if (typeof emissions.ExceptionMessage !== 'undefined' && emissions.ExceptionMessage.toString().includes("validation errors")) {
+                    alertMsg += "\n\nError(s):\n\n" + emissions.ExceptionMessage
+                }
             }
-            else if (research === false) {
-                alert("Unable to save research data. See log for errors.")
-                console.log('Error:', res)
+            else if (research !== true) {
+                alertMsg = "Unable to save research data."
+                if (typeof research.ExceptionMessage !== 'undefined' && research.ExceptionMessage.toString().includes("validation errors")) {
+                    alertMsg += "\n\nError(s):\n\n" + research.ExceptionMessage
+                }
+            }
+
+            if (alertMsg !== "") {
+                alert(alertMsg)
+                console.log(alertMsg)
             }
 
             setLoading(false)
@@ -599,10 +615,6 @@ class ProjectDetails extends React.Component {
 
         if (projectDetails.state === 'modified') {
 
-            //Validate data...
-
-            //Corrections
-
             let strPostData = JSON.stringify(projectDetails)
             let url = apiBaseURL + "api/Projects/AddOrUpdate"
 
@@ -613,15 +625,18 @@ class ProjectDetails extends React.Component {
             })
                 .then((res) => res.json())
                 .then((res) => {
-                    if (res === true) {
+
+                    if (!isNaN(res) && res > 0) {
                         resetProjectState(projectDetails)
+                        this.setState({ projectId: res })
+                        location.hash = "/projects/" + res
                     }
 
                     return res
                 })
         }
         else {
-            return true
+            return 1
         }
     }
 
@@ -629,27 +644,25 @@ class ProjectDetails extends React.Component {
 
         let { adaptationDetails, resetAdaptationState } = this.props
         let result = true
-        let actions = []
 
         return Promise.all(
             adaptationDetails.map((adaptation) => {
 
-                if (adaptation.state === "modified") {
-
-                    //Validate data...
+                if (result === true && adaptation.state === "modified") {
 
                     let strPostData = JSON.stringify(adaptation)
                     let url = apiBaseURL + "api/AdaptationDetails/AddOrUpdate"
 
-                    fetch(url, {
+                    return fetch(url, {
                         method: 'post',
                         headers: { 'Content-Type': 'application/json' },
                         body: strPostData
                     })
                         .then((res) => res.json())
                         .then((res) => {
-                            if (result === true && res === false) {
-                                result === false
+
+                            if (result === true && res !== true) {
+                                result = res
                             }
                             else if (res === true) {
                                 resetAdaptationState(adaptation)
@@ -666,14 +679,11 @@ class ProjectDetails extends React.Component {
 
         let { mitigationDetails, resetMitigationState } = this.props
         let result = true
-        let actions = []
 
         return Promise.all(
             mitigationDetails.map((mitigation) => {
 
-                if (mitigation.state === "modified") {
-
-                    //Validate data...
+                if (result === true && mitigation.state === "modified") {
 
                     let strPostData = JSON.stringify(mitigation)
                     let url = apiBaseURL + "api/MitigationDetails/AddOrUpdate"
@@ -685,8 +695,9 @@ class ProjectDetails extends React.Component {
                     })
                         .then((res) => res.json())
                         .then((res) => {
-                            if (result === true && res === false) {
-                                result === false
+
+                            if (result === true && res !== true) {
+                                result = res
                             }
                             else if (res === true) {
                                 resetMitigationState(mitigation)
@@ -703,16 +714,13 @@ class ProjectDetails extends React.Component {
 
         let { emissionsData, resetEmissionState } = this.props
         let result = true
-        let actions = []
 
         return Promise.all(
-            emissionsData.map((emission) => {
+            emissionsData.map((emissions) => {
 
-                if (emission.state === "modified") {
+                if (result === true && emissions.state === "modified") {
 
-                    //Validate data...
-
-                    let strPostData = JSON.stringify(emission)
+                    let strPostData = JSON.stringify(emissions)
                     let url = apiBaseURL + "api/MitigationEmissionsData/AddOrUpdate"
 
                     return fetch(url, {
@@ -722,11 +730,12 @@ class ProjectDetails extends React.Component {
                     })
                         .then((res) => res.json())
                         .then((res) => {
-                            if (result === true && res === false) {
-                                result === false
+
+                            if (result === true && res !== true) {
+                                result = res
                             }
                             else if (res === true) {
-                                resetEmissionState(emission)
+                                resetEmissionState(emissions)
                             }
                         })
                 }
@@ -740,14 +749,11 @@ class ProjectDetails extends React.Component {
 
         let { researchDetails, resetResearchState } = this.props
         let result = true
-        let actions = []
 
         return Promise.all(
             researchDetails.map((research) => {
 
-                if (research.state === "modified") {
-
-                    //Validate data...
+                if (result === true && research.state === "modified") {
 
                     let strPostData = JSON.stringify(research)
                     let url = apiBaseURL + "api/ResearchDetails/AddOrUpdate"
@@ -759,8 +765,9 @@ class ProjectDetails extends React.Component {
                     })
                         .then((res) => res.json())
                         .then((res) => {
-                            if (result === true && res === false) {
-                                result === false
+
+                            if (result === true && res !== true) {
+                                result = res
                             }
                             else if (res === true) {
                                 resetResearchState(research)
@@ -872,10 +879,10 @@ class ProjectDetails extends React.Component {
                 <Tabs forceRenderTabPanel={true}>
                     <TabList>
                         <Tab><b style={{ color: "#1565c0" }}>Project Details</b></Tab>
-                        <Tab><b style={{ color: "#1565c0" }}>Adaptation Details</b></Tab>
-                        <Tab><b style={{ color: "#1565c0" }}>Mitigation Details</b></Tab>
-                        <Tab><b style={{ color: "#1565c0" }}>Mitigation Emissions Data</b></Tab>
-                        <Tab><b style={{ color: "#1565c0" }}>Research Details</b></Tab>
+                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Adaptation Details</b></Tab>
+                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Mitigation Details</b></Tab>
+                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Mitigation Emissions Data</b></Tab>
+                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Research Details</b></Tab>
                     </TabList>
 
                     <TabPanel>

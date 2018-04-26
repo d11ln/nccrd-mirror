@@ -17,7 +17,6 @@ export default function FilterReducer(state = {}, action) {
         }
 
         case ACTION_TYPES.LOAD_STATUS_FILTER: {
-            console.log("set filter:", payload.value)
             return { ...state, statusFilter: payload.value }
         }
 

@@ -172,7 +172,6 @@ class ProjectDetailsTab extends React.Component {
                         col="col-md-4"
                         label="Project sub-type:"
                         selectedValue={projectDetails.ProjectSubTypeId}
-                        // data={this.props.projectSubTypes.filter(x => x.ProjectTypeId === projectDetails.ProjectTypeId)}
                         data={this.props.projectSubTypes}
                         dataFilterKey={"ProjectTypeId"}
                         dataFilterValue={projectDetails.ProjectTypeId}
