@@ -1,6 +1,7 @@
 'use strict'
 
 import * as ACTION_TYPES from "../constants/action-types"
+import { GetUID } from "../globalFunctions"
 
 const _ = require('lodash')
 
@@ -13,19 +14,23 @@ function extractItemAndId(array, key, value) {
     return { item, id }
 }
 
-function getUID() {
-    return new Date().valueOf();
-}
-
 export default function AdaptationsReducer(state = {}, action) {
 
     let { type, payload } = action
     let id = 0
+    let modState = "original"
 
-    //Check if ID embedded in payload
-    if (typeof payload !== 'undefined' && typeof payload.value !== 'undefined') {
-        id = parseInt(payload.id)
-        payload = payload.value
+    //Check if additional data embedded in payload
+    if (typeof payload !== 'undefined') {
+        if (typeof payload.id !== 'undefined') {
+            id = parseInt(payload.id)
+        }
+        if (typeof payload.state !== 'undefined') {
+            modState = payload.state
+        }
+        if (typeof payload.value !== 'undefined') {
+            payload = payload.value
+        }
     }
 
     switch (type) {
@@ -51,7 +56,7 @@ export default function AdaptationsReducer(state = {}, action) {
             let { adaptationDetails, projectDetails } = state
 
             let newItem = {
-                "AdaptationDetailId": getUID(),
+                "AdaptationDetailId": parseInt(GetUID()),
                 "Description": "",
                 "AdaptationPurposeId": 0,
                 "ProjectId": payload,
@@ -71,7 +76,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload, state: "modified" }] }
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload, state: modState }] }
         }
 
         case ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE: {
@@ -83,7 +88,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, AdaptationPurposeId: payload, state: "modified" }] }
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, AdaptationPurposeId: payload, state: modState }] }
         }
 
         case ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR: {
@@ -95,7 +100,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, SectorId: payload, state: "modified" }] }
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, SectorId: payload, state: modState }] }
         }
 
         default: {

@@ -4,6 +4,8 @@
  * Depecdencies
  * @ignore
  */
+import 'antd/lib/style/index.css'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -15,12 +17,13 @@ import store from './store'
 import queryString from 'query-string'
 import { Button } from 'mdbreact/'
 import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import Home from './components/Home.jsx'
-import Projects from './components/Projects.jsx'
-import ProjectDetails from './components/ProjectDetails.jsx'
-import Login from './components/Login.jsx'
-import Logout from './components/Logout.jsx'
-import CustomNavbar from './components/CustomNavbar.jsx'
+import Home from './components/Base/Home.jsx'
+import Projects from './components/Projects/List/Projects.jsx'
+import ProjectDetails from './components/Projects/Details/ProjectDetails.jsx'
+import Login from './components/Authentication/Login.jsx'
+import Logout from './components/Authentication/Logout.jsx'
+import CustomNavbar from './components/Base/CustomNavbar.jsx'
+import { stripURLParam } from "./globalFunctions.js"
 
 /**
  * Tap Event
@@ -35,6 +38,20 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.getNavbar = this.getNavbar.bind(this)
+
+    this.state = { navbar: true}
+    if(location.toString().includes("navbar=hidden")){
+      this.state = { navbar: false}
+      stripURLParam("navbar=hidden")
+    }
+  }
+
+  getNavbar(){
+    if(this.state.navbar){
+      return <CustomNavbar />
+    }
   }
 
   render() {
@@ -43,7 +60,7 @@ class App extends React.Component {
         <Router>
           <div>
 
-            <CustomNavbar />
+            {this.getNavbar()}
 
             <Switch>
               {/* <Redirect from="/" to="/projects" exact /> */}

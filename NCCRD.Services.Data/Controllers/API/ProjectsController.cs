@@ -1,8 +1,10 @@
 ﻿using NCCRD.Database.Models;
 using NCCRD.Database.Models.Contexts;
+using NCCRD.Services.Data.Classes;
 using NCCRD.Services.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -27,10 +29,12 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="regionId">RegionId to filter on</param>
         /// <param name="sectorId">RegionId to filter on</param>
         /// <param name="typologyId">TypologyId to filter on</param>
+        /// <param name="batchSize">Download batch size</param>
+        /// <param name="batchCount">Download batch number</param>
         /// <returns>Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAll")]
-        public IEnumerable<Project> GetAll(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
+        public IEnumerable<Project> GetAll(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0, int batchSize = 0, int batchCount = 0)
         {
             List<Project> projectList = new List<Project>();
 
@@ -41,32 +45,58 @@ namespace NCCRD.Services.Data.Controllers.API
                 if (regionId > 0)
                 {
                     //Get all RegionIds (including children)
-                    var regionIds = GetChildRegions(regionId, context.Region.ToList()).Select(r => r.RegionId).Distinct();
+                    var allRegionIDs = GetChildRegions(regionId, context.Region.ToList()).Select(r => r.RegionId).Distinct().ToList();
+                    allRegionIDs.Add(regionId);
 
                     //Get all ProjectIds assigned to these Regions and/or Typology
-                    regionProjectIds = context.ProjectRegion.Where(p => regionIds.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
+                    regionProjectIds = context.ProjectRegion.Where(p => allRegionIDs.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
                 }
 
                 var sectorTypologyProjectIds = new List<int>();
                 if (typologyId > 0 || sectorId > 0)
                 {
-                    sectorTypologyProjectIds = context.MitigationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList();
-                    sectorTypologyProjectIds.AddRange(context.AdaptationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
-                    sectorTypologyProjectIds.AddRange(context.ResearchDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
+                    if (sectorId > 0)
+                    {
+                        var allSectorIDs = GetChildSectors(sectorId, context.Sector.ToList()).Select(x => (int?)x.SectorId).ToList();
+                        allSectorIDs.Add(sectorId);
+
+                        sectorTypologyProjectIds.AddRange(context.MitigationDetails.Where(x => sectorId == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+                        sectorTypologyProjectIds.AddRange(context.AdaptationDetails.Where(x => sectorId == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+                        sectorTypologyProjectIds.AddRange(context.ResearchDetails.Where(x => sectorId == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+                    }
+
+                    if (typologyId > 0)
+                    {
+                        sectorTypologyProjectIds.AddRange(context.MitigationDetails.Where(x => typologyId == 0 || x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
+                        sectorTypologyProjectIds.AddRange(context.AdaptationDetails.Where(x => typologyId == 0 || x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
+                        sectorTypologyProjectIds.AddRange(context.ResearchDetails.Where(x => typologyId == 0 || x.Sector.TypologyId == typologyId).Select(x => x.ProjectId).ToList());
+                    }
 
                     //Remove duplicates
                     sectorTypologyProjectIds = sectorTypologyProjectIds.Distinct().ToList();
                 }
 
+                if (batchSize <= 0)
+                {
+                    batchSize = context.Project.Count();
+                }
+
+                if (batchCount <= 0)
+                {
+                    batchCount = 1;
+                }
+
                 //GET PORJECTS FILTERED//
                 //Retrieve project details and filter on query params
-                projectList = context.Project.OrderBy(p => p.ProjectTitle).
-                    Where(p => 
-                        (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
-                        (statusId == 0 || p.ProjectStatusId == statusId) &&
-                        (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
-                        ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId))).
-                    ToList();
+                projectList = context.Project.OrderBy(p => p.ProjectTitle)
+                                .Where(p =>
+                                    (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
+                                    (statusId == 0 || p.ProjectStatusId == statusId) &&
+                                    (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
+                                    ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId)))
+                                .Skip((batchCount - 1) * batchSize)
+                                .Take(batchSize)
+                                .ToList();
             }
 
             return projectList;
@@ -80,23 +110,29 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <param name="regionId">RegionId to filter on</param>
         /// <param name="sectorId">RegionId to filter on</param>
         /// <param name="typologyId">TypologyId to filter on</param>
+        /// <param name="batchSize">Download batch size</param>
+        /// <param name="batchCount">Download batch number</param>
         /// <returns>Minimal Projects data as JSON</returns>
         [HttpGet]
         [Route("api/Projects/GetAll/List")]
-        public IEnumerable<ProjectListViewModel> GetAllList(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0)
+        public IEnumerable<ProjectListViewModel> GetAllList(string titlePart = "", int statusId = 0, int regionId = 0, int sectorId = 0, int typologyId = 0, int batchSize = 0, int batchCount = 0)
         {
-            return GetAll(titlePart, statusId, regionId,sectorId,typologyId).
-                        Select(x => new ProjectListViewModel()
-                        {
-                            ProjectId = x.ProjectId,
-                            ProjectTitle = x.ProjectTitle,
-                            ProjectDescription = x.ProjectDescription
-                        }).ToList();
+            var projectData = new List<ProjectListViewModel>();
+
+            projectData = GetAll(titlePart, statusId, regionId, sectorId, typologyId, batchSize, batchCount)
+                            .Select(x => new ProjectListViewModel()
+                            {
+                                ProjectId = x.ProjectId,
+                                ProjectTitle = x.ProjectTitle,
+                                ProjectDescription = x.ProjectDescription
+                            }).ToList();
+
+            return projectData;
         }
 
         private List<Region> GetChildRegions(int regionId, List<Region> regionList)
         {
-            var regions = regionList.Where(x => x.ParentRegionID == regionId).ToList();
+            var regions = regionList.Where(x => x.ParentRegionId == regionId).ToList();
 
             var childRegions = new List<Region>();
             foreach (var region in regions)
@@ -106,6 +142,20 @@ namespace NCCRD.Services.Data.Controllers.API
             regions.AddRange(childRegions);
 
             return regions;
+        }
+
+        private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
+        {
+            var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+
+            var childSectors = new List<Sector>();
+            foreach (var sector in sectors)
+            {
+                childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
+            }
+            sectors.AddRange(childSectors);
+
+            return sectors;
         }
 
         /// <summary>
@@ -123,36 +173,12 @@ namespace NCCRD.Services.Data.Controllers.API
         {
             List<ProjectGeoJson> projectGeo = new List<ProjectGeoJson>();
 
+            var projectIDs = GetAll(titlePart, statusId, regionId, sectorId, typologyId).Select(p => p.ProjectId).ToList();
+
             using (var context = new SQLDBContext())
             {
-                //GET FILTER DATA//
-                var regionProjectIds = new List<int>();
-                if (regionId > 0)
-                {
-                    //Get all RegionIds (including children)
-                    var regionIds = GetChildRegions(regionId, context.Region.ToList()).Select(r => r.RegionId).Distinct();
-
-                    //Get all ProjectIds assigned to these Regions and/or Typology
-                    regionProjectIds = context.ProjectRegion.Where(p => regionIds.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
-                }
-
-                var sectorTypologyProjectIds = new List<int>();
-                if (typologyId > 0 || sectorId > 0)
-                {
-                    sectorTypologyProjectIds = context.MitigationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList();
-                    sectorTypologyProjectIds.AddRange(context.AdaptationDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
-                    sectorTypologyProjectIds.AddRange(context.ResearchDetails.Where(x => (typologyId == 0 || x.Sector.TypologyId == typologyId) && (sectorId == 0 || x.SectorId == sectorId)).Select(x => x.ProjectId).ToList());
-
-                    //Remove duplicates
-                    sectorTypologyProjectIds = sectorTypologyProjectIds.Distinct().ToList();
-                }
-
                 //GET PROJECT DATA FILTERED//
-                var projectData = (from proj in context.Project.Where(p =>
-                                                                    (string.IsNullOrEmpty(titlePart) || p.ProjectTitle.ToLower().Contains(titlePart.ToLower())) &&
-                                                                    (statusId == 0 || p.ProjectStatusId == statusId) &&
-                                                                    (regionId == 0 || regionProjectIds.Contains(p.ProjectId)) &&
-                                                                    ((typologyId == 0 && sectorId == 0) || sectorTypologyProjectIds.Contains(p.ProjectId)))
+                var projectData = (from proj in context.Project.Where(p => projectIDs.Contains(p.ProjectId))
                                    join projLoc in context.ProjectLocation on proj.ProjectId equals projLoc.ProjectId
                                    join loc in context.Location on projLoc.LocationId equals loc.LocationId
                                    join projStat in context.ProjectStatus on proj.ProjectStatusId equals projStat.ProjectStatusId
@@ -165,7 +191,7 @@ namespace NCCRD.Services.Data.Controllers.API
                                        loc.LonCalculated
                                    }).ToList();
 
-                foreach(var projDat in projectData)
+                foreach (var projDat in projectData)
                 {
                     ProjectGeoJson item = new ProjectGeoJson();
                     item.type = "Feature";
@@ -297,9 +323,9 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/Projects/AddOrUpdate")]
-        public bool AddOrUpdate([FromBody]Project project)
+        public int AddOrUpdate([FromBody]Project project)
         {
-            bool result = false;
+            int result = 0;
 
             using (var context = new SQLDBContext())
             {
@@ -363,8 +389,16 @@ namespace NCCRD.Services.Data.Controllers.API
                     existProj.MAOption = context.MAOptions.FirstOrDefault(x => x.MAOptionId == project.MAOptionId);
                 }
 
-                context.SaveChanges();
-                result = true;
+                try
+                {
+                    context.SaveChanges();
+                    result = project.ProjectId;
+                }
+                catch (DbEntityValidationException e)
+                {
+                    //throw new Exception(Utils.ParseDbEntityValidationException(e));
+                    throw new DbEntityValidationException(Utils.ParseDbEntityValidationException(e));
+                }
             }
 
             return result;

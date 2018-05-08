@@ -16,13 +16,13 @@ const store = createStore(
         globalData: {
             isAuthenticated: false,
             loading: true,
-            editMode: true
+            editMode: false,
+            username: ""
         },
 
         editListModalData: {
             show: false,
             data: [],
-            treeData: [],
             dispatch: "",
             persist: "",
             type: "std",
@@ -32,7 +32,10 @@ const store = createStore(
 
         projectData: {
             projects: [],
-            projectDetails: {}
+            projectDetails: {},
+            start: 0,
+            end: 10,
+            listScrollPos: 0
         },
 
         adaptationData: {
@@ -59,11 +62,12 @@ const store = createStore(
             validationStatus: [],
             typology: [],
             regionTree: [],
+            region: [],
             sectorTree: [],
+            sector: [],
+            sectorType: [],
             maOptions: [],
             adaptationPurpose: [],
-            sector: [],
-            region: [],
             carbonCredit: [],
             carbonCreditMarket: [],
             cdmStatus: [],
@@ -80,7 +84,8 @@ const store = createStore(
             statusFilter: 0,
             typologyFilter: 0,
             regionFilter: 0,
-            sectorFilter: 0
+            sectorFilter: 0,
+            polygonFilter: ""
         }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
