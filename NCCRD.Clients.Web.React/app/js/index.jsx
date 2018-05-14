@@ -24,6 +24,9 @@ import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
 import { stripURLParam } from "./globalFunctions.js"
+import userManager from './utils/userManager';
+import CallbackPage from '../js/components/Authentication/callback.jsx';
+import { OidcProvider } from 'redux-oidc'
 
 /**
  * Tap Event
@@ -69,6 +72,7 @@ class App extends React.Component {
               <Route path="/projects/:id" component={ProjectDetails} exact />
               <Route path="/login" component={Login} exact />
               <Route path="/logout" component={Logout} exact />
+              <Route path="/callback" component={CallbackPage} />
             </Switch>
 
           </div>
@@ -81,7 +85,9 @@ class App extends React.Component {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <OidcProvider store={store} userManager={userManager}>
+      <App />
+    </OidcProvider>
   </Provider>,
   document.getElementById('app')
 )

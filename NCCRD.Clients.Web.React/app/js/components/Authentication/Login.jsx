@@ -4,7 +4,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
 import { Button, Input } from 'mdbreact'
-import * as ACTION_TYPES from "../../constants/action-types"
+import * as ACTION_TYPES from '../../constants/action-types'
+import userManager from '../../utils/userManager'
 
 const mapStateToProps = (state, props) => {
     let { globalData: { loading } } = state
@@ -27,70 +28,79 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.login = this.login.bind(this)
-
-        this.state = { username: "", password: "" }
+        // this.login = this.login.bind(this)
+        // this.state = { username: "", password: "" }
     }
 
     componentDidMount() {
         this.props.setLoading(false)
+        userManager.signinRedirect()
     }
 
-    login() {
+    // login(event) {
 
-        let { username, password } = this.state
-        let valid = true
+    //     let { username, password } = this.state
+    //     let valid = true
 
-        valid = this.validateUsername(username)
-        if (valid) {
-            valid = this.validatePassword(password)
-        }
+    //     valid = this.validateUsername(username)
+    //     if (valid === true) {
+    //         valid = this.validatePassword(password)
+    //     }
 
-        if (valid) {
-            Promise.all([this.props.setAuthenticated({isAuthenticated: true, username: username})]).then(location.hash = "/")
-        }
-    }
+    //     if (valid === true) {
 
-    validateUsername(username) {
+    //         this.props.setLoading(true)
 
-        let valid = true
+    //         event.preventDefault()
 
-        if (username === "") {
-            alert("Email (username) required")
-            valid = false
-        }
-        else if (!(username.includes("@") && username.includes("."))) {
-            alert("Invalid Email (username)")
-            valid = false
-        }
+    //         console.log(userManager._settings)
 
-        return valid
-    }
+    //         userManager.signinRedirect()
+    //     }
+    // }
 
-    validatePassword(password) {
-        let valid = true
+    // validateUsername(username) {
 
-        if (password === "") {
-            alert("Password required")
-            valid = false
-        }
+    //     let valid = true
 
-        return valid
-    }
+    //     if (username === "") {
+    //         alert("Email (username) required")
+    //         valid = false
+    //     }
+    //     else if (!(username.includes("@") && username.includes("."))) {
+    //         alert("Invalid Email (username)")
+    //         valid = false
+    //     }
 
-    username(e) {
-        this.setState({ username: e.target.value })
-    }
+    //     return valid
+    // }
 
-    password(e) {
-        this.setState({ password: e.target.value })
-    }
+    // validatePassword(password) {
+    //     let valid = true
+
+    //     if (password === "") {
+    //         alert("Password required")
+    //         valid = false
+    //     }
+
+    //     return valid
+    // }
+
+    // username(e) {
+    //     this.setState({ username: e.target.value })
+    // }
+
+    // password(e) {
+    //     this.setState({ password: e.target.value })
+    // }
 
     render() {
 
         return (
             <>
-                <div className="container-fluid">
+                <div>Redirecting...</div>
+
+                {/* <div className="container-fluid">
                     <div className="row">
                         <div
                             hidden={!this.props.loading}
@@ -124,7 +134,7 @@ class Login extends React.Component {
                             <Button onClick={this.login} size="sm" style={{ float: "right", marginRight: "13px" }}>Login</Button>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* <br/> */}
                 {/* Third party login providers */}
