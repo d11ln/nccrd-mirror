@@ -97,8 +97,11 @@ class Login extends React.Component {
     render() {
 
         return (
-            <>
-                <div>Redirecting...</div>
+            <> 
+                <div>
+                    <br />
+                    <label>&nbsp;Redirecting...</label>
+                </div>
 
                 {/* <div className="container-fluid">
                     <div className="row">

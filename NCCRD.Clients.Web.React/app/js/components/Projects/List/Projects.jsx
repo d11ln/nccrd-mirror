@@ -11,8 +11,9 @@ import * as ACTION_TYPES from "../../../constants/action-types"
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-    let { globalData: { loading, isAuthenticated } } = state
-    return { loading, isAuthenticated }
+    let { globalData: { loading } } = state
+    let user = state.oidc.user
+    return { loading, user }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -56,19 +57,16 @@ class Projects extends React.Component {
         location.hash = '/projects/add'
     }
 
-    // componentDidMount() {
-    //     window.scrollTo(0, 0);
-    // }
-
     componentWillMount() {
         this.props.setLoading(true)
     }
 
     render() {
 
+        let { user } = this.props
+
         return (
             <>
-
                 <div className="container-fluid">
                     <div className="row">
                         <div
@@ -90,7 +88,7 @@ class Projects extends React.Component {
 
                 <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
-                    <Button hidden={!this.props.isAuthenticated} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
+                    <Button hidden={!user || user.expired} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
                         <i className="fa fa-plus-circle" aria-hidden="true" />
                         &nbsp;&nbsp;
                         Add project

@@ -27,6 +27,7 @@ import { stripURLParam } from "./globalFunctions.js"
 import userManager from './utils/userManager';
 import CallbackPage from '../js/components/Authentication/callback.jsx';
 import { OidcProvider } from 'redux-oidc'
+import LoggedOut from './components/Authentication/LoggedOut.jsx';
 
 /**
  * Tap Event
@@ -72,6 +73,7 @@ class App extends React.Component {
               <Route path="/projects/:id" component={ProjectDetails} exact />
               <Route path="/login" component={Login} exact />
               <Route path="/logout" component={Logout} exact />
+              <Route path="/loggedout" component={LoggedOut} exact />
               <Route path="/callback" component={CallbackPage} />
             </Switch>
 

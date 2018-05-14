@@ -29,14 +29,14 @@ const mapStateToProps = (state, props) => {
     let { mitigationData: { mitigationDetails } } = state
     let { emissionData: { emissionsData } } = state
     let { researchData: { researchDetails } } = state
-    let { globalData: { loading, editMode, isAuthenticated } } = state
-
+    let { globalData: { loading, editMode } } = state
     let editListModalType = state.editListModalData.type
     let editListModalShow = state.editListModalData.show
+    let user = state.oidc.user
 
     return {
-        projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading, isAuthenticated,
-        editListModalType, editListModalShow
+        projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading,
+        editListModalType, editListModalShow, user
     }
 }
 
@@ -850,7 +850,7 @@ class ProjectDetails extends React.Component {
 
     render() {
 
-        const { projectDetails, editMode, isAuthenticated } = this.props
+        const { projectDetails, editMode, user } = this.props
 
         return (
 
@@ -917,7 +917,7 @@ class ProjectDetails extends React.Component {
                     </TabPanel>
                 </Tabs>
 
-                <div className="container-fluid" hidden={!isAuthenticated}>
+                <div className="container-fluid" hidden={!user || user.expired}>
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>

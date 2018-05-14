@@ -16,10 +16,8 @@ const store = createStore(
         //...applyMiddleware(middleware),
 
         globalData: {
-            isAuthenticated: false,
             loading: true,
-            editMode: false,
-            username: ""
+            editMode: false
         },
 
         editListModalData: {
