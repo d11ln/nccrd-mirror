@@ -304,8 +304,6 @@ namespace NCCRD.Services.Data.Controllers.API
 
             using (var context = new SQLDBContext())
             {
-                //project = context.Project.FirstOrDefault(x => x.ProjectTitle == title);
-
                 var polygonWKT = new SqlParameter("@WKT", polygon);
 
                 results = context.Database
@@ -314,6 +312,18 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Get Projects by Polygon (POST version)
+        /// </summary>
+        /// <param name="polygon">Polygon (as post body)</param>
+        /// <returns>Projects data as JSON</returns>
+        [HttpPost]
+        [Route("api/Projects/GetByPolygonPost")]
+        public List<PolygonFilterResults> GetByPolygonPost([FromBody]Polygon polygon)
+        {
+            return GetByPolygon(polygon.polygon);
         }
 
         /// <summary>

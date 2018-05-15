@@ -74,6 +74,10 @@
     <Compile Include="Migrations\201804191019237_UpdatedRegionModel.Designer.cs">
       <DependentUpon>201804191019237_UpdatedRegionModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805150644303_UpdatePolgygonSP.cs" />
+    <Compile Include="Migrations\201805150644303_UpdatePolgygonSP.Designer.cs">
+      <DependentUpon>201805150644303_UpdatePolgygonSP.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\AdaptationDetail.cs" />
@@ -150,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804191019237_UpdatedRegionModel.resx">
       <DependentUpon>201804191019237_UpdatedRegionModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805150644303_UpdatePolgygonSP.resx">
+      <DependentUpon>201805150644303_UpdatePolgygonSP.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
