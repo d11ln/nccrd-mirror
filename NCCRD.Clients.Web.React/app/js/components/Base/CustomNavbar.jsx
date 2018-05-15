@@ -5,8 +5,9 @@ import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
 import { Button, Input } from 'mdbreact'
 import * as ACTION_TYPES from "../../constants/action-types"
-import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact';
-import userManager from '../../utils/userManager';
+import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
+import userManager from '../../utils/userManager'
+import { ssoBaseURL } from '../../constants/ssoBaseURL'
 
 const mapStateToProps = (state, props) => {
     let user = state.oidc.user
@@ -26,9 +27,10 @@ class CustomNavbar extends React.Component {
 
         this.onClick = this.onClick.bind(this)
         this.toggle = this.toggle.bind(this)
-        this.Logout = this.Logout.bind(this);
-        this.LoginLogout = this.LoginLogout.bind(this);
-        this.GetUser = this.GetUser.bind(this);
+        this.Logout = this.Logout.bind(this)
+        this.LoginLogout = this.LoginLogout.bind(this)
+        this.GetUser = this.GetUser.bind(this)
+        this.Register = this.Register.bind(this)
     }
 
     onClick() {
@@ -56,6 +58,15 @@ class CustomNavbar extends React.Component {
         }
         else {
             return <a className="nav-link" href="#/logout">Logout</a>
+        }
+    }
+
+    Register()
+    {
+        let { user } = this.props
+
+        if (!user || user.expired) {
+            return <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank">Register</a>
         }
     }
 
@@ -91,12 +102,13 @@ class CustomNavbar extends React.Component {
 
                     <NavbarNav right>
                         <NavItem>
-                            {/* <span style={{ color: "#d0d6e2" }} className="nav-link">{user === "" ? "" : "Hello, " + user}</span> */}
                             {this.GetUser()}
                         </NavItem>
                         <NavItem>
                             {this.LoginLogout()}
-                            {/* <a className="nav-link" href={userManager.signoutRedirect()}>Logout</a> */}
+                        </NavItem>
+                        <NavItem>
+                            {this.Register()}
                         </NavItem>
                     </NavbarNav>
 
