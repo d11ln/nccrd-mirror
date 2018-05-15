@@ -291,6 +291,22 @@ namespace NCCRD.Services.Data.Controllers.API
             return project;
         }
 
+        private string GetPolygonFromUrl(string url)
+        {
+            string polygon = url;
+
+            //Get polygon from URL
+            if (!string.IsNullOrEmpty(url))
+            {
+                using (WebClient client = new WebClient())
+                {
+                    polygon = client.DownloadString(url);
+                }
+            }
+
+            return polygon;
+        }
+
         /// <summary>
         /// Get Projects by Polygon
         /// </summary>
@@ -300,8 +316,18 @@ namespace NCCRD.Services.Data.Controllers.API
         [Route("api/Projects/GetByPolygon")]
         public List<PolygonFilterResults> GetByPolygon(string polygon)
         {
-            List<PolygonFilterResults> results = new List<PolygonFilterResults>();
+            //Check if polygon param is URL for download
+            Uri uriResult;
+            bool isPolyUrl = Uri.TryCreate(polygon, UriKind.Absolute, out uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
+            //Get actual polygon string from URL
+            if (isPolyUrl)
+            {
+                polygon = GetPolygonFromUrl(polygon);
+            }
+
+            List<PolygonFilterResults> results = new List<PolygonFilterResults>();
             using (var context = new SQLDBContext())
             {
                 var polygonWKT = new SqlParameter("@WKT", polygon);
