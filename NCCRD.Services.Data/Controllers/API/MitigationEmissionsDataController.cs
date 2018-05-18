@@ -79,6 +79,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/MitigationEmissionsData/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]MitigationEmissionsData mitigationEmissionsData)
         {
             bool result = false;
@@ -138,59 +139,5 @@ namespace NCCRD.Services.Data.Controllers.API
 
             return result;
         }
-
-        /*/// <summary>
-        /// Delete MitigationEmissionsData
-        /// </summary>
-        /// <param name="mitigationEmissionsData">MitigationEmissionsData to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/MitigationEmissionsData/Delete")]
-        public bool Delete([FromBody]MitigationEmissionsData mitigationEmissionsData)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MitigationEmissionsData.FirstOrDefault(x => x.MitigationEmissionsDataId == mitigationEmissionsData.MitigationEmissionsDataId);
-                if (data != null)
-                {
-                    context.MitigationEmissionsData.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete MitigationEmissionsData by Id
-        /// </summary>
-        /// <param name="id">Id of MitigationEmissionsData to delete</param>
-        /// <returns>True/False</returns>
-        [HttpGet]
-        [Route("api/MitigationEmissionsData/DeleteById/{id}")]
-        public bool DeleteById(int id)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MitigationEmissionsData.FirstOrDefault(x => x.MitigationEmissionsDataId == id);
-                if (data != null)
-                {
-                    context.MitigationEmissionsData.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
     }
 }

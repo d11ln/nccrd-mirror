@@ -42,6 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ProjectType/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody] List<ProjectType> items)
         {
             bool result = false;
@@ -81,6 +82,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpGet]
         [Route("api/ProjectType/DeleteById/{id}")]
+        [Authorize]
         public bool DeleteById(int id)
         {
             bool result = false;

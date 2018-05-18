@@ -51,6 +51,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ChangeLog/Add")]
+        [Authorize]
         public bool Add([FromBody]ChangeLog changeLog)
         {
             return logger.Log(changeLog);

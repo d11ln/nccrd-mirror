@@ -97,6 +97,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/Sector/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]List<Sector> items)
         {
             bool result = false;
@@ -147,6 +148,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpGet]
         [Route("api/Sector/DeleteById/{id}")]
+        [Authorize]
         public bool DeleteById(int id)
         {
             bool result = false;

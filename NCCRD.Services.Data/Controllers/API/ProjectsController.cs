@@ -130,34 +130,6 @@ namespace NCCRD.Services.Data.Controllers.API
             return projectData;
         }
 
-        private List<Region> GetChildRegions(int regionId, List<Region> regionList)
-        {
-            var regions = regionList.Where(x => x.ParentRegionId == regionId).ToList();
-
-            var childRegions = new List<Region>();
-            foreach (var region in regions)
-            {
-                childRegions.AddRange(GetChildRegions(region.RegionId, regionList));
-            }
-            regions.AddRange(childRegions);
-
-            return regions;
-        }
-
-        private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
-        {
-            var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
-
-            var childSectors = new List<Sector>();
-            foreach (var sector in sectors)
-            {
-                childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
-            }
-            sectors.AddRange(childSectors);
-
-            return sectors;
-        }
-
         /// <summary>
         /// Get Projects (GeoJson)
         /// </summary>
@@ -323,6 +295,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/Projects/AddOrUpdate")]
+        [Authorize]
         public int AddOrUpdate([FromBody]Project project)
         {
             int result = 0;
@@ -402,6 +375,35 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return result;
+        }
+
+
+        private List<Region> GetChildRegions(int regionId, List<Region> regionList)
+        {
+            var regions = regionList.Where(x => x.ParentRegionId == regionId).ToList();
+
+            var childRegions = new List<Region>();
+            foreach (var region in regions)
+            {
+                childRegions.AddRange(GetChildRegions(region.RegionId, regionList));
+            }
+            regions.AddRange(childRegions);
+
+            return regions;
+        }
+
+        private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
+        {
+            var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+
+            var childSectors = new List<Sector>();
+            foreach (var sector in sectors)
+            {
+                childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
+            }
+            sectors.AddRange(childSectors);
+
+            return sectors;
         }
 
     }

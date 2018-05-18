@@ -5,7 +5,7 @@ import { routerReducer, routerMiddleware } from 'react-router-redux'
 //import { createHashHistory } from 'history'
 import reducers from './reducers'
 import { loadUser } from 'redux-oidc'
-import userManager from './utils/userManager'
+import userManager from './components/Authentication/userManager'
 import { reducer as oidcReducer } from 'redux-oidc';
 
 //const history = createHashHistory()

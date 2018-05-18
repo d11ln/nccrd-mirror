@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
 import { Button, Footer, Container } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
 
 const queryString = require('query-string')
 
@@ -61,12 +62,35 @@ class Projects extends React.Component {
         this.props.setLoading(true)
     }
 
+    // testAuth() {
+
+    //     let { user } = this.props
+
+    //     console.log("Test Auth")
+    //     console.log("User", user)
+
+    //     fetch(apiBaseURL + 'api/Projects/GetById/741', {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+    //         }
+    //     }).then(res => res.json()).then(res => {
+    //         console.log("res", res)
+    //     }).catch(res => {
+    //         console.log("Error details:", res)
+    //     })
+    // }
+
     render() {
 
         let { user } = this.props
 
         return (
             <>
+                {/* <Button onTouchTap={this.testAuth.bind(this)} >
+                    Test Auth
+                </Button> */}
+
                 <div className="container-fluid">
                     <div className="row">
                         <div

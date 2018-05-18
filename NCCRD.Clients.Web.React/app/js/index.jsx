@@ -24,7 +24,7 @@ import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
 import { stripURLParam } from "./globalFunctions.js"
-import userManager from './utils/userManager';
+import userManager from './components/Authentication/userManager';
 import CallbackPage from '../js/components/Authentication/callback.jsx';
 import { OidcProvider } from 'redux-oidc'
 import LoggedOut from './components/Authentication/LoggedOut.jsx';

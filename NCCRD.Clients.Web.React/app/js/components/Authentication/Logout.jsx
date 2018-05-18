@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import userManager from '../../utils/userManager'
+import userManager from '../Authentication/userManager'
 
 class Logout extends React.Component {
 
