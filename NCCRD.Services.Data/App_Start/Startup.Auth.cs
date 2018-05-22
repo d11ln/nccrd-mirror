@@ -11,6 +11,7 @@ using Owin;
 using NCCRD.Services.Data.Providers;
 using NCCRD.Services.Data.Models;
 using IdentityServer3.AccessTokenValidation;
+using System.Diagnostics;
 
 namespace NCCRD.Services.Data
 {
@@ -47,9 +48,10 @@ namespace NCCRD.Services.Data
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
 
+            // Enable the application to use Identity-Server-Bearer-Token to authenticate users
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:44320/",
+                Authority = Debugger.IsAttached ? Properties.Settings.Default.IdentityServerURL_DEV : Properties.Settings.Default.IdentityServerURL_PRD,
                 RequiredScopes = new[] { "SAEON.NCCRD.Web.API" },
             });
 
