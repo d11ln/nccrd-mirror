@@ -3,7 +3,6 @@
 import React from 'react'
 import { Button, Collapse } from 'mdbreact'
 import { connect } from 'react-redux'
-import { Chip } from 'material-ui'
 import * as ACTION_TYPES from "../../../constants/action-types"
 
 //Filters
@@ -97,57 +96,47 @@ class ProjectFilters extends React.Component {
 
             if (titleFilter !== "") {
                 filterChips.push(
-                    <Chip
-                        label={"Title: " + titleFilter}
-                        onDelete={() => this.deleteFilterChip("title")}
-                        style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
-                        key="titleFilterChip"
-                    />
+                    <div class="chip blue lighten-1" key="titleFilterChip">
+                        {"Title: " + titleFilter}
+                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("title")}></i>
+                    </div>
                 )
             }
 
             if (statusFilter > 0 && projectStatus.length > 0) {
                 filterChips.push(
-                    <Chip
-                        label={"Status: " + projectStatus.filter(x => x.ProjectStatusId === parseInt(statusFilter))[0].Value}
-                        onDelete={() => this.deleteFilterChip("status")}
-                        style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
-                        key="statusFilterChip"
-                    />
+                    <div class="chip blue lighten-1" key="statusFilterChip">
+                        {"Status: " + projectStatus.filter(x => x.ProjectStatusId === parseInt(statusFilter))[0].Value}
+                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("status")}></i>
+                    </div>
                 )
             }
 
             if (typologyFilter > 0 && typology.length > 0) {
                 filterChips.push(
-                    <Chip
-                        label={"Typology: " + typology.filter(x => x.TypologyId === parseInt(typologyFilter))[0].Value}
-                        onDelete={() => this.deleteFilterChip("typology")}
-                        style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
-                        key="typologyFilterChip"
-                    />
+                    <div class="chip blue lighten-1" key="typologyFilterChip">
+                        {"Typology: " + typology.filter(x => x.TypologyId === parseInt(typologyFilter))[0].Value}
+                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("typology")}></i>
+                    </div>
                 )
             }
 
             if (regionFilter > 0 && region.length > 0) {
 
                 filterChips.push(
-                    <Chip
-                        label={"Region: " + region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName}
-                        onDelete={() => this.deleteFilterChip("region")}
-                        style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
-                        key="regionFilterChip"
-                    />
+                    <div class="chip blue lighten-1" key="regionFilterChip">
+                        {"Region: " + region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName}
+                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("region")}></i>
+                    </div>
                 )
             }
 
             if (sectorFilter > 0 && sector.length > 0) {
                 filterChips.push(
-                    <Chip
-                        label={"Sector: " + sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value}
-                        onDelete={() => this.deleteFilterChip("sector")}
-                        style={{ backgroundColor: "#4285F4", marginRight: "5px" }}
-                        key="sectorFilterChip"
-                    />
+                    <div class="chip blue lighten-1" key="sectorFilterChip">
+                        {"Sector: " + sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value}
+                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("sector")}></i>
+                    </div>
                 )
             }
         }
