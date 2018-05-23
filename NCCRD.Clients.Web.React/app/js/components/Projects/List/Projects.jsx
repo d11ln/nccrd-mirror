@@ -4,7 +4,6 @@ import React from 'react'
 import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
-import { BeatLoader } from 'react-spinners'
 import { Button, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
 
@@ -68,25 +67,6 @@ class Projects extends React.Component {
 
         return (
             <>
-                <div className="container-fluid">
-                    <div className="row">
-                        <div
-                            hidden={!this.props.loading}
-                            className="card"
-                            style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99" }}>
-
-                            <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
-                                <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
-                                <BeatLoader
-                                    color={'#4285F4'}
-                                    size={30}
-                                    loading={this.props.loading}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
                     <Button hidden={!this.props.isAuthenticated} color="secondary" className="btn-sm" onTouchTap={this.addProject} >

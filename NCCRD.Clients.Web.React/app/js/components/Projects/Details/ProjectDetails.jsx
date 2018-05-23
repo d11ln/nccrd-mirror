@@ -17,7 +17,6 @@ import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
 import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import TextComponent from '../../Shared/TextComponent.jsx'
-import { BeatLoader } from 'react-spinners';
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
 import classnames from 'classnames';
@@ -864,21 +863,6 @@ class ProjectDetails extends React.Component {
         return (
 
             <>
-                <div
-                    hidden={!this.props.loading}
-                    className="card"
-                    style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99", background: "white" }}>
-
-                    <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
-                        <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
-                        <BeatLoader
-                            color={'#4285F4'}
-                            size={30}
-                            loading={this.props.loading}
-                        />
-                    </div>
-                </div>
-
                 <Button style={{ width: "100px", margin: "8px 0px 8px 0px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
                 </Button>
