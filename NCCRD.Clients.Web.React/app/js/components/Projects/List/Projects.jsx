@@ -4,8 +4,9 @@ import React from 'react'
 import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
-import { Button, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
+import { Fa, Button, ButtonFixed, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import ReactTooltip from 'react-tooltip'
 
 const queryString = require('query-string')
 
@@ -69,21 +70,19 @@ class Projects extends React.Component {
             <>
                 <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
-                    <Button hidden={!this.props.isAuthenticated} color="secondary" className="btn-sm" onTouchTap={this.addProject} >
-                        <i className="fa fa-plus-circle" aria-hidden="true" />
-                        &nbsp;&nbsp;
-                        Add project
-                                </Button>
-
-                    <Button color="secondary" className="btn-sm" onTouchTap={this.backToTop} >
-                        <i className="fa fa-arrow-circle-up" aria-hidden="true" />
-                        &nbsp;&nbsp;
-                        Back to top
-                                </Button>
+                    <Button data-tip="Add project" tag="a" size="sm" floating color="purple" onClick={this.addProject}>
+                        <Fa icon="plus" />
+                    </Button>
+                    <Button data-tip="Back to top" tag="a" size="sm" floating color="purple" onClick={this.backToTop}>
+                        <Fa icon="arrow-up" />
+                    </Button>
 
                 </div>
+                
                 <ProjectFilters />
                 <ProjectList />
+
+                <ReactTooltip delayShow="1000" />
             </>
         )
     }
