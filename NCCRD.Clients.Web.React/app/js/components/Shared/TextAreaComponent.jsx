@@ -77,7 +77,8 @@ class TextAreaComponent extends React.Component {
                         borderWidth: "0px 0px 1px 0px",
                         borderColor: "#b4b4b4",
                         paddingBottom: "4px",
-                        color: this.getFontColour()
+                        color: this.getFontColour(),
+                        fontSize: "15px"
                     }}
                     value={value}
                     onChange={this.valueChange.bind(this)}

@@ -2,8 +2,6 @@
 
 import React from 'react'
 import { Button } from 'mdbreact'
-import Select from 'react-select'
-import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL";

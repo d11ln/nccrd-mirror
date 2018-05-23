@@ -1,8 +1,6 @@
 'use strict'
 
 import React from 'react'
-import Select from 'react-select'
-import 'react-select/dist/react-select.css'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../constants/action-types"
 import { UILookup } from "../../constants/ui_config.js"

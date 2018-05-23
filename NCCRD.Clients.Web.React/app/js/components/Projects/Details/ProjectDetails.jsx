@@ -1,7 +1,10 @@
 'use strict'
 
 import React from 'react'
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
+import {
+    Container, Button, Modal, ModalBody, ModalHeader, ModalFooter,
+    Row, Col, TabPane, TabContent, Nav, NavItem, NavLink, Fa
+} from 'mdbreact'
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
@@ -14,13 +17,9 @@ import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
 import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import TextComponent from '../../Shared/TextComponent.jsx'
-import { BeatLoader } from 'react-spinners';
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
-
-//react-tabs
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import classnames from 'classnames';
 
 const mapStateToProps = (state, props) => {
 
@@ -150,9 +149,10 @@ class ProjectDetails extends React.Component {
         this.discardChanges = this.discardChanges.bind(this)
         this.backToList = this.backToList.bind(this)
         this.renderListEditor = this.renderListEditor.bind(this)
+        this.toggleClassicTabs1 = this.toggleClassicTabs1.bind(this);
 
         let projectId = this.props.match.params.id
-        this.state = { ...this.state, projectId, discardModal: false, saveModal: false, navBack: false }
+        this.state = { activeItemClassicTabs1: '1', projectId, discardModal: false, saveModal: false, navBack: false }
     }
 
     loadProjectType(loadProjectTypes) {
@@ -848,6 +848,14 @@ class ProjectDetails extends React.Component {
         }
     }
 
+    toggleClassicTabs1(tab) {
+        if (this.state.activeItemClassicTabs1 !== tab) {
+            this.setState({
+                activeItemClassicTabs1: tab
+            });
+        }
+    }
+
     render() {
 
         const { projectDetails, editMode, isAuthenticated } = this.props
@@ -855,117 +863,126 @@ class ProjectDetails extends React.Component {
         return (
 
             <>
-                <div
-                    hidden={!this.props.loading}
-                    className="card"
-                    style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99", background: "white" }}>
-
-                    <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
-                        <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
-                        <BeatLoader
-                            color={'#4285F4'}
-                            size={30}
-                            loading={this.props.loading}
-                        />
-                    </div>
-                </div>
-
                 <Button style={{ width: "100px", margin: "8px 0px 8px 0px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
                 </Button>
 
                 <br />
 
-                <Tabs forceRenderTabPanel={true}>
-                    <TabList>
-                        <Tab><b style={{ color: "#1565c0" }}>Project Details</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Adaptation Details</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Mitigation Details</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Mitigation Emissions Data</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Research Details</b></Tab>
-                    </TabList>
-
-                    <TabPanel>
-                        <ProjectDetailsTab />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <MitigationDetailsTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <ResearchDetailsTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                </Tabs>
+                <Container className="mt-2">
+                    <Row>
+                        <Col md="12">
+                            <Nav pills color="primary" className="nav-justified" style={{ borderBottom: "1px solid #727272" }}>
+                                <NavItem >
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '1' })} onClick={() => { this.toggleClassicTabs1('1'); }}>
+                                        Project
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '2' })} onClick={() => { this.toggleClassicTabs1('2'); }}>
+                                        Adaptation
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '3' })} onClick={() => { this.toggleClassicTabs1('3'); }}>
+                                        Mitigation
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '4' })} onClick={() => { this.toggleClassicTabs1('4'); }}>
+                                        Emissions
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '5' })} onClick={() => { this.toggleClassicTabs1('5'); }}>
+                                        Research
+                                    </NavLink>
+                                </NavItem>
+                            </Nav>
+                            {/* <hr /> */}
+                            <TabContent activeItem={this.state.activeItemClassicTabs1}>
+                                <TabPane tabId="1">
+                                    <ProjectDetailsTab />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="2">
+                                    <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="3">
+                                    <MitigationDetailsTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="4">
+                                    <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="5">
+                                    <ResearchDetailsTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                            </TabContent>
+                        </Col>
+                    </Row>
+                </Container>
 
                 <div className="container-fluid" hidden={!isAuthenticated}>
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
-                                <Button hidden={editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.editClick} >
-                                    <i className="fa fa-pencil" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Edit
+                                <Button hidden={editMode} data-tip="Edit" tag="a" size="sm" floating color="purple" onClick={this.editClick}>
+                                    <Fa icon="pencil" />
                                 </Button>
-                                <Button hidden={!editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.saveClick} >
-                                    <i className="fa fa-save" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Save
+                                <Button hidden={!editMode} data-tip="Save changes" tag="a" size="sm" floating color="purple" onClick={this.saveClick}>
+                                    <Fa icon="save" />
                                 </Button>
-                                <Button hidden={!editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.discardClick} >
-                                    <i className="fa fa-trash-o" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Discard
+                                <Button hidden={!editMode} data-tip="Discard changes" tag="a" size="sm" floating color="purple" onClick={this.discardClick}>
+                                    <Fa icon="trash" />
                                 </Button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <Modal isOpen={this.state.discardModal}>
-                    <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
-                    <ModalBody>
-                        Are you sure you want to discard all changes?
+                <Container>
+                    <Modal isOpen={this.state.discardModal} backdrop={false}>
+                        <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
+                        <ModalBody>
+                            Are you sure you want to discard all changes?
                     </ModalBody>
-                    <ModalFooter>
-                        <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>{' '}
-                        <Button size="sm" style={{ width: "100px" }} color="primary" onClick={this.discardChanges} >Discard</Button>
-                    </ModalFooter>
-                </Modal>
+                        <ModalFooter>
+                            <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>{' '}
+                            <Button size="sm" style={{ width: "100px" }} color="primary" onClick={this.discardChanges} >Discard</Button>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
 
-                <Modal isOpen={this.state.saveModal}>
-                    <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
-                    <ModalBody>
-                        Are you sure you want to save all changes?
+                <Container>
+                    <Modal isOpen={this.state.saveModal} backdrop={false}>
+                        <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
+                        <ModalBody>
+                            Are you sure you want to save all changes?
                     </ModalBody>
-                    <ModalFooter>
-                        <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>{' '}
-                        <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
-                    </ModalFooter>
-                </Modal>
+                        <ModalFooter>
+                            <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>{' '}
+                            <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
 
                 {this.renderListEditor()}
 
-                <ReactTooltip />
+                <ReactTooltip delayShow={700} />
 
             </>
         )

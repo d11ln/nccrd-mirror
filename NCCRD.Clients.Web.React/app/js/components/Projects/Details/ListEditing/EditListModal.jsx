@@ -2,10 +2,12 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { ListGroup, ListGroupItem, Input, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
+import {
+    ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter,
+    Select, SelectInput, SelectOptions, SelectOption
+} from 'mdbreact'
 import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
-import Select from 'react-select'
 import { GetUID } from "../../../../globalFunctions"
 
 const _ = require('lodash')
@@ -47,7 +49,7 @@ class EditListModal extends React.Component {
         this.cloneData()
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.cloneData()
     }
 
@@ -117,16 +119,29 @@ class EditListModal extends React.Component {
         }
     }
 
-    dependencySelect(key, selectedOption) {
+    dependencySelect(key, value) {
 
         let selectedValue = 0
         let { _data, selectedItemId } = this.state
+        let { dependencies } = this.props
+        let depData = null
 
-        if (selectedOption !== null) {
-            selectedValue = selectedOption.value
+        //Get select data
+        let depItem = dependencies.filter(d => d.key === key)[0]
+        if (typeof depItem != 'undefined') {
+            depData = depItem.value
         }
 
-        let currentItem = _data.filter(x => x[Object.keys(x)[0]] === selectedItemId)[0]
+        //Convert value
+        if (value !== null && depData !== null) {
+            let dataItem = depData.filter(x => x[Object.keys(x)[1]] === value)[0]
+            if (typeof dataItem !== 'undefined' && dataItem !== null) {
+                selectedValue = parseInt(dataItem[Object.keys(dataItem)[0]])
+            }
+        }
+
+        let idKey = Object.keys(_data[0])[0]
+        let currentItem = _data.filter(x => x[idKey] == selectedItemId)[0]
         if (typeof currentItem !== 'undefined') {
 
             //Update with changed value
@@ -136,7 +151,6 @@ class EditListModal extends React.Component {
             //Update state
             this.setState({ _data: _data })
         }
-
     }
 
     confirmSave() {
@@ -230,7 +244,7 @@ class EditListModal extends React.Component {
         return processedItems
     }
 
-    renderSelectOptions(data) {
+    renderSelectOptions(data, key) {
 
         let ar = []
 
@@ -238,7 +252,7 @@ class EditListModal extends React.Component {
 
             let procData = this.processData(data)
             for (let i of procData) {
-                ar.push({ value: i.id, label: i.value })
+                ar.push(<SelectOption key={i.id} triggerOptionClick={this.dependencySelect.bind(this, key)}>{i.value}</SelectOption>)
             }
         }
 
@@ -255,7 +269,7 @@ class EditListModal extends React.Component {
             if (item.id > 0) {
                 let { selectedItemId } = this.state
                 listItems.push(<ListGroupItem style={{ cursor: "pointer" }}
-                    hover="true"
+                    hover={true}
                     onClick={this.listItemClick.bind(this, item.id)}
                     key={item.id}
                     active={selectedItemId === item.id}
@@ -298,18 +312,29 @@ class EditListModal extends React.Component {
 
                     //If dependency found - render select
                     detailElements.push(<label key={GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
-                    detailElements.push(<Select key={item.id + "_" + item.key + "_select"}
-                        value={item.value.toString()}
-                        options={this.renderSelectOptions(deps[0].value)}
-                        onChange={this.dependencySelect.bind(this, item.key)}
-                        style={{ marginBottom: "25px" }}
-                    />)
+
+                    //Convert value
+                    let displayValue = "Select..."
+                    if (item.value > 0) {
+                        let dataItem = depItem.value.filter(x => x[Object.keys(x)[0]] === item.value)[0]
+                        if (typeof dataItem !== 'undefined' && dataItem !== null && typeof dataItem[Object.keys(dataItem)[1]] !== 'undefined') {
+                            displayValue = dataItem[Object.keys(dataItem)[1]]
+                        }
+                    }
+
+                    detailElements.push(
+                        <Select color="primary" key={item.id + "_" + item.key + "_select"}>
+                            <SelectInput style={{ height: "35px", marginBottom: "25px" }} value={displayValue}></SelectInput>
+                            <SelectOptions>
+                                {this.renderSelectOptions(depItem.value, item.key)}
+                            </SelectOptions>
+                        </Select >)
                 }
                 else {
 
                     //If no dependency found - render input
                     detailElements.push(
-                        <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} defaultValue={item.value.toString()}
+                        <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} value={item.value.toString()}
                             onChange={this.valueChange.bind(this, item.id, item.key)} />)
                 }
             }
@@ -325,42 +350,44 @@ class EditListModal extends React.Component {
 
         return (
             <>
-                <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
+                <Container>
+                    <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} backdrop={false} >
 
-                    <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
+                        <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
 
-                    <ModalBody height="80%">
-                        <div className="row">
-                            <div className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
-                                <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
-                                {this.renderList()}
+                        <ModalBody height="80%">
+                            <div className="row">
+                                <div className="col-md-4" style={{ overflowY: "auto", height: "65vh" }}>
+                                    <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
+                                    {this.renderList()}
+                                </div>
+
+                                <div className="col-md-8" style={{ borderLeft: "solid 1px", overflowY: "auto", height: "65vh" }}>
+                                    <h5 style={{ marginBottom: "25px", textDecoration: "underline" }}>Edit item details:</h5>
+                                    {this.renderDetails()}
+                                </div>
+                            </div>
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <div className="col-md-2" hidden={confirmSave}>
+                                <Button size="sm" color="primary" onClick={this.add.bind(this)}>&nbsp;&nbsp;Add&nbsp;&nbsp;</Button>
                             </div>
 
-                            <div className="col-md-8" style={{ borderLeft: "solid 1px", overflowY: "auto", height: "65vh" }}>
-                                <h5 style={{ marginBottom: "25px", textDecoration: "underline" }}>Edit item details:</h5>
-                                {this.renderDetails()}
+                            <div className="col-md-10">
+                                <div hidden={confirmSave} style={{ float: "right" }}>
+                                    <Button size="sm" color="warning" onClick={this.save.bind(this)}>&nbsp;&nbsp;Save&nbsp;&nbsp;</Button>
+                                    <Button size="sm" color="secondary" onClick={this.cancel.bind(this)}>Cancel</Button>
+                                </div>
+                                <div hidden={!confirmSave} style={{ float: "right" }}>
+                                    <label>Please confirm to save changes?&nbsp;</label>
+                                    <Button size="sm" color="warning" onClick={this.confirmSave.bind(this)}>Confirm</Button>
+                                    <Button size="sm" color="secondary" onClick={this.cancelConfirm.bind(this)}>Cancel</Button>
+                                </div>
                             </div>
-                        </div>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <div className="col-md-2" hidden={confirmSave}>
-                            <Button size="sm" color="primary" onClick={this.add.bind(this)}>&nbsp;&nbsp;Add&nbsp;&nbsp;</Button>
-                        </div>
-
-                        <div className="col-md-10">
-                            <div hidden={confirmSave} style={{ float: "right" }}>
-                                <Button size="sm" color="warning" onClick={this.save.bind(this)}>&nbsp;&nbsp;Save&nbsp;&nbsp;</Button>
-                                <Button size="sm" color="secondary" onClick={this.cancel.bind(this)}>Cancel</Button>
-                            </div>
-                            <div hidden={!confirmSave} style={{ float: "right" }}>
-                                <label>Please confirm to save changes?&nbsp;</label>
-                                <Button size="sm" color="warning" onClick={this.confirmSave.bind(this)}>Confirm</Button>
-                                <Button size="sm" color="secondary" onClick={this.cancelConfirm.bind(this)}>Cancel</Button>
-                            </div>
-                        </div>
-                    </ModalFooter>
-                </Modal>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
             </>
         )
     }

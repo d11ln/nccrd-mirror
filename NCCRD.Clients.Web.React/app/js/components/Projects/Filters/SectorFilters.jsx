@@ -192,7 +192,6 @@ class SectorFilters extends React.Component {
                     {this.renderTreeNodes(treeData)}
                 </Tree>
 
-                <ReactTooltip />
             </>
         )
     }
