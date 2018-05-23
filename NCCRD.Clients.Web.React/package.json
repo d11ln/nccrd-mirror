@@ -27,7 +27,6 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "react-spinners": "^0.2.6",
-    "react-tabs": "^2.2.1",
     "react-tap-event-plugin": "^3.0.2",
     "react-textarea-autosize": "^6.0.0",
     "react-tooltip": "^3.5.0",

@@ -31,7 +31,7 @@ class MitigationDetailsItem extends React.Component {
 
     return (
       <>
-        <br />
+        {/* <br /> */}
 
         <div className="row">
           <SelectComponent
@@ -191,6 +191,7 @@ class MitigationDetailsItem extends React.Component {
 
         <br />
         <hr />
+        <br />
 
         <ReactTooltip />
       </>

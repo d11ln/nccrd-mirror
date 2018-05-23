@@ -29,7 +29,7 @@ class ProjectDetailsTab extends React.Component {
         return (
 
             <>
-                <br />
+                {/* <br /> */}
 
                 <div className="row">
                     <TextAreaComponent

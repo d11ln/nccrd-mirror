@@ -1,7 +1,10 @@
 'use strict'
 
 import React from 'react'
-import { Container, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
+import {
+    Container, Button, Modal, ModalBody, ModalHeader, ModalFooter,
+    Row, Col, TabPane, TabContent, Nav, NavItem, NavLink
+} from 'mdbreact'
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
@@ -17,10 +20,7 @@ import TextComponent from '../../Shared/TextComponent.jsx'
 import { BeatLoader } from 'react-spinners';
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
-
-//react-tabs
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import classnames from 'classnames';
 
 const mapStateToProps = (state, props) => {
 
@@ -150,9 +150,10 @@ class ProjectDetails extends React.Component {
         this.discardChanges = this.discardChanges.bind(this)
         this.backToList = this.backToList.bind(this)
         this.renderListEditor = this.renderListEditor.bind(this)
+        this.toggleClassicTabs1 = this.toggleClassicTabs1.bind(this);
 
         let projectId = this.props.match.params.id
-        this.state = { ...this.state, projectId, discardModal: false, saveModal: false, navBack: false }
+        this.state = { activeItemClassicTabs1: '1', projectId, discardModal: false, saveModal: false, navBack: false }
     }
 
     loadProjectType(loadProjectTypes) {
@@ -848,6 +849,14 @@ class ProjectDetails extends React.Component {
         }
     }
 
+    toggleClassicTabs1(tab) {
+        if (this.state.activeItemClassicTabs1 !== tab) {
+            this.setState({
+                activeItemClassicTabs1: tab
+            });
+        }
+    }
+
     render() {
 
         const { projectDetails, editMode, isAuthenticated } = this.props
@@ -876,46 +885,72 @@ class ProjectDetails extends React.Component {
 
                 <br />
 
-                <Tabs forceRenderTabPanel={true}>
-                    <TabList>
-                        <Tab><b style={{ color: "#1565c0" }}>Project Details</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Adaptation Details</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Mitigation Details</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Mitigation Emissions Data</b></Tab>
-                        <Tab hidden={this.state.projectId === 'add'}><b style={{ color: "#1565c0" }}>Research Details</b></Tab>
-                    </TabList>
-
-                    <TabPanel>
-                        <ProjectDetailsTab />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <MitigationDetailsTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                    <TabPanel>
-                        <ResearchDetailsTab projectId={projectDetails.ProjectId} />
-                        <br />
-                        <br />
-                        <br />
-                    </TabPanel>
-                </Tabs>
+                <Container className="mt-2">
+                    <Row>
+                        <Col md="12">
+                            <Nav pills color="primary" className="nav-justified" style={{ borderBottom: "1px solid #727272"}}>
+                                <NavItem >
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '1' })} onClick={() => { this.toggleClassicTabs1('1'); }}>
+                                        Project
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '2' })} onClick={() => { this.toggleClassicTabs1('2'); }}>
+                                        Adaptation
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '3' })} onClick={() => { this.toggleClassicTabs1('3'); }}>
+                                        Mitigation 
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '4' })} onClick={() => { this.toggleClassicTabs1('4'); }}>
+                                        Emissions
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '5' })} onClick={() => { this.toggleClassicTabs1('5'); }}>
+                                        Research
+                                    </NavLink>
+                                </NavItem>
+                            </Nav>
+                            {/* <hr /> */}
+                            <TabContent activeItem={this.state.activeItemClassicTabs1}>
+                                <TabPane tabId="1">
+                                    <ProjectDetailsTab />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="2">
+                                    <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="3">
+                                    <MitigationDetailsTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="4">
+                                    <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                                <TabPane tabId="5">
+                                    <ResearchDetailsTab projectId={projectDetails.ProjectId} />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </TabPane>
+                            </TabContent>
+                        </Col>
+                    </Row>
+                </Container>
 
                 <div className="container-fluid" hidden={!isAuthenticated}>
                     <div className="row">

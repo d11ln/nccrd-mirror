@@ -18,7 +18,7 @@ class MitigationEmissionsDataItem extends React.Component {
 
     return (
       <>
-        <br />
+        {/* <br /> */}
 
         <div className="row">
           <TextComponent
@@ -262,6 +262,7 @@ class MitigationEmissionsDataItem extends React.Component {
 
         <br />
         <hr />
+        <br />
 
         <ReactTooltip />
       </>
