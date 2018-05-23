@@ -37,6 +37,11 @@ class SelectComponent extends React.Component {
     }
 
     onClick(e) {
+
+        if(this.getDisabledState()){
+            return;
+        }
+
         // check if select is multiple
         if (e.target.dataset.multiple === 'true') {
             return;
@@ -233,7 +238,7 @@ class SelectComponent extends React.Component {
             <div className={col}>
                 <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
                 <Select color="primary">
-                    <SelectInput style={{ height: "35px" }} value={displayValue}></SelectInput>
+                    <SelectInput  style={{ height: "35px", color: this.getFontColour() }} value={displayValue}></SelectInput>
                     <SelectOptions>
                         {this.selectOptions()}
                     </SelectOptions>
