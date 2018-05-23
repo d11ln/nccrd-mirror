@@ -82,7 +82,7 @@ class Projects extends React.Component {
                 <ProjectFilters />
                 <ProjectList />
 
-                <ReactTooltip delayShow="1000" />
+                <ReactTooltip delayShow="700" />
             </>
         )
     }
