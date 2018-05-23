@@ -96,27 +96,27 @@ class ProjectFilters extends React.Component {
 
             if (titleFilter !== "") {
                 filterChips.push(
-                    <div class="chip blue lighten-1" key="titleFilterChip">
+                    <div className="chip blue lighten-1" key="titleFilterChip">
                         {"Title: " + titleFilter}
-                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("title")}></i>
+                        <i className="close fa fa-times" onClick={() => this.deleteFilterChip("title")}></i>
                     </div>
                 )
             }
 
             if (statusFilter > 0 && projectStatus.length > 0) {
                 filterChips.push(
-                    <div class="chip blue lighten-1" key="statusFilterChip">
+                    <div className="chip blue lighten-1" key="statusFilterChip">
                         {"Status: " + projectStatus.filter(x => x.ProjectStatusId === parseInt(statusFilter))[0].Value}
-                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("status")}></i>
+                        <i className="close fa fa-times" onClick={() => this.deleteFilterChip("status")}></i>
                     </div>
                 )
             }
 
             if (typologyFilter > 0 && typology.length > 0) {
                 filterChips.push(
-                    <div class="chip blue lighten-1" key="typologyFilterChip">
+                    <div className="chip blue lighten-1" key="typologyFilterChip">
                         {"Typology: " + typology.filter(x => x.TypologyId === parseInt(typologyFilter))[0].Value}
-                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("typology")}></i>
+                        <i className="close fa fa-times" onClick={() => this.deleteFilterChip("typology")}></i>
                     </div>
                 )
             }
@@ -124,18 +124,18 @@ class ProjectFilters extends React.Component {
             if (regionFilter > 0 && region.length > 0) {
 
                 filterChips.push(
-                    <div class="chip blue lighten-1" key="regionFilterChip">
+                    <div className="chip blue lighten-1" key="regionFilterChip">
                         {"Region: " + region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName}
-                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("region")}></i>
+                        <i className="close fa fa-times" onClick={() => this.deleteFilterChip("region")}></i>
                     </div>
                 )
             }
 
             if (sectorFilter > 0 && sector.length > 0) {
                 filterChips.push(
-                    <div class="chip blue lighten-1" key="sectorFilterChip">
+                    <div className="chip blue lighten-1" key="sectorFilterChip">
                         {"Sector: " + sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value}
-                        <i class="close fa fa-times" onClick={() => this.deleteFilterChip("sector")}></i>
+                        <i className="close fa fa-times" onClick={() => this.deleteFilterChip("sector")}></i>
                     </div>
                 )
             }

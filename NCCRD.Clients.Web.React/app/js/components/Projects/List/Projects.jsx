@@ -5,7 +5,7 @@ import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { BeatLoader } from 'react-spinners'
-import { Button, Footer, Container } from 'mdbreact'
+import { Button, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
 
 const queryString = require('query-string')
@@ -68,7 +68,6 @@ class Projects extends React.Component {
 
         return (
             <>
-
                 <div className="container-fluid">
                     <div className="row">
                         <div

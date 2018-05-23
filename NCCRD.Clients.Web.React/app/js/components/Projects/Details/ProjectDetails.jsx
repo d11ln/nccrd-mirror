@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
+import { Container, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
@@ -941,27 +941,31 @@ class ProjectDetails extends React.Component {
                     </div>
                 </div>
 
-                <Modal isOpen={this.state.discardModal}>
-                    <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
-                    <ModalBody>
-                        Are you sure you want to discard all changes?
+                <Container>
+                    <Modal isOpen={this.state.discardModal} backdrop={false}>
+                        <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
+                        <ModalBody>
+                            Are you sure you want to discard all changes?
                     </ModalBody>
-                    <ModalFooter>
-                        <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>{' '}
-                        <Button size="sm" style={{ width: "100px" }} color="primary" onClick={this.discardChanges} >Discard</Button>
-                    </ModalFooter>
-                </Modal>
+                        <ModalFooter>
+                            <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>{' '}
+                            <Button size="sm" style={{ width: "100px" }} color="primary" onClick={this.discardChanges} >Discard</Button>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
 
-                <Modal isOpen={this.state.saveModal}>
-                    <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
-                    <ModalBody>
-                        Are you sure you want to save all changes?
+                <Container>
+                    <Modal isOpen={this.state.saveModal} backdrop={false}>
+                        <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
+                        <ModalBody>
+                            Are you sure you want to save all changes?
                     </ModalBody>
-                    <ModalFooter>
-                        <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>{' '}
-                        <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
-                    </ModalFooter>
-                </Modal>
+                        <ModalFooter>
+                            <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>{' '}
+                            <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
 
                 {this.renderListEditor()}
 
