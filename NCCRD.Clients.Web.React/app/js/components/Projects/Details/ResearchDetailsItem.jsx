@@ -115,7 +115,7 @@ class ResearchDetailsItem extends React.Component {
         <hr />
         <br />
 
-        <ReactTooltip />
+        <ReactTooltip delayShow={700} />
       </>
     )
   }

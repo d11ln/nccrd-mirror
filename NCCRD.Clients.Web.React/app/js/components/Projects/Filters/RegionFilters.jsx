@@ -192,8 +192,6 @@ class RegionFilters extends React.Component {
                 >
                     {this.renderTreeNodes(treeData)}
                 </Tree>
-
-                <ReactTooltip />
             </>
         )
     }

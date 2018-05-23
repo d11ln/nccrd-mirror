@@ -70,10 +70,10 @@ class Projects extends React.Component {
             <>
                 <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
-                    <Button data-tip="Add project" tag="a" size="sm" floating color="purple" onClick={this.addProject}>
+                    <Button data-tip="Add project" tag="a" size="sm" floating onClick={this.addProject}>
                         <Fa icon="plus" />
                     </Button>
-                    <Button data-tip="Back to top" tag="a" size="sm" floating color="purple" onClick={this.backToTop}>
+                    <Button data-tip="Back to top" tag="a" size="sm" floating onClick={this.backToTop}>
                         <Fa icon="arrow-up" />
                     </Button>
 
@@ -82,7 +82,7 @@ class Projects extends React.Component {
                 <ProjectFilters />
                 <ProjectList />
 
-                <ReactTooltip delayShow="700" />
+                <ReactTooltip delayShow={700} />
             </>
         )
     }

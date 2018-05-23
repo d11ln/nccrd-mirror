@@ -34,8 +34,6 @@ class GeneralFilters extends React.Component {
                     <StatusFilter />
                     <TypologyFilter />
                 </div>
-
-                <ReactTooltip />
             </>
         )
     }

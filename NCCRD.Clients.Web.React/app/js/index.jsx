@@ -8,7 +8,7 @@ import 'antd/lib/style/index.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import 'font-awesome/css/font-awesome.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -24,7 +24,7 @@ import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
 import { stripURLParam } from "./globalFunctions.js"
-import { connect } from 'react-redux'
+import ReactTooltip from 'react-tooltip'
 
 /**
  * Tap Event
@@ -97,6 +97,8 @@ class App extends React.Component {
                                 </div>
                             </div>
                         </div>
+
+                        <ReactTooltip delayShow={700} />
 
                     </div>
 

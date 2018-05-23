@@ -3,7 +3,7 @@
 import React from 'react'
 import {
     Container, Button, Modal, ModalBody, ModalHeader, ModalFooter,
-    Row, Col, TabPane, TabContent, Nav, NavItem, NavLink
+    Row, Col, TabPane, TabContent, Nav, NavItem, NavLink, Fa
 } from 'mdbreact'
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
@@ -872,7 +872,7 @@ class ProjectDetails extends React.Component {
                 <Container className="mt-2">
                     <Row>
                         <Col md="12">
-                            <Nav pills color="primary" className="nav-justified" style={{ borderBottom: "1px solid #727272"}}>
+                            <Nav pills color="primary" className="nav-justified" style={{ borderBottom: "1px solid #727272" }}>
                                 <NavItem >
                                     <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '1' })} onClick={() => { this.toggleClassicTabs1('1'); }}>
                                         Project
@@ -885,7 +885,7 @@ class ProjectDetails extends React.Component {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '3' })} onClick={() => { this.toggleClassicTabs1('3'); }}>
-                                        Mitigation 
+                                        Mitigation
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
@@ -940,20 +940,14 @@ class ProjectDetails extends React.Component {
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
-                                <Button hidden={editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.editClick} >
-                                    <i className="fa fa-pencil" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Edit
+                                <Button hidden={editMode} data-tip="Edit" tag="a" size="sm" floating color="purple" onClick={this.editClick}>
+                                    <Fa icon="pencil" />
                                 </Button>
-                                <Button hidden={!editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.saveClick} >
-                                    <i className="fa fa-save" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Save
+                                <Button hidden={!editMode} data-tip="Save changes" tag="a" size="sm" floating color="purple" onClick={this.saveClick}>
+                                    <Fa icon="save" />
                                 </Button>
-                                <Button hidden={!editMode} style={{ width: "125px" }} color="secondary" className="btn-sm" onTouchTap={this.discardClick} >
-                                    <i className="fa fa-trash-o" aria-hidden="true" />
-                                    &nbsp;&nbsp;
-                                    Discard
+                                <Button hidden={!editMode} data-tip="Discard changes" tag="a" size="sm" floating color="purple" onClick={this.discardClick}>
+                                    <Fa icon="trash" />
                                 </Button>
                             </div>
                         </div>
@@ -988,7 +982,7 @@ class ProjectDetails extends React.Component {
 
                 {this.renderListEditor()}
 
-                <ReactTooltip />
+                <ReactTooltip delayShow={700} />
 
             </>
         )

@@ -193,7 +193,7 @@ class MitigationDetailsItem extends React.Component {
         <hr />
         <br />
 
-        <ReactTooltip />
+        <ReactTooltip delayShow={700} />
       </>
     )
   }
