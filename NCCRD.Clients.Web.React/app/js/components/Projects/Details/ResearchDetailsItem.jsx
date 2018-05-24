@@ -26,7 +26,7 @@ class ResearchDetailsItem extends React.Component {
 
     return (
       <>
-        <br />
+        {/* <br /> */}
 
         <div className="row">
           <TextComponent
@@ -113,8 +113,9 @@ class ResearchDetailsItem extends React.Component {
 
         <br />
         <hr />
+        <br />
 
-        <ReactTooltip />
+        <ReactTooltip delayShow={700} />
       </>
     )
   }

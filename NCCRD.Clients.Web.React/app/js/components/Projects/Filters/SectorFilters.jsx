@@ -180,7 +180,6 @@ class SectorFilters extends React.Component {
                         </Button>
                     </div>
                 </div>
-                <br />
 
                 <Tree key={GetUID()}
                     autoExpandParent
@@ -192,7 +191,6 @@ class SectorFilters extends React.Component {
                     {this.renderTreeNodes(treeData)}
                 </Tree>
 
-                <ReactTooltip />
             </>
         )
     }

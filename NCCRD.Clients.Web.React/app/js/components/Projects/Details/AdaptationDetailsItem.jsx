@@ -42,7 +42,7 @@ class AdaptationDetailsItem extends React.Component {
     
     return (
       <>
-        <br />
+        {/* <br /> */}
 
         <div className="row">
 
@@ -110,8 +110,9 @@ class AdaptationDetailsItem extends React.Component {
 
         <br />
         <hr />
+        <br />
 
-        <ReactTooltip />
+        <ReactTooltip delayShow={700} />
       </>
     )
   }

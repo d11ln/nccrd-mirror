@@ -117,31 +117,53 @@ class ProjectList extends React.Component {
 
         let fetchURL = ""
         if (polygonFilter !== "") {
-            fetchURL = apiBaseURL + 'api/Projects/GetByPolygon?polygon=' + polygonFilter
+
+            fetchURL = apiBaseURL + 'api/Projects/GetByPolygonPost'
+
+            //Get project list data
+            fetch(fetchURL,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: "{ 'polygon':'" + polygonFilter + "' }"
+                })
+                .then(res => res.json())
+                .then(res => {
+                    loadProjects(res)
+                    setLoading(false)
+                })
+                .catch(res => {
+                    setLoading(false)
+                    console.log("Error details:", res)
+                    alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+                })
         }
         else {
+
             fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
                 '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
                 '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
-        }
 
-        //Get project list data
-        fetch(fetchURL,
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(res => res.json())
-            .then(res => {
-                loadProjects(res)
-                setLoading(false)
-            })
-            .catch(res => {
-                setLoading(false)
-                console.log("Error details:", res)
-                alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-            })
+            //Get project list data
+            fetch(fetchURL,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => res.json())
+                .then(res => {
+                    loadProjects(res)
+                    setLoading(false)
+                })
+                .catch(res => {
+                    setLoading(false)
+                    console.log("Error details:", res)
+                    alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+                })
+        }
     }
 
     componentDidMount() {

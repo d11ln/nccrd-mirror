@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import { Button } from 'mdbreact'
+import { Button, Fa } from 'mdbreact'
 import { apiBaseURL } from "../../../constants/apiBaseURL"
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
@@ -58,15 +58,13 @@ class MitigationEmissionsDataTab extends React.Component {
 
     return (
       <>
-
-        <Button hidden={!editMode} style={{ marginLeft: "-1px", marginBottom: "8px" }} color="secondary" className="btn-sm" onTouchTap={this.addClick} >
-          <i className="fa fa-plus-circle" aria-hidden="true" />
-          &nbsp;&nbsp;
-          Add Emissions Data
-        </Button>
+        <div style={{ position: "fixed", right: "14%", bottom: "65px", zIndex: "99" }}>
+          <Button hidden={!editMode} data-tip="Add Emissions Data" tag="a" size="sm" floating color="primary" onClick={this.addClick}>
+            <Fa icon="plus" />
+          </Button>
+        </div>
 
         {this.loadDetails()}
-
       </>
     )
   }

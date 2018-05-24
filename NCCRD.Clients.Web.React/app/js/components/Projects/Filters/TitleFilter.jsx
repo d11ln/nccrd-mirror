@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import { Button, Input } from 'mdbreact'
+import { Button, Input, FormInline } from 'mdbreact'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { UILookup } from '../../../constants/ui_config';
@@ -64,20 +64,26 @@ class TitleFilter extends React.Component {
         return (
             <div className="col-md-4">
                 <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
-                <div className="md-form form-sm">
-                    <Button
-                        color="primary"
-                        size="sm"
-                        style={{ height: "35px", marginLeft: "3px", marginTop: "2px", float: "right" }}
-                        onTouchTap={this.onTouchTap.bind(this, titleFilterInternal)} >
-                        Apply
-                    </Button>
 
-                    <div style={{ overflow: "hidden", paddingRight: "5px" }}>
-                        <input type="text" style={{ marginTop: "-4px", fontSize: "14px", fontWeight: "300", width: "100%" }}
-                            value={titleFilterInternal} onChange={this.onChange.bind(this)} />
-                    </div>
-                </div>
+                <table style={{ width: "100%" }}>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Input size="sm" style={{ marginLeft: "0px", marginRight: "0px", marginTop: "-25px", width: "100%", fontSize: "14px" }}
+                                    onChange={this.onChange.bind(this)} value={titleFilterInternal} />
+                            </td>
+                            <td style={{width: "1px"}}>
+                                <Button
+                                    color="primary"
+                                    size="sm"
+                                    style={{ height: "32px", marginTop: "-14px", marginRight: "0px" }}
+                                    onTouchTap={this.onTouchTap.bind(this, titleFilterInternal)} >
+                                    Apply
+                                </Button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         )
     }

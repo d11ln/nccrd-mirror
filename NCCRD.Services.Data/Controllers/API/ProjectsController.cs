@@ -263,6 +263,22 @@ namespace NCCRD.Services.Data.Controllers.API
             return project;
         }
 
+        private string GetPolygonFromUrl(string url)
+        {
+            string polygon = url;
+
+            //Get polygon from URL
+            if (!string.IsNullOrEmpty(url))
+            {
+                using (WebClient client = new WebClient())
+                {
+                    polygon = client.DownloadString(url);
+                }
+            }
+
+            return polygon;
+        }
+
         /// <summary>
         /// Get Projects by Polygon
         /// </summary>
@@ -272,12 +288,20 @@ namespace NCCRD.Services.Data.Controllers.API
         [Route("api/Projects/GetByPolygon")]
         public List<PolygonFilterResults> GetByPolygon(string polygon)
         {
-            List<PolygonFilterResults> results = new List<PolygonFilterResults>();
+            //Check if polygon param is URL for download
+            Uri uriResult;
+            bool isPolyUrl = Uri.TryCreate(polygon, UriKind.Absolute, out uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
+            //Get actual polygon string from URL
+            if (isPolyUrl)
+            {
+                polygon = GetPolygonFromUrl(polygon);
+            }
+
+            List<PolygonFilterResults> results = new List<PolygonFilterResults>();
             using (var context = new SQLDBContext())
             {
-                //project = context.Project.FirstOrDefault(x => x.ProjectTitle == title);
-
                 var polygonWKT = new SqlParameter("@WKT", polygon);
 
                 results = context.Database
@@ -286,6 +310,18 @@ namespace NCCRD.Services.Data.Controllers.API
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Get Projects by Polygon (POST version)
+        /// </summary>
+        /// <param name="polygon">Polygon (as post body)</param>
+        /// <returns>Projects data as JSON</returns>
+        [HttpPost]
+        [Route("api/Projects/GetByPolygonPost")]
+        public List<PolygonFilterResults> GetByPolygonPost([FromBody]Polygon polygon)
+        {
+            return GetByPolygon(polygon.polygon);
         }
 
         /// <summary>
