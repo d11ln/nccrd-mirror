@@ -4,15 +4,20 @@
  * Depecdencies
  * @ignore
  */
+
+//Styles - Ant.Design (has to be loaded before MDB so that MDB can replace all applicable styles)
 import 'antd/lib/style/index.css'
 
+//Styles - MDB
+import 'font-awesome/css/font-awesome.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'mdbreact/dist/css/mdb.css'
+
+//Components
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider, connect } from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import 'font-awesome/css/font-awesome.min.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'mdbreact/docs/css-pro/mdb.min.css'
 import store from './store'
 import queryString from 'query-string'
 import { Button, Spinner } from 'mdbreact/'

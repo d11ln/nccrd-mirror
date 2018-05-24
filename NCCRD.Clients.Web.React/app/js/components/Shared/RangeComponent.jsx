@@ -3,6 +3,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../constants/ui_config.js"
+import { Input } from 'mdbreact'
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -30,13 +31,13 @@ class RangeComponent extends React.Component {
 
     getPrefix() {
         if (typeof this.props.prefix !== "undefined") {
-            return <label>{this.props.prefix}&nbsp;</label>
+            return <h6>{this.props.prefix}&nbsp;</h6>
         }
     }
 
     getSuffix() {
         if (typeof this.props.suffix !== "undefined") {
-            return <label>&nbsp;{this.props.suffix}</label>
+            return <h6>&nbsp;{this.props.suffix}</h6>
         }
     }
 
@@ -62,7 +63,7 @@ class RangeComponent extends React.Component {
         )
     }
 
-    getLabelFontColour(uiconf){
+    getLabelFontColour(uiconf) {
         if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
             return "red"
         }
@@ -104,7 +105,7 @@ class RangeComponent extends React.Component {
             value = ""
         }
 
-        return value
+        return value.toString()
     }
 
     render() {
@@ -118,21 +119,36 @@ class RangeComponent extends React.Component {
 
                 {this.getLabel()}
 
-                {this.getPrefix()}
-                <input id={this.getId("from")} type="text" readOnly={!editMode}
+                <div className="row">
+
+                    <span style={{ width: "16px" }} />
+
+                    {this.getPrefix()}
+                    {/* <input id={this.getId("from")} type="text" readOnly={!editMode}
                     style={{ color: this.getFontColour(), width: inputWidth }} value={this.fixNullOrUndefinedValue(valueFrom)}
                     onChange={this.valueFromChange.bind(this)}
-                />
-                {this.getSuffix()}
+                /> */}
+                    <Input size="sm" id={this.getId("from")} readOnly={!editMode}
+                        style={{ marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth }}
+                        value={this.fixNullOrUndefinedValue(valueFrom)}
+                        onChange={this.valueFromChange.bind(this)} />
 
-                <label style={{ marginLeft: "10px", marginRight: "10px" }}> - </label>
+                    {this.getSuffix()}
 
-                {this.getPrefix()}
-                <input id={this.getId("to")} type="text" readOnly={!editMode}
+                    <h6 style={{ marginLeft: "10px", marginRight: "10px" }}> - </h6>
+
+                    {this.getPrefix()}
+                    {/* <input id={this.getId("to")} type="text" readOnly={!editMode}
                     style={{ color: this.getFontColour(), width: inputWidth }} value={this.fixNullOrUndefinedValue(valueTo)}
                     onChange={this.valueToChange.bind(this)}
-                />
-                {this.getSuffix()}
+                /> */}
+                    <Input size="sm" id={this.getId("to")} readOnly={!editMode}
+                        style={{ marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth }}
+                        value={this.fixNullOrUndefinedValue(valueTo)}
+                        onChange={this.valueToChange.bind(this)} />
+
+                    {this.getSuffix()}
+                </div>
             </div>
         )
     }

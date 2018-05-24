@@ -56,7 +56,7 @@ class AdaptationDetailsTab extends React.Component {
         return (
             <>
                 <div style={{ position: "fixed", right: "14%", bottom: "65px", zIndex: "99" }}>
-                    <Button hidden={!editMode} data-tip="Add Adaptation Details" tag="a" size="sm" floating color="purple" onClick={this.addClick}>
+                    <Button hidden={!editMode} data-tip="Add Adaptation Details" tag="a" size="sm" floating color="primary" onClick={this.addClick}>
                         <Fa icon="plus" />
                     </Button>
                 </div>

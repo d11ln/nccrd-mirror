@@ -181,7 +181,6 @@ class RegionFilters extends React.Component {
                         </Button>
                     </div>
                 </div>
-                <br />
 
                 <Tree key={GetUID()}
                     autoExpandParent

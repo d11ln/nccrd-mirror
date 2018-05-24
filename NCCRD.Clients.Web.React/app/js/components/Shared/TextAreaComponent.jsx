@@ -4,6 +4,7 @@ import React from 'react'
 import TextareaAutosize from "react-textarea-autosize"
 import { connect } from 'react-redux'
 import { UILookup } from "../../constants/ui_config.js"
+import { Input } from "mdbreact"
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -51,7 +52,7 @@ class TextAreaComponent extends React.Component {
         }
     }
 
-    getLabelFontColour(uiconf){
+    getLabelFontColour(uiconf) {
         if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
             return "red"
         }
@@ -78,11 +79,25 @@ class TextAreaComponent extends React.Component {
                         borderColor: "#b4b4b4",
                         paddingBottom: "4px",
                         color: this.getFontColour(),
-                        fontSize: "15px"
+                        width: "100%"
                     }}
                     value={value}
                     onChange={this.valueChange.bind(this)}
                 />
+
+                {/* <Input type="textarea" readOnly={!editMode}
+                    style={{
+                        marginTop: "-15px",
+                        //borderStyle: "solid",
+                        //borderWidth: "0px 0px 1px 0px",
+                        //borderColor: "#b4b4b4",
+                        //paddingBottom: "4px",
+                        color: this.getFontColour()
+                        //fontSize: "15px"
+                    }}
+                    value={value}
+                    onChange={this.valueChange.bind(this)} /> */}
+
             </div>
         )
 
