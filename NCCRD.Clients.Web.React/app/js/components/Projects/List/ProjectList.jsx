@@ -9,9 +9,10 @@ import { apiBaseURL } from "../../../constants/apiBaseURL"
 const mapStateToProps = (state, props) => {
     let { projectData: { projects, start, end, listScrollPos } } = state
     let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter } } = state
+    let user = state.oidc.user
     return {
         projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-        listScrollPos
+        listScrollPos, user
     }
 }
 
@@ -86,7 +87,7 @@ class ProjectList extends React.Component {
 
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
             clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
-            clearResearchDetails, start, end, resetProjectCounts, polygonFilter } = this.props
+            clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user } = this.props
 
         if (resetCounts === true) {
             start = 0
@@ -220,6 +221,7 @@ class ProjectList extends React.Component {
     }
 
     render() {
+
         const ar = this.buildList()
         let projectlist = []
 

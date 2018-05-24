@@ -101,6 +101,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/ResearchDetails/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]ResearchDetail researchDetails)
         {
             bool result = false;
@@ -148,91 +149,5 @@ namespace NCCRD.Services.Data.Controllers.API
 
             return result;
         }
-
-        /*/// <summary>
-        /// Update ResearchDetails
-        /// </summary>
-        /// <param name="researchDetails">ResearchDetails to update</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ResearchDetails/Update")]
-        public bool Update([FromBody]ResearchDetail researchDetails)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ResearchDetails.FirstOrDefault(x => x.ResearchDetailId == researchDetails.ResearchDetailId);
-                if (data != null)
-                {
-                    data.Author = researchDetails.Author;
-                    data.PaperLink = researchDetails.PaperLink;
-                    data.ResearchTypeId = researchDetails.ResearchTypeId;
-                    data.TargetAudienceId = researchDetails.TargetAudienceId;
-                    data.ProjectId = researchDetails.ProjectId;
-                    data.SectorId = researchDetails.SectorId;
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete ResearchDetails
-        /// </summary>
-        /// <param name="researchDetails">ResearchDetails to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/ResearchDetails/Delete")]
-        public bool Delete([FromBody]ResearchDetail researchDetails)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ResearchDetails.FirstOrDefault(x => x.ResearchDetailId == researchDetails.ResearchDetailId);
-                if (data != null)
-                {
-                    context.ResearchDetails.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete ResearchDetails by Id
-        /// </summary>
-        /// <param name="id">Id of ResearchDetails to delete</param>
-        /// <returns>True/False</returns>
-        [HttpGet]
-        [Route("api/ResearchDetails/DeleteById/{id}")]
-        public bool DeleteById(int id)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.ResearchDetails.FirstOrDefault(x => x.ResearchDetailId == id);
-                if (data != null)
-                {
-                    context.ResearchDetails.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
     }
 }

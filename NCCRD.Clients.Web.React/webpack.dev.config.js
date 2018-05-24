@@ -3,6 +3,8 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cwd = process.cwd()
 
+
+
 const mode = 'development'
 
 /**
@@ -12,6 +14,9 @@ module.exports = {
   context: path.join(cwd, 'app'),
   devtool: 'inline-source-map',
   mode,
+  devServer: {
+    historyApiFallback: true
+  },
   entry: {
     app: ['./js/index.jsx'],
     react: ['react', 'react-dom', 'react-router-dom', 'react-router', 'redux', 'react-redux', 'react-router-redux', 'react-tap-event-plugin', 'history'],

@@ -42,6 +42,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/VoluntaryGoldStandard/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]List<VoluntaryGoldStandard> items)
         {
             bool result = false;
@@ -79,6 +80,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpGet]
         [Route("api/VoluntaryGoldStandard/DeleteById/{id}")]
+        [Authorize]
         public bool DeleteById(int id)
         {
             bool result = false;

@@ -10,11 +10,13 @@ import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
 import { GetUID } from "../../../../globalFunctions"
 
+
 const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
     let { editListModalData: { show, data, dispatch, persist, dependencies, newItemTemplate } } = state
-    return { show, data, dispatch, persist, dependencies, newItemTemplate }
+    let user = state.oidc.user
+    return { show, data, dispatch, persist, dependencies, newItemTemplate, user }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -155,7 +157,7 @@ class EditListModal extends React.Component {
 
     confirmSave() {
 
-        let { dispatchToStore, dispatch, persist, setLoading, data } = this.props
+        let { dispatchToStore, dispatch, persist, setLoading, data, user } = this.props
         let { _data } = this.state
 
         //Update items
@@ -171,7 +173,10 @@ class EditListModal extends React.Component {
         //Save items to DB
         return fetch(url, {
             method: 'post',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+            },
             body: strPostData
         })
             .then((res) => res.json())

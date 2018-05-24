@@ -3,7 +3,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input } from 'mdbreact'
-import * as ACTION_TYPES from "../../constants/action-types"
+import * as ACTION_TYPES from '../../constants/action-types'
+import userManager from '../Authentication/userManager'
 
 const mapStateToProps = (state, props) => {
     let { globalData: { loading } } = state
@@ -26,69 +27,100 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.login = this.login.bind(this)
-
-        this.state = { username: "", password: "" }
+        // this.login = this.login.bind(this)
+        // this.state = { username: "", password: "" }
     }
 
     componentDidMount() {
         this.props.setLoading(false)
+        userManager.signinRedirect()
     }
 
-    login() {
+    // login(event) {
 
-        let { username, password } = this.state
-        let valid = true
+    //     let { username, password } = this.state
+    //     let valid = true
 
-        valid = this.validateUsername(username)
-        if (valid) {
-            valid = this.validatePassword(password)
-        }
+    //     valid = this.validateUsername(username)
+    //     if (valid === true) {
+    //         valid = this.validatePassword(password)
+    //     }
 
-        if (valid) {
-            Promise.all([this.props.setAuthenticated({isAuthenticated: true, username: username})]).then(location.hash = "/")
-        }
-    }
+    //     if (valid === true) {
 
-    validateUsername(username) {
+    //         this.props.setLoading(true)
 
-        let valid = true
+    //         event.preventDefault()
 
-        if (username === "") {
-            alert("Email (username) required")
-            valid = false
-        }
-        else if (!(username.includes("@") && username.includes("."))) {
-            alert("Invalid Email (username)")
-            valid = false
-        }
+    //         console.log(userManager._settings)
 
-        return valid
-    }
+    //         userManager.signinRedirect()
+    //     }
+    // }
 
-    validatePassword(password) {
-        let valid = true
+    // validateUsername(username) {
 
-        if (password === "") {
-            alert("Password required")
-            valid = false
-        }
+    //     let valid = true
 
-        return valid
-    }
+    //     if (username === "") {
+    //         alert("Email (username) required")
+    //         valid = false
+    //     }
+    //     else if (!(username.includes("@") && username.includes("."))) {
+    //         alert("Invalid Email (username)")
+    //         valid = false
+    //     }
 
-    username(e) {
-        this.setState({ username: e.target.value })
-    }
+    //     return valid
+    // }
 
-    password(e) {
-        this.setState({ password: e.target.value })
-    }
+    // validatePassword(password) {
+    //     let valid = true
+
+    //     if (password === "") {
+    //         alert("Password required")
+    //         valid = false
+    //     }
+
+    //     return valid
+    // }
+
+    // username(e) {
+    //     this.setState({ username: e.target.value })
+    // }
+
+    // password(e) {
+    //     this.setState({ password: e.target.value })
+    // }
 
     render() {
 
         return (
-            <>
+            <> 
+                <div>
+                    <br />
+                    <label>&nbsp;Redirecting...</label>
+                </div>
+
+                {/* <div className="container-fluid">
+                    <div className="row">
+                        <div
+                            hidden={!this.props.loading}
+                            className="card"
+                            style={{ position: "fixed", right: "40%", bottom: "42%", zIndex: "99" }}>
+
+                            <div className="card-body" style={{ margin: "30px 80px 30px 80px" }}>
+                                <label style={{ fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
+                                <BeatLoader
+                                    color={'#4285F4'}
+                                    size={30}
+                                    loading={this.props.loading}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="row" style={{ marginTop: "10%" }}>
 
                     <div className="col-md-4">
@@ -104,7 +136,7 @@ class Login extends React.Component {
                             <Button onClick={this.login} size="sm" style={{ float: "right", marginRight: "13px" }}>Login</Button>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* <br/> */}
                 {/* Third party login providers */}

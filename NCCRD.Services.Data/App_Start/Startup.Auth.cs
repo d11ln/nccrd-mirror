@@ -10,6 +10,8 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using NCCRD.Services.Data.Providers;
 using NCCRD.Services.Data.Models;
+using IdentityServer3.AccessTokenValidation;
+using System.Diagnostics;
 
 namespace NCCRD.Services.Data
 {
@@ -46,6 +48,13 @@ namespace NCCRD.Services.Data
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
 
+            // Enable the application to use Identity-Server-Bearer-Token to authenticate users
+            app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
+            {
+                Authority = Debugger.IsAttached ? Properties.Settings.Default.IdentityServerURL_DEV : Properties.Settings.Default.IdentityServerURL_PRD,
+                RequiredScopes = new[] { "SAEON.NCCRD.Web.API" },
+            });
+
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
@@ -65,36 +74,6 @@ namespace NCCRD.Services.Data
             //    ClientSecret = ""
             //});
 
-            using (var context = new ApplicationDbContext())
-            {
-                var roleStore = new RoleStore<IdentityRole>(context);
-                var roleManager = new RoleManager<IdentityRole>(roleStore);
-
-                var defaultRoles = new string[]
-                {
-                    "Administrator",
-                    "Funder",
-                    "Project Owner",
-                    "Option Owner",
-                    "General"
-                };
-
-                foreach (var role in defaultRoles)
-                {
-                    roleManager.Create(new IdentityRole { Name = role });
-                }
-
-                //Create default admin user
-                var userStore = new UserStore<ApplicationUser>(context);
-                var userManager = new UserManager<ApplicationUser>(userStore);
-                var user = new ApplicationUser { UserName = "admin", PasswordHash = userManager.PasswordHasher.HashPassword("admin") };
-
-                if (userManager.FindByName(user.UserName) == null)
-                {
-                    userManager.Create(user);
-                    userManager.AddToRole(user.Id, "Administrator");
-                }
-            }
         }
     }
 }

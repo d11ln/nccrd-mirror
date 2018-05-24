@@ -43,6 +43,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/AdaptationPurpose/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]List<AdaptationPurpose> items)
         {
             bool result = false;
@@ -80,6 +81,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpGet]
         [Route("api/AdaptationPurpose/DeleteById/{id}")]
+        [Authorize]
         public bool DeleteById(int id)
         {
             bool result = false;

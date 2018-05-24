@@ -6,13 +6,15 @@ import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { Fa, Button, ButtonFixed, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
+import { apiBaseURL } from "../../../constants/apiBaseURL"
 import ReactTooltip from 'react-tooltip'
 
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-    let { globalData: { loading, isAuthenticated } } = state
-    return { loading, isAuthenticated }
+    let { globalData: { loading } } = state
+    let user = state.oidc.user
+    return { loading, user }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -56,15 +58,32 @@ class Projects extends React.Component {
         location.hash = '/projects/add'
     }
 
-    // componentDidMount() {
-    //     window.scrollTo(0, 0);
-    // }
-
     componentWillMount() {
         this.props.setLoading(true)
     }
 
+    // testAuth() {
+
+    //     let { user } = this.props
+
+    //     console.log("Test Auth")
+    //     console.log("User", user)
+
+    //     fetch(apiBaseURL + 'api/Projects/GetById/741', {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+    //         }
+    //     }).then(res => res.json()).then(res => {
+    //         console.log("res", res)
+    //     }).catch(res => {
+    //         console.log("Error details:", res)
+    //     })
+    // }
+
     render() {
+
+        let { user } = this.props
 
         return (
             <>

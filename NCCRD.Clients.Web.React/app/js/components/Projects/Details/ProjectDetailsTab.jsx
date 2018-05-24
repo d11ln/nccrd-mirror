@@ -235,7 +235,7 @@ class ProjectDetailsTab extends React.Component {
                             "Description": ""
                         }}
                     />
-                    <SelectComponent
+                    {/* <SelectComponent
                         id="selProjectMAOptions"
                         col="col-md-4"
                         label="MAOptions:"
@@ -245,7 +245,7 @@ class ProjectDetailsTab extends React.Component {
                         // dispatch={ACTION_TYPES.LOAD_MA_OPTIONS}
                         // persist={"api/MAOptions/AddOrUpdate"}
                         allowEdit={false}
-                    />
+                    /> */}
                 </div>
             </>
         )

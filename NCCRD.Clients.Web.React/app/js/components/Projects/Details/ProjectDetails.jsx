@@ -28,14 +28,14 @@ const mapStateToProps = (state, props) => {
     let { mitigationData: { mitigationDetails } } = state
     let { emissionData: { emissionsData } } = state
     let { researchData: { researchDetails } } = state
-    let { globalData: { loading, editMode, isAuthenticated } } = state
-
+    let { globalData: { loading, editMode } } = state
     let editListModalType = state.editListModalData.type
     let editListModalShow = state.editListModalData.show
+    let user = state.oidc.user
 
     return {
-        projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading, isAuthenticated,
-        editListModalType, editListModalShow
+        projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading,
+        editListModalType, editListModalShow, user
     }
 }
 
@@ -76,9 +76,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadValidationStatus: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_VALIDATION_STATUS, payload })
-        },
-        loadMAOptions: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_MA_OPTIONS, payload })
         },
         loadAdaptationPurpose: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_PURPOSE, payload })
@@ -205,15 +202,15 @@ class ProjectDetails extends React.Component {
         })
     }
 
-    loadMAOption(loadMAOptions) {
-        return fetch(apiBaseURL + 'api/MAOptions/GetAll', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(res => res.json()).then(res => {
-            loadMAOptions(res)
-        })
-    }
+    // loadMAOption(loadMAOptions) {
+    //     return fetch(apiBaseURL + 'api/MAOptions/GetAll', {
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         }
+    //     }).then(res => res.json()).then(res => {
+    //         loadMAOptions(res)
+    //     })
+    // }
 
     loadAdaptationPurpose(loadAdaptationPurpose) {
         return fetch(apiBaseURL + 'api/AdaptationPurpose/GetAll/', {
@@ -348,7 +345,6 @@ class ProjectDetails extends React.Component {
     loadProjects(loadProjectDetails) {
 
         let action
-
         if (this.state.projectId === 'add') {
 
             let newProject = {
@@ -378,9 +374,11 @@ class ProjectDetails extends React.Component {
             action = loadProjectDetails(newProject)
         }
         else {
+
             action = fetch(apiBaseURL + 'api/Projects/GetById/' + this.state.projectId, {
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json"/*,
+                    "Authorization": "Bearer " + (user === null ? "" : user.access_token)*/
                 }
             }).then(res => res.json()).then(res => {
                 res.state = "original"
@@ -478,12 +476,17 @@ class ProjectDetails extends React.Component {
     loadData() {
 
         let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadProjectManagers, loadValidationStatus,
-            loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMAOptions, loadSectorType, loadTypology,
+            loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
             loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadSectorTree, loadCarbonCredit,
             loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-            loadResearchType, loadTargetAudience } = this.props
+            loadResearchType, loadTargetAudience, user } = this.props
 
         setLoading(true)
+        setEditMode(false)
+
+        if ((!user || user.expired) && this.state.projectId === 'add') {
+            location.hash = "/projects"
+        }
 
         Promise.all([
             this.loadProjectType(loadProjectTypes),
@@ -491,7 +494,6 @@ class ProjectDetails extends React.Component {
             this.loadProjectStatus(loadProjectStatus),
             this.loadProjectManager(loadProjectManagers),
             this.loadValidationStatus(loadValidationStatus),
-            this.loadMAOption(loadMAOptions),
             this.loadProjects(loadProjectDetails),
             this.loadAdaptationDetails(loadAdaptationDetails),
             this.loadMitigationDetails(loadMitigationDetails),
@@ -611,7 +613,7 @@ class ProjectDetails extends React.Component {
 
     SaveProjectChanges() {
 
-        let { projectDetails, resetProjectState } = this.props
+        let { projectDetails, resetProjectState, user } = this.props
 
         if (projectDetails.state === 'modified') {
 
@@ -620,7 +622,10 @@ class ProjectDetails extends React.Component {
 
             return fetch(url, {
                 method: 'post',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+                },
                 body: strPostData
             })
                 .then((res) => res.json())
@@ -642,7 +647,7 @@ class ProjectDetails extends React.Component {
 
     SaveAdaptationChanges() {
 
-        let { adaptationDetails, resetAdaptationState } = this.props
+        let { adaptationDetails, resetAdaptationState, user } = this.props
         let result = true
 
         return Promise.all(
@@ -655,7 +660,10 @@ class ProjectDetails extends React.Component {
 
                     return fetch(url, {
                         method: 'post',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+                        },
                         body: strPostData
                     })
                         .then((res) => res.json())
@@ -677,7 +685,7 @@ class ProjectDetails extends React.Component {
 
     SaveMitigationChanges() {
 
-        let { mitigationDetails, resetMitigationState } = this.props
+        let { mitigationDetails, resetMitigationState, user } = this.props
         let result = true
 
         return Promise.all(
@@ -690,7 +698,10 @@ class ProjectDetails extends React.Component {
 
                     return fetch(url, {
                         method: 'post',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+                        },
                         body: strPostData
                     })
                         .then((res) => res.json())
@@ -712,7 +723,7 @@ class ProjectDetails extends React.Component {
 
     SaveEmissionsChanges() {
 
-        let { emissionsData, resetEmissionState } = this.props
+        let { emissionsData, resetEmissionState, user } = this.props
         let result = true
 
         return Promise.all(
@@ -725,7 +736,10 @@ class ProjectDetails extends React.Component {
 
                     return fetch(url, {
                         method: 'post',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+                        },
                         body: strPostData
                     })
                         .then((res) => res.json())
@@ -747,7 +761,7 @@ class ProjectDetails extends React.Component {
 
     SaveResearchChanges() {
 
-        let { researchDetails, resetResearchState } = this.props
+        let { researchDetails, resetResearchState, user } = this.props
         let result = true
 
         return Promise.all(
@@ -760,7 +774,10 @@ class ProjectDetails extends React.Component {
 
                     return fetch(url, {
                         method: 'post',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+                        },
                         body: strPostData
                     })
                         .then((res) => res.json())
@@ -858,7 +875,7 @@ class ProjectDetails extends React.Component {
 
     render() {
 
-        const { projectDetails, editMode, isAuthenticated } = this.props
+        const { projectDetails, editMode, user } = this.props
 
         return (
 
@@ -936,7 +953,7 @@ class ProjectDetails extends React.Component {
                     </Row>
                 </Container>
 
-                <div className="container-fluid" hidden={!isAuthenticated}>
+                <div className="container-fluid" hidden={!user || user.expired}>
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>

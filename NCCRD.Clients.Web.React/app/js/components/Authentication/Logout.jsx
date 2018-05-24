@@ -1,39 +1,25 @@
 'use strict'
 
 import React from 'react'
-import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../constants/action-types"
-
-const mapStateToProps = (state, props) => {
-    return { }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setAuthenticated: payload => {
-            dispatch({ type: ACTION_TYPES.SET_AUTHENTICATED, payload })
-        }
-    }
-}
+import userManager from '../Authentication/userManager'
 
 class Logout extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
-      Promise.all([ this.props.setAuthenticated({ isAuthenticated: false }) ]).then(location.hash = "/")
+        userManager.signoutRedirect();
     }
 
     render() {
 
         return (
-            <>
-                Logging out...
+            <>    
+                <div>
+                    <br />
+                    <label>&nbsp;Logging out...</label>
+                </div>
             </>
         )
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Logout)
+export default Logout

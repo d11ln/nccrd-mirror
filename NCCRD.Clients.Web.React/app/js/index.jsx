@@ -29,6 +29,10 @@ import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
 import { stripURLParam } from "./globalFunctions.js"
+import userManager from './components/Authentication/userManager';
+import CallbackPage from '../js/components/Authentication/callback.jsx';
+import { OidcProvider } from 'redux-oidc'
+import LoggedOut from './components/Authentication/LoggedOut.jsx';
 import ReactTooltip from 'react-tooltip'
 
 /**
@@ -83,6 +87,8 @@ class App extends React.Component {
                             <Route path="/projects/:id" component={ProjectDetails} exact />
                             <Route path="/login" component={Login} exact />
                             <Route path="/logout" component={Logout} exact />
+                            <Route path="/loggedout" component={LoggedOut} exact />
+                            <Route path="/callback" component={CallbackPage} />
                         </Switch>
 
                         <div className="container-fluid">
@@ -117,7 +123,9 @@ const ConnectedApp = connect(mapStateToProps)(App)
 
 ReactDOM.render(
     <Provider store={store}>
-        <ConnectedApp />
+        <OidcProvider store={store} userManager={userManager}>
+            <App />
+        </OidcProvider>
     </Provider>,
     document.getElementById('app')
 )

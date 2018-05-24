@@ -119,6 +119,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/MitigationDetails/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]MitigationDetail mitigationDetails)
         {
             bool result = false;
@@ -191,59 +192,5 @@ namespace NCCRD.Services.Data.Controllers.API
 
             return result;
         }
-
-        /*/// <summary>
-        /// Delete MitigationDetails
-        /// </summary>
-        /// <param name="mitigationDetails">MitigationDetails to delete</param>
-        /// <returns>True/False</returns>
-        [HttpPost]
-        [Route("api/MitigationDetails/Delete")]
-        public bool Delete([FromBody]MitigationDetail mitigationDetails)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MitigationDetails.FirstOrDefault(x => x.MitigationDetailId == mitigationDetails.MitigationDetailId);
-                if (data != null)
-                {
-                    context.MitigationDetails.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
-
-        /*/// <summary>
-        /// Delete MitigationDetails by Id
-        /// </summary>
-        /// <param name="id">Id of MitigationDetails to delete</param>
-        /// <returns>True/False</returns>
-        [HttpGet]
-        [Route("api/MitigationDetails/DeleteById/{id}")]
-        public bool DeleteById(int id)
-        {
-            bool result = false;
-
-            using (var context = new SQLDBContext())
-            {
-                //Check if exists
-                var data = context.MitigationDetails.FirstOrDefault(x => x.MitigationDetailId == id);
-                if (data != null)
-                {
-                    context.MitigationDetails.Remove(data);
-                    context.SaveChanges();
-
-                    result = true;
-                }
-            }
-
-            return result;
-        }*/
     }
 }

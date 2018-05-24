@@ -21,7 +21,8 @@ const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
     let { editListModalData: { show, data, dispatch, persist, type, dependencies, newItemTemplate } } = state
-    return { show, data, dispatch, persist, type, dependencies, newItemTemplate }
+    let user = state.oidc.user
+    return { show, data, dispatch, persist, type, dependencies, newItemTemplate, user }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -389,7 +390,7 @@ class EditTreeModal extends React.Component {
 
     confirmSave() {
 
-        let { dispatchToStore, dispatch, persist, setLoading, data } = this.props
+        let { dispatchToStore, dispatch, persist, setLoading, data, user } = this.props
         let { _data } = this.state
 
         //Update items
@@ -405,7 +406,10 @@ class EditTreeModal extends React.Component {
         //Save items to DB
         return fetch(url, {
             method: 'post',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+            },
             body: strPostData
         })
             .then((res) => res.json())

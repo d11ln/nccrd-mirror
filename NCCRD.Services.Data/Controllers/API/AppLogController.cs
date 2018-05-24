@@ -81,6 +81,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/AppLog/Add")]
+        [Authorize]
         public bool Add([FromBody]AppLog appLog)
         {
             bool result = false;

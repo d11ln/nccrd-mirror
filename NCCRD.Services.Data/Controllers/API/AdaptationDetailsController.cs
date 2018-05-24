@@ -118,6 +118,7 @@ namespace NCCRD.Services.Data.Controllers.API
         /// <returns>True/False</returns>
         [HttpPost]
         [Route("api/AdaptationDetails/AddOrUpdate")]
+        [Authorize]
         public bool AddOrUpdate([FromBody]AdaptationDetail adaptationDetail)
         {
             bool result = false;

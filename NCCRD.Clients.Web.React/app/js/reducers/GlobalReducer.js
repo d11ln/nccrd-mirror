@@ -20,18 +20,6 @@ export default function GlobalReducer(state = {}, action) {
             return { ...state, showEditListModal: payload }
         }
 
-        case ACTION_TYPES.SET_AUTHENTICATED: {
-            
-            //Clear token data here
-            //...
-
-            return {
-                ...state,
-                isAuthenticated: payload.isAuthenticated,
-                username: (payload.isAuthenticated === true ? payload.username : "")
-            }
-        }
-
         default: {
             return state
         }
