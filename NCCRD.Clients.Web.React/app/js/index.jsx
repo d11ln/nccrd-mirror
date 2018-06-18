@@ -124,7 +124,7 @@ const ConnectedApp = connect(mapStateToProps)(App)
 ReactDOM.render(
     <Provider store={store}>
         <OidcProvider store={store} userManager={userManager}>
-            <App />
+            <ConnectedApp />
         </OidcProvider>
     </Provider>,
     document.getElementById('app')
