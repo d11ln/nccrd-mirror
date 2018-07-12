@@ -10,7 +10,7 @@ const userManagerConfig = {
     //silent_redirect_uri: siteBaseURL + '/silent_renew.html',
     //response_mode: 'form_post',
     response_type: 'id_token token',
-    scope: 'openid profile email SAEON.NCCRD.Web.API',
+    scope: 'openid profile email SAEON_NCCRD_Web_API',
     authority: ssoBaseURL,
     automaticSilentRenew: false,
     filterProtocolClaims: true,

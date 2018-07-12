@@ -16,7 +16,7 @@ const store = createStore(
         //...applyMiddleware(middleware),
 
         globalData: {
-            loading: true,
+            loading: false,
             editMode: false
         },
 
