@@ -62,25 +62,6 @@ class Projects extends React.Component {
         this.props.setLoading(true)
     }
 
-    // testAuth() {
-
-    //     let { user } = this.props
-
-    //     console.log("Test Auth")
-    //     console.log("User", user)
-
-    //     fetch(apiBaseURL + 'api/Projects/GetById/741', {
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-    //         }
-    //     }).then(res => res.json()).then(res => {
-    //         console.log("res", res)
-    //     }).catch(res => {
-    //         console.log("Error details:", res)
-    //     })
-    // }
-
     render() {
 
         let { user } = this.props
@@ -89,15 +70,17 @@ class Projects extends React.Component {
             <>
                 <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
-                    <Button data-tip="Add project" tag="a" size="sm" floating color="primary" onClick={this.addProject}>
-                        <Fa icon="plus" />
-                    </Button>
-                    <Button data-tip="Back to top" tag="a" size="sm" floating color="success" onClick={this.backToTop}>
-                        <Fa icon="arrow-up" />
+                    {(user && !user.expired) &&
+                        <Button data-tip="Add project" tag="button" size="sm" floating color="primary" onClick={this.addProject}>
+                            <Fa icon="plus" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
+                        </Button>}
+
+                    <Button data-tip="Back to top" tag="button" size="sm" floating color="success" onClick={this.backToTop}>
+                        <Fa icon="arrow-up" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
                     </Button>
 
                 </div>
-                
+
                 <ProjectFilters />
                 <ProjectList />
 

@@ -957,14 +957,14 @@ class ProjectDetails extends React.Component {
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
-                                <Button hidden={editMode} data-tip="Edit" tag="a" size="sm" floating color="primary" onClick={this.editClick}>
-                                    <Fa icon="pencil" />
+                                <Button hidden={editMode} data-tip="Edit" tag="button" size="sm" floating color="primary" onClick={this.editClick}>
+                                    <Fa icon="pencil" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
                                 </Button>
-                                <Button hidden={!editMode} data-tip="Save changes" tag="a" size="sm" floating color="success" onClick={this.saveClick}>
-                                    <Fa icon="save" />
+                                <Button hidden={!editMode} data-tip="Save changes" tag="button" size="sm" floating color="success" onClick={this.saveClick}>
+                                    <Fa icon="save" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
                                 </Button>
-                                <Button hidden={!editMode} data-tip="Discard changes" tag="a" size="sm" floating color="danger" onClick={this.discardClick}>
-                                    <Fa icon="trash" />
+                                <Button hidden={!editMode} data-tip="Discard changes" tag="button" size="sm" floating color="danger" onClick={this.discardClick}>
+                                    <Fa icon="trash" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
                                 </Button>
                             </div>
                         </div>
