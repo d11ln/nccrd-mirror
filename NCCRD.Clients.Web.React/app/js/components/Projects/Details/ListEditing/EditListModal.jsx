@@ -368,7 +368,7 @@ class EditListModal extends React.Component {
         return (
             <>
                 <Container>
-                    <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} backdrop={false} >
+                    <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
 
                         <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
 
