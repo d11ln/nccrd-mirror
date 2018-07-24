@@ -75,7 +75,7 @@ class TitleFilter extends React.Component {
         <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
         <Input size="sm"
           className="form-control"
-          style={{ padding: "5px", marginTop: "-26px", width: "100%", border: "1px solid lightgrey", borderRadius: "5px" }}
+          style={{ padding: "5px", marginTop: "-24px", width: "100%", border: "1px solid lightgrey", borderRadius: "5px" }}
           onChange={this.onChange.bind(this)} value={titleFilterInternal} icon="search" hint="Search..."
           onKeyDown={this.test.bind(this)}
         />

@@ -15,19 +15,13 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    addResearchDetails: payload => {
-      dispatch({ type: ACTION_TYPES.ADD_RESEARCH_DETAILS, payload })
-    }
-  }
+  return {}
 }
 
 class ResearchDetailsTab extends React.Component {
 
   constructor(props) {
     super(props)
-
-    this.addClick = this.addClick.bind(this)
   }
 
   loadDetails() {
@@ -46,26 +40,11 @@ class ResearchDetailsTab extends React.Component {
     return <div />
   }
 
-  addClick() {
-
-    let { addResearchDetails, projectDetails } = this.props
-    addResearchDetails(projectDetails.ProjectId)
-  }
-
   render() {
-
-    let { editMode } = this.props
 
     return (
       <>
-        <div style={{ position: "fixed", right: "14%", bottom: "65px", zIndex: "99" }}>
-          <Button hidden={!editMode} data-tip="Add Research Details" tag="a" size="sm" floating color="primary" onTouchTap={this.addClick}>
-            <Fa icon="plus" />
-          </Button>
-        </div>
-
         {this.loadDetails()}
-
       </>
     )
   }

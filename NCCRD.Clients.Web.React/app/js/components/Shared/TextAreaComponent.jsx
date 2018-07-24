@@ -74,13 +74,9 @@ class TextAreaComponent extends React.Component {
                 <TextareaAutosize
                     readOnly={!editMode}
                     style={{
-                        //borderStyle: "solid",
-                        //borderWidth: "0px 0px 1px 0px",
-                        //borderColor: "#b4b4b4",
-                        //paddingBottom: "4px",
                         border: "1px solid lightgrey",
                         borderRadius: "5px",
-                        padding: "3px 5px 3px 5px",
+                        padding: "5px",
                         color: this.getFontColour(),
                         width: "100%"
                     }}

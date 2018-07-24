@@ -75,12 +75,15 @@ class Projects extends React.Component {
 
         return (
             <>
-                <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
+                <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
 
                     {(user && !user.expired) &&
-                        <Button data-tip="Add project" tag="s" size="sm" floating color="primary" onTouchTap={this.addProject}>
-                            <Fa icon="plus" />
-                        </Button>}
+                        <div>
+                            <Button data-tip="Add project" tag="s" size="sm" floating color="primary" onTouchTap={this.addProject}>
+                                <Fa icon="plus" />
+                            </Button>
+                            <br />
+                        </div>}
 
                     <Button data-tip="Back to top" tag="a" size="sm" floating color="default" onTouchTap={this.backToTop}>
                         <Fa icon="arrow-up" />

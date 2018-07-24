@@ -257,7 +257,9 @@ class EditListModal extends React.Component {
 
             let procData = this.processData(data)
             for (let i of procData) {
-                ar.push(<SelectOption key={i.id} triggerOptionClick={this.dependencySelect.bind(this, key)}><span style={{ color: "black" }}>{i.value}</span></SelectOption>)
+                <Option key={i.id} value={i.value}>
+                    {i.value}
+                </Option>
             }
         }
 
@@ -280,7 +282,6 @@ class EditListModal extends React.Component {
                     hover={true}
                     onClick={this.listItemClick.bind(this, item.id)}
                     key={item.id}
-                //active={selectedItemId === item.id}
                 >&nbsp;{(item.modifiedState === true ? "* " : "") + item.value}</ListGroupItem>)
             }
         })
@@ -331,19 +332,21 @@ class EditListModal extends React.Component {
                     }
 
                     detailElements.push(
-                        <Select color="default" key={item.id + "_" + item.key + "_select"}>
-                            <SelectInput style={{ height: "35px", marginBottom: "25px", border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} value={displayValue}></SelectInput>
-                            <SelectOptions>
-                                {this.renderSelectOptions(depItem.value, item.key)}
-                            </SelectOptions>
-                        </Select >
-                        )
+                        <Select
+                            key={item.id + "_" + item.key + "_select"}
+                            style={{ width: "100%", marginBottom: "25px" }}
+                            onChange={this.dependencySelect.bind(this, item.key)}
+                            value={displayValue}
+                        >
+                            {this.renderSelectOptions(depItem.value, item.key)}
+                        </Select>
+                    )
                 }
                 else {
 
                     //If no dependency found - render input
                     detailElements.push(
-                        <div key={item.id + "_" + item.key + "_input"} style={{marginRight: "15px"}}>
+                        <div key={item.id + "_" + item.key + "_input"} style={{ marginRight: "15px" }}>
                             <label>{item.key.toString()}</label>
                             <Input value={item.value.toString()}
                                 style={{ marginTop: "-25px", border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
