@@ -130,7 +130,10 @@ const mapDispatchToProps = (dispatch) => {
         },
         resetResearchState: payload => {
             dispatch({ type: ACTION_TYPES.RESET_RESEARCH_STATE, payload })
-        }
+        },
+        updateNav: payload => {
+            dispatch({ type: "NAV", payload })
+          }
     }
 }
 
@@ -527,6 +530,7 @@ class ProjectDetails extends React.Component {
     }
 
     componentDidMount() {
+        this.props.updateNav(location.hash)
         window.scrollTo(0, 0);
         this.loadData()
     }
@@ -866,6 +870,7 @@ class ProjectDetails extends React.Component {
     }
 
     toggleClassicTabs1(tab) {
+        
         if (this.state.activeItemClassicTabs1 !== tab) {
             this.setState({
                 activeItemClassicTabs1: tab
@@ -880,38 +885,38 @@ class ProjectDetails extends React.Component {
         return (
 
             <>
-                <Button style={{ width: "100px", margin: "8px 0px 8px 0px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                {/* <Button style={{ width: "100px", margin: "8px 0px 8px 0px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back
                 </Button>
 
-                <br />
+                <br /> */}
 
                 <Container className="mt-2">
                     <Row>
                         <Col md="12">
-                            <Nav pills color="primary" className="nav-justified" style={{ borderBottom: "1px solid #727272" }}>
+                            <Nav pills color="default" className="nav-justified" style={{ borderBottom: "1px solid gainsboro", borderTop: "1px solid gainsboro" }}>
                                 <NavItem >
-                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '1' })} onClick={() => { this.toggleClassicTabs1('1'); }}>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '1' })} onTouchTap={() => { this.toggleClassicTabs1('1'); }}>
                                         Project
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '2' })} onClick={() => { this.toggleClassicTabs1('2'); }}>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '2' })} onTouchTap={() => { this.toggleClassicTabs1('2'); }}>
                                         Adaptation
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '3' })} onClick={() => { this.toggleClassicTabs1('3'); }}>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '3' })} onTouchTap={() => { this.toggleClassicTabs1('3'); }}>
                                         Mitigation
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '4' })} onClick={() => { this.toggleClassicTabs1('4'); }}>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '4' })} onTouchTap={() => { this.toggleClassicTabs1('4'); }}>
                                         Emissions
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '5' })} onClick={() => { this.toggleClassicTabs1('5'); }}>
+                                    <NavLink to="#" className={classnames({ active: this.state.activeItemClassicTabs1 === '5' })} onTouchTap={() => { this.toggleClassicTabs1('5'); }}>
                                         Research
                                     </NavLink>
                                 </NavItem>
@@ -957,14 +962,14 @@ class ProjectDetails extends React.Component {
                     <div className="row">
                         <div className="col-md-12">
                             <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
-                                <Button hidden={editMode} data-tip="Edit" tag="button" size="sm" floating color="primary" onClick={this.editClick}>
-                                    <Fa icon="pencil" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
+                                <Button hidden={editMode} data-tip="Edit" tag="a" size="sm" floating color="default" onTouchTap={this.editClick}>
+                                    <Fa icon="pencil" />
                                 </Button>
-                                <Button hidden={!editMode} data-tip="Save changes" tag="button" size="sm" floating color="success" onClick={this.saveClick}>
-                                    <Fa icon="save" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
+                                <Button hidden={!editMode} data-tip="Save changes" tag="a" size="sm" floating color="default" onTouchTap={this.saveClick}>
+                                    <Fa icon="save" />
                                 </Button>
-                                <Button hidden={!editMode} data-tip="Discard changes" tag="button" size="sm" floating color="danger" onClick={this.discardClick}>
-                                    <Fa icon="trash" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
+                                <Button hidden={!editMode} data-tip="Discard changes" tag="a" size="sm" floating color="danger" onTouchTap={this.discardClick}>
+                                    <Fa icon="trash" />
                                 </Button>
                             </div>
                         </div>

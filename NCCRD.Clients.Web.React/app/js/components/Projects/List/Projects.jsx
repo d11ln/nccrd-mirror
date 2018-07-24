@@ -24,6 +24,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadPolygonFilter: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_POLYGON_FILTER, payload })
+        },
+        updateNav: payload => {
+            dispatch({ type: "NAV", payload })
         }
     }
 }
@@ -62,6 +65,10 @@ class Projects extends React.Component {
         this.props.setLoading(true)
     }
 
+    componentDidMount() {
+        this.props.updateNav(location.hash)
+    }
+
     render() {
 
         let { user } = this.props
@@ -71,12 +78,12 @@ class Projects extends React.Component {
                 <div style={{ position: "fixed", right: "14%", bottom: "10px", zIndex: "99" }}>
 
                     {(user && !user.expired) &&
-                        <Button data-tip="Add project" tag="button" size="sm" floating color="primary" onClick={this.addProject}>
-                            <Fa icon="plus" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
+                        <Button data-tip="Add project" tag="s" size="sm" floating color="primary" onTouchTap={this.addProject}>
+                            <Fa icon="plus" />
                         </Button>}
 
-                    <Button data-tip="Back to top" tag="button" size="sm" floating color="success" onClick={this.backToTop}>
-                        <Fa icon="arrow-up" style={{ marginLeft: "-1px", marginTop: "-1px"}} />
+                    <Button data-tip="Back to top" tag="a" size="sm" floating color="default" onTouchTap={this.backToTop}>
+                        <Fa icon="arrow-up" />
                     </Button>
 
                 </div>

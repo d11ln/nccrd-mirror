@@ -34,6 +34,9 @@ import CallbackPage from '../js/components/Authentication/callback.jsx';
 import { OidcProvider } from 'redux-oidc'
 import LoggedOut from './components/Authentication/LoggedOut.jsx';
 import ReactTooltip from 'react-tooltip'
+import Header from './components/Base/Header.jsx'
+
+// import backdrop from '../images/backdrop.jpg'
 
 /**
  * Tap Event
@@ -78,18 +81,21 @@ class App extends React.Component {
             <div className="container">
                 <Router>
                     <div>
+                        <Header />
 
                         {this.getNavbar()}
 
-                        <Switch>
-                            <Route path="/" component={Home} exact />
-                            <Route path="/projects" component={Projects} exact />
-                            <Route path="/projects/:id" component={ProjectDetails} exact />
-                            <Route path="/login" component={Login} exact />
-                            <Route path="/logout" component={Logout} exact />
-                            <Route path="/loggedout" component={LoggedOut} exact />
-                            <Route path="/callback" component={CallbackPage} />
-                        </Switch>
+                        {/* <section style={{ minHeight: "400px", backgroundImage: `url(${backdrop})`}}> */}
+                            <Switch>
+                                <Route path="/" component={Home} exact />
+                                <Route path="/projects" component={Projects} exact />
+                                <Route path="/projects/:id" component={ProjectDetails} exact />
+                                <Route path="/login" component={Login} exact />
+                                <Route path="/logout" component={Logout} exact />
+                                <Route path="/loggedout" component={LoggedOut} exact />
+                                <Route path="/callback" component={CallbackPage} />
+                            </Switch>
+                        {/* </section> */}
 
                         <div className="container-fluid">
                             <div className="row">
@@ -99,7 +105,7 @@ class App extends React.Component {
                                     style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "99" }}>
 
                                     <div className="card-body">
-                                        <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#4285F4" }}>LOADING</label>
+                                        <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>
                                         <br />
                                         <span style={{ width: "100px", paddingLeft: ((loaderWidth / 2) - 50) }}>
                                             <Spinner big multicolor />

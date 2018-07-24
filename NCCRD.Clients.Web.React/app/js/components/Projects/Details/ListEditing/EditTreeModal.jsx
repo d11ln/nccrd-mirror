@@ -146,14 +146,12 @@ class EditTreeModal extends React.Component {
                         let depItem = deps[0]
 
                         //Push label
-                        //detailElements.push(<br key={item.id + "_" + item.key + "break1"}/>)
                         detailElements.push(<label key={item.id + "_" + item.key + "_label"} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
-                        //detailElements.push(<br key={item.id + "_" + item.key + "break2"}/>)
+                        //detalElements.push(<br key={item.id + "_" + item.key + "break2"}/>)
 
 
                         if (depItem.type === "std") {
                             //If 'std' dependency found - render select
-
                             //Convert value
                             let displayValue = "Select..."
                             if (item.value > 0) {
@@ -164,8 +162,8 @@ class EditTreeModal extends React.Component {
                             }
 
                             detailElements.push(
-                                <Select color="primary" key={item.id + "_" + item.key + "_select"}>
-                                    <SelectInput style={{ height: "35px", marginBottom: "0px" }} value={displayValue}></SelectInput>
+                                <Select color="default" key={item.id + "_" + item.key + "_select"}>
+                                    <SelectInput style={{ height: "35px", marginBottom: "0px", border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} value={displayValue}></SelectInput>
                                     <SelectOptions>
                                         {this.renderSelectOptions(depItem.value, item.key)}
                                     </SelectOptions>
@@ -214,9 +212,13 @@ class EditTreeModal extends React.Component {
 
                         // If no dependency found - render input
                         detailElements.push(
-                            <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} value={item.value.toString()}
-                                onChange={this.valueChange.bind(this, item.id, item.key)}
-                            />)
+                            <div key={item.id + "_" + item.key + "_input"} style={{ marginRight: "15px" }}>
+                                <label>{item.key.toString()}</label>
+                                <Input value={item.value.toString()}
+                                    style={{ marginTop: "-25px", border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                                    onChange={this.valueChange.bind(this, item.id, item.key)} />
+                            </div>
+                        )
                     }
                 }
             })
@@ -234,7 +236,7 @@ class EditTreeModal extends React.Component {
             let procData = this.processData(data)
             for (let i of procData) {
                 //ar.push({ value: i.id, label: i.value })
-                ar.push(<SelectOption key={i.id} triggerOptionClick={this.dependencySelect.bind(this, key)}>{i.value}</SelectOption>)
+                ar.push(<SelectOption key={i.id} triggerOptionClick={this.dependencySelect.bind(this, key)}><span style={{ color: "black" }}>{i.value}</span></SelectOption>)
             }
         }
 
@@ -579,7 +581,7 @@ class EditTreeModal extends React.Component {
 
                         <ModalFooter>
                             <div className="col-md-4" hidden={confirmSave}>
-                                <Button size="sm" color="primary" onClick={this.add.bind(this)}>
+                                <Button size="sm" color="default" onClick={this.add.bind(this)}>
                                     &nbsp;&nbsp;Add {selectedItemId === 0 ? "root item" : "child item"}&nbsp;&nbsp;
                                 </Button>
                             </div>

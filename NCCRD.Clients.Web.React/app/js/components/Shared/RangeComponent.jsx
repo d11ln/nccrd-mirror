@@ -74,7 +74,7 @@ class RangeComponent extends React.Component {
 
     getFontColour() {
         if (this.props.editMode) {
-            return "steelblue"
+            return "#2BBBAD"
         }
         else {
             return "black"
@@ -124,12 +124,9 @@ class RangeComponent extends React.Component {
                     <span style={{ width: "16px" }} />
 
                     {this.getPrefix()}
-                    {/* <input id={this.getId("from")} type="text" readOnly={!editMode}
-                    style={{ color: this.getFontColour(), width: inputWidth }} value={this.fixNullOrUndefinedValue(valueFrom)}
-                    onChange={this.valueFromChange.bind(this)}
-                /> */}
+
                     <Input size="sm" id={this.getId("from")} readOnly={!editMode}
-                        style={{ marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth }}
+                        style={{ marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                         value={this.fixNullOrUndefinedValue(valueFrom)}
                         onChange={this.valueFromChange.bind(this)} />
 
@@ -138,12 +135,9 @@ class RangeComponent extends React.Component {
                     <h6 style={{ marginLeft: "10px", marginRight: "10px" }}> - </h6>
 
                     {this.getPrefix()}
-                    {/* <input id={this.getId("to")} type="text" readOnly={!editMode}
-                    style={{ color: this.getFontColour(), width: inputWidth }} value={this.fixNullOrUndefinedValue(valueTo)}
-                    onChange={this.valueToChange.bind(this)}
-                /> */}
+
                     <Input size="sm" id={this.getId("to")} readOnly={!editMode}
-                        style={{ marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth }}
+                        style={{ marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                         value={this.fixNullOrUndefinedValue(valueTo)}
                         onChange={this.valueToChange.bind(this)} />
 

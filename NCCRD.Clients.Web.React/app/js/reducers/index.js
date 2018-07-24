@@ -9,6 +9,7 @@ import ResearchReducer from './ResearchReducer'
 import LookupsReducer from './LookupsReducer'
 import FilterReducer from './FilterReducer'
 import EditListModalReducer from './EditListModalReducer'
+import NavigationReducer from './NavigationReducer'
 
 export default {
     globalData: GlobalReducer,
@@ -19,5 +20,6 @@ export default {
     researchData: ResearchReducer ,
     lookupData: LookupsReducer,
     filterData: FilterReducer,
-    editListModalData: EditListModalReducer
+    editListModalData: EditListModalReducer,
+    navigation: NavigationReducer
 }

@@ -139,7 +139,7 @@ class SelectComponent extends React.Component {
 
             for (let i of procData) {
                 //ar.push({ value: i.id, label: i.value })
-                ar.push(<SelectOption key={i.id} triggerOptionClick={this.onSelect}>{i.value}</SelectOption>)
+                ar.push(<SelectOption key={i.id} triggerOptionClick={this.onSelect}><span style={{color: "black"}}>{i.value}</span></SelectOption>)
             }
         }
 
@@ -157,7 +157,7 @@ class SelectComponent extends React.Component {
 
     getFontColour() {
         if (this.props.editMode) {
-            return "steelblue"
+            return "#2BBBAD"
         }
         else {
             return "black"
@@ -237,8 +237,8 @@ class SelectComponent extends React.Component {
         return (
             <div className={col}>
                 <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
-                <Select color="primary">
-                    <SelectInput  style={{ height: "35px", color: this.getFontColour() }} value={displayValue}></SelectInput>
+                <Select color="default">
+                    <SelectInput  style={{ height: "35px", color: this.getFontColour(), border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} value={displayValue}></SelectInput>
                     <SelectOptions>
                         {this.selectOptions()}
                     </SelectOptions>
