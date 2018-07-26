@@ -926,27 +926,27 @@ class ProjectDetails extends React.Component {
             <Col md="12">
               <Nav pills color="default" className="nav-justified" style={{ border: "1px solid gainsboro", backgroundColor: "whitesmoke", marginBottom: "-20px" }}>
                 <NavItem >
-                  <NavLink to="#" className={classnames({ active: activeTabId === '1' })} onTouchTap={() => { this.toggleTabs('1'); }}>
+                  <NavLink to="#" className={classnames({ active: activeTabId === '1' })} onClick={() => { this.toggleTabs('1'); }}>
                     Project
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '2' })} onTouchTap={() => { this.toggleTabs('2'); }}>
+                  <NavLink to="#" className={classnames({ active: activeTabId === '2' })} onClick={() => { this.toggleTabs('2'); }}>
                     Adaptation
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '3' })} onTouchTap={() => { this.toggleTabs('3'); }}>
+                  <NavLink to="#" className={classnames({ active: activeTabId === '3' })} onClick={() => { this.toggleTabs('3'); }}>
                     Mitigation
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '4' })} onTouchTap={() => { this.toggleTabs('4'); }}>
+                  <NavLink to="#" className={classnames({ active: activeTabId === '4' })} onClick={() => { this.toggleTabs('4'); }}>
                     Emissions
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '5' })} onTouchTap={() => { this.toggleTabs('5'); }}>
+                  <NavLink to="#" className={classnames({ active: activeTabId === '5' })} onClick={() => { this.toggleTabs('5'); }}>
                     Research
                   </NavLink>
                 </NavItem>
@@ -954,7 +954,7 @@ class ProjectDetails extends React.Component {
 
               <TabContent activeItem={activeTabId}>
                 <TabPane tabId="1">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                                     </Button>
                   <ProjectDetailsTab />
@@ -963,7 +963,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="2">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
@@ -972,7 +972,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="3">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <MitigationDetailsTab projectId={projectDetails.ProjectId} />
@@ -981,7 +981,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="4">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
@@ -990,7 +990,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="5">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onTouchTap={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <ResearchDetailsTab projectId={projectDetails.ProjectId} />
@@ -1010,7 +1010,7 @@ class ProjectDetails extends React.Component {
 
                 {!editMode &&
                   <div>
-                    <Button /*data-tip="Edit"*/ tag="a" size="sm" floating color="default" onTouchTap={this.editClick}>
+                    <Button /*data-tip="Edit"*/ tag="a" size="sm" floating color="default" onClick={this.editClick}>
                       <Fa icon="pencil" />
                     </Button>
                     <br />
@@ -1018,7 +1018,7 @@ class ProjectDetails extends React.Component {
 
                 {(activeTabId !== "1" && editMode) &&
                   <div>
-                    <Button data-tip="Add Adaptation Details" tag="a" size="sm" floating color="primary" onTouchTap={this.addClick}>
+                    <Button data-tip="Add Adaptation Details" tag="a" size="sm" floating color="primary" onClick={this.addClick}>
                       <Fa icon="plus" />
                     </Button>
                   </div>
@@ -1026,11 +1026,11 @@ class ProjectDetails extends React.Component {
 
                 {editMode &&
                   <div>
-                    <Button data-tip="Discard changes" tag="a" size="sm" floating color="danger" onTouchTap={this.discardClick}>
+                    <Button data-tip="Discard changes" tag="a" size="sm" floating color="danger" onClick={this.discardClick}>
                       <Fa icon="trash" />
                     </Button>
                     <br />
-                    <Button data-tip="Save changes" tag="a" size="sm" floating color="default" onTouchTap={this.saveClick}>
+                    <Button data-tip="Save changes" tag="a" size="sm" floating color="default" onClick={this.saveClick}>
                       <Fa icon="save" />
                     </Button>
                   </div>}

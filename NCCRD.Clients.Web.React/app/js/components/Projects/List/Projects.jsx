@@ -79,13 +79,13 @@ class Projects extends React.Component {
 
                     {(user && !user.expired) &&
                         <div>
-                            <Button data-tip="Add project" tag="a" size="sm" floating color="primary" onTouchTap={this.addProject}>
+                            <Button data-tip="Add project" tag="a" size="sm" floating color="primary" onClick={this.addProject}>
                                 <Fa icon="plus" />
                             </Button>
                             <br />
                         </div>}
 
-                    <Button data-tip="Back to top" tag="a" size="sm" floating color="default" onTouchTap={this.backToTop}>
+                    <Button data-tip="Back to top" tag="a" size="sm" floating color="default" onClick={this.backToTop}>
                         <Fa icon="arrow-up" />
                     </Button>
 

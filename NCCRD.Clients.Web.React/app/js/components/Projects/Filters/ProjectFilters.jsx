@@ -187,19 +187,19 @@ class ProjectFilters extends React.Component {
 
         <div className="row">
           <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseGeneral)} className="btn-sm" onTouchTap={this.toggleGeneral} style={{ marginBottom: "2px" }}>General filters</Button>
+            <Button block color={this.getBottonColor(this.state.collapseGeneral)} className="btn-sm" onClick={this.toggleGeneral} style={{ marginBottom: "2px" }}>General filters</Button>
           </div>
 
           <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseRegion)} className="btn-sm" onTouchTap={this.toggleRegion} style={{ marginBottom: "2px" }} >Region filters</Button>
+            <Button block color={this.getBottonColor(this.state.collapseRegion)} className="btn-sm" onClick={this.toggleRegion} style={{ marginBottom: "2px" }} >Region filters</Button>
           </div>
 
           <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseSector)} className="btn-sm" onTouchTap={this.toggleSector} style={{ marginBottom: "2px" }} >Sector filters</Button>
+            <Button block color={this.getBottonColor(this.state.collapseSector)} className="btn-sm" onClick={this.toggleSector} style={{ marginBottom: "2px" }} >Sector filters</Button>
           </div>
 
           <div className="col-md-3">
-            <Button block color="secondary" className="btn-sm" onTouchTap={this.clearFilters} style={{ marginBottom: "2px" }}>
+            <Button block color="secondary" className="btn-sm" onClick={this.clearFilters} style={{ marginBottom: "2px" }}>
               <i className="fa fa-eraser" aria-hidden="true"></i>&nbsp;&nbsp;Clear filters
               </Button>
           </div>

@@ -36,7 +36,7 @@ class TitleFilter extends React.Component {
     if (typeof parsedHash.title !== 'undefined') {
 
       //Update internal state
-      this.onTouchTap(parsedHash.title)
+      //this.onClick(parsedHash.title)
       stripURLParam("title=" + parsedHash.title)
     }
   }
@@ -47,7 +47,7 @@ class TitleFilter extends React.Component {
     this.props.loadTitleFilterInternal(event.target.value)
   }
 
-  // onTouchTap(filterValue, e) {
+  // onClick(filterValue, e) {
 
   //   //Update global state
   //   let { loadTitleFilter, titleFilterInternal } = this.props
