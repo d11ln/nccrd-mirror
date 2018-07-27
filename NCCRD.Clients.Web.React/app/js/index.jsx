@@ -35,6 +35,7 @@ import { OidcProvider } from 'redux-oidc'
 import LoggedOut from './components/Authentication/LoggedOut.jsx';
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
+import Footer from './components/Base/Footer.jsx'
 
 // import backdrop from '../images/backdrop.jpg'
 
@@ -88,6 +89,8 @@ class App extends React.Component {
               <Route path="/loggedout" component={LoggedOut} exact />
               <Route path="/callback" component={CallbackPage} />
             </Switch>
+
+            {navbar && <Footer />}
 
             <div className="container-fluid">
               <div className="row">

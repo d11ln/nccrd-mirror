@@ -38,6 +38,7 @@ class Projects extends React.Component {
 
         this.backToTop = this.backToTop.bind(this)
         this.addProject = this.addProject.bind(this)
+        this.handleScroll = this.handleScroll.bind(this);
 
         //Read polygon filter from URL
         const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
@@ -47,6 +48,8 @@ class Projects extends React.Component {
             //Dispatch to store
             this.props.loadPolygonFilter(parsedHash.polygon)
         }
+
+        this.state = { showBackToTop: false }
     }
 
     backToTop() {
@@ -66,12 +69,18 @@ class Projects extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener("scroll", this.handleScroll);
         this.props.updateNav(location.hash)
+    }
+
+    handleScroll() {
+        this.setState({ showBackToTop: (window.pageYOffset > 300) })
     }
 
     render() {
 
         let { user } = this.props
+        let { showBackToTop } = this.state
 
         return (
             <>
@@ -85,9 +94,10 @@ class Projects extends React.Component {
                             <br />
                         </div>}
 
-                    <Button data-tip="Back to top" tag="a" size="sm" floating color="default" onClick={this.backToTop}>
-                        <Fa icon="arrow-up" />
-                    </Button>
+                    {showBackToTop &&
+                        <Button data-tip="Back to top" tag="a" size="sm" floating color="default" onClick={this.backToTop}>
+                            <Fa icon="arrow-up" />
+                        </Button>}
 
                 </div>
 
