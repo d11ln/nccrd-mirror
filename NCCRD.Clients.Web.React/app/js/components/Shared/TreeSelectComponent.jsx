@@ -41,7 +41,7 @@ class TreeSelectComponent extends React.Component {
 
     getFontColour() {
         if (this.props.editMode) {
-            return "steelblue"
+            return "#2BBBAD"
         }
         else {
             return "black"

@@ -257,7 +257,9 @@ class EditListModal extends React.Component {
 
             let procData = this.processData(data)
             for (let i of procData) {
-                ar.push(<SelectOption key={i.id} triggerOptionClick={this.dependencySelect.bind(this, key)}>{i.value}</SelectOption>)
+                <Option key={i.id} value={i.value}>
+                    {i.value}
+                </Option>
             }
         }
 
@@ -273,11 +275,13 @@ class EditListModal extends React.Component {
         processedItems.map(item => {
             if (item.id > 0) {
                 let { selectedItemId } = this.state
-                listItems.push(<ListGroupItem style={{ cursor: "pointer" }}
+                listItems.push(<ListGroupItem style={{
+                    cursor: "pointer",
+                    backgroundColor: (selectedItemId === item.id ? "#2BBBAD" : "white")
+                }}
                     hover={true}
                     onClick={this.listItemClick.bind(this, item.id)}
                     key={item.id}
-                    active={selectedItemId === item.id}
                 >&nbsp;{(item.modifiedState === true ? "* " : "") + item.value}</ListGroupItem>)
             }
         })
@@ -328,19 +332,27 @@ class EditListModal extends React.Component {
                     }
 
                     detailElements.push(
-                        <Select color="primary" key={item.id + "_" + item.key + "_select"}>
-                            <SelectInput style={{ height: "35px", marginBottom: "25px" }} value={displayValue}></SelectInput>
-                            <SelectOptions>
-                                {this.renderSelectOptions(depItem.value, item.key)}
-                            </SelectOptions>
-                        </Select >)
+                        <Select
+                            key={item.id + "_" + item.key + "_select"}
+                            style={{ width: "100%", marginBottom: "25px" }}
+                            onChange={this.dependencySelect.bind(this, item.key)}
+                            value={displayValue}
+                        >
+                            {this.renderSelectOptions(depItem.value, item.key)}
+                        </Select>
+                    )
                 }
                 else {
 
                     //If no dependency found - render input
                     detailElements.push(
-                        <Input key={item.id + "_" + item.key + "_input"} label={item.key.toString()} value={item.value.toString()}
-                            onChange={this.valueChange.bind(this, item.id, item.key)} />)
+                        <div key={item.id + "_" + item.key + "_input"} style={{ marginRight: "15px" }}>
+                            <label>{item.key.toString()}</label>
+                            <Input value={item.value.toString()}
+                                style={{ marginTop: "-25px", border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                                onChange={this.valueChange.bind(this, item.id, item.key)} />
+                        </div>
+                    )
                 }
             }
         })
@@ -356,7 +368,7 @@ class EditListModal extends React.Component {
         return (
             <>
                 <Container>
-                    <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} backdrop={false} >
+                    <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
 
                         <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
 
@@ -376,7 +388,7 @@ class EditListModal extends React.Component {
 
                         <ModalFooter>
                             <div className="col-md-2" hidden={confirmSave}>
-                                <Button size="sm" color="primary" onClick={this.add.bind(this)}>&nbsp;&nbsp;Add&nbsp;&nbsp;</Button>
+                                <Button size="sm" color="default" onClick={this.add.bind(this)}>&nbsp;&nbsp;Add&nbsp;&nbsp;</Button>
                             </div>
 
                             <div className="col-md-10">
