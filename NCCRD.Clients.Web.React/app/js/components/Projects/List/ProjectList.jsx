@@ -233,7 +233,8 @@ class ProjectList extends React.Component {
 
         return (
             <div>
-                {projectlist}
+                {projectlist.length > 0 && projectlist}
+                {projectlist.length === 0 && <h5>&nbsp;Loading projects...</h5>}
             </div>
         )
     }

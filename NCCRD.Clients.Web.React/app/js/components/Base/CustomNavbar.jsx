@@ -10,7 +10,8 @@ import { ssoBaseURL } from '../../constants/ssoBaseURL'
 
 const mapStateToProps = (state, props) => {
     let user = state.oidc.user
-    return { user }
+    let { navigation: { locationHash } } = state
+    return { user, locationHash }
 }
 
 class CustomNavbar extends React.Component {
@@ -53,19 +54,18 @@ class CustomNavbar extends React.Component {
         let { user } = this.props
 
         if (!user || user.expired) {
-            return <a className="nav-link" href="#/login">Login</a>
+            return <a className="nav-link" href="#/login"><b style={{ color: "black" }}>Login</b></a>
         }
         else {
-            return <a className="nav-link" href="#/logout">Logout</a>
+            return <a className="nav-link" href="#/logout"><b style={{ color: "black" }}>Logout</b></a>
         }
     }
 
-    Register()
-    {
+    Register() {
         let { user } = this.props
 
         if (!user || user.expired) {
-            return <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank">Register</a>
+            return <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank"><b style={{ color: "black" }}>Register</b></a>
         }
     }
 
@@ -73,40 +73,43 @@ class CustomNavbar extends React.Component {
         let { user } = this.props
 
         if (!user || user.expired) {
-            return <span style={{ color: "#d0d6e2" }} className="nav-link"></span>
+            return <span className="nav-link"></span>
         }
         else {
-            return <span style={{ color: "#d0d6e2" }} className="nav-link">{"Hello, " + user.profile.email}</span>
+            return <span className="nav-link"><b style={{ color: "#2BBBAD" }}>{"Hello, " + user.profile.email}</b></span>
         }
     }
 
     render() {
+
+        let { locationHash } = this.props
+
         return (
-            <Navbar size="sm" color="indigo" expand="md" dark >
-                {!this.state.isWideEnough && <NavbarToggler onClick={this.onClick} />}
+            <Navbar size="sm" color="white" dark expand="md" style={{ boxShadow: "none", borderTop: "1px solid gainsboro" }} >
+                {!this.state.isWideEnough && <NavbarToggler style={{backgroundColor: "#2BBBAD"}} onClick={this.onClick} />}
                 <Collapse isOpen={this.state.collapse} navbar>
 
-                    <NavbarBrand tag="span">
+                    {/* <NavbarBrand tag="span">
                         NCCRD
-            </NavbarBrand>
+                    </NavbarBrand> */}
 
                     <NavbarNav left>
-                        <NavItem>
-                            <a className="nav-link" href="#">Home</a>
+                        <NavItem style={{borderBottom: (locationHash === "#/" ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px"}}>
+                            <a className="nav-link" href="#"><b style={{ color: "black" }}>Home</b></a>
                         </NavItem>
-                        <NavItem>
-                            <a className="nav-link" href="#/projects">Projects</a>
+                        <NavItem style={{borderBottom: (locationHash.startsWith("#/projects") ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px"}}>
+                            <a className="nav-link" href="#/projects"><b style={{ color: "black" }}>Projects</b></a>
                         </NavItem>
                     </NavbarNav>
 
                     <NavbarNav right>
-                        <NavItem>
+                        <NavItem style={{marginLeft: "15px"}}>
                             {this.GetUser()}
                         </NavItem>
-                        <NavItem>
+                        <NavItem style={{marginLeft: "15px"}}>
                             {this.LoginLogout()}
                         </NavItem>
-                        <NavItem>
+                        <NavItem style={{marginLeft: "15px"}}>
                             {this.Register()}
                         </NavItem>
                     </NavbarNav>

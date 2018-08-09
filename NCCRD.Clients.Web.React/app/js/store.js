@@ -12,12 +12,16 @@ import { reducer as oidcReducer } from 'redux-oidc';
 //const middleware = routerMiddleware(history)
 
 const store = createStore(
-    combineReducers({oidc: oidcReducer, ...reducers, router: routerReducer }), {
+    combineReducers({ oidc: oidcReducer, ...reducers, router: routerReducer }), {
         //...applyMiddleware(middleware),
 
         globalData: {
             loading: false,
             editMode: false
+        },
+
+        navigation: {
+            locationHash: "#/"
         },
 
         editListModalData: {

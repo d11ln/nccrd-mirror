@@ -15,19 +15,13 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    addMitigationDetails: payload => {
-      dispatch({ type: ACTION_TYPES.ADD_MITIGATION_DETAILS, payload })
-    }
-  }
+  return {}
 }
 
 class MitigationDetailsTab extends React.Component {
 
   constructor(props) {
     super(props)
-
-    this.addClick = this.addClick.bind(this)
   }
 
   loadDetails() {
@@ -46,26 +40,11 @@ class MitigationDetailsTab extends React.Component {
     return <div />
   }
 
-  addClick() {
-
-    let { addMitigationDetails, projectDetails } = this.props
-    addMitigationDetails(projectDetails.ProjectId)
-  }
-
   render() {
-
-    let { editMode } = this.props
 
     return (
       <>
-        <div style={{ position: "fixed", right: "14%", bottom: "65px", zIndex: "99" }}>
-          <Button hidden={!editMode} data-tip="Add Mitigation Details" tag="a" size="sm" floating color="primary" onClick={this.addClick}>
-            <Fa icon="plus" />
-          </Button>
-        </div>
-
         {this.loadDetails()}
-
       </>
     )
   }

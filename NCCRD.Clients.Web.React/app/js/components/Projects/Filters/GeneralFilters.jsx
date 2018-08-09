@@ -12,31 +12,31 @@ import TypologyFilter from './TypologyFilter.jsx'
 
 class GeneralFilters extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-    }
+  }
 
-    render() {
+  render() {
 
-        let uiconf = UILookup("txtGeneralFilters", "General filters:")
+    let uiconf = UILookup("txtGeneralFilters", "General filters:")
 
-        return (
-            <>
-                <div className="row">
-                    <div className="col-md-12">
-                        <p data-tip={uiconf.tooltip} style={{ fontSize: "large" }}>{uiconf.label}</p>
-                    </div>
-                </div>
+    return (
+      <>
+        <div className="row">
+          <div className="col-md-12">
+            <p data-tip={uiconf.tooltip} style={{ fontSize: "large" }}>{uiconf.label}</p>
+          </div>
+        </div>
 
-                <div className="row">
-                    <TitleFilter />
-                    <StatusFilter />
-                    <TypologyFilter />
-                </div>
-            </>
-        )
-    }
+        <div className="row">
+          <TitleFilter />
+          <StatusFilter />
+          <TypologyFilter />
+        </div>
+      </>
+    )
+  }
 }
 
 export default GeneralFilters

@@ -36,7 +36,7 @@ class TextAreaComponent extends React.Component {
 
     getFontColour() {
         if (this.props.editMode) {
-            return "steelblue"
+            return "#2BBBAD"
         }
         else {
             return "black"
@@ -74,30 +74,15 @@ class TextAreaComponent extends React.Component {
                 <TextareaAutosize
                     readOnly={!editMode}
                     style={{
-                        borderStyle: "solid",
-                        borderWidth: "0px 0px 1px 0px",
-                        borderColor: "#b4b4b4",
-                        paddingBottom: "4px",
+                        border: "1px solid lightgrey",
+                        borderRadius: "5px",
+                        padding: "5px",
                         color: this.getFontColour(),
                         width: "100%"
                     }}
                     value={value}
                     onChange={this.valueChange.bind(this)}
                 />
-
-                {/* <Input type="textarea" readOnly={!editMode}
-                    style={{
-                        marginTop: "-15px",
-                        //borderStyle: "solid",
-                        //borderWidth: "0px 0px 1px 0px",
-                        //borderColor: "#b4b4b4",
-                        //paddingBottom: "4px",
-                        color: this.getFontColour()
-                        //fontSize: "15px"
-                    }}
-                    value={value}
-                    onChange={this.valueChange.bind(this)} /> */}
-
             </div>
         )
 

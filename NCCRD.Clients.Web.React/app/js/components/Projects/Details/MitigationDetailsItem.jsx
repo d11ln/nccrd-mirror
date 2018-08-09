@@ -31,8 +31,6 @@ class MitigationDetailsItem extends React.Component {
 
     return (
       <>
-        {/* <br /> */}
-
         <div className="row">
           <SelectComponent
             id="selMitigationCarbonCredit"

@@ -18,8 +18,6 @@ class MitigationEmissionsDataItem extends React.Component {
 
     return (
       <>
-        {/* <br /> */}
-
         <div className="row">
           <TextComponent
             col="col-md-3"
