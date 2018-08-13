@@ -15,9 +15,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setLoading: payload => {
             dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
-        },
-        setAuthenticated: payload => {
-            dispatch({ type: ACTION_TYPES.SET_AUTHENTICATED, payload })
         }
     }
 }

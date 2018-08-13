@@ -2,9 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cwd = process.cwd()
-
-
-
 const mode = 'development'
 
 /**
@@ -19,8 +16,16 @@ module.exports = {
   },
   entry: {
     app: ['./js/index.jsx'],
-    react: ['react', 'react-dom', 'react-router-dom', 'react-router', 'redux', 'react-redux', 'react-router-redux', 'react-tap-event-plugin', 'history'],
-    //styles: ['font-awesome/css/font-awesome.min.css', 'bootstrap/dist/css/bootstrap.min.css', 'mdbreact/docs/css/mdb.min.css']
+    react: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-router',
+      'redux',
+      'react-redux',
+      'react-router-redux',
+      'history'
+    ],
   },
 
   output: {
