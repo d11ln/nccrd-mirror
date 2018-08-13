@@ -38,7 +38,7 @@ class TypologyFilter extends React.Component {
 
             //Dispatch to store
             let { loadTypologyFilter } = this.props
-            loadTypologyFilter({value: parsedHash.typology})
+            loadTypologyFilter({ value: parsedHash.typology })
             stripURLParam("typology=" + parsedHash.typology)
         }
     }
@@ -47,13 +47,15 @@ class TypologyFilter extends React.Component {
 
         //Load data
         let { loadData } = this.props
-        fetch(apiBaseURL + 'api/Typology/GetAll', {
+        let fetchURL = apiBaseURL + "Typology?$select=TypologyId,Value"
+
+        fetch(fetchURL, {
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json())
             .then(res => {
-                loadData(res)
+                loadData(res.value)
             })
     }
 
@@ -62,11 +64,11 @@ class TypologyFilter extends React.Component {
         let { typologyFilter } = this.props
 
         return (
-            <SelectComponent 
+            <SelectComponent
                 id="selTypologyFilter"
-                col="col-md-4" 
-                label="Typology:" 
-                selectedValue={typologyFilter} 
+                col="col-md-4"
+                label="Typology:"
+                selectedValue={typologyFilter}
                 data={this.props.typology}
                 selectCallback={this.selectCallbackHandler}
                 setSelectedValueKey={ACTION_TYPES.LOAD_TYPOLOGY_FILTER}

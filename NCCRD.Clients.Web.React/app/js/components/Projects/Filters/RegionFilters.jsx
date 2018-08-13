@@ -24,9 +24,9 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadData: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_REGION_TREE, payload })
-        },
+        // loadData: payload => {
+        //     dispatch({ type: ACTION_TYPES.LOAD_REGION_TREE, payload })
+        // },
         loadRegionFilter: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_REGION_FILTER, payload })
         },
@@ -63,25 +63,17 @@ class RegionFilters extends React.Component {
     componentDidMount() {
 
         //Load data
-        let { loadData, loadRegions } = this.props
-        fetch(apiBaseURL + 'api/region/GetAllTree', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                loadData(res)
-            })
+        let { loadRegions } = this.props
+        let fetchURL = apiBaseURL + 'Regions?$select=RegionId,RegionName,LocationTypeId,ParentRegionId'
 
-        fetch(apiBaseURL + 'api/Region/GetAll/', {
+        fetch(fetchURL, {
             headers: {
                 "Content-Type": "application/json"
             }
         })
             .then(res => res.json())
             .then(res => {
-                loadRegions(res)
+                loadRegions(res.value)
             })
     }
 
@@ -95,7 +87,34 @@ class RegionFilters extends React.Component {
     }
 
     collapseAllNodes() {
-        this.setState({ expandedKeys: []})
+        this.setState({ expandedKeys: [] })
+    }
+
+    transformDataToTree(data) {
+
+        let tree = []
+
+        data.filter(x => x.LocationTypeId === 4).map(p => {
+
+            //Districts
+            let districtChildren = []
+            data.filter(px => px.ParentRegionId === p.RegionId && px.LocationTypeId === 3).map(d => {
+
+                //Municipalities
+                let municipalityChildren = []
+                data.filter(dx => dx.ParentRegionId === d.RegionId && dx.LocationTypeId === 2).map(m => {
+                    municipalityChildren.push({ id: m.RegionId, text: m.RegionName })
+                })
+                
+                //Add District
+                districtChildren.push({id: d.RegionId, text: d.RegionName, children: municipalityChildren})
+            })
+
+            //Add Province
+            tree.push({ id: p.RegionId, text: p.RegionName, children: districtChildren })
+        })
+
+        return tree
     }
 
     renderTreeNodes(data) {
@@ -151,10 +170,9 @@ class RegionFilters extends React.Component {
 
     render() {
 
-        let { region, regionTree, regionFilter } = this.props
+        let { region, regionFilter } = this.props
         let { expandedKeys } = this.state
         let selectedValue = "All"
-        let treeData = typeof regionTree.dataSource === 'undefined' ? [] : regionTree.dataSource
 
         if (regionFilter > 0 && region.length > 0) {
             selectedValue = region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName
@@ -189,7 +207,7 @@ class RegionFilters extends React.Component {
                     defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(regionFilter, region), regionFilter.toString()]}
                     onExpand={this.onExpand}
                 >
-                    {this.renderTreeNodes(treeData)}
+                    {this.renderTreeNodes(this.transformDataToTree(region))}
                 </Tree>
             </>
         )

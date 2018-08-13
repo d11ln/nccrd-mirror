@@ -91,7 +91,7 @@ class ProjectList extends React.Component {
 
         if (resetCounts === true) {
             start = 0
-            end = 10
+            end = 25
             resetProjectCounts()
         }
 
@@ -142,10 +142,41 @@ class ProjectList extends React.Component {
         }
         else {
 
-            fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
-                '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
-                '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
+            //http://localhost:62553/odata/Projects?$orderby=ProjectTitle&$select=ProjectId,%20ProjectTitle,%20ProjectDescription&$top=20&&$filter=contains(ProjectTitle,%20%27wind%27)
 
+            // fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
+            //     '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
+            //     '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
+
+            let batchSize = 25
+            let skip = 0
+            let batchCount = Math.floor(end / batchSize)
+            if(batchCount > 0){
+                skip = (batchCount - 1) * batchSize
+            }
+
+            fetchURL = apiBaseURL + "Projects?" + "$filter=contains(ProjectTitle, '" + titleFilter + "')"
+
+            if (statusFilter !== 0) {
+                fetchURL += " and ProjectStatusId eq " + statusFilter
+            }
+
+            if (regionFilter != 0) {
+                fetchURL += " and ProjectRegions/any(x:x/RegionId eq " + regionFilter + ")"
+            }
+
+            if (sectorFilter !== 0) {
+                fetchURL += " and (AdaptationDetails/any(x:x/SectorId eq " + sectorFilter + ") or MitigationDetails/any(x:x/SectorId eq " + sectorFilter + ") or ResearchDetails/any(x:x/SectorId eq " + sectorFilter + "))"
+            }
+
+            if (typologyFilter !== 0) {
+                fetchURL += " and (AdaptationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or MitigationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or ResearchDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + "))"
+            }
+
+            fetchURL += "&&$skip=" + skip
+                + "&&$top=" + batchSize
+                + "&&$orderby=ProjectTitle"     
+                
             //Get project list data
             fetch(fetchURL,
                 {
@@ -155,7 +186,7 @@ class ProjectList extends React.Component {
                 })
                 .then(res => res.json())
                 .then(res => {
-                    loadProjects(res)
+                    loadProjects(res.value)
                     setLoading(false)
                 })
                 .catch(res => {

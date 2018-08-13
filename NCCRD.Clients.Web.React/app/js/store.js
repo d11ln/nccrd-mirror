@@ -38,7 +38,7 @@ const store = createStore(
             projects: [],
             projectDetails: {},
             start: 0,
-            end: 10,
+            end: 25,
             listScrollPos: 0
         },
 

@@ -44,7 +44,7 @@ export default function ProjectsReducer(state = {}, action) {
         case ACTION_TYPES.LOAD_PROJECTS: {
             let { projects, end } = state
 
-            if(end === 10){
+            if(end === 25){
                 return { ...state, projects: payload }
             }
             else{
@@ -153,14 +153,14 @@ export default function ProjectsReducer(state = {}, action) {
 
         case ACTION_TYPES.LOAD_MORE_PROJECTS: {
             const { start, end  } = state
-            let newend = end + 10
+            let newend = end + 25
             let newstart = start
 
             return { ...state, start: newstart, end: newend }
         }
 
         case ACTION_TYPES.RESET_PROJECT_COUNTS:{
-            return { ...state, start: 0, end: 10 }
+            return { ...state, start: 0, end: 25 }
         }
 
         case ACTION_TYPES.SET_PROJECT_SCROLL:{

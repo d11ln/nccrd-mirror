@@ -48,13 +48,15 @@ class StatusFilter extends React.Component {
 
         //Load data
         let { loadData } = this.props
-        fetch(apiBaseURL + 'api/ProjectStatus/GetAll', {
+        let fetchURL = apiBaseURL + "ProjectStatus?$select=ProjectStatusId,Value"
+
+        fetch(fetchURL, {
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(res => res.json())
             .then(res => {
-                loadData(res)
+                loadData(res.value)
             })
     }
 

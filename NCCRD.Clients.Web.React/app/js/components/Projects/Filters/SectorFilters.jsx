@@ -62,26 +62,26 @@ class SectorFilters extends React.Component {
 
     componentDidMount() {
 
-        let { loadData, loadSectors } = this.props
-        fetch(apiBaseURL + 'api/sector/GetAllTree', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                loadData(res)
-            })
+        // let { loadData, loadSectors } = this.props
+        // fetch(apiBaseURL + 'api/sector/GetAllTree', {
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     }
+        // })
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         loadData(res)
+        //     })
 
-        fetch(apiBaseURL + 'api/Sector/GetAll/', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                loadSectors(res)
-            })
+        // fetch(apiBaseURL + 'api/Sector/GetAll/', {
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     }
+        // })
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         loadSectors(res)
+        //     })
     }
 
     expandAllNodes() {
