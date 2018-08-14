@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 using NCCRD.Services.DataV2.DBModels;
+using NCCRD.Services.DataV2.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,7 +104,23 @@ namespace NCCRD.Services.DataV2.DBContexts
                 .Expand() // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
-                .Select();// Allow for the $select Command; 
+                .Select();// Allow for the $select Command;  
+
+            builder.EntitySet<ProjectDetails>("ProjectDetails")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command;  
+
+            //builder.Namespace = "ProjectServices";
+            //builder.EntityType<Project>()
+            //    //.Collection
+            //    .Function("Verbose")
+            //    .Returns<ProjectDetails>();
+            //    //.Parameter<int>("id");
 
             return builder.GetEdmModel();
         }

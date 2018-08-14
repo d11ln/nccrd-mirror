@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NCCRD.Services.DataV2.DBContexts;
 using NCCRD.Services.DataV2.DBModels;
+using NCCRD.Services.DataV2.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace NCCRD.Services.DataV2.Controllers
 {
+    [Produces("application/json")]
+    [ODataRoutePrefix("Projects")]
     [EnableCors("CORSPolicy")]
     public class ProjectsController : ODataController
     {
@@ -26,6 +29,13 @@ namespace NCCRD.Services.DataV2.Controllers
         public IQueryable<Project> Get()
         {
             return _context.Project.AsQueryable();
+        }
+
+        [EnableQuery]
+        [ODataRoute("({id})")]
+        public Project Get(int id)
+        {
+            return _context.Project.FirstOrDefault(x => x.ProjectId == id);
         }
     }
 }

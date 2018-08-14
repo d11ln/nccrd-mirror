@@ -64,7 +64,10 @@ namespace NCCRD.Services.DataV2
 
             app.UseMvc(routeBuilder =>
             {
-                routeBuilder.MapODataServiceRoute("ODataRoutes", "odata", modelBuilder.GetEdmModel(app.ApplicationServices));
+                routeBuilder.MapODataServiceRoute(
+                    "ODataRoutes", 
+                    "odata", 
+                    modelBuilder.GetEdmModel(app.ApplicationServices));
             });
         }
     }

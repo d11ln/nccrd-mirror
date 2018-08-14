@@ -39,6 +39,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+let lastClickTime = new Date().valueOf()
+
 class ProjectFilters extends React.Component {
 
   constructor(props) {
@@ -174,10 +176,13 @@ class ProjectFilters extends React.Component {
   }
 
   render() {
-    return (
-      <div style={{ marginLeft: "0px", marginRight: "0px", backgroundColor: "white"}}>
 
-        <div className="row" style={{marginBottom: "-25px", marginTop: "10px"}}>
+    //console.log("state:", this.state.collapseGeneral)
+
+    return (
+      <div style={{ marginLeft: "0px", marginRight: "0px", backgroundColor: "white" }}>
+
+        <div className="row" style={{ marginBottom: "-25px", marginTop: "10px" }}>
           <div className="col-md-12">
             {this.renderFilterChips()}
           </div>

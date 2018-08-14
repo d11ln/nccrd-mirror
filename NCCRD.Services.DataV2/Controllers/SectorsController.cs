@@ -14,18 +14,18 @@ namespace NCCRD.Services.DataV2.Controllers
 {
     [Produces("application/json")]
     [EnableCors("CORSPolicy")]
-    public class TypologyController : ODataController
+    public class SectorsController : ODataController
     {
         public SQLDBContext _context { get; }
-        public TypologyController(SQLDBContext context)
+        public SectorsController(SQLDBContext context)
         {
             _context = context;
         }
 
         [EnableQuery]
-        public IQueryable<Typology> Get()
+        public IQueryable<Sector> Get()
         {
-            return _context.Typology.AsQueryable();
+            return _context.Sector.AsQueryable();
         }
     }
 }

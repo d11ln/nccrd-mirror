@@ -36,7 +36,7 @@ class ProjectCard extends React.Component {
           <CardBody>
             <CardTitle>{this.props.ptitle}</CardTitle>
             <CardText>{this.props.pdes}</CardText>
-            <Button color="default" className="btn-sm" onClick={this.onClick.bind(this)}>View</Button>
+            <Button color="default" className="btn-sm" onClick={this.onClick.bind(this)}>View</Button>  
           </CardBody>
         </Card>
         <br />

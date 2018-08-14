@@ -73,7 +73,7 @@ class TextComponent extends React.Component {
         return (
             <div className={col}>
                 <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px" ,fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
-                <Input size="sm" id={id} readOnly={!editMode} value={value} onChange={this.valueChange.bind(this)}
+                <Input size="sm" id={id} readOnly={!editMode} value={value.toString()} onChange={this.valueChange.bind(this)}
                     style={{ marginTop: "-15px", color: this.getFontColour(), border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} />
             </div>
         )

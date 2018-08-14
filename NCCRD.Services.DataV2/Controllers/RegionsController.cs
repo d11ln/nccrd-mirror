@@ -12,6 +12,7 @@ using NCCRD.Services.DataV2.DBModels;
 
 namespace NCCRD.Services.DataV2.Controllers
 {
+    [Produces("application/json")]
     [EnableCors("CORSPolicy")]
     public class RegionsController : ODataController
     {

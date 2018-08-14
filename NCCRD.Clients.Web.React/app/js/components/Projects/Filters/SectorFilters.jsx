@@ -24,9 +24,6 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadData: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TREE, payload })
-        },
         loadSectorFilter: payload => {
             dispatch({ type: ACTION_TYPES.LOAD_SECTOR_FILTER, payload })
         },
@@ -62,26 +59,19 @@ class SectorFilters extends React.Component {
 
     componentDidMount() {
 
-        // let { loadData, loadSectors } = this.props
-        // fetch(apiBaseURL + 'api/sector/GetAllTree', {
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         loadData(res)
-        //     })
+        let { loadSectors } = this.props
 
-        // fetch(apiBaseURL + 'api/Sector/GetAll/', {
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         loadSectors(res)
-        //     })
+        let fetchURL = apiBaseURL + 'Sectors?$orderby=Value'
+
+        fetch(fetchURL, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                loadSectors(res.value)
+            })
     }
 
     expandAllNodes() {
@@ -94,7 +84,34 @@ class SectorFilters extends React.Component {
     }
 
     collapseAllNodes() {
-        this.setState({ expandedKeys: []})
+        this.setState({ expandedKeys: [] })
+    }
+
+    transformDataToTree(data) {
+
+        let tree = []
+
+        data.filter(x => x.SectorTypeId === 1).map(p => {
+
+            //Districts
+            let districtChildren = []
+            data.filter(px => px.ParentSectorId === p.SectorId && px.SectorTypeId === 2).map(d => {
+
+                //Municipalities
+                let municipalityChildren = []
+                data.filter(dx => dx.ParentSectorId === d.SectorId && dx.SectorTypeId === 3).map(m => {
+                    municipalityChildren.push({ id: m.SectorId, text: m.Value })
+                })
+                
+                //Add District
+                districtChildren.push({id: d.SectorId, text: d.Value, children: municipalityChildren})
+            })
+
+            //Add Province
+            tree.push({ id: p.SectorId, text: p.Value, children: districtChildren })
+        })
+
+        return tree
     }
 
     renderTreeNodes(data) {
@@ -150,10 +167,10 @@ class SectorFilters extends React.Component {
 
     render() {
 
-        let { sector, sectorTree, sectorFilter } = this.props
+        let { sector, sectorFilter } = this.props
         let { expandedKeys } = this.state
         let selectedValue = "All"
-        let treeData = typeof sectorTree.dataSource === 'undefined' ? [] : sectorTree.dataSource
+        //let treeData = typeof sectorTree.dataSource === 'undefined' ? [] : sectorTree.dataSource
 
         if (sectorFilter > 0 && sector.length > 0) {
             selectedValue = sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value
@@ -188,7 +205,7 @@ class SectorFilters extends React.Component {
                     defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(sectorFilter, sector), sectorFilter.toString()]}
                     onExpand={this.onExpand}
                 >
-                    {this.renderTreeNodes(treeData)}
+                    {this.renderTreeNodes(this.transformDataToTree(sector))}
                 </Tree>
 
             </>

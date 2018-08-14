@@ -65,6 +65,7 @@ class RegionFilters extends React.Component {
         //Load data
         let { loadRegions } = this.props
         let fetchURL = apiBaseURL + 'Regions?$select=RegionId,RegionName,LocationTypeId,ParentRegionId'
+        + '&&$orderby=RegionName'
 
         fetch(fetchURL, {
             headers: {

@@ -23,18 +23,18 @@ class AdaptationDetailsItem extends React.Component {
     this.setState({ value });
   }
 
-  componentDidMount() {
-    fetch(apiBaseURL + 'api/sector/GetAllTree', {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(res => {
-        let { dataSource } = res
-        this.setState({ treeData: dataSource })
-      })
-  }
+  // componentDidMount() {
+  //   fetch(apiBaseURL + 'api/sector/GetAllTree', {
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => {
+  //       let { dataSource } = res
+  //       this.setState({ treeData: dataSource })
+  //     })
+  // }
 
   render() {
 
