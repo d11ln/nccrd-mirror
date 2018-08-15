@@ -288,7 +288,7 @@ class ProjectDetails extends React.Component {
       this.SaveResearchChanges()
     ]).then(([project, adaptations, mitigations, emissions, research]) => {
 
-      let alertMsg = ""
+      // let alertMsg = ""
 
       if ((!isNaN(project) && project > 0) && adaptations === true && mitigations === true && emissions === true && research === true) {
         setEditMode(false)
@@ -298,41 +298,41 @@ class ProjectDetails extends React.Component {
         this.loadMitigationEmissionsData(loadMitigationEmissions)
         this.loadResearchDetails(loadResearchDetails)
       }
-      else if (isNaN(project) || project < 1) {
-        alertMsg = "Unable to save project data."
-        if (typeof project.ExceptionMessage !== 'undefined' && project.ExceptionMessage.toString().includes("validation errors")) {
-          alertMsg += "\n\nError(s):\n\n" + project.ExceptionMessage
-        }
-      }
-      else if (adaptations !== true) {
-        alertMsg = "Unable to save adaptations data."
-        if (typeof adaptations.ExceptionMessage !== 'undefined' && adaptations.ExceptionMessage.toString().includes("validation errors")) {
-          alertMsg += "\n\nError(s):\n\n" + adaptations.ExceptionMessage
-        }
-      }
-      else if (mitigations !== true) {
-        alertMsg = "Unable to save mitigations data."
-        if (typeof mitigations.ExceptionMessage !== 'undefined' && mitigations.ExceptionMessage.toString().includes("validation errors")) {
-          alertMsg += "\n\nError(s):\n\n" + mitigations.ExceptionMessage
-        }
-      }
-      else if (emissions !== true) {
-        alertMsg = "Unable to save emissions data."
-        if (typeof emissions.ExceptionMessage !== 'undefined' && emissions.ExceptionMessage.toString().includes("validation errors")) {
-          alertMsg += "\n\nError(s):\n\n" + emissions.ExceptionMessage
-        }
-      }
-      else if (research !== true) {
-        alertMsg = "Unable to save research data."
-        if (typeof research.ExceptionMessage !== 'undefined' && research.ExceptionMessage.toString().includes("validation errors")) {
-          alertMsg += "\n\nError(s):\n\n" + research.ExceptionMessage
-        }
-      }
+      // else if (isNaN(project) || project < 1) {
+      //   alertMsg = "Unable to save project data."
+      //   if (typeof project.ExceptionMessage !== 'undefined' && project.ExceptionMessage.toString().includes("validation errors")) {
+      //     alertMsg += "\n\nError(s):\n\n" + project.ExceptionMessage
+      //   }
+      // }
+      // else if (adaptations !== true) {
+      //   alertMsg = "Unable to save adaptations data."
+      //   if (typeof adaptations.ExceptionMessage !== 'undefined' && adaptations.ExceptionMessage.toString().includes("validation errors")) {
+      //     alertMsg += "\n\nError(s):\n\n" + adaptations.ExceptionMessage
+      //   }
+      // }
+      // else if (mitigations !== true) {
+      //   alertMsg = "Unable to save mitigations data."
+      //   if (typeof mitigations.ExceptionMessage !== 'undefined' && mitigations.ExceptionMessage.toString().includes("validation errors")) {
+      //     alertMsg += "\n\nError(s):\n\n" + mitigations.ExceptionMessage
+      //   }
+      // }
+      // else if (emissions !== true) {
+      //   alertMsg = "Unable to save emissions data."
+      //   if (typeof emissions.ExceptionMessage !== 'undefined' && emissions.ExceptionMessage.toString().includes("validation errors")) {
+      //     alertMsg += "\n\nError(s):\n\n" + emissions.ExceptionMessage
+      //   }
+      // }
+      // else if (research !== true) {
+      //   alertMsg = "Unable to save research data."
+      //   if (typeof research.ExceptionMessage !== 'undefined' && research.ExceptionMessage.toString().includes("validation errors")) {
+      //     alertMsg += "\n\nError(s):\n\n" + research.ExceptionMessage
+      //   }
+      // }
 
-      if (alertMsg !== "") {
-        alert(alertMsg)
-        console.log(alertMsg)
-      }
+      // if (alertMsg !== "") {
+      //   alert(alertMsg)
+      //   console.log(alertMsg)
+      // }
 
       setLoading(false)
     })
@@ -344,24 +344,35 @@ class ProjectDetails extends React.Component {
 
     if (projectDetails.state === 'modified') {
 
+      projectDetails["@odata.type"] = "NCCRD.Services.DataV2.DBModels.Project"
       let strPostData = JSON.stringify(projectDetails)
-      let url = apiBaseURL + "api/Projects/AddOrUpdate"
+      let url = apiBaseURL + "Projects"
+
+      console.log(projectDetails)
 
       return fetch(url, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json;odata.metadata=minimal',
+          'Accept': 'application/json',
           "Authorization": "Bearer " + (user === null ? "" : user.access_token)
         },
-        body: strPostData
+        body: projectDetails
       })
         .then((res) => res.json())
         .then((res) => {
 
-          if (!isNaN(res) && res > 0) {
+          //console.log(res)
+
+          // if (!isNaN(res) && res > 0) {
+          if (res.code === 200) {
             resetProjectState(projectDetails)
             this.setState({ projectId: res })
             location.hash = "/projects/" + res
+          }
+          else {
+            alert("Unable to save Project.\n\n" + res.error.message)
+            console.log("Unable to save Project.", res.error)
           }
 
           return res
@@ -729,7 +740,7 @@ class ProjectDetails extends React.Component {
 
                 {(activeTabId !== "1" && editMode) &&
                   <div>
-                    <Button data-tip="Add Adaptation Details" size="sm" floating color="primary" onClick={this.addClick}>
+                    <Button /*data-tip="Add Adaptation Details"*/ size="sm" floating color="primary" onClick={this.addClick}>
                       <Fa icon="plus" />
                     </Button>
                   </div>
@@ -737,11 +748,11 @@ class ProjectDetails extends React.Component {
 
                 {editMode &&
                   <div>
-                    <Button data-tip="Discard changes" size="sm" floating color="danger" onClick={this.discardClick}>
+                    <Button /*data-tip="Discard changes"*/ size="sm" floating color="danger" onClick={this.discardClick}>
                       <Fa icon="trash" />
                     </Button>
                     <br />
-                    <Button data-tip="Save changes" size="sm" floating color="default" onClick={this.saveClick}>
+                    <Button /*data-tip="Save changes"*/ size="sm" floating color="default" onClick={this.saveClick}>
                       <Fa icon="save" />
                     </Button>
                   </div>}
@@ -751,7 +762,7 @@ class ProjectDetails extends React.Component {
         </div>
 
         <Container>
-          <Modal isOpen={this.state.discardModal} centered>
+          <Modal fade={false} isOpen={this.state.discardModal} centered>
             <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
             <ModalBody>
               Are you sure you want to discard all changes?
@@ -764,7 +775,7 @@ class ProjectDetails extends React.Component {
         </Container>
 
         <Container>
-          <Modal isOpen={this.state.saveModal} centered>
+          <Modal fade={false} isOpen={this.state.saveModal} centered>
             <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
             <ModalBody>
               Are you sure you want to save all changes?
