@@ -168,327 +168,6 @@ class ProjectDetails extends React.Component {
     this.state = { activeItemTabs: '1', projectId, discardModal: false, saveModal: false, navBack: false }
   }
 
-  // loadProjectType(loadProjectTypes) {
-  //   return fetch(apiBaseURL + 'api/ProjectType/GetAll', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadProjectTypes(res)
-  //   })
-  // }
-
-  // loadProjectSubType(loadProjectSubTypes) {
-  //   return fetch(apiBaseURL + 'api/ProjectSubType/GetAll', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadProjectSubTypes(res)
-  //   })
-  // }
-
-  // loadProjectStatus(loadProjectStatus) {
-  //   return fetch(apiBaseURL + 'api/ProjectStatus/GetAll', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadProjectStatus(res)
-  //   })
-  // }
-
-  // loadProjectManager(loadProjectManagers) {
-  //   return fetch(apiBaseURL + 'api/AppUsr/GetAllBasic', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadProjectManagers(res)
-  //   })
-  // }
-
-  // loadValidationStatus(loadValidationStatus) {
-  //   return fetch(apiBaseURL + 'api/ValidationStatus/GetAll', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadValidationStatus(res)
-  //   })
-  // }
-
-  // // loadMAOption(loadMAOptions) {
-  // //     return fetch(apiBaseURL + 'api/MAOptions/GetAll', {
-  // //         headers: {
-  // //             "Content-Type": "application/json"
-  // //         }
-  // //     }).then(res => res.json()).then(res => {
-  // //         loadMAOptions(res)
-  // //     })
-  // // }
-
-  // loadAdaptationPurpose(loadAdaptationPurpose) {
-  //   return fetch(apiBaseURL + 'api/AdaptationPurpose/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadAdaptationPurpose(res)
-  //   })
-  // }
-
-  // loadSector(loadSectors) {
-  //   return fetch(apiBaseURL + 'api/Sector/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadSectors(res)
-  //   })
-  // }
-
-  // loadSectorType(loadSectorType) {
-  //   return fetch(apiBaseURL + 'api/SectorType/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadSectorType(res)
-  //   })
-  // }
-
-  // loadSectorTree(loadSectorTree) {
-  //   return fetch(apiBaseURL + 'api/Sector/GetAllTree/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadSectorTree(res)
-  //   })
-  // }
-
-  // loadTypology(loadTypology) {
-  //   return fetch(apiBaseURL + 'api/Typology/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadTypology(res)
-  //   })
-  // }
-
-  // loadCarbonCredit(loadCarbonCredit) {
-  //   return fetch(apiBaseURL + 'api/CarbonCredit/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadCarbonCredit(res)
-  //   })
-  // }
-
-  // loadCarbonCreditMarket(loadCarbonCreditMarket) {
-  //   return fetch(apiBaseURL + 'api/CarbonCreditMarket/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadCarbonCreditMarket(res)
-  //   })
-  // }
-
-  // loadCDMStatus(loadCDMStatus) {
-  //   return fetch(apiBaseURL + 'api/CDMStatus/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadCDMStatus(res)
-  //   })
-  // }
-
-  // loadCDMMethodology(loadCDMMethodology) {
-  //   return fetch(apiBaseURL + 'api/CDMMethodology/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadCDMMethodology(res)
-  //   })
-  // }
-
-  // loadVoluntaryMethodology(loadVoluntaryMethodology) {
-  //   return fetch(apiBaseURL + 'api/VoluntaryMethodology/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadVoluntaryMethodology(res)
-  //   })
-  // }
-
-  // loadVoluntaryGoldStandard(loadVoluntaryGoldStandard) {
-  //   return fetch(apiBaseURL + 'api/VoluntaryGoldStandard/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadVoluntaryGoldStandard(res)
-  //   })
-  // }
-
-  // loadResearchType(loadResearchType) {
-  //   return fetch(apiBaseURL + 'api/ResearchType/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadResearchType(res)
-  //   })
-  // }
-
-  // loadTargetAudience(loadTargetAudience) {
-  //   return fetch(apiBaseURL + 'api/TargetAudience/GetAll/', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(res => res.json()).then(res => {
-  //     loadTargetAudience(res)
-  //   })
-  // }
-
-  // loadProjects(loadProjectDetails) {
-
-  //   let action
-  //   if (this.state.projectId === 'add') {
-
-  //     let newProject = {
-  //       "ProjectId": Date().valueOf(),
-  //       "ProjectTitle": "",
-  //       "ProjectDescription": "",
-  //       "LeadAgent": "",
-  //       "HostPartner": "",
-  //       "HostOrganisation": "",
-  //       "StartYear": 0,
-  //       "EndYear": 0,
-  //       "AlternativeContact": "",
-  //       "AlternativeContactEmail": "",
-  //       "Link": "",
-  //       "ValidationComments": "",
-  //       "BudgetLower": 0,
-  //       "BudgetUpper": 0,
-  //       "ProjectTypeId": 0,
-  //       "ProjectSubTypeId": 0,
-  //       "ProjectStatusId": 0,
-  //       "ProjectManagerId": 0,
-  //       "ValidationStatusId": 0,
-  //       "MAOptionId": 0,
-  //       "state": "modified"
-  //     }
-
-  //     action = loadProjectDetails(newProject)
-  //   }
-  //   else {
-
-  //     action = fetch(apiBaseURL + 'api/Projects/GetById/' + this.state.projectId, {
-  //       headers: {
-  //         "Content-Type": "application/json"/*,
-  //                   "Authorization": "Bearer " + (user === null ? "" : user.access_token)*/
-  //       }
-  //     }).then(res => res.json()).then(res => {
-  //       res.state = "original"
-  //       loadProjectDetails(res)
-  //     })
-  //   }
-
-  //   return action
-  // }
-
-  // loadAdaptationDetails(loadAdaptationDetails) {
-
-  //   let action
-
-  //   if (this.state.projectId === 'add') {
-  //     action = loadAdaptationDetails([])
-  //   }
-  //   else {
-  //     action = fetch(apiBaseURL + 'api/AdaptationDetails/GetByProjectId/' + this.state.projectId, {
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       }
-  //     }).then(res => res.json()).then(res => {
-  //       res.map((x) => { x.state = "original" })
-  //       loadAdaptationDetails(res)
-  //     })
-  //   }
-
-  //   return action
-  // }
-
-  // loadMitigationDetails(loadMitigationDetails) {
-
-  //   let action
-
-  //   if (this.state.projectId === 'add') {
-  //     action = loadMitigationDetails([])
-  //   }
-  //   else {
-  //     action = fetch(apiBaseURL + 'api/MitigationDetails/GetByProjectId/' + this.state.projectId, {
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       }
-  //     }).then(res => res.json()).then(res => {
-  //       res.map((x) => { x.state = "original" })
-  //       loadMitigationDetails(res)
-  //     })
-  //   }
-
-  //   return action
-  // }
-
-  // loadMitigationEmissionsData(loadMitigationEmissions) {
-
-  //   let action
-
-  //   if (this.state.projectId === 'add') {
-  //     action = loadMitigationEmissions([])
-  //   }
-  //   else {
-  //     action = fetch(apiBaseURL + 'api/MitigationEmissionsData/GetByProjectID//' + this.state.projectId, {
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       }
-  //     }).then(res => res.json()).then(res => {
-  //       res.map((x) => { x.state = "original" })
-  //       loadMitigationEmissions(res)
-  //     })
-  //   }
-
-  //   return action
-  // }
-
-  // loadResearchDetails(loadResearchDetails) {
-
-  //   let action
-
-  //   if (this.state.projectId === 'add') {
-  //     action = loadResearchDetails([])
-  //   }
-  //   else {
-  //     action = fetch(apiBaseURL + 'api/ResearchDetails/GetByProjectId/' + this.state.projectId, {
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       }
-  //     }).then(res => res.json()).then(res => {
-  //       res.map((x) => { x.state = "original" })
-  //       loadResearchDetails(res)
-  //     })
-  //   }
-
-  //   return action
-  // }
-
   loadData() {
 
     let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadProjectManagers, loadValidationStatus,
@@ -503,43 +182,6 @@ class ProjectDetails extends React.Component {
     if ((!user || user.expired) && this.state.projectId === 'add') {
       location.hash = "/projects"
     }
-
-    // Promise.all([
-    //   this.loadProjectType(loadProjectTypes),
-    //   this.loadProjectSubType(loadProjectSubTypes),
-    //   this.loadProjectStatus(loadProjectStatus),
-    //   this.loadProjectManager(loadProjectManagers),
-    //   this.loadValidationStatus(loadValidationStatus),
-    //   this.loadProjects(loadProjectDetails),
-    //   this.loadAdaptationDetails(loadAdaptationDetails),
-    //   this.loadMitigationDetails(loadMitigationDetails),
-    //   this.loadMitigationEmissionsData(loadMitigationEmissions),
-    //   this.loadResearchDetails(loadResearchDetails),
-    //   this.loadAdaptationPurpose(loadAdaptationPurpose),
-    //   this.loadSector(loadSectors),
-    //   this.loadSectorType(loadSectorType),
-    //   this.loadSectorTree(loadSectorTree),
-    //   this.loadCarbonCredit(loadCarbonCredit),
-    //   this.loadCarbonCreditMarket(loadCarbonCreditMarket),
-    //   this.loadCDMStatus(loadCDMStatus),
-    //   this.loadCDMMethodology(loadCDMMethodology),
-    //   this.loadVoluntaryMethodology(loadVoluntaryMethodology),
-    //   this.loadVoluntaryGoldStandard(loadVoluntaryGoldStandard),
-    //   this.loadResearchType(loadResearchType),
-    //   this.loadTargetAudience(loadTargetAudience),
-    //   this.loadTypology(loadTypology)
-    // ])
-    // .then(() => {
-    //   setLoading(false)
-    //   if (this.state.projectId === 'add') {
-    //     setEditMode(true)
-    //   }
-    // })
-    // .catch(res => {
-    //   setLoading(false)
-    //   console.log("Error details:", res)
-    //   alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-    // })
 
     let fetchURL = apiBaseURL + "ProjectDetails(" + this.state.projectId + ")?$expand="
       + "Project"
@@ -576,9 +218,6 @@ class ProjectDetails extends React.Component {
           setEditMode(true)
         }
 
-        console.log(res)
-        setEditMode(true)
-
         //Dispatch results
         loadProjectDetails(res.Project)
 
@@ -593,8 +232,8 @@ class ProjectDetails extends React.Component {
         loadCDMMethodology(res.CDMMethodologies)
         loadCDMStatus(res.CDMStatuses)
         loadProjectStatus(res.ProjectStatuses)
-        loadProjectSubTypes(res.ProjectSubTypes)
         loadProjectTypes(res.ProjectTypes)
+        loadProjectSubTypes(res.ProjectSubTypes)
         loadResearchType(res.ResearchTypes)
         loadSectors(res.Sectors)
         loadSectorType(res.SectorTypes)
@@ -915,15 +554,16 @@ class ProjectDetails extends React.Component {
     let { projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails } = this.props
     let dataState = "original"
 
-    if (projectDetails.state !== 'original') {
+    if (projectDetails.state !== 'original' && typeof projectDetails.state !== 'undefined') {
       dataState = projectDetails.state
     }
 
     let arraySources = [adaptationDetails, mitigationDetails, emissionsData, researchDetails]
-    arraySources.map((source) => {
+    arraySources.map(source => {
       if (dataState === "original") {
         source.map((item) => {
-          if (item.state !== 'original') {
+          if (item.state !== 'original' && typeof item.state !== 'undefined') {
+            console.log("item.state", item.state)
             dataState = item.state
           }
         })
@@ -1025,9 +665,9 @@ class ProjectDetails extends React.Component {
 
               <TabContent activeItem={activeTabId}>
                 <TabPane tabId="1">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
-                                    </Button>
+                  </Button>
                   <ProjectDetailsTab />
                   <br />
                   <br />

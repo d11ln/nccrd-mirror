@@ -26,8 +26,6 @@ class ProjectDetailsTab extends React.Component {
 
         const { projectDetails } = this.props
 
-        console.log("projectDetails.ProjectTypeId", projectDetails.ProjectTypeId)
-
         return (
 
             <>

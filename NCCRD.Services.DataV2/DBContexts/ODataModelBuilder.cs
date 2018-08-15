@@ -115,13 +115,6 @@ namespace NCCRD.Services.DataV2.DBContexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command;  
 
-            //builder.Namespace = "ProjectServices";
-            //builder.EntityType<Project>()
-            //    //.Collection
-            //    .Function("Verbose")
-            //    .Returns<ProjectDetails>();
-            //    //.Parameter<int>("id");
-
             return builder.GetEdmModel();
         }
     }

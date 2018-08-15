@@ -80,9 +80,9 @@ class SelectComponent extends React.Component {
 
     let { selectedValue, data } = this.props
 
-    if (selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0) {
-      this.onSelect(null)
-    }
+    // if (selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0) {
+    //   this.onSelect(null)
+    // }
   }
 
   preProcessData(data) {
@@ -172,7 +172,6 @@ class SelectComponent extends React.Component {
   }
 
   onSelect(value) {
-
 
     let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
     let selectedValue = 0

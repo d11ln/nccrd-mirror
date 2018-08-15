@@ -30,7 +30,7 @@ namespace NCCRD.Services.DataV2.ViewModels
         public List<SectorType> SectorTypes { get; set; }
         public List<TargetAudience> TargetAudiences { get; set; }
         public List<Typology> Typologies { get; set; }
-        public List<User> Users { get; set; }
+        public List<UserBasic> Users { get; set; }
         public List<ValidationStatus> ValidationStatuses { get; set; }
         public List<VoluntaryGoldStandard> VoluntaryGoldStandards { get; set; }
         public List<VoluntaryMethodology> VoluntaryMethodologies { get; set; }

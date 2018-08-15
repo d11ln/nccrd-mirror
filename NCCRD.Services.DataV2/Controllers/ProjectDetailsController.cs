@@ -30,28 +30,28 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             var project = _context.Project.FirstOrDefault(x => x.ProjectId == id);
 
-            var adaptationDetails = _context.AdaptationDetails.Where(x => x.ProjectId == id);
-            var mitigationDetails = _context.MitigationDetails.Where(x => x.ProjectId == id);
-            var mitigationEmissionsData = _context.MitigationEmissionsData.Where(x => x.ProjectId == id);
-            var researchDetails = _context.ResearchDetails.Where(x => x.ProjectId == id);
+            var adaptationDetails = _context.AdaptationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.AdaptationPurposeId);
+            var mitigationDetails = _context.MitigationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationDetailId);
+            var mitigationEmissionsData = _context.MitigationEmissionsData.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationEmissionsDataId);
+            var researchDetails = _context.ResearchDetails.Where(x => x.ProjectId == id).OrderBy(x => x.ResearchDetailId);
 
-            var adaptationPurposes = _context.AdaptationPurpose;
-            var carbonCredits = _context.CarbonCredit;
-            var carbonCreditMarkets = _context.CarbonCreditMarket;
-            var cdmMethodologies = _context.CDMMethodology;
-            var cdmStatuses = _context.CDMStatus;
-            var projectStatuses = _context.ProjectStatus;
-            var projectSubTypes = _context.ProjectSubType;
-            var projectTypes = _context.ProjectType;
-            var researchTypes = _context.ResearchType;
-            var sectors = _context.Sector;
-            var sectorTypes = _context.SectorType;
-            var targetAudiences = _context.TargetAudience;
-            var typologies = _context.Typology;
-            var users = _context.Users;
-            var validationStatuses = _context.ValidationStatus;
-            var voluntaryGoldStandards = _context.VoluntaryGoldStandard;
-            var voluntaryMethodologies = _context.VoluntaryMethodology;
+            var adaptationPurposes = _context.AdaptationPurpose.OrderBy(x => x.Value);
+            var carbonCredits = _context.CarbonCredit.OrderBy(x => x.Value);
+            var carbonCreditMarkets = _context.CarbonCreditMarket.OrderBy(x => x.Value);
+            var cdmMethodologies = _context.CDMMethodology.OrderBy(x => x.Value);
+            var cdmStatuses = _context.CDMStatus.OrderBy(x => x.Value);
+            var projectStatuses = _context.ProjectStatus.OrderBy(x => x.Value);
+            var projectSubTypes = _context.ProjectSubType.OrderBy(x => x.Value);
+            var projectTypes = _context.ProjectType.OrderBy(x => x.Value);
+            var researchTypes = _context.ResearchType.OrderBy(x => x.Value);
+            var sectors = _context.Sector.OrderBy(x => x.Value);
+            var sectorTypes = _context.SectorType.OrderBy(x => x.Name);
+            var targetAudiences = _context.TargetAudience.OrderBy(x => x.Value);
+            var typologies = _context.Typology.OrderBy(x => x.Value);
+            var users = _context.Users.OrderBy(u => u.FirstName).ThenBy(u => u.Surname).Select(u => new UserBasic() { UserId = u.UserId, Username = u.Username, Firstname = u.FirstName, Surname = u.Surname, Value = $"{u.FirstName} {u.Surname}" });
+            var validationStatuses = _context.ValidationStatus.OrderBy(x => x.Value);
+            var voluntaryGoldStandards = _context.VoluntaryGoldStandard.OrderBy(x => x.Value);
+            var voluntaryMethodologies = _context.VoluntaryMethodology.OrderBy(x => x.Value);
 
             var result = new ProjectDetails()
             {
