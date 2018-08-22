@@ -7,8 +7,8 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NCCRD.Services.DataV2.DBContexts;
-using NCCRD.Services.DataV2.DBModels;
+using NCCRD.Services.DataV2.Database.Contexts;
+using NCCRD.Services.DataV2.Database.Models;
 
 namespace NCCRD.Services.DataV2.Controllers
 {

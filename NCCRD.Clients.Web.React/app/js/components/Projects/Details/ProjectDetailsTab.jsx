@@ -211,15 +211,6 @@ class ProjectDetailsTab extends React.Component {
 
                 <div className="row">
                     <SelectComponent
-                        id="selProjectManager"
-                        col="col-md-4"
-                        label="Project manager:"
-                        selectedValue={projectDetails.ProjectManagerId}
-                        data={this.props.users}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER}
-                        allowEdit={false}
-                    />
-                    <SelectComponent
                         id="selProjectValidationStatus"
                         col="col-md-4"
                         label="Validation status:"
@@ -234,6 +225,15 @@ class ProjectDetailsTab extends React.Component {
                             "Value": "",
                             "Description": ""
                         }}
+                    />
+                    <SelectComponent
+                        id="selProjectManager"
+                        col="col-md-8"
+                        label="Project manager:"
+                        selectedValue={projectDetails.ProjectManagerId}
+                        data={this.props.users}
+                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER}
+                        allowEdit={false}
                     />
                     {/* <SelectComponent
                         id="selProjectMAOptions"

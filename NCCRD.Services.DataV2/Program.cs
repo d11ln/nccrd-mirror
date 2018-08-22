@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NCCRD.Services.DataV2.DBContexts;
+using NCCRD.Services.DataV2.Database.Contexts;
 
 namespace NCCRD.Services.DataV2
 {

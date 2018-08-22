@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using NCCRD.Services.DataV2.DBContexts;
+using NCCRD.Services.DataV2.Database.Contexts;
 using System;
 
 namespace NCCRD.Services.DataV2.Migrations

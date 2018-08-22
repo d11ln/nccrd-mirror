@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using NCCRD.Services.DataV2.DBContexts;
-using NCCRD.Services.DataV2.DBModels;
+using NCCRD.Services.DataV2.Database.Contexts;
+using NCCRD.Services.DataV2.Database.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
