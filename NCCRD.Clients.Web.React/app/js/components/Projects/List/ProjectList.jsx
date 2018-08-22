@@ -5,14 +5,19 @@ import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { Container, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "mdbreact"
+
+const _gf = require("../../../globalFunctions")
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projects, start, end, listScrollPos } } = state
     let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter } } = state
     let user = state.oidc.user
+    let { globalData: { loading } } = state
     return {
         projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-        listScrollPos, user
+        listScrollPos, user, loading
     }
 }
 
@@ -65,9 +70,22 @@ class ProjectList extends React.Component {
             sectorFilter: 0,
             polygonFilter: "",
             start: 0,
-            end: 10
+            end: 10,
+            messageModal: false,
+            title: "",
+            message: ""
         }
-        this.handleScroll = this.handleScroll.bind(this);
+
+        this.handleScroll = this.handleScroll.bind(this)
+        this.showMessage = this.showMessage.bind(this)
+    }
+
+    showMessage(title, message) {
+        this.setState({
+            title,
+            message,
+            messageModal: true
+        })
     }
 
     handleScroll() {
@@ -115,10 +133,9 @@ class ProjectList extends React.Component {
         clearEmissionsData()
         clearResearchDetails()
 
-        let fetchURL = ""
         if (polygonFilter !== "") {
 
-            fetchURL = apiBaseURL + 'api/Projects/GetByPolygonPost'
+            let fetchURL = apiBaseURL + 'api/Projects/GetByPolygonPost'
 
             //Get project list data
             fetch(fetchURL,
@@ -142,58 +159,38 @@ class ProjectList extends React.Component {
         }
         else {
 
-            //http://localhost:62553/odata/Projects?$orderby=ProjectTitle&$select=ProjectId,%20ProjectTitle,%20ProjectDescription&$top=20&&$filter=contains(ProjectTitle,%20%27wind%27)
-
-            // fetchURL = apiBaseURL + 'api/Projects/GetAll/List?titlePart=' + titleFilter + '&statusId=' + statusFilter +
-            //     '&regionId=' + regionFilter + '&sectorId=' + sectorFilter + '&typologyId=' + typologyFilter +
-            //     '&batchSize=' + 10 + '&batchCount=' + Math.floor(end / 10)
-
             let batchSize = 25
             let skip = 0
             let batchCount = Math.floor(end / batchSize)
-            if(batchCount > 0){
+            if (batchCount > 0) {
                 skip = (batchCount - 1) * batchSize
             }
 
-            fetchURL = apiBaseURL + "Projects?" + "$filter=contains(ProjectTitle, '" + titleFilter + "')"
-
-            if (statusFilter !== 0) {
-                fetchURL += " and ProjectStatusId eq " + statusFilter
-            }
-
-            if (regionFilter != 0) {
-                fetchURL += " and ProjectRegions/any(x:x/RegionId eq " + regionFilter + ")"
-            }
-
-            if (sectorFilter !== 0) {
-                fetchURL += " and (AdaptationDetails/any(x:x/SectorId eq " + sectorFilter + ") or MitigationDetails/any(x:x/SectorId eq " + sectorFilter + ") or ResearchDetails/any(x:x/SectorId eq " + sectorFilter + "))"
-            }
-
-            if (typologyFilter !== 0) {
-                fetchURL += " and (AdaptationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or MitigationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or ResearchDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + "))"
-            }
-
-            fetchURL += "&&$skip=" + skip
-                + "&&$top=" + batchSize
-                + "&&$orderby=ProjectTitle"     
-                
             //Get project list data
-            fetch(fetchURL,
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
-                .then(res => res.json())
-                .then(res => {
-                    loadProjects(res.value)
-                    setLoading(false)
-                })
-                .catch(res => {
-                    setLoading(false)
-                    console.log("Error details:", res)
-                    alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-                })
+            //Setup oHandler
+            var oHandler = o(apiBaseURL + "Projects")
+
+            //Conditional filters
+            if (titleFilter !== "") oHandler.search(["ProjectTitle"], titleFilter)
+            if (statusFilter !== 0) oHandler.filter("ProjectStatusId eq " + statusFilter)
+            if (regionFilter != 0) oHandler.filter("ProjectRegions/any(x:x/RegionId eq " + regionFilter + ")")
+            if (sectorFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/SectorId eq " + sectorFilter + ") or MitigationDetails/any(x:x/SectorId eq " + sectorFilter + ") or ResearchDetails/any(x:x/SectorId eq " + sectorFilter + "))")
+            if (typologyFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or MitigationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or ResearchDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + "))")
+
+            //Pagination and ordering
+            oHandler
+                .skip(skip)
+                .top(batchSize)
+                .orderBy("ProjectTitle")
+
+            oHandler.get((data) => {
+                setLoading(false)
+                loadProjects(data)
+            }, (error) => {
+                setLoading(false)
+                this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+                console.error("error", error)
+            })
         }
     }
 
@@ -265,7 +262,21 @@ class ProjectList extends React.Component {
         return (
             <div>
                 {projectlist.length > 0 && projectlist}
-                {projectlist.length === 0 && <h5>&nbsp;Loading projects...</h5>}
+                {(projectlist.length === 0 && this.props.loading) && <h5>&nbsp;Loading projects...</h5>}
+
+                <Container>
+                    <Modal fade={false} isOpen={this.state.messageModal} toggle={this.toggle} centered>
+                        <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
+                        <ModalBody>
+                            <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>
+                                {this.state.message.split("\n").map(str => <div key={_gf.GetUID()}><label>{str}</label><br /></div>)}
+                            </div>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button size="sm" style={{ width: "100px" }} color="default" onClick={() => this.setState({ messageModal: false })} >Close</Button>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
             </div>
         )
     }

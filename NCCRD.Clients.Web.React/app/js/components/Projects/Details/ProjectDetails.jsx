@@ -21,12 +21,16 @@ import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
 import classnames from 'classnames';
 
+const _gf = require("../../../globalFunctions")
+const o = require("odata")
+const _ = require("lodash")
+
 const mapStateToProps = (state, props) => {
 
   let { projectData: { projectDetails } } = state
   let { adaptationData: { adaptationDetails } } = state
   let { mitigationData: { mitigationDetails } } = state
-  let { emissionData: { emissionsData } } = state
+  let { emissionsData: { emissionsData } } = state
   let { researchData: { researchDetails } } = state
   let { globalData: { loading, editMode } } = state
   let editListModalType = state.editListModalData.type
@@ -71,7 +75,7 @@ const mapDispatchToProps = (dispatch) => {
     loadProjectStatus: payload => {
       dispatch({ type: ACTION_TYPES.LOAD_PROJECT_STATUS, payload })
     },
-    loadProjectManagers: payload => {
+    loadUsers: payload => {
       dispatch({ type: ACTION_TYPES.LOAD_USERS, payload })
     },
     loadValidationStatus: payload => {
@@ -163,18 +167,38 @@ class ProjectDetails extends React.Component {
     this.renderListEditor = this.renderListEditor.bind(this)
     this.toggleTabs = this.toggleTabs.bind(this);
     this.addClick = this.addClick.bind(this)
+    this.showMessage = this.showMessage.bind(this)
 
     let projectId = this.props.match.params.id
-    this.state = { activeItemTabs: '1', projectId, discardModal: false, saveModal: false, navBack: false }
+    this.state = {
+      activeItemTabs: '1',
+      projectId,
+      discardModal: false,
+      saveModal: false,
+      messageModal: false,
+      navBack: false,
+      title: "message",
+      message: ""
+    }
+  }
+
+  showMessage(title, message) {
+    this.setState({
+      title,
+      message,
+      messageModal: true
+    })
   }
 
   loadData() {
 
-    let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadProjectManagers, loadValidationStatus,
+    let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadUsers, loadValidationStatus,
       loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
       loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadSectorTree, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
       loadResearchType, loadTargetAudience, user } = this.props
+
+    let { projectId } = this.state
 
     setLoading(true)
     setEditMode(false)
@@ -183,73 +207,66 @@ class ProjectDetails extends React.Component {
       location.hash = "/projects"
     }
 
-    let fetchURL = apiBaseURL + "ProjectDetails(" + this.state.projectId + ")?$expand="
-      + "Project"
-      + ",AdaptationDetails"
-      + ",MitigationDetails"
-      + ",MitigationEmissionsData"
-      + ",ResearchDetails"
-      + ",AdaptationPurposes"
-      + ",CarbonCredits"
-      + ",CarbonCreditMarkets"
-      + ",CDMMethodologies"
-      + ",CDMStatuses"
-      + ",ProjectStatuses"
-      + ",ProjectSubTypes"
-      + ",ProjectTypes"
-      + ",ResearchTypes"
-      + ",Sectors"
-      + ",SectorTypes"
-      + ",TargetAudiences"
-      + ",Typologies"
-      + ",Users"
-      + ",ValidationStatuses"
-      + ",VoluntaryGoldStandards"
-      + ",VoluntaryMethodologies"
-
-    return fetch(fetchURL, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => res.json())
-      .then(res => {
+    Promise.all([
+      o(apiBaseURL + "Projects").find(this.state.projectId).get(),
+      o(apiBaseURL + "AdaptationDetails").filter("ProjectId eq " + this.state.projectId).orderBy("AdaptationDetailId").get(),
+      o(apiBaseURL + "MitigationDetails").filter("ProjectId eq " + this.state.projectId).orderBy("MitigationDetailId").get(),
+      o(apiBaseURL + "MitigationEmissionsData").filter("ProjectId eq " + this.state.projectId).orderBy("MitigationEmissionsDataId").get(),
+      o(apiBaseURL + "ResearchDetails").filter("ProjectId eq " + this.state.projectId).orderBy("ResearchDetailId").get(),
+      o(apiBaseURL + "AdaptationPurpose").orderBy("Value").get(),
+      o(apiBaseURL + "CarbonCredit").orderBy("Value").get(),
+      o(apiBaseURL + "CarbonCreditMarket").orderBy("Value").get(),
+      o(apiBaseURL + "CDMMethodology").orderBy("Value").get(),
+      o(apiBaseURL + "CDMStatus").orderBy("Value").get(),
+      o(apiBaseURL + "ProjectStatus").orderBy("Value").get(),
+      o(apiBaseURL + "ProjectType").orderBy("Value").get(),
+      o(apiBaseURL + "ProjectSubType").orderBy("Value").get(),
+      o(apiBaseURL + "ResearchType").orderBy("Value").get(),
+      o(apiBaseURL + "Sector").orderBy("Value").get(),
+      o(apiBaseURL + "SectorType").orderBy("Name").get(),
+      o(apiBaseURL + "TargetAudience").orderBy("Value").get(),
+      o(apiBaseURL + "Typology").orderBy("Value").get(),
+      o(apiBaseURL + "User").select("UserId,Username,FirstName,Surname").orderBy("FirstName,Surname").get(),
+      o(apiBaseURL + "ValidationStatus").orderBy("Value").get(),
+      o(apiBaseURL + "VoluntaryGoldStandard").orderBy("Value").get(),
+      o(apiBaseURL + "VoluntaryMethodology").orderBy("Value").get()
+    ])
+      .then(function (oHandlerArray) {
         setLoading(false)
-        if (this.state.projectId === 'add') {
+
+        if (projectId === 'add') {
           setEditMode(true)
         }
 
         //Dispatch results
-        loadProjectDetails(res.Project)
-
-        loadAdaptationDetails(res.AdaptationDetails)
-        loadMitigationDetails(res.MitigationDetails)
-        loadMitigationEmissions(res.MitigationEmissionsData)
-        loadResearchDetails(res.ResearchDetails)
-
-        loadAdaptationPurpose(res.AdaptationPurposes)
-        loadCarbonCredit(res.CarbonCredits)
-        loadCarbonCreditMarket(res.CarbonCreditMarkets)
-        loadCDMMethodology(res.CDMMethodologies)
-        loadCDMStatus(res.CDMStatuses)
-        loadProjectStatus(res.ProjectStatuses)
-        loadProjectTypes(res.ProjectTypes)
-        loadProjectSubTypes(res.ProjectSubTypes)
-        loadResearchType(res.ResearchTypes)
-        loadSectors(res.Sectors)
-        loadSectorType(res.SectorTypes)
-        loadTargetAudience(res.TargetAudiences)
-        loadTypology(res.Typologies)
-        loadProjectManagers(res.Users)
-        loadValidationStatus(res.ValidationStatuses)
-        loadVoluntaryGoldStandard(res.VoluntaryGoldStandards)
-        loadVoluntaryMethodology(res.VoluntaryMethodologies)
+        loadProjectDetails(oHandlerArray[0].data)
+        loadAdaptationDetails(oHandlerArray[1].data)
+        loadMitigationDetails(oHandlerArray[2].data)
+        loadMitigationEmissions(oHandlerArray[3].data)
+        loadResearchDetails(oHandlerArray[4].data)
+        loadAdaptationPurpose(oHandlerArray[5].data)
+        loadCarbonCredit(oHandlerArray[6].data)
+        loadCarbonCreditMarket(oHandlerArray[7].data)
+        loadCDMMethodology(oHandlerArray[8].data)
+        loadCDMStatus(oHandlerArray[9].data)
+        loadProjectStatus(oHandlerArray[10].data)
+        loadProjectTypes(oHandlerArray[11].data)
+        loadProjectSubTypes(oHandlerArray[12].data)
+        loadResearchType(oHandlerArray[13].data)
+        loadSectors(oHandlerArray[14].data)
+        loadSectorType(oHandlerArray[15].data)
+        loadTargetAudience(oHandlerArray[16].data)
+        loadTypology(oHandlerArray[17].data)
+        loadUsers(oHandlerArray[18].data.map(x => ({ Id: x.UserId, Value: (x.FirstName + " " + x.Surname + " (" + x.Username + ")") })))
+        loadValidationStatus(oHandlerArray[19].data)
+        loadVoluntaryGoldStandard(oHandlerArray[20].data)
+        loadVoluntaryMethodology(oHandlerArray[21].data)
       })
-      .catch(res => {
+      .catch((ex) => {
         setLoading(false)
-        console.log("Error details:", res)
-        alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+        this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
+        console.error("An error occurred while trying to fetch data from the server", ex)
       })
-
   }
 
   componentDidMount() {
@@ -272,268 +289,292 @@ class ProjectDetails extends React.Component {
 
   saveChanges() {
 
-    let { setEditMode, setLoading, loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadMitigationEmissions, loadResearchDetails } = this.props
+    let { setEditMode, setLoading, loadProjectDetails, loadAdaptationDetails, loadMitigationDetails,
+      loadMitigationEmissions, loadResearchDetails, projectDetails, adaptationDetails,
+      mitigationDetails, emissionsData, researchDetails, resetProjectState, resetAdaptationState,
+      resetMitigationState, resetEmissionState, resetResearchState } = this.props
+
+    let { projectId } = this.state
 
     //Close modal
     this.setState({ saveModal: false })
 
-    //Save changes to DB
+    //Show loading
     setLoading(true)
 
-    Promise.all([
-      this.SaveProjectChanges(),
-      this.SaveAdaptationChanges(),
-      this.SaveMitigationChanges(),
-      this.SaveEmissionsChanges(),
-      this.SaveResearchChanges()
-    ]).then(([project, adaptations, mitigations, emissions, research]) => {
 
-      // let alertMsg = ""
+    //Handle error messages with error-config in order 
+    //to get error message back and not just code
+    o().config({
+      error: (code, error) => {
 
-      if ((!isNaN(project) && project > 0) && adaptations === true && mitigations === true && emissions === true && research === true) {
-        setEditMode(false)
-        this.loadProjects(loadProjectDetails)
-        this.loadAdaptationDetails(loadAdaptationDetails)
-        this.loadMitigationDetails(loadMitigationDetails)
-        this.loadMitigationEmissionsData(loadMitigationEmissions)
-        this.loadResearchDetails(loadResearchDetails)
+        //(Re)Enable edit mode
+        setEditMode(true)
+
+        //Try to get & parse error message
+        let errorJS = JSON.parse(error)
+        let message = errorJS.value
+        if (typeof message === 'undefined') message = errorJS.error.message
+        if (typeof message === 'undefined') message = "(See log for error details)"
+
+        //Log error message & details
+        this.showMessage("Unable to save changes", message)
+        console.error("Unable to save changes", code, errorJS)
       }
-      // else if (isNaN(project) || project < 1) {
-      //   alertMsg = "Unable to save project data."
-      //   if (typeof project.ExceptionMessage !== 'undefined' && project.ExceptionMessage.toString().includes("validation errors")) {
-      //     alertMsg += "\n\nError(s):\n\n" + project.ExceptionMessage
-      //   }
-      // }
-      // else if (adaptations !== true) {
-      //   alertMsg = "Unable to save adaptations data."
-      //   if (typeof adaptations.ExceptionMessage !== 'undefined' && adaptations.ExceptionMessage.toString().includes("validation errors")) {
-      //     alertMsg += "\n\nError(s):\n\n" + adaptations.ExceptionMessage
-      //   }
-      // }
-      // else if (mitigations !== true) {
-      //   alertMsg = "Unable to save mitigations data."
-      //   if (typeof mitigations.ExceptionMessage !== 'undefined' && mitigations.ExceptionMessage.toString().includes("validation errors")) {
-      //     alertMsg += "\n\nError(s):\n\n" + mitigations.ExceptionMessage
-      //   }
-      // }
-      // else if (emissions !== true) {
-      //   alertMsg = "Unable to save emissions data."
-      //   if (typeof emissions.ExceptionMessage !== 'undefined' && emissions.ExceptionMessage.toString().includes("validation errors")) {
-      //     alertMsg += "\n\nError(s):\n\n" + emissions.ExceptionMessage
-      //   }
-      // }
-      // else if (research !== true) {
-      //   alertMsg = "Unable to save research data."
-      //   if (typeof research.ExceptionMessage !== 'undefined' && research.ExceptionMessage.toString().includes("validation errors")) {
-      //     alertMsg += "\n\nError(s):\n\n" + research.ExceptionMessage
-      //   }
-      // }
-
-      // if (alertMsg !== "") {
-      //   alert(alertMsg)
-      //   console.log(alertMsg)
-      // }
-
-      setLoading(false)
     })
-  }
 
-  SaveProjectChanges() {
+    let promises = []
 
-    let { projectDetails, resetProjectState, user } = this.props
-
+    //Project
     if (projectDetails.state === 'modified') {
-
-      projectDetails["@odata.type"] = "NCCRD.Services.DataV2.DBModels.Project"
-      let strPostData = JSON.stringify(projectDetails)
-      let url = apiBaseURL + "Projects"
-
-      console.log(projectDetails)
-
-      return fetch(url, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json;odata.metadata=minimal',
-          'Accept': 'application/json',
-          "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-        },
-        body: projectDetails
-      })
-        .then((res) => res.json())
-        .then((res) => {
-
-          //console.log(res)
-
-          // if (!isNaN(res) && res > 0) {
-          if (res.code === 200) {
-            resetProjectState(projectDetails)
-            this.setState({ projectId: res })
-            location.hash = "/projects/" + res
-          }
-          else {
-            alert("Unable to save Project.\n\n" + res.error.message)
-            console.log("Unable to save Project.", res.error)
-          }
-
-          return res
-        })
+      let data = _.clone(projectDetails)
+      delete data.state //OData can only bind to the original object spec which does not contain 'state'
+      promises.push(o(apiBaseURL + "Projects").post(data).save(() => { resetProjectState() }))
     }
-    else {
-      return 1
-    }
-  }
 
-  SaveAdaptationChanges() {
-
-    let { adaptationDetails, resetAdaptationState, user } = this.props
-    let result = true
-
-    return Promise.all(
-      adaptationDetails.map((adaptation) => {
-
-        if (result === true && adaptation.state === "modified") {
-
-          let strPostData = JSON.stringify(adaptation)
-          let url = apiBaseURL + "api/AdaptationDetails/AddOrUpdate"
-
-          return fetch(url, {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-            },
-            body: strPostData
-          })
-            .then((res) => res.json())
-            .then((res) => {
-
-              if (result === true && res !== true) {
-                result = res
-              }
-              else if (res === true) {
-                resetAdaptationState(adaptation)
-              }
-            })
-        }
-      })
-    ).then(() => {
-      return result
+    adaptationDetails.forEach(item => {
+      if (item.state === 'modified') {
+        delete item.state //OData can only bind to the original object spec which does not contain 'state'
+        item.ProjectId = projectId //Asociate with current project
+        promises.push(o(apiBaseURL + "AdaptationDetails").post(item).save(() => { resetAdaptationState() }))
+      }
     })
-  }
 
-  SaveMitigationChanges() {
-
-    let { mitigationDetails, resetMitigationState, user } = this.props
-    let result = true
-
-    return Promise.all(
-      mitigationDetails.map((mitigation) => {
-
-        if (result === true && mitigation.state === "modified") {
-
-          let strPostData = JSON.stringify(mitigation)
-          let url = apiBaseURL + "api/MitigationDetails/AddOrUpdate"
-
-          return fetch(url, {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-            },
-            body: strPostData
-          })
-            .then((res) => res.json())
-            .then((res) => {
-
-              if (result === true && res !== true) {
-                result = res
-              }
-              else if (res === true) {
-                resetMitigationState(mitigation)
-              }
-            })
-        }
-      })
-    ).then(() => {
-      return result
+    mitigationDetails.forEach(item => {
+      if (item.state === 'modified') {
+        delete item.state //OData can only bind to the original object spec which does not contain 'state'
+        item.ProjectId = projectId //Asociate with current project
+        promises.push(o(apiBaseURL + "MitigationDetails").post(item).save(() => { resetMitigationState() }))
+      }
     })
-  }
 
-  SaveEmissionsChanges() {
-
-    let { emissionsData, resetEmissionState, user } = this.props
-    let result = true
-
-    return Promise.all(
-      emissionsData.map((emissions) => {
-
-        if (result === true && emissions.state === "modified") {
-
-          let strPostData = JSON.stringify(emissions)
-          let url = apiBaseURL + "api/MitigationEmissionsData/AddOrUpdate"
-
-          return fetch(url, {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-            },
-            body: strPostData
-          })
-            .then((res) => res.json())
-            .then((res) => {
-
-              if (result === true && res !== true) {
-                result = res
-              }
-              else if (res === true) {
-                resetEmissionState(emissions)
-              }
-            })
-        }
-      })
-    ).then(() => {
-      return result
+    emissionsData.forEach(item => {
+      if (item.state === 'modified') {
+        delete item.state //OData can only bind to the original object spec which does not contain 'state'
+        item.ProjectId = projectId //Asociate with current project
+        promises.push(o(apiBaseURL + "MitigationEmissionsData").post(item).save(() => { resetEmissionState() }))
+      }
     })
-  }
 
-  SaveResearchChanges() {
-
-    let { researchDetails, resetResearchState, user } = this.props
-    let result = true
-
-    return Promise.all(
-      researchDetails.map((research) => {
-
-        if (result === true && research.state === "modified") {
-
-          let strPostData = JSON.stringify(research)
-          let url = apiBaseURL + "api/ResearchDetails/AddOrUpdate"
-
-          return fetch(url, {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-            },
-            body: strPostData
-          })
-            .then((res) => res.json())
-            .then((res) => {
-
-              if (result === true && res !== true) {
-                result = res
-              }
-              else if (res === true) {
-                resetResearchState(research)
-              }
-            })
-        }
-      })
-    ).then(() => {
-      return result
+    researchDetails.forEach(item => {
+      if (item.state === 'modified') {
+        delete item.state //OData can only bind to the original object spec which does not contain 'state'
+        item.ProjectId = projectId //Asociate with current project
+        promises.push(o(apiBaseURL + "ResearchDetails").post(item).save(() => { resetResearchState() }))
+      }
     })
+
+    Promise.all(promises)
+      .then(() => {
+        o().config({ error: null }) //Reset error config
+
+        //Hide loading
+        setLoading(false)
+
+        //disable editing on success
+        setEditMode(false)
+
+        this.showMessage("Success", "Changes saved successfully.")
+      })
+      .catch((ex) => {
+        setLoading(false)
+      })
+
   }
+
+  // SaveProjectChanges() {
+
+  //   let { projectDetails, user } = this.props
+  //   let result = true
+
+  //   if (projectDetails.state == "modified") {
+
+  //     //OData can only bind to the original object spec
+  //     //which does not contain 'state'
+  //     delete projectDetails.state
+
+  //     //Handle error messages with error-config in order 
+  //     //to get error message back and not just code
+  //     o().config({
+  //       error: (code, error) => {
+  //         this.showMessage("Unable to save Project changes", JSON.parse(error).value)
+  //         console.error("Unable to save Project changes", code, error)
+  //       }
+  //     })
+
+  //     return Promise.all([
+  //       o(apiBaseURL + "Projects")
+  //         .post(projectDetails)
+  //         .save(
+  //           (data) => {
+  //             this.showMessage("Success", "Changes saved successfully.")
+  //           },
+  //           (ex) => {
+  //             //This is need so that the error is not logged as 'Uncaught'
+  //             result = false
+  //           })
+  //     ])
+  //       .then(() => {
+  //         o().config({ error: null }) //Reset error config
+  //         return result
+  //       })
+  //   }
+  //   else {
+  //     return false
+  //   }
+  // }
+
+  // SaveAdaptationChanges() {
+
+  //   let { adaptationDetails, resetAdaptationState, user } = this.props
+  //   let result = true
+
+  //   return Promise.all(
+  //     adaptationDetails.map((adaptation) => {
+
+  //       if (result === true && adaptation.state === "modified") {
+
+  //         let strPostData = JSON.stringify(adaptation)
+  //         let url = apiBaseURL + "api/AdaptationDetails/AddOrUpdate"
+
+  //         return fetch(url, {
+  //           method: 'post',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+  //           },
+  //           body: strPostData
+  //         })
+  //           .then((res) => res.json())
+  //           .then((res) => {
+
+  //             if (result === true && res !== true) {
+  //               result = res
+  //             }
+  //             else if (res === true) {
+  //               resetAdaptationState(adaptation)
+  //             }
+  //           })
+  //       }
+  //     })
+  //   ).then(() => {
+  //     return result
+  //   })
+  // }
+
+  // SaveMitigationChanges() {
+
+  //   let { mitigationDetails, resetMitigationState, user } = this.props
+  //   let result = true
+
+  //   return Promise.all(
+  //     mitigationDetails.map((mitigation) => {
+
+  //       if (result === true && mitigation.state === "modified") {
+
+  //         let strPostData = JSON.stringify(mitigation)
+  //         let url = apiBaseURL + "api/MitigationDetails/AddOrUpdate"
+
+  //         return fetch(url, {
+  //           method: 'post',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+  //           },
+  //           body: strPostData
+  //         })
+  //           .then((res) => res.json())
+  //           .then((res) => {
+
+  //             if (result === true && res !== true) {
+  //               result = res
+  //             }
+  //             else if (res === true) {
+  //               resetMitigationState(mitigation)
+  //             }
+  //           })
+  //       }
+  //     })
+  //   ).then(() => {
+  //     return result
+  //   })
+  // }
+
+  // SaveEmissionsChanges() {
+
+  //   let { emissionsData, resetEmissionState, user } = this.props
+  //   let result = true
+
+  //   return Promise.all(
+  //     emissionsData.map((emissions) => {
+
+  //       if (result === true && emissions.state === "modified") {
+
+  //         let strPostData = JSON.stringify(emissions)
+  //         let url = apiBaseURL + "api/MitigationEmissionsData/AddOrUpdate"
+
+  //         return fetch(url, {
+  //           method: 'post',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+  //           },
+  //           body: strPostData
+  //         })
+  //           .then((res) => res.json())
+  //           .then((res) => {
+
+  //             if (result === true && res !== true) {
+  //               result = res
+  //             }
+  //             else if (res === true) {
+  //               resetEmissionState(emissions)
+  //             }
+  //           })
+  //       }
+  //     })
+  //   ).then(() => {
+  //     return result
+  //   })
+  // }
+
+  // SaveResearchChanges() {
+
+  //   let { researchDetails, resetResearchState, user } = this.props
+  //   let result = true
+
+  //   return Promise.all(
+  //     researchDetails.map((research) => {
+
+  //       if (result === true && research.state === "modified") {
+
+  //         let strPostData = JSON.stringify(research)
+  //         let url = apiBaseURL + "api/ResearchDetails/AddOrUpdate"
+
+  //         return fetch(url, {
+  //           method: 'post',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+  //           },
+  //           body: strPostData
+  //         })
+  //           .then((res) => res.json())
+  //           .then((res) => {
+
+  //             if (result === true && res !== true) {
+  //               result = res
+  //             }
+  //             else if (res === true) {
+  //               resetResearchState(research)
+  //             }
+  //           })
+  //       }
+  //     })
+  //   ).then(() => {
+  //     return result
+  //   })
+  // }
 
   discardClick() {
     this.setState({ discardModal: true })
@@ -725,41 +766,44 @@ class ProjectDetails extends React.Component {
           </Row>
         </Container>
 
-        <div className="container-fluid" hidden={!user || user.expired}>
-          <div className="row">
-            <div className="col-md-12">
-              <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
+        {
+          ((user && !user.expired) || _gf.isLocalhost()) &&
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-12">
+                <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
 
-                {!editMode &&
-                  <div>
-                    <Button /*data-tip="Edit"*/ size="sm" floating color="default" onClick={this.editClick}>
-                      <Fa icon="pencil" />
-                    </Button>
-                    <br />
-                  </div>}
+                  {!editMode &&
+                    <div>
+                      <Button /*data-tip="Edit"*/ size="sm" floating color="default" onClick={this.editClick}>
+                        <Fa icon="pencil" />
+                      </Button>
+                      <br />
+                    </div>}
 
-                {(activeTabId !== "1" && editMode) &&
-                  <div>
-                    <Button /*data-tip="Add Adaptation Details"*/ size="sm" floating color="primary" onClick={this.addClick}>
-                      <Fa icon="plus" />
-                    </Button>
-                  </div>
-                }
+                  {(activeTabId !== "1" && editMode) &&
+                    <div>
+                      <Button /*data-tip="Add Adaptation Details"*/ size="sm" floating color="primary" onClick={this.addClick}>
+                        <Fa icon="plus" />
+                      </Button>
+                    </div>
+                  }
 
-                {editMode &&
-                  <div>
-                    <Button /*data-tip="Discard changes"*/ size="sm" floating color="danger" onClick={this.discardClick}>
-                      <Fa icon="trash" />
-                    </Button>
-                    <br />
-                    <Button /*data-tip="Save changes"*/ size="sm" floating color="default" onClick={this.saveClick}>
-                      <Fa icon="save" />
-                    </Button>
-                  </div>}
+                  {editMode &&
+                    <div>
+                      <Button /*data-tip="Discard changes"*/ size="sm" floating color="danger" onClick={this.discardClick}>
+                        <Fa icon="trash" />
+                      </Button>
+                      <br />
+                      <Button /*data-tip="Save changes"*/ size="sm" floating color="default" onClick={this.saveClick}>
+                        <Fa icon="save" />
+                      </Button>
+                    </div>}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        }
 
         <Container>
           <Modal fade={false} isOpen={this.state.discardModal} centered>
@@ -768,7 +812,7 @@ class ProjectDetails extends React.Component {
               Are you sure you want to discard all changes?
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>{' '}
+              <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>
               <Button size="sm" style={{ width: "100px" }} color="default" onClick={this.discardChanges} >Discard</Button>
             </ModalFooter>
           </Modal>
@@ -781,8 +825,23 @@ class ProjectDetails extends React.Component {
               Are you sure you want to save all changes?
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>{' '}
+              <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>
               <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
+            </ModalFooter>
+          </Modal>
+        </Container>
+
+        <Container>
+          <Modal fade={false} isOpen={this.state.messageModal} toggle={this.toggle} centered>
+            <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
+            <ModalBody>
+              <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>
+                {/* {this.state.message.split("\n").map(str => <div key={_gf.GetUID()}><label>{str}</label><br /></div>)} */}
+                {_gf.StringToHTML(this.state.message)}
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button size="sm" style={{ width: "100px" }} color="default" onClick={() => this.setState({ messageModal: false })} >Close</Button>
             </ModalFooter>
           </Modal>
         </Container>

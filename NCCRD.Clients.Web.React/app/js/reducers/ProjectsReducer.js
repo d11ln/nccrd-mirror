@@ -37,7 +37,7 @@ export default function ProjectsReducer(state = {}, action) {
 
         case ACTION_TYPES.RESET_PROJECT_STATE: {
             return {
-                ...state, projectDetails: { ...payload, state: "original" }
+                ...state, projectDetails: { ...state.projectDetails, state: "original" }
             }
         }
 

@@ -8,7 +8,7 @@ import * as ACTION_TYPES from "../../../constants/action-types"
 import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
-  let { emissionData: { emissionsData } } = state
+  let { emissionsData: { emissionsData } } = state
   let { projectData: { projectDetails } } = state
   let { globalData: { editMode } } = state
   return { emissionsData, editMode, projectDetails }

@@ -17,12 +17,13 @@ import ProjectDetails from './components/Projects/Details/ProjectDetails.jsx'
 import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
-import { stripURLParam } from "./globalFunctions.js"
 import CallbackPage from '../js/components/Authentication/callback.jsx';
 import LoggedOut from './components/Authentication/LoggedOut.jsx';
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
+
+const _gf = require("./globalFunctions.js")
 
 const mapStateToProps = (state, props) => {
   let { globalData: { loading } } = state
@@ -40,7 +41,7 @@ class App extends React.Component {
     this.state = { navbar: true }
     if (location.toString().includes("navbar=hidden")) {
       this.state = { navbar: false }
-      stripURLParam("navbar=hidden")
+      _gf.stripURLParam("navbar=hidden")
     }
   }
 

@@ -1,8 +1,8 @@
 'use strict'
 
 import * as ACTION_TYPES from "../constants/action-types"
-import { GetUID } from "../globalFunctions"
 
+const _gf = require("../globalFunctions")
 const _ = require('lodash')
 
 function extractItemAndId(array, key, value) {
@@ -56,7 +56,7 @@ export default function MitigationsReducer(state = {}, action) {
             let { mitigationDetails, projectDetails } = state
 
             let newItem = {
-                "MitigationDetailId": parseInt(GetUID()),
+                "MitigationDetailId": parseInt(_gf.GetUID()),
                 "VCS": 0,
                 "Other": 0,
                 "OtherDescription": "",

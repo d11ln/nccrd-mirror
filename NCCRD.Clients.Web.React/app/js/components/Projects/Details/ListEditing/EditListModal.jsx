@@ -8,9 +8,8 @@ import {
 } from 'mdbreact'
 import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
-import { GetUID } from "../../../../globalFunctions"
 
-
+const _gf = require("../../../../globalFunctions")
 const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
@@ -88,7 +87,7 @@ class EditListModal extends React.Component {
         })
 
         //Set Id to GUID
-        let newItemId = parseInt(GetUID())
+        let newItemId = parseInt(_gf.GetUID())
         newItem[Object.keys(newItem)[0]] = newItemId
         newItem[Object.keys(newItem)[1]] = "ENTER VALUE HERE"
         newItem.modifiedState = true
@@ -320,7 +319,7 @@ class EditListModal extends React.Component {
                 if (deps.length > 0) {
 
                     //If dependency found - render select
-                    detailElements.push(<label key={GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
+                    detailElements.push(<label key={_gf.GetUID()} style={{ fontSize: "smaller" }}>{item.key.toString()}</label>)
 
                     //Convert value
                     let displayValue = "Select..."

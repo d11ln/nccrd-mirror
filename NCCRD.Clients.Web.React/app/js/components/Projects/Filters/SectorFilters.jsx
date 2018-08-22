@@ -7,14 +7,15 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
-import { stripURLParam, GetUID } from "../../../globalFunctions.js"
 
 //AntD Tree
 import Tree from 'antd/lib/tree'
 import '../../../../css/antd.tree.css' //Overrides default antd.tree css
 const TreeNode = Tree.TreeNode
 
+const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
     let { lookupData: { sectorTree, sector } } = state
@@ -53,7 +54,7 @@ class SectorFilters extends React.Component {
             //Dispatch to store
             let { loadSectorFilter } = this.props
             loadSectorFilter(parsedHash.sector)
-            stripURLParam("sector=" + parsedHash.sector)
+            _gf.stripURLParam("sector=" + parsedHash.sector)
         }
     }
 
@@ -61,17 +62,15 @@ class SectorFilters extends React.Component {
 
         let { loadSectors } = this.props
 
-        let fetchURL = apiBaseURL + 'Sectors?$orderby=Value'
+        //Get data
+        var oHandler = o(apiBaseURL + "Sector")
+            .orderBy("Value")
 
-        fetch(fetchURL, {
-            headers: {
-                "Content-Type": "application/json"
-            }
+        oHandler.get(function (data) {
+            loadSectors(data)
+        }, function (error) {
+            console.error(error)
         })
-            .then(res => res.json())
-            .then(res => {
-                loadSectors(res.value)
-            })
     }
 
     expandAllNodes() {
@@ -102,9 +101,9 @@ class SectorFilters extends React.Component {
                 data.filter(dx => dx.ParentSectorId === d.SectorId && dx.SectorTypeId === 3).map(m => {
                     municipalityChildren.push({ id: m.SectorId, text: m.Value })
                 })
-                
+
                 //Add District
-                districtChildren.push({id: d.SectorId, text: d.Value, children: municipalityChildren})
+                districtChildren.push({ id: d.SectorId, text: d.Value, children: municipalityChildren })
             })
 
             //Add Province
@@ -198,7 +197,7 @@ class SectorFilters extends React.Component {
                     </div>
                 </div>
 
-                <Tree key={GetUID()}
+                <Tree key={_gf.GetUID()}
                     autoExpandParent
                     onSelect={this.onSelect}
                     defaultSelectedKeys={[sectorFilter.toString()]}

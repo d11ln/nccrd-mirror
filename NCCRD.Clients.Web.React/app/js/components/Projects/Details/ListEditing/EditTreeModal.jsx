@@ -7,7 +7,6 @@ import {
 } from 'mdbreact'
 import { apiBaseURL } from "../../../../constants/apiBaseURL"
 import * as ACTION_TYPES from "../../../../constants/action-types"
-import { GetUID } from '../../../../globalFunctions'
 
 //AntD TreeSelect + Select
 import Tree from 'antd/lib/tree'
@@ -19,6 +18,7 @@ const TreeNode = Tree.TreeNode
 const TreeSelectNode = TreeSelect.TreeNode
 const Option = Select.Option;
 
+const _gf = require("../../../../globalFunctions")
 const _ = require('lodash')
 
 const mapStateToProps = (state, props) => {
@@ -469,7 +469,7 @@ class EditTreeModal extends React.Component {
     })
 
     //Setup and insert data item
-    let newItemId = parseInt(GetUID())
+    let newItemId = parseInt(_gf.GetUID())
     let newItemText = "Item_" + newItemId.toString() //"ENTER VALUE HERE"
     newItem[Object.keys(newItem)[0]] = newItemId
     newItem[Object.keys(newItem)[1]] = newItemText
@@ -568,7 +568,7 @@ class EditTreeModal extends React.Component {
 
                 <div className="col-md-4" style={{ overflowY: "auto", height: "65vh", fontSize: "large" }}>
                   <h5 style={{ marginBottom: "15px", textDecoration: "underline" }}>Select item to edit:</h5>
-                  <Tree key={GetUID()}
+                  <Tree key={_gf.GetUID()}
                     onSelect={this.onSelect}
                     defaultSelectedKeys={[selectedItemId.toString()]}
                     defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(selectedItemId, _data), selectedItemId.toString()]}

@@ -6,9 +6,10 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL";
 import SelectComponent from '../../Shared/SelectComponent.jsx'
-import { stripURLParam } from "../../../globalFunctions.js"
 
+const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
     let { lookupData: { typology } } = state
@@ -39,7 +40,7 @@ class TypologyFilter extends React.Component {
             //Dispatch to store
             let { loadTypologyFilter } = this.props
             loadTypologyFilter({ value: parsedHash.typology })
-            stripURLParam("typology=" + parsedHash.typology)
+            _gf.stripURLParam("typology=" + parsedHash.typology)
         }
     }
 
@@ -47,16 +48,17 @@ class TypologyFilter extends React.Component {
 
         //Load data
         let { loadData } = this.props
-        let fetchURL = apiBaseURL + "Typology?$select=TypologyId,Value"
 
-        fetch(fetchURL, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(res => res.json())
-            .then(res => {
-                loadData(res.value)
-            })
+        //Get data
+        var oHandler = o(apiBaseURL + "Typology")
+        .select("TypologyId,Value")
+        .orderBy("Value")
+
+        oHandler.get(function(data){
+            loadData(data)
+        }, function(error){
+            console.error(error)
+        })
     }
 
     render() {

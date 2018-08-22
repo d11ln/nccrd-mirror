@@ -6,108 +6,111 @@ import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { Fa, Button, ButtonFixed, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
 import * as ACTION_TYPES from "../../../constants/action-types"
-import { apiBaseURL } from "../../../constants/apiBaseURL"
 import ReactTooltip from 'react-tooltip'
 
 const queryString = require('query-string')
+const _gf = require("../../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
-    let { globalData: { loading } } = state
-    let user = state.oidc.user
-    return { loading, user }
+  let { globalData: { loading } } = state
+  let user = state.oidc.user
+  return { loading, user }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        setLoading: payload => {
-            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
-        },
-        loadPolygonFilter: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_POLYGON_FILTER, payload })
-        },
-        updateNav: payload => {
-            dispatch({ type: "NAV", payload })
-        }
+  return {
+    setLoading: payload => {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+    },
+    loadPolygonFilter: payload => {
+      dispatch({ type: ACTION_TYPES.LOAD_POLYGON_FILTER, payload })
+    },
+    updateNav: payload => {
+      dispatch({ type: "NAV", payload })
     }
+  }
 }
 
 class Projects extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.backToTop = this.backToTop.bind(this)
-        this.addProject = this.addProject.bind(this)
-        this.handleScroll = this.handleScroll.bind(this);
+    this.backToTop = this.backToTop.bind(this)
+    this.addProject = this.addProject.bind(this)
+    this.handleScroll = this.handleScroll.bind(this);
 
-        //Read polygon filter from URL
-        const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    //Read polygon filter from URL
+    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
 
-        if (typeof parsedHash.polygon !== 'undefined') {
+    if (typeof parsedHash.polygon !== 'undefined') {
 
-            //Dispatch to store
-            this.props.loadPolygonFilter(parsedHash.polygon)
-        }
-
-        this.state = { showBackToTop: false }
+      //Dispatch to store
+      this.props.loadPolygonFilter(parsedHash.polygon)
     }
 
-    backToTop() {
-        window.scroll({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        });
-    }
+    this.state = { showBackToTop: false }
+  }
 
-    addProject() {
-        location.hash = '/projects/add'
-    }
+  backToTop() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
 
-    componentWillMount() {
-        this.props.setLoading(true)
-    }
+  addProject() {
+    location.hash = '/projects/add'
+  }
 
-    componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll);
-        this.props.updateNav(location.hash)
-    }
+  componentDidMount() {
+    this.props.setLoading(true)
+    window.addEventListener("scroll", this.handleScroll);
+    this.props.updateNav(location.hash)
+  }
 
-    handleScroll() {
-        this.setState({ showBackToTop: (window.pageYOffset > 300) })
-    }
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll)
+  }
 
-    render() {
+  handleScroll() {
+    this.setState({ showBackToTop: (window.pageYOffset > 300) })
+  }
 
-        let { user } = this.props
-        let { showBackToTop } = this.state
+  render() {
 
-        return (
-            <>
-                <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
+    let { user } = this.props
+    let { showBackToTop } = this.state
 
-                    {(user && !user.expired) &&
-                        <div>
-                            <Button data-tip="Add project" size="sm" floating color="primary" onClick={this.addProject}>
-                                <Fa icon="plus" />
-                            </Button>
-                            <br />
-                        </div>}
+    return (
+      <>
+        <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
 
-                    {showBackToTop &&
-                        <Button data-tip="Back to top" size="sm" floating color="default" onClick={this.backToTop}>
-                            <Fa icon="arrow-up" />
-                        </Button>}
+          {
+            ((user && !user.expired) || _gf.isLocalhost()) &&
+            <div>
+              <Button data-tip="Add project" size="sm" floating color="primary" onClick={this.addProject}>
+                <Fa icon="plus" />
+              </Button>
+              <br />
+            </div>
+          }
 
-                </div>
+          {showBackToTop &&
+            <Button data-tip="Back to top" size="sm" floating color="default" onClick={this.backToTop}>
+              <Fa icon="arrow-up" />
+            </Button>}
 
-                <ProjectFilters />
-                <ProjectList />
+        </div>
 
-                <ReactTooltip delayShow={700} />
-            </>
-        )
-    }
+        <ProjectFilters />
+        <ProjectList />
+
+        <ReactTooltip delayShow={700} />
+      </>
+    )
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Projects)

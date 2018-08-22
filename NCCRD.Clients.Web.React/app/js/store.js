@@ -50,7 +50,7 @@ const store = createStore(
             mitigationDetails: []
         },
 
-        emissionData: {
+        emissionsData: {
             emissionsData: []
         },
 

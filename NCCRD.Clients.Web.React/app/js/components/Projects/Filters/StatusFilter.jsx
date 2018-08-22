@@ -6,9 +6,10 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../constants/apiBaseURL";
 import SelectComponent from '../../Shared/SelectComponent.jsx'
-import { stripURLParam } from "../../../globalFunctions.js"
 
+const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
     let { lookupData: { projectStatus } } = state
@@ -39,8 +40,8 @@ class StatusFilter extends React.Component {
 
             //Dispatch to store
             let { loadStatusFilter } = this.props
-            loadStatusFilter({value: parsedHash.status})
-            stripURLParam("status=" + parsedHash.status)
+            loadStatusFilter({ value: parsedHash.status })
+            _gf.stripURLParam("status=" + parsedHash.status)
         }
     }
 
@@ -48,16 +49,17 @@ class StatusFilter extends React.Component {
 
         //Load data
         let { loadData } = this.props
-        let fetchURL = apiBaseURL + "ProjectStatus?$select=ProjectStatusId,Value"
 
-        fetch(fetchURL, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(res => res.json())
-            .then(res => {
-                loadData(res.value)
-            })
+        //Get data
+        var oHandler = o(apiBaseURL + "ProjectStatus")
+            .select("ProjectStatusId,Value")
+            .orderBy("Value")
+
+        oHandler.get(function (data) {
+            loadData(data)
+        }, function (error) {
+            console.error(error)
+        })
     }
 
     render() {
@@ -65,11 +67,11 @@ class StatusFilter extends React.Component {
         let { statusFilter } = this.props
 
         return (
-            <SelectComponent 
+            <SelectComponent
                 id="selStatusFilter"
-                col="col-md-4" 
-                label="Status:" 
-                selectedValue={statusFilter} 
+                col="col-md-4"
+                label="Status:"
+                selectedValue={statusFilter}
                 data={this.props.projectStatus}
                 setSelectedValueKey={ACTION_TYPES.LOAD_STATUS_FILTER}
                 editModeOverride={true}

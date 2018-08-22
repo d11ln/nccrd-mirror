@@ -7,14 +7,15 @@ import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../constants/ui_config';
-import { stripURLParam, GetUID } from "../../../globalFunctions.js"
 
 //AntD Tree
 import Tree from 'antd/lib/tree'
 import '../../../../css/antd.tree.css' //Overrides default antd.tree css
 const TreeNode = Tree.TreeNode
 
+const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
     let { lookupData: { regionTree, region } } = state
@@ -56,7 +57,7 @@ class RegionFilters extends React.Component {
             //Dispatch to store
             let { loadRegionFilter } = this.props
             loadRegionFilter(parsedHash.region)
-            stripURLParam("region=" + parsedHash.region)
+            _gf.stripURLParam("region=" + parsedHash.region)
         }
     }
 
@@ -64,18 +65,17 @@ class RegionFilters extends React.Component {
 
         //Load data
         let { loadRegions } = this.props
-        let fetchURL = apiBaseURL + 'Regions?$select=RegionId,RegionName,LocationTypeId,ParentRegionId'
-        + '&&$orderby=RegionName'
 
-        fetch(fetchURL, {
-            headers: {
-                "Content-Type": "application/json"
-            }
+        //Get data
+        var oHandler = o(apiBaseURL + "Regions")
+            .select("RegionId,RegionName,LocationTypeId,ParentRegionId")
+            .orderBy("RegionName")
+
+        oHandler.get(function (data) {
+            loadRegions(data)
+        }, function (error) {
+            console.error(error)
         })
-            .then(res => res.json())
-            .then(res => {
-                loadRegions(res.value)
-            })
     }
 
     expandAllNodes() {
@@ -106,9 +106,9 @@ class RegionFilters extends React.Component {
                 data.filter(dx => dx.ParentRegionId === d.RegionId && dx.LocationTypeId === 2).map(m => {
                     municipalityChildren.push({ id: m.RegionId, text: m.RegionName })
                 })
-                
+
                 //Add District
-                districtChildren.push({id: d.RegionId, text: d.RegionName, children: municipalityChildren})
+                districtChildren.push({ id: d.RegionId, text: d.RegionName, children: municipalityChildren })
             })
 
             //Add Province
@@ -201,7 +201,7 @@ class RegionFilters extends React.Component {
                     </div>
                 </div>
 
-                <Tree key={GetUID()}
+                <Tree key={_gf.GetUID()}
                     autoExpandParent
                     onSelect={this.onSelect}
                     defaultSelectedKeys={[regionFilter.toString()]}

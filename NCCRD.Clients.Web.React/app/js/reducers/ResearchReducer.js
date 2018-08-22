@@ -1,8 +1,8 @@
 'use strict'
 
 import * as ACTION_TYPES from "../constants/action-types"
-import { GetUID } from "../globalFunctions"
 
+const _gf = require("../globalFunctions")
 const _ = require('lodash')
 
 function extractItemAndId(array, key, value) {
@@ -57,7 +57,7 @@ export default function ResearchReducer(state = {}, action) {
             let { researchDetails, projectDetails } = state
 
             let newItem = {
-                "ResearchDetailId": parseInt(GetUID()),
+                "ResearchDetailId": parseInt(_gf.GetUID()),
                 "Author": "",
                 "PaperLink": "",
                 "ResearchTypeId": 0,

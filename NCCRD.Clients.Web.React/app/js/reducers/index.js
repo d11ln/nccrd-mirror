@@ -16,7 +16,7 @@ export default {
     projectData: ProjectsReducer,
     adaptationData: AdaptationsReducer,
     mitigationData: MitigationsReducer,
-    emissionData: EmissionsReducer,
+    emissionsData: EmissionsReducer,
     researchData: ResearchReducer ,
     lookupData: LookupsReducer,
     filterData: FilterReducer,

@@ -5,8 +5,8 @@ import { Button, Input, FormInline } from 'mdbreact'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import { UILookup } from '../../../constants/ui_config';
-import { stripURLParam } from "../../../globalFunctions.js"
 
+const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
@@ -37,7 +37,7 @@ class TitleFilter extends React.Component {
 
       //Update internal state
       //this.onClick(parsedHash.title)
-      stripURLParam("title=" + parsedHash.title)
+      _gf.stripURLParam("title=" + parsedHash.title)
     }
   }
 

@@ -1,8 +1,8 @@
 'use strict'
 
 import * as ACTION_TYPES from "../constants/action-types"
-import { GetUID } from "../globalFunctions"
 
+const _gf = require("../globalFunctions")
 const _ = require('lodash')
 
 function extractItemAndId(array, key, value) {
@@ -56,33 +56,33 @@ export default function EmissionsReducer(state = {}, action) {
             let { emissionsData, projectDetails } = state
 
             let newItem = {
-                "MitigationEmissionsDataId": parseInt(GetUID()),
-                "Year": "",
-                "CO2": "",
-                "CH4": "",
-                "CH4_CO2e": "",
-                "N2O": "",
-                "N2O_CO2e": "",
-                "HFC": "",
-                "HFC_CO2e": "",
-                "PFC": "",
-                "PFC_CO2e": "",
-                "SF6": "",
-                "SF6_CO2e": "",
-                "Hydro": "",
-                "Hydro_CO2e": "",
-                "Tidal": "",
-                "Tidal_CO2e": "",
-                "Wind": "",
-                "Wind_CO2e": "",
-                "Solar": "",
-                "Solar_CO2e": "",
-                "FossilFuelElecRed": "",
-                "FossilFuelElecRed_CO2e": "",
-                "BioWaste": "",
-                "BioWaste_CO2e": "",
-                "Geothermal": "",
-                "Geothermal_CO2e": "",
+                "MitigationEmissionsDataId": parseInt(_gf.GetUID()),
+                "Year": new Date().getFullYear(),
+                "CO2": null,
+                "CH4": null,
+                "CH4_CO2e": null,
+                "N2O": null,
+                "N2O_CO2e": null,
+                "HFC": null,
+                "HFC_CO2e": null,
+                "PFC": null,
+                "PFC_CO2e": null,
+                "SF6": null,
+                "SF6_CO2e": null,
+                "Hydro": null,
+                "Hydro_CO2e": null,
+                "Tidal": null,
+                "Tidal_CO2e": null,
+                "Wind": null,
+                "Wind_CO2e": null,
+                "Solar": null,
+                "Solar_CO2e": null,
+                "FossilFuelElecRed": null,
+                "FossilFuelElecRed_CO2e": null,
+                "BioWaste": null,
+                "BioWaste_CO2e": null,
+                "Geothermal": null,
+                "Geothermal_CO2e": null,
                 "ProjectId": payload,
                 "state": "modified"
             }
