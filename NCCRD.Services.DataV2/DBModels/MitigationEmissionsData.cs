@@ -12,9 +12,10 @@ namespace NCCRD.Services.DataV2.DBModels
     [Table("MitigationEmissionsData")]
     public class MitigationEmissionsData
     {
+        [Range(1, int.MaxValue, ErrorMessage = "The MitigationEmissionsDataId field is required.")]
         public int MitigationEmissionsDataId { get; set; }
 
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The Year field is required.")]
         public int Year { get; set; }
 
         public double? CO2 { get; set; }
@@ -68,9 +69,8 @@ namespace NCCRD.Services.DataV2.DBModels
         public double? Geothermal_CO2e { get; set; }
 
         //FK - Project
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public Project Project { get; set; }
     }

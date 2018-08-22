@@ -22,14 +22,13 @@ namespace NCCRD.Services.DataV2.DBModels
         public string CDMProjectNumber { get; set; } //Don't know what this links to
 
         //FK - CarbonCredit
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The CarbonCredit field is required.")]
         public int CarbonCreditId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public CarbonCredit CarbonCredit { get; set; }
 
         //FK - CarbonCreditMarket
-        public int? CarbonCreditMarketId { get; set; }
+        public int? CarbonCreditMarketId { get; set; } = null;
         [IgnoreDataMember]
         public CarbonCreditMarket CarbonCreditMarket { get; set; }
 
@@ -54,15 +53,13 @@ namespace NCCRD.Services.DataV2.DBModels
         public VoluntaryGoldStandard VoluntaryGoldStandard { get; set; }
 
         //FK - Project
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The Project field is reqiured.")]
         public int ProjectId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public Project Project { get; set; }
 
         //FK - Sector
         public int? SectorId { get; set; }
-        //[IgnoreDataMember]
         public Sector Sector { get; set; }
     }
 }

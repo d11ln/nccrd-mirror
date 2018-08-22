@@ -17,22 +17,19 @@ namespace NCCRD.Services.DataV2.DBModels
         public string Description { get; set; } //Optional
 
         //FK - AdaptationPurpose
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The AdaptationPurpose field is required.")]
         public int AdaptationPurposeId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public AdaptationPurpose AdaptationPurpose { get; set; }
 
         //FK - Project
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public Project Project { get; set; }
 
         //FK - Sector
         public int? SectorId { get; set; }
-        //[IgnoreDataMember]
         public Sector Sector { get; set; }
     }
 }

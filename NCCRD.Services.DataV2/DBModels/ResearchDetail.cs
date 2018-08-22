@@ -12,6 +12,7 @@ namespace NCCRD.Services.DataV2.DBModels
     [Table("ResearchDetails")]
     public class ResearchDetail
     {
+        [Range(1, int.MaxValue, ErrorMessage = "The ResearchDetailId field is required.")]
         public int ResearchDetailId { get; set; }
 
         [Required]
@@ -22,29 +23,25 @@ namespace NCCRD.Services.DataV2.DBModels
         public string PaperLink { get; set; } //Optional
 
         //FK - ResearchType
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The ResearchType field is required.")]
         public int ResearchTypeId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public ResearchType ResearchType { get; set; }
 
         //FK - TargetAudience
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The TargetAudience field is required.")]
         public int TargetAudienceId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public TargetAudience TargetAudience { get; set; }
 
         //FK - Project
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public Project Project { get; set; }
 
         //FK - Sector
         public int? SectorId { get; set; }
-        //[IgnoreDataMember]
         public Sector Sector { get; set; }
     }
 }

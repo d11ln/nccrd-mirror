@@ -9,11 +9,11 @@ namespace NCCRD.Services.DataV2.DBModels
     [Table("Project")]
     public class Project
     {
+        [Range(1, int.MaxValue, ErrorMessage = "The ProjectId field is required.")]
         public int ProjectId { get; set; }
 
         [Required]
         [MaxLength(450)]
-        //[Index("ProjectTitleIndex", IsUnique = true)]
         public string ProjectTitle { get; set; }
 
         public string ProjectDescription { get; set; }
@@ -51,9 +51,8 @@ namespace NCCRD.Services.DataV2.DBModels
         public decimal? BudgetUpper { get; set; }
 
         //FK - ProjectType
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
         public int ProjectTypeId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public ProjectType ProjectType { get; set; }
 
@@ -63,17 +62,15 @@ namespace NCCRD.Services.DataV2.DBModels
         public ProjectSubType ProjectSubType { get; set; } //Optional
 
         //FK - ProjectStatus
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
         public int ProjectStatusId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public ProjectStatus ProjectStatus { get; set; }
 
         //FK - ProjectManager
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The ProjectManager field is required.")]
         [ForeignKey("ProjectManager")]
         public int ProjectManagerId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public User ProjectManager { get; set; }
 

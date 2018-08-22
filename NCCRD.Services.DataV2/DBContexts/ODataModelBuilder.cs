@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Edm;
 using NCCRD.Services.DataV2.DBModels;
-using NCCRD.Services.DataV2.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +69,115 @@ namespace NCCRD.Services.DataV2.DBContexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
+            builder.EntitySet<Region>("Regions")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command;  
+            
+            builder.EntitySet<AdaptationPurpose>("AdaptationPurpose")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<CarbonCredit>("CarbonCredit")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<CarbonCreditMarket>("CarbonCreditMarket")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<CDMMethodology>("CDMMethodology")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<CDMStatus>("CDMStatus")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
             builder.EntitySet<ProjectStatus>("ProjectStatus")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<ProjectType>("ProjectType")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<ProjectSubType>("ProjectSubType")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<ResearchType>("ResearchType")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<Sector>("Sector")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<SectorType>("SectorType")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<TargetAudience>("TargetAudience")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
@@ -88,7 +195,7 @@ namespace NCCRD.Services.DataV2.DBContexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
-            builder.EntitySet<Sector>("Sectors")
+            builder.EntitySet<User>("User")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
@@ -97,23 +204,32 @@ namespace NCCRD.Services.DataV2.DBContexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
-            builder.EntitySet<Region>("Regions")
+            builder.EntitySet<ValidationStatus>("ValidationStatus")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
                 .Expand() // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
-                .Select();// Allow for the $select Command;  
+                .Select();// Allow for the $select Command; 
 
-            builder.EntitySet<ProjectDetails>("ProjectDetails")
+            builder.EntitySet<VoluntaryGoldStandard>("VoluntaryGoldStandard")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
                 .Expand() // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
-                .Select();// Allow for the $select Command;  
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<VoluntaryMethodology>("VoluntaryMethodology")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
 
             return builder.GetEdmModel();
         }

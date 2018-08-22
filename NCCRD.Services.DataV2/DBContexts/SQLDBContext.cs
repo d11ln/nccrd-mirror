@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NCCRD.Services.DataV2.DBModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NCCRD.Services.DataV2.DBContexts
 {
@@ -18,7 +14,7 @@ namespace NCCRD.Services.DataV2.DBContexts
         public DbSet<CarbonCredit> CarbonCredit { get; set; }
         public DbSet<CarbonCreditMarket> CarbonCreditMarket { get; set; }
         public DbSet<CDMMethodology> CDMMethodology { get; set; }
-        public DbSet<CDMStatus> CDMStatus { get; set; }   
+        public DbSet<CDMStatus> CDMStatus { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Feasibility> Feasibility { get; set; }
@@ -66,9 +62,9 @@ namespace NCCRD.Services.DataV2.DBContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Project>()
-            .HasAlternateKey(c => c.ProjectTitle)
-            .HasName("ProjectTitleIndex");
+            //modelBuilder.Entity<Project>()
+            //.HasAlternateKey(c => c.ProjectTitle)
+            //.HasName("ProjectTitleIndex");
         }
     }
 }

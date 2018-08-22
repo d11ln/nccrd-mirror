@@ -5,29 +5,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NCCRD.Services.DataV2.DBContexts;
 using NCCRD.Services.DataV2.DBModels;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace NCCRD.Services.DataV2.Controllers
 {
     [Produces("application/json")]
-    [ODataRoutePrefix("Typology")]
+    [ODataRoutePrefix("CarbonCreditMarket")]
     [EnableCors("CORSPolicy")]
-    public class TypologyController : ODataController
+    public class CarbonCreditMarketController : ODataController
     {
         public SQLDBContext _context { get; }
-        public TypologyController(SQLDBContext context)
+        public CarbonCreditMarketController(SQLDBContext context)
         {
             _context = context;
         }
 
         [EnableQuery]
-        public IQueryable<Typology> Get()
+        public IQueryable<CarbonCreditMarket> Get()
         {
-            return _context.Typology.AsQueryable();
+            return _context.CarbonCreditMarket.AsQueryable();
         }
     }
 }
