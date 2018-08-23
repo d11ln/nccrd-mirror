@@ -71,7 +71,7 @@ class AdaptationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE}
             parentId={details.AdaptationDetailId}
             dispatch={ACTION_TYPES.LOAD_ADAPTATION_PURPOSE}
-            persist={"api/AdaptationPurpose/AddOrUpdate"}
+            persist="AdaptationPurpose"
             allowEdit={true}
             newItemTemplate={{
               "AdaptationPurposeId": 0,
@@ -89,7 +89,7 @@ class AdaptationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR}
             parentId={details.AdaptationDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
-            persist="api/Sector/AddOrUpdate"
+            persist="Sector"
             type="tree"
             dependencies={[
               { key: "SectorTypeId", value: sectorType, type: "std" },

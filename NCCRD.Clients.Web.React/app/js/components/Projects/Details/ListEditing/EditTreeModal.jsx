@@ -20,6 +20,7 @@ const Option = Select.Option;
 
 const _gf = require("../../../../globalFunctions")
 const _ = require('lodash')
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
   let { editListModalData: { show, data, dispatch, persist, type, dependencies, newItemTemplate } } = state
@@ -405,29 +406,40 @@ class EditTreeModal extends React.Component {
     setLoading(true)
 
     //Get changed items
-    let changedItems = _data.filter(x => x.modifiedState === true)
+    let postData = { Id: 123456 }
+    let postDataItems = []
+    _data.filter(x => x.modifiedState === true).forEach(x => {
+      let clone = _.clone(x)
+      delete clone.modifiedState
+      postDataItems.push(clone)
+    })
+    postData[persist] = postDataItems
 
     //Prep post params
-    let strPostData = JSON.stringify(changedItems)
-    let url = apiBaseURL + persist
+    let url = apiBaseURL + "Lookups"
 
-    //Save items to DB
-    return fetch(url, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-      },
-      body: strPostData
+    //Handle error messages with error-config in order 
+    //to get error message back and not just code
+    o().config({
+      error: (code, error) => {
+        //Try to get & parse error message
+        let errorJS = JSON.parse(error)
+        let message = errorJS.value
+        if (typeof message === 'undefined') message = errorJS.error.message
+        if (typeof message === 'undefined') message = "(See log for error details)"
+
+        //Log error message & details
+        alert("Unable to save changes.\n\n" + message)
+        console.error("Unable to save changes", code, errorJS)
+      }
     })
-      .then((res) => res.json())
-      .then((res) => {
 
-        setLoading(false)
-
-        if (res === true) {
-
-          //Saved successully...
+    o(apiBaseURL + "Lookups")
+      .post(postData)
+      .save(
+        (data) => {
+          //Success
+          o().config({ error: null }) //Reset error config
 
           //Toggle confirm save 
           this.setState({ confirmSave: false })
@@ -440,18 +452,18 @@ class EditTreeModal extends React.Component {
           //Dispatch to store
           dispatchToStore(dispatch, merged)
 
+          setLoading(false)
+
           //Close modal
           let { setEditList } = this.props
           setEditList({ show: false })
-
+        },
+        (status) => {
+          //Failed
+          o().config({ error: null }) //Reset error config
+          setLoading(false)
         }
-        else {
-
-          //Save failed...
-          alert("Unable to save changes. See log for details.")
-          console.log("ERROR:", res)
-        }
-      })
+      )
   }
 
   add() {
@@ -559,7 +571,7 @@ class EditTreeModal extends React.Component {
     return (
       <>
         <Container>
-          <Modal isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
+          <Modal fade={false} isOpen={show} toggle={this.cancel} size="fluid" style={{ width: "80%" }} >
 
             <ModalHeader toggle={this.cancel}>Edit list values</ModalHeader>
 

@@ -37,39 +37,5 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             return _context.Project.FirstOrDefault(x => x.ProjectId == id);
         }
-
-        //Add/Update
-        [EnableQuery]
-        public async Task<IActionResult> Post([FromBody]Project update)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            //Check that ProjectTitle is unique
-            if (_context.Project.AsNoTracking().FirstOrDefault(x => x.ProjectTitle == update.ProjectTitle) != null)
-            {
-                return BadRequest("ProjectTitle already exists");
-            }
-
-            var exiting = _context.Project.FirstOrDefault(x => x.ProjectId == update.ProjectId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref update);
-                HelperExtensions.ClearNullableInts(ref update);
-                _context.Project.Add(update);
-                await _context.SaveChangesAsync();
-                return Created(update);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(update);
-                await _context.SaveChangesAsync();
-                return Updated(exiting);
-            }
-        }
     }
 }

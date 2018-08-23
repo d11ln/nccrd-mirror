@@ -5,21 +5,27 @@ import userManager from '../Authentication/userManager'
 
 class Logout extends React.Component {
 
-    componentDidMount() {
-        userManager.signoutRedirect();
-    }
+  componentDidMount() {
 
-    render() {
+    //Remove auth token from OData config
+    o().config({
+      headers: []
+    })
 
-        return (
-            <>    
-                <div>
-                    <br />
-                    <label>&nbsp;Logging out...</label>
-                </div>
-            </>
-        )
-    }
+    userManager.signoutRedirect();
+  }
+
+  render() {
+
+    return (
+      <>
+        <div>
+          <br />
+          <label>&nbsp;Logging out...</label>
+        </div>
+      </>
+    )
+  }
 }
 
 export default Logout

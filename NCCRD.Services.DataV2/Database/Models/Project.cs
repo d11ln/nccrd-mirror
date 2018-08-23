@@ -79,11 +79,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         [IgnoreDataMember]
         public ValidationStatus ValidationStatus { get; set; } //Optional
 
-        //FK - MAOption
-        public int? MAOptionId { get; set; }
-        [IgnoreDataMember]
-        public MAOption MAOption { get; set; } //Optional
-
         public virtual ICollection<ProjectRegion> ProjectRegions { get; set; }
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }

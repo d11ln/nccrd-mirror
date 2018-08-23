@@ -34,7 +34,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command;   
 
-            builder.EntitySet<ProjectLookups>("ProjectLookups")
+            builder.EntitySet<Lookups>("Lookups")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command

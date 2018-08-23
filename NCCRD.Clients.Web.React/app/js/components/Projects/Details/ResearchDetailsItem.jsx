@@ -54,7 +54,7 @@ class ResearchDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_RESEARCH_TYPE}
-            persist={"api/ResearchType/AddOrUpdate"}
+            persist="ResearchType"
             allowEdit={true}
             newItemTemplate={{
               "ResearchTypeId": 0,
@@ -76,7 +76,7 @@ class ResearchDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_TARGET_AUDIENCE}
-            persist={"api/TargetAudience/AddOrUpdate"}
+            persist="TargetAudience"
             allowEdit={true}
             newItemTemplate={{
               "TargetAudienceId": 0,
@@ -93,7 +93,7 @@ class ResearchDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
             parentId={details.ResearchDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
-            persist="api/Sector/AddOrUpdate"
+            persist="Sector"
             type="tree"
             dependencies={[
               { key: "SectorTypeId", value: sectorType, type: "std" },

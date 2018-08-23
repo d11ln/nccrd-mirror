@@ -4,53 +4,64 @@ import { CallbackComponent } from "redux-oidc";
 import userManager from '../Authentication/userManager'
 import * as ACTION_TYPES from '../../constants/action-types'
 
+const o = require("odata")
+
 const mapStateToProps = (state, props) => {
-    let { globalData: { loading } } = state
-    return { loading }
+  let { globalData: { loading } } = state
+  return { loading }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        setLoading: payload => {
-            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
-        }
+  return {
+    setLoading: payload => {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
     }
+  }
 }
 
 class CallbackPage extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.successCallbackHandler = this.successCallbackHandler.bind(this);
-        this.errorCallbackHandler = this.errorCallbackHandler.bind(this);
-    }
+    this.successCallbackHandler = this.successCallbackHandler.bind(this);
+    this.errorCallbackHandler = this.errorCallbackHandler.bind(this);
+  }
 
-    successCallbackHandler(user) {
-        location = "#"
-    }
+  successCallbackHandler(user) {
 
-    errorCallbackHandler(e) {
-        console.log("Login failed!!", e)
-        location = "#"
-    }
+    //Add auth token to OData config
+    o().config({
+      headers: [
+        { name: "Authorization", value: "Bearer " + (user === null ? "" : user.access_token) }
+      ]
+    })
 
-    render() {
+    //Redirect
+    location = "#"
+  }
 
-        return (
-            <CallbackComponent
-                userManager={userManager}
-                successCallback={this.successCallbackHandler}
-                errorCallback={this.errorCallbackHandler}
-            >
-                <div>
-                    <br />
-                    <label>&nbsp;Redirecting...</label>
-                </div>
+  errorCallbackHandler(e) {
+    console.log("Login failed!!", e)
+    location = "#"
+  }
 
-            </CallbackComponent>
-        );
-    }
+  render() {
+
+    return (
+      <CallbackComponent
+        userManager={userManager}
+        successCallback={this.successCallbackHandler}
+        errorCallback={this.errorCallbackHandler}
+      >
+        <div>
+          <br />
+          <label>&nbsp;Redirecting...</label>
+        </div>
+
+      </CallbackComponent>
+    );
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallbackPage)

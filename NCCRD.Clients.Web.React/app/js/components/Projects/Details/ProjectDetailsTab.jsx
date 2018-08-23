@@ -159,7 +159,7 @@ class ProjectDetailsTab extends React.Component {
                         data={this.props.projectTypes}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_TYPE}
                         dispatch={ACTION_TYPES.LOAD_PROJECT_TYPE}
-                        persist={"api/ProjectType/AddOrUpdate"}
+                        persist="ProjectType"
                         allowEdit={true}
                         newItemTemplate={{
                             "ProjectTypeId": 0,
@@ -177,7 +177,7 @@ class ProjectDetailsTab extends React.Component {
                         dataFilterValue={projectDetails.ProjectTypeId}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE}
                         dispatch={ACTION_TYPES.LOAD_PROJECT_SUBTYPE}
-                        persist={"api/ProjectSubType/AddOrUpdate"}
+                        persist="ProjectSubType"
                         allowEdit={true}
                         dependencies={[
                             { key: "ProjectTypeId", value: this.props.projectTypes }
@@ -197,7 +197,7 @@ class ProjectDetailsTab extends React.Component {
                         data={this.props.projectStatus}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_STATUS}
                         dispatch={ACTION_TYPES.LOAD_PROJECT_STATUS}
-                        persist={"api/ProjectStatus/AddOrUpdate"}
+                        persist="ProjectStatus"
                         allowEdit={true}
                         newItemTemplate={{
                             "ProjectStatusId": 0,
@@ -218,7 +218,7 @@ class ProjectDetailsTab extends React.Component {
                         data={this.props.validationStatus}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_STATUS}
                         dispatch={ACTION_TYPES.LOAD_VALIDATION_STATUS}
-                        persist={"api/ValidationStatus/AddOrUpdate"}
+                        persist="ValidationStatus"
                         allowEdit={true}
                         newItemTemplate={{
                             "ValidationStatusId": 0,
@@ -234,6 +234,17 @@ class ProjectDetailsTab extends React.Component {
                         data={this.props.users}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER}
                         allowEdit={false}
+                        dispatch={ACTION_TYPES.LOAD_USERS}
+                        persist="User"
+                        newItemTemplate={{
+                            "UserId": 0,
+                            "EmailAddress": "",
+                            "FirstName": "",
+                            "Surname": "",
+                            "Organisation": "",
+                            "PhoneNumber": "",
+                            "MobileNumber": ""
+                        }}
                     />
                     {/* <SelectComponent
                         id="selProjectMAOptions"
@@ -243,7 +254,7 @@ class ProjectDetailsTab extends React.Component {
                         data={this.props.maOptions}
                         setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION}
                         // dispatch={ACTION_TYPES.LOAD_MA_OPTIONS}
-                        // persist={"api/MAOptions/AddOrUpdate"}
+                        // persist="MAOptions"
                         allowEdit={false}
                     /> */}
                 </div>

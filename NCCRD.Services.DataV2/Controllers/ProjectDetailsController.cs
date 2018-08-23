@@ -33,60 +33,22 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             //Get project and details
             var project = _context.Project.FirstOrDefault(x => x.ProjectId == id);
-            var adaptations = _context.AdaptationDetails.Where(x => x.ProjectId == id).ToArray();
-            var mitigations = _context.MitigationDetails.Where(x => x.ProjectId == id).ToArray();
-            var emissions = _context.MitigationEmissionsData.Where(x => x.ProjectId == id).ToArray();
-            var research = _context.ResearchDetails.Where(x => x.ProjectId == id).ToArray();
+            var adaptations = _context.AdaptationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.AdaptationDetailId).ToArray();
+            var mitigations = _context.MitigationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationDetailId).ToArray();
+            var emissions = _context.MitigationEmissionsData.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationEmissionsDataId).ToArray();
+            var research = _context.ResearchDetails.Where(x => x.ProjectId == id).OrderBy(x => x.ResearchDetailId).ToArray();
 
-            //Get lookups
-            var adaptationPurpose = _context.AdaptationPurpose.ToArray();
-            var carbonCredit = _context.CarbonCredit.ToArray();
-            var carbonCreditMarket = _context.CarbonCreditMarket.ToArray();
-            var cdmMethodology = _context.CDMMethodology.ToArray();
-            var cdmStatus = _context.CDMStatus.ToArray();
-            var projectStatus = _context.ProjectStatus.ToArray();
-            var projectType = _context.ProjectType.ToArray();
-            var projectSubType = _context.ProjectSubType.ToArray();
-            var researchType = _context.ResearchType.ToArray();
-            var sector = _context.Sector.ToArray();
-            var sectorType = _context.SectorType.ToArray();
-            var targetAudience = _context.TargetAudience.ToArray();
-            var typology = _context.Typology.ToArray();
-            var user = _context.Users.ToArray();
-            var validationStatus = _context.ValidationStatus.ToArray();
-            var voluntaryGoldStandard = _context.VoluntaryGoldStandard.ToArray();
-            var voluntaryMethodology = _context.VoluntaryMethodology.ToArray();
-
+            var lookups = new LookupsController(_context).GetLookups();
 
             return new ProjectDetails()
             {
-                Id = id,
+                Id = id == 0 ? int.Parse(DateTime.Now.ToString("HHmmssfff")) : id,
                 Project = project,
                 AdaptationDetails = adaptations,
                 MitigationDetails = mitigations,
                 MitigationEmissionsData = emissions,
                 ResearchDetails = research,
-                Lookups = new ProjectLookups()
-                {
-                    Id = id,
-                    AdaptationPurpose = adaptationPurpose,
-                    CarbonCredit = carbonCredit,
-                    CarbonCreditMarket = carbonCreditMarket,
-                    CDMMethodology = cdmMethodology,
-                    CDMStatus = cdmStatus,
-                    ProjectStatus = projectStatus,
-                    ProjectSubType = projectSubType,
-                    ProjectType = projectType,
-                    ResearchType = researchType,
-                    Sector = sector,
-                    SectorType = sectorType,
-                    TargetAudience = targetAudience,
-                    Typology = typology,
-                    User = user,
-                    ValidationStatus = validationStatus,
-                    VoluntaryGoldStandard = voluntaryGoldStandard,
-                    VoluntaryMethodology = voluntaryMethodology
-                }
+                Lookups = lookups
             };
         }
 

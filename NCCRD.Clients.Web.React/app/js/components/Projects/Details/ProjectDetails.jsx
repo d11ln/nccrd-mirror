@@ -203,66 +203,100 @@ class ProjectDetails extends React.Component {
     setLoading(true)
     setEditMode(false)
 
-    if ((!user || user.expired) && this.state.projectId === 'add') {
+    //Redirect back to /Projects if un-authenticated
+    let userState = (!user || user.expired)
+    if (userState && !_gf.isLocalhost() && this.state.projectId === 'add') {
       location.hash = "/projects"
     }
 
-    let oHandler = o(apiBaseURL + "ProjectDetails")
-      .find(projectId)
-      .expand("Project,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+    if (this.state.projectId === 'add') {
 
-    if (!detailsOnly) {
-      oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
-        "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Sector,SectorType,TargetAudience,Typology,User," +
-        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology)")
+      let newProject = {
+        "ProjectId": Date().valueOf(),
+        "ProjectTitle": "",
+        "ProjectDescription": "",
+        "LeadAgent": "",
+        "HostPartner": "",
+        "HostOrganisation": "",
+        "StartYear": 0,
+        "EndYear": 0,
+        "AlternativeContact": "",
+        "AlternativeContactEmail": "",
+        "Link": "",
+        "ValidationComments": "",
+        "BudgetLower": 0,
+        "BudgetUpper": 0,
+        "ProjectTypeId": 0,
+        "ProjectSubTypeId": 0,
+        "ProjectStatusId": 0,
+        "ProjectManagerId": 0,
+        "ValidationStatusId": 0,
+        "MAOptionId": 0,
+        "state": "modified"
+      }
+
+      setLoading(false)
+      setEditMode(true)
+      loadProjectDetails(newProject)
     }
+    else {
 
-    oHandler.get()
-      .then(
-        (oHandler) => {
-          //Success
-          console.log(oHandler.data)
+      let oHandler = o(apiBaseURL + "ProjectDetails")
+        .find(projectId)
+        .expand("Project,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
 
-          setLoading(false)
+      if (!detailsOnly) {
+        oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
+          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Sector,SectorType,TargetAudience,Typology,User," +
+          "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology)")
+      }
 
-          if (projectId === 'add') {
-            setEditMode(true)
+      oHandler.get()
+        .then(
+          (oHandler) => {
+            //Success
+            setLoading(false)
+
+            //Dispatch results
+            loadProjectDetails(oHandler.data.Project)
+            loadAdaptationDetails(oHandler.data.AdaptationDetails)
+            loadMitigationDetails(oHandler.data.MitigationDetails)
+            loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
+            loadResearchDetails(oHandler.data.ResearchDetails)
+
+            if (!detailsOnly) {
+              loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
+              loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
+              loadCarbonCreditMarket(oHandler.data.Lookups.CarbonCreditMarket)
+              loadCDMMethodology(oHandler.data.Lookups.CDMMethodology)
+              loadCDMStatus(oHandler.data.Lookups.CDMStatus)
+              loadProjectStatus(oHandler.data.Lookups.ProjectStatus)
+              loadProjectTypes(oHandler.data.Lookups.ProjectType)
+              loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
+              loadResearchType(oHandler.data.Lookups.ResearchType)
+              loadSectors(oHandler.data.Lookups.Sector)
+              loadSectorType(oHandler.data.Lookups.SectorType)
+              loadTargetAudience(oHandler.data.Lookups.TargetAudience)
+              loadTypology(oHandler.data.Lookups.Typology)
+
+              loadUsers(oHandler.data.Lookups.User.map(x => { 
+                x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
+                return x
+              }))
+
+              loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
+              loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
+              loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
+            }
+          },
+          (ex) => {
+            //Failed
+            setLoading(false)
+            this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
+            console.error("An error occurred while trying to fetch data from the server", ex)
           }
-
-          //Dispatch results
-          loadProjectDetails(oHandler.data.Project)
-          loadAdaptationDetails(oHandler.data.AdaptationDetails)
-          loadMitigationDetails(oHandler.data.MitigationDetails)
-          loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
-          loadResearchDetails(oHandler.data.ResearchDetails)
-
-          if (!detailsOnly) {
-            loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
-            loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
-            loadCarbonCreditMarket(oHandler.data.Lookups.CarbonCreditMarket)
-            loadCDMMethodology(oHandler.data.Lookups.CDMMethodology)
-            loadCDMStatus(oHandler.data.Lookups.CDMStatus)
-            loadProjectStatus(oHandler.data.Lookups.ProjectStatus)
-            loadProjectTypes(oHandler.data.Lookups.ProjectType)
-            loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
-            loadResearchType(oHandler.data.Lookups.ResearchType)
-            loadSectors(oHandler.data.Lookups.Sector)
-            loadSectorType(oHandler.data.Lookups.SectorType)
-            loadTargetAudience(oHandler.data.Lookups.TargetAudience)
-            loadTypology(oHandler.data.Lookups.Typology)
-            loadUsers(oHandler.data.Lookups.User.map(x => ({ Id: x.UserId, Value: (x.FirstName + " " + x.Surname + " (" + x.Username + ")") })))
-            loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
-            loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
-            loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
-          }
-        },
-        (ex) => {
-          //Failed
-          setLoading(false)
-          this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
-          console.error("An error occurred while trying to fetch data from the server", ex)
-        }
-      )
+        )
+    }
   }
 
   componentDidMount() {
@@ -357,8 +391,6 @@ class ProjectDetails extends React.Component {
       modified = true
     }
 
-    //console.log("data", dataObj)
-
     const successCallback = (data) => {
 
       this.showMessage("Success", "Changes saved successfully.")
@@ -367,14 +399,12 @@ class ProjectDetails extends React.Component {
 
       //Refresh data to get ID's from DB
       this.loadData(true)
-
-      //console.log("data", data)
     }
 
     const errorCallback = (status) => {
 
       o().config({ error: null }) //Reset error config
-      setLoading(false)   
+      setLoading(false)
     }
 
     if (modified) {
@@ -411,259 +441,7 @@ class ProjectDetails extends React.Component {
     else {
       successCallback()
     }
-
-    // let promises = []
-
-    // //Project
-    // if (projectDetails.state === 'modified') {
-    //   let data = _.clone(projectDetails)
-    //   delete data.state //OData can only bind to the original object spec which does not contain 'state'
-    //   promises.push(o(apiBaseURL + "Projects").post(data).save(() => { resetProjectState() }))
-    // }
-
-    // adaptationDetails.forEach(item => {
-    //   if (item.state === 'modified') {
-    //     delete item.state //OData can only bind to the original object spec which does not contain 'state'
-    //     item.ProjectId = projectId //Asociate with current project
-    //     promises.push(o(apiBaseURL + "AdaptationDetails").post(item).save(() => { resetAdaptationState() }))
-    //   }
-    // })
-
-    // mitigationDetails.forEach(item => {
-    //   if (item.state === 'modified') {
-    //     delete item.state //OData can only bind to the original object spec which does not contain 'state'
-    //     item.ProjectId = projectId //Asociate with current project
-    //     promises.push(o(apiBaseURL + "MitigationDetails").post(item).save(() => { resetMitigationState() }))
-    //   }
-    // })
-
-    // emissionsData.forEach(item => {
-    //   if (item.state === 'modified') {
-    //     delete item.state //OData can only bind to the original object spec which does not contain 'state'
-    //     item.ProjectId = projectId //Asociate with current project
-    //     promises.push(o(apiBaseURL + "MitigationEmissionsData").post(item).save(() => { resetEmissionState() }))
-    //   }
-    // })
-
-    // researchDetails.forEach(item => {
-    //   if (item.state === 'modified') {
-    //     delete item.state //OData can only bind to the original object spec which does not contain 'state'
-    //     item.ProjectId = projectId //Asociate with current project
-    //     promises.push(o(apiBaseURL + "ResearchDetails").post(item).save(() => { resetResearchState() }))
-    //   }
-    // })
-
-    // Promise.all(promises)
-    //   .then(() => {
-    //     o().config({ error: null }) //Reset error config
-
-    //     //Hide loading
-    //     setLoading(false)
-
-    //     //disable editing on success
-    //     setEditMode(false)
-
-    //     this.showMessage("Success", "Changes saved successfully.")
-    //   })
-    //   .catch((ex) => {
-    //     setLoading(false)
-    //   })
-
   }
-
-  // SaveProjectChanges() {
-
-  //   let { projectDetails, user } = this.props
-  //   let result = true
-
-  //   if (projectDetails.state == "modified") {
-
-  //     //OData can only bind to the original object spec
-  //     //which does not contain 'state'
-  //     delete projectDetails.state
-
-  //     //Handle error messages with error-config in order 
-  //     //to get error message back and not just code
-  //     o().config({
-  //       error: (code, error) => {
-  //         this.showMessage("Unable to save Project changes", JSON.parse(error).value)
-  //         console.error("Unable to save Project changes", code, error)
-  //       }
-  //     })
-
-  //     return Promise.all([
-  //       o(apiBaseURL + "Projects")
-  //         .post(projectDetails)
-  //         .save(
-  //           (data) => {
-  //             this.showMessage("Success", "Changes saved successfully.")
-  //           },
-  //           (ex) => {
-  //             //This is need so that the error is not logged as 'Uncaught'
-  //             result = false
-  //           })
-  //     ])
-  //       .then(() => {
-  //         o().config({ error: null }) //Reset error config
-  //         return result
-  //       })
-  //   }
-  //   else {
-  //     return false
-  //   }
-  // }
-
-  // SaveAdaptationChanges() {
-
-  //   let { adaptationDetails, resetAdaptationState, user } = this.props
-  //   let result = true
-
-  //   return Promise.all(
-  //     adaptationDetails.map((adaptation) => {
-
-  //       if (result === true && adaptation.state === "modified") {
-
-  //         let strPostData = JSON.stringify(adaptation)
-  //         let url = apiBaseURL + "api/AdaptationDetails/AddOrUpdate"
-
-  //         return fetch(url, {
-  //           method: 'post',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-  //           },
-  //           body: strPostData
-  //         })
-  //           .then((res) => res.json())
-  //           .then((res) => {
-
-  //             if (result === true && res !== true) {
-  //               result = res
-  //             }
-  //             else if (res === true) {
-  //               resetAdaptationState(adaptation)
-  //             }
-  //           })
-  //       }
-  //     })
-  //   ).then(() => {
-  //     return result
-  //   })
-  // }
-
-  // SaveMitigationChanges() {
-
-  //   let { mitigationDetails, resetMitigationState, user } = this.props
-  //   let result = true
-
-  //   return Promise.all(
-  //     mitigationDetails.map((mitigation) => {
-
-  //       if (result === true && mitigation.state === "modified") {
-
-  //         let strPostData = JSON.stringify(mitigation)
-  //         let url = apiBaseURL + "api/MitigationDetails/AddOrUpdate"
-
-  //         return fetch(url, {
-  //           method: 'post',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-  //           },
-  //           body: strPostData
-  //         })
-  //           .then((res) => res.json())
-  //           .then((res) => {
-
-  //             if (result === true && res !== true) {
-  //               result = res
-  //             }
-  //             else if (res === true) {
-  //               resetMitigationState(mitigation)
-  //             }
-  //           })
-  //       }
-  //     })
-  //   ).then(() => {
-  //     return result
-  //   })
-  // }
-
-  // SaveEmissionsChanges() {
-
-  //   let { emissionsData, resetEmissionState, user } = this.props
-  //   let result = true
-
-  //   return Promise.all(
-  //     emissionsData.map((emissions) => {
-
-  //       if (result === true && emissions.state === "modified") {
-
-  //         let strPostData = JSON.stringify(emissions)
-  //         let url = apiBaseURL + "api/MitigationEmissionsData/AddOrUpdate"
-
-  //         return fetch(url, {
-  //           method: 'post',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-  //           },
-  //           body: strPostData
-  //         })
-  //           .then((res) => res.json())
-  //           .then((res) => {
-
-  //             if (result === true && res !== true) {
-  //               result = res
-  //             }
-  //             else if (res === true) {
-  //               resetEmissionState(emissions)
-  //             }
-  //           })
-  //       }
-  //     })
-  //   ).then(() => {
-  //     return result
-  //   })
-  // }
-
-  // SaveResearchChanges() {
-
-  //   let { researchDetails, resetResearchState, user } = this.props
-  //   let result = true
-
-  //   return Promise.all(
-  //     researchDetails.map((research) => {
-
-  //       if (result === true && research.state === "modified") {
-
-  //         let strPostData = JSON.stringify(research)
-  //         let url = apiBaseURL + "api/ResearchDetails/AddOrUpdate"
-
-  //         return fetch(url, {
-  //           method: 'post',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             "Authorization": "Bearer " + (user === null ? "" : user.access_token)
-  //           },
-  //           body: strPostData
-  //         })
-  //           .then((res) => res.json())
-  //           .then((res) => {
-
-  //             if (result === true && res !== true) {
-  //               result = res
-  //             }
-  //             else if (res === true) {
-  //               resetResearchState(research)
-  //             }
-  //           })
-  //       }
-  //     })
-  //   ).then(() => {
-  //     return result
-  //   })
-  // }
 
   discardClick() {
     this.setState({ discardModal: true })
@@ -676,12 +454,12 @@ class ProjectDetails extends React.Component {
     this.setState({ discardModal: false })
     setEditMode(false)
 
-    if (this.state.navBack === true) {
+    if (this.state.navBack === true || this.state.projectId === 'add') {
       this.navBack()
     }
     else {
       //Re-load data - discarding changes
-      this.loadData()
+      this.loadData(true)
     }
   }
 

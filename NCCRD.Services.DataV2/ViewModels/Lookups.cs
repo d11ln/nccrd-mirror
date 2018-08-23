@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NCCRD.Services.DataV2.ViewModels
 {
-    public class ProjectLookups
+    public class Lookups
     {
         public int Id { get; set; }
 

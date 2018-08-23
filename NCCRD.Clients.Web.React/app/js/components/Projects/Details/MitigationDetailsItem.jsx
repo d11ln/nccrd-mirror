@@ -41,7 +41,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT}
-            persist={"api/CarbonCredit/AddOrUpdate"}
+            persist="CarbonCredit"
             allowEdit={true}
             newItemTemplate={{
               "CarbonCreditId": 0,
@@ -58,7 +58,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT_MARKET}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET}
-            persist={"api/CarbonCreditMarket/AddOrUpdate"}
+            persist="CarbonCreditMarket"
             allowEdit={true}
             newItemTemplate={{
               "CarbonCreditMarketId": 0,
@@ -75,7 +75,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_STATUS}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CDM_STATUS}
-            persist={"api/CDMStatus/AddOrUpdate"}
+            persist="CDMStatus"
             allowEdit={true}
             newItemTemplate={{
               "CDMStatusId": 0,
@@ -97,7 +97,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_METHODOLOGY}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_CDM_METHODOLOGY}
-            persist={"api/CDMMethodology/AddOrUpdate"}
+            persist="CDMMethodology"
             allowEdit={true}
             newItemTemplate={{
               "CDMMethodologyId": 0,
@@ -114,7 +114,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_METHODOLOGY}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY}
-            persist={"api/VoluntaryMethodology/AddOrUpdate"}
+            persist="VoluntaryMethodology"
             allowEdit={true}
             newItemTemplate={{
               "VoluntaryMethodologyId": 0,
@@ -131,7 +131,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD}
-            persist={"api/VoluntaryGoldStandard/AddOrUpdate"}
+            persist="VoluntaryGoldStandard"
             allowEdit={true}
             newItemTemplate={{
               "VoluntaryGoldStandardId": 0,
@@ -169,7 +169,7 @@ class MitigationDetailsItem extends React.Component {
             setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_SECTOR}
             parentId={details.MitigationDetailId}
             dispatch={ACTION_TYPES.LOAD_SECTOR}
-            persist="api/Sector/AddOrUpdate"
+            persist="Sector"
             type="tree"
             dependencies={[
               { key: "SectorTypeId", value: sectorType, type: "std" },

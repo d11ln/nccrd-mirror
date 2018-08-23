@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace NCCRD.Services.DataV2.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,44 +77,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CDMStatus", x => x.CDMStatusId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Country",
-                columns: table => new
-                {
-                    CountryId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Country", x => x.CountryId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Drivers",
-                columns: table => new
-                {
-                    DriverId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Drivers", x => x.DriverId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Feasibility",
-                columns: table => new
-                {
-                    FeasibilityId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Feasibility", x => x.FeasibilityId);
                 });
 
             migrationBuilder.CreateTable(
@@ -236,32 +198,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SitePages",
-                columns: table => new
-                {
-                    SitePageId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PageTitle = table.Column<string>(maxLength: 450, nullable: false),
-                    URL = table.Column<string>(maxLength: 1000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SitePages", x => x.SitePageId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Stocks",
-                columns: table => new
-                {
-                    StockId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stocks", x => x.StockId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TargetAudience",
                 columns: table => new
                 {
@@ -273,20 +209,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TargetAudience", x => x.TargetAudienceId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Title",
-                columns: table => new
-                {
-                    TitleId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Title", x => x.TitleId);
                 });
 
             migrationBuilder.CreateTable(
@@ -303,16 +225,21 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
+                name: "Users",
                 columns: table => new
                 {
-                    UserRoleId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoleName = table.Column<string>(maxLength: 450, nullable: false)
+                    EmailAddress = table.Column<string>(maxLength: 450, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 450, nullable: false),
+                    MobileNumber = table.Column<string>(maxLength: 450, nullable: true),
+                    Organisation = table.Column<string>(maxLength: 450, nullable: false),
+                    PhoneNumber = table.Column<string>(maxLength: 450, nullable: true),
+                    Surname = table.Column<string>(maxLength: 450, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => x.UserRoleId);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -422,32 +349,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hazards",
-                columns: table => new
-                {
-                    HazardId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DriverId = table.Column<int>(nullable: false),
-                    StockId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Hazards", x => x.HazardId);
-                    table.ForeignKey(
-                        name: "FK_Hazards_Drivers_DriverId",
-                        column: x => x.DriverId,
-                        principalTable: "Drivers",
-                        principalColumn: "DriverId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Hazards_Stocks_StockId",
-                        column: x => x.StockId,
-                        principalTable: "Stocks",
-                        principalColumn: "StockId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sector",
                 columns: table => new
                 {
@@ -482,195 +383,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AccessRights",
-                columns: table => new
-                {
-                    AccessRightId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AllowAdd = table.Column<bool>(nullable: false),
-                    AllowDelete = table.Column<bool>(nullable: false),
-                    AllowRead = table.Column<bool>(nullable: false),
-                    AllowUpdate = table.Column<bool>(nullable: false),
-                    SitePageId = table.Column<int>(nullable: false),
-                    UserRoleId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccessRights", x => x.AccessRightId);
-                    table.ForeignKey(
-                        name: "FK_AccessRights_SitePages_SitePageId",
-                        column: x => x.SitePageId,
-                        principalTable: "SitePages",
-                        principalColumn: "SitePageId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccessRights_UserRoles_UserRoleId",
-                        column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "UserRoleId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Blocked = table.Column<bool>(nullable: true),
-                    FaxNumber = table.Column<string>(maxLength: 450, nullable: true),
-                    FirstName = table.Column<string>(maxLength: 450, nullable: false),
-                    JobTitle = table.Column<string>(maxLength: 450, nullable: true),
-                    MobileNumber = table.Column<string>(maxLength: 450, nullable: true),
-                    Organisation = table.Column<string>(maxLength: 450, nullable: false),
-                    Password = table.Column<string>(maxLength: 450, nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressCountry = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressLine1 = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressLine2 = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressLine3 = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressPostalCode = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressProvince = table.Column<string>(maxLength: 450, nullable: true),
-                    PhysicalAddressTown = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressCountry = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressLine1 = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressLine2 = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressLine3 = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressPostalCode = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressProvince = table.Column<string>(maxLength: 450, nullable: true),
-                    PostalAddressTown = table.Column<string>(maxLength: 450, nullable: true),
-                    Surname = table.Column<string>(maxLength: 450, nullable: false),
-                    TitleId = table.Column<int>(nullable: false),
-                    UserRoleId = table.Column<int>(nullable: false),
-                    Username = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Title_TitleId",
-                        column: x => x.TitleId,
-                        principalTable: "Title",
-                        principalColumn: "TitleId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_UserRoles_UserRoleId",
-                        column: x => x.UserRoleId,
-                        principalTable: "UserRoles",
-                        principalColumn: "UserRoleId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MAOptions",
-                columns: table => new
-                {
-                    MAOptionId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    FeasibilityId = table.Column<int>(nullable: false),
-                    HazardId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(maxLength: 450, nullable: false),
-                    SectorId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MAOptions", x => x.MAOptionId);
-                    table.ForeignKey(
-                        name: "FK_MAOptions_Feasibility_FeasibilityId",
-                        column: x => x.FeasibilityId,
-                        principalTable: "Feasibility",
-                        principalColumn: "FeasibilityId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MAOptions_Hazards_HazardId",
-                        column: x => x.HazardId,
-                        principalTable: "Hazards",
-                        principalColumn: "HazardId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MAOptions_Sector_SectorId",
-                        column: x => x.SectorId,
-                        principalTable: "Sector",
-                        principalColumn: "SectorId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppLog",
-                columns: table => new
-                {
-                    AppLogId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ActiveUserId = table.Column<int>(nullable: false),
-                    LogTime = table.Column<DateTime>(nullable: false),
-                    Message = table.Column<string>(nullable: false),
-                    MessageDetail = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppLog", x => x.AppLogId);
-                    table.ForeignKey(
-                        name: "FK_AppLog_Users_ActiveUserId",
-                        column: x => x.ActiveUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OptionFunder",
-                columns: table => new
-                {
-                    OptionFunderId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FunderId = table.Column<int>(nullable: false),
-                    MAOptionId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OptionFunder", x => x.OptionFunderId);
-                    table.ForeignKey(
-                        name: "FK_OptionFunder_Funders_FunderId",
-                        column: x => x.FunderId,
-                        principalTable: "Funders",
-                        principalColumn: "FunderId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OptionFunder_MAOptions_MAOptionId",
-                        column: x => x.MAOptionId,
-                        principalTable: "MAOptions",
-                        principalColumn: "MAOptionId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OptionRegion",
-                columns: table => new
-                {
-                    OptionRegionId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    MAOptionId = table.Column<int>(nullable: false),
-                    RegionId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OptionRegion", x => x.OptionRegionId);
-                    table.ForeignKey(
-                        name: "FK_OptionRegion_MAOptions_MAOptionId",
-                        column: x => x.MAOptionId,
-                        principalTable: "MAOptions",
-                        principalColumn: "MAOptionId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OptionRegion_Region_RegionId",
-                        column: x => x.RegionId,
-                        principalTable: "Region",
-                        principalColumn: "RegionId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
@@ -685,7 +397,6 @@ namespace NCCRD.Services.DataV2.Migrations
                     HostPartner = table.Column<string>(maxLength: 450, nullable: true),
                     LeadAgent = table.Column<string>(maxLength: 450, nullable: false),
                     Link = table.Column<string>(maxLength: 450, nullable: true),
-                    MAOptionId = table.Column<int>(nullable: true),
                     ProjectDescription = table.Column<string>(nullable: true),
                     ProjectManagerId = table.Column<int>(nullable: false),
                     ProjectStatusId = table.Column<int>(nullable: false),
@@ -700,13 +411,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Project", x => x.ProjectId);
-                    table.UniqueConstraint("ProjectTitleIndex", x => x.ProjectTitle);
-                    table.ForeignKey(
-                        name: "FK_Project_MAOptions_MAOptionId",
-                        column: x => x.MAOptionId,
-                        principalTable: "MAOptions",
-                        principalColumn: "MAOptionId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Project_Users_ProjectManagerId",
                         column: x => x.ProjectManagerId,
@@ -1018,16 +722,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AccessRights_SitePageId",
-                table: "AccessRights",
-                column: "SitePageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AccessRights_UserRoleId",
-                table: "AccessRights",
-                column: "UserRoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AdaptationDetails_AdaptationPurposeId",
                 table: "AdaptationDetails",
                 column: "AdaptationPurposeId");
@@ -1040,36 +734,6 @@ namespace NCCRD.Services.DataV2.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AdaptationDetails_SectorId",
                 table: "AdaptationDetails",
-                column: "SectorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppLog_ActiveUserId",
-                table: "AppLog",
-                column: "ActiveUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Hazards_DriverId",
-                table: "Hazards",
-                column: "DriverId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Hazards_StockId",
-                table: "Hazards",
-                column: "StockId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MAOptions_FeasibilityId",
-                table: "MAOptions",
-                column: "FeasibilityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MAOptions_HazardId",
-                table: "MAOptions",
-                column: "HazardId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MAOptions_SectorId",
-                table: "MAOptions",
                 column: "SectorId");
 
             migrationBuilder.CreateIndex(
@@ -1116,31 +780,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "IX_MitigationEmissionsData_ProjectId",
                 table: "MitigationEmissionsData",
                 column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionFunder_FunderId",
-                table: "OptionFunder",
-                column: "FunderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionFunder_MAOptionId",
-                table: "OptionFunder",
-                column: "MAOptionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionRegion_MAOptionId",
-                table: "OptionRegion",
-                column: "MAOptionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionRegion_RegionId",
-                table: "OptionRegion",
-                column: "RegionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Project_MAOptionId",
-                table: "Project",
-                column: "MAOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_ProjectManagerId",
@@ -1251,43 +890,18 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "IX_Sector_TypologyId",
                 table: "Sector",
                 column: "TypologyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_TitleId",
-                table: "Users",
-                column: "TitleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UserRoleId",
-                table: "Users",
-                column: "UserRoleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AccessRights");
-
-            migrationBuilder.DropTable(
                 name: "AdaptationDetails");
-
-            migrationBuilder.DropTable(
-                name: "AppLog");
-
-            migrationBuilder.DropTable(
-                name: "Country");
 
             migrationBuilder.DropTable(
                 name: "MitigationDetails");
 
             migrationBuilder.DropTable(
                 name: "MitigationEmissionsData");
-
-            migrationBuilder.DropTable(
-                name: "OptionFunder");
-
-            migrationBuilder.DropTable(
-                name: "OptionRegion");
 
             migrationBuilder.DropTable(
                 name: "ProjectFunder");
@@ -1303,9 +917,6 @@ namespace NCCRD.Services.DataV2.Migrations
 
             migrationBuilder.DropTable(
                 name: "VersionHistory");
-
-            migrationBuilder.DropTable(
-                name: "SitePages");
 
             migrationBuilder.DropTable(
                 name: "AdaptationPurpose");
@@ -1347,13 +958,13 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "ResearchType");
 
             migrationBuilder.DropTable(
+                name: "Sector");
+
+            migrationBuilder.DropTable(
                 name: "TargetAudience");
 
             migrationBuilder.DropTable(
                 name: "LocationType");
-
-            migrationBuilder.DropTable(
-                name: "MAOptions");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -1368,34 +979,13 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "ValidationStatus");
 
             migrationBuilder.DropTable(
-                name: "Feasibility");
-
-            migrationBuilder.DropTable(
-                name: "Hazards");
-
-            migrationBuilder.DropTable(
-                name: "Sector");
-
-            migrationBuilder.DropTable(
-                name: "Title");
-
-            migrationBuilder.DropTable(
-                name: "UserRoles");
-
-            migrationBuilder.DropTable(
-                name: "ProjectType");
-
-            migrationBuilder.DropTable(
-                name: "Drivers");
-
-            migrationBuilder.DropTable(
-                name: "Stocks");
-
-            migrationBuilder.DropTable(
                 name: "SectorType");
 
             migrationBuilder.DropTable(
                 name: "Typology");
+
+            migrationBuilder.DropTable(
+                name: "ProjectType");
         }
     }
 }

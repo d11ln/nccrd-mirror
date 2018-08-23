@@ -21,6 +21,6 @@ namespace NCCRD.Services.DataV2.ViewModels
         public ResearchDetail[] ResearchDetails { get; set; }
 
         //Lookup data
-        public ProjectLookups Lookups { get; set; }
+        public Lookups Lookups { get; set; }
     }
 }

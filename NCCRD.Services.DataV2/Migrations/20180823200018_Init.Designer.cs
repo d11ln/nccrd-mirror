@@ -11,8 +11,8 @@ using System;
 namespace NCCRD.Services.DataV2.Migrations
 {
     [DbContext(typeof(SQLDBContext))]
-    [Migration("20180809124629_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20180823200018_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,33 +21,7 @@ namespace NCCRD.Services.DataV2.Migrations
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AccessRight", b =>
-                {
-                    b.Property<int>("AccessRightId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("AllowAdd");
-
-                    b.Property<bool>("AllowDelete");
-
-                    b.Property<bool>("AllowRead");
-
-                    b.Property<bool>("AllowUpdate");
-
-                    b.Property<int>("SitePageId");
-
-                    b.Property<int>("UserRoleId");
-
-                    b.HasKey("AccessRightId");
-
-                    b.HasIndex("SitePageId");
-
-                    b.HasIndex("UserRoleId");
-
-                    b.ToTable("AccessRights");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AdaptationDetail", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.AdaptationDetail", b =>
                 {
                     b.Property<int>("AdaptationDetailId")
                         .ValueGeneratedOnAdd();
@@ -71,7 +45,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("AdaptationDetails");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AdaptationPurpose", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.AdaptationPurpose", b =>
                 {
                     b.Property<int>("AdaptationPurposeId")
                         .ValueGeneratedOnAdd();
@@ -87,28 +61,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("AdaptationPurpose");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AppLog", b =>
-                {
-                    b.Property<int>("AppLogId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ActiveUserId");
-
-                    b.Property<DateTime>("LogTime");
-
-                    b.Property<string>("Message")
-                        .IsRequired();
-
-                    b.Property<string>("MessageDetail");
-
-                    b.HasKey("AppLogId");
-
-                    b.HasIndex("ActiveUserId");
-
-                    b.ToTable("AppLog");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.CarbonCredit", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.CarbonCredit", b =>
                 {
                     b.Property<int>("CarbonCreditId")
                         .ValueGeneratedOnAdd();
@@ -124,7 +77,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("CarbonCredit");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.CarbonCreditMarket", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.CarbonCreditMarket", b =>
                 {
                     b.Property<int>("CarbonCreditMarketId")
                         .ValueGeneratedOnAdd();
@@ -140,7 +93,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("CarbonCreditMarket");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.CDMMethodology", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.CDMMethodology", b =>
                 {
                     b.Property<int>("CDMMethodologyId")
                         .ValueGeneratedOnAdd();
@@ -156,7 +109,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("CDMMethodology");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.CDMStatus", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.CDMStatus", b =>
                 {
                     b.Property<int>("CDMStatusId")
                         .ValueGeneratedOnAdd();
@@ -172,43 +125,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("CDMStatus");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Country", b =>
-                {
-                    b.Property<int>("CountryId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.HasKey("CountryId");
-
-                    b.ToTable("Country");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Driver", b =>
-                {
-                    b.Property<int>("DriverId")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("DriverId");
-
-                    b.ToTable("Drivers");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Feasibility", b =>
-                {
-                    b.Property<int>("FeasibilityId")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("FeasibilityId");
-
-                    b.ToTable("Feasibility");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Funder", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Funder", b =>
                 {
                     b.Property<int>("FunderId")
                         .ValueGeneratedOnAdd();
@@ -224,7 +141,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("Funders");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.FundingStatus", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.FundingStatus", b =>
                 {
                     b.Property<int>("FundingStatusId")
                         .ValueGeneratedOnAdd();
@@ -240,25 +157,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("FundingStatus");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Hazard", b =>
-                {
-                    b.Property<int>("HazardId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("DriverId");
-
-                    b.Property<int>("StockId");
-
-                    b.HasKey("HazardId");
-
-                    b.HasIndex("DriverId");
-
-                    b.HasIndex("StockId");
-
-                    b.ToTable("Hazards");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Location", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Location", b =>
                 {
                     b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd();
@@ -288,7 +187,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("Location");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.LocationType", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.LocationType", b =>
                 {
                     b.Property<int>("LocationTypeId")
                         .ValueGeneratedOnAdd();
@@ -302,35 +201,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("LocationType");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.MAOption", b =>
-                {
-                    b.Property<int>("MAOptionId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("FeasibilityId");
-
-                    b.Property<int>("HazardId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.Property<int>("SectorId");
-
-                    b.HasKey("MAOptionId");
-
-                    b.HasIndex("FeasibilityId");
-
-                    b.HasIndex("HazardId");
-
-                    b.HasIndex("SectorId");
-
-                    b.ToTable("MAOptions");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.MitigationDetail", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.MitigationDetail", b =>
                 {
                     b.Property<int>("MitigationDetailId")
                         .ValueGeneratedOnAdd();
@@ -381,7 +252,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("MitigationDetails");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.MitigationEmissionsData", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.MitigationEmissionsData", b =>
                 {
                     b.Property<int>("MitigationEmissionsDataId")
                         .ValueGeneratedOnAdd();
@@ -447,43 +318,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("MitigationEmissionsData");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.OptionFunder", b =>
-                {
-                    b.Property<int>("OptionFunderId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("FunderId");
-
-                    b.Property<int>("MAOptionId");
-
-                    b.HasKey("OptionFunderId");
-
-                    b.HasIndex("FunderId");
-
-                    b.HasIndex("MAOptionId");
-
-                    b.ToTable("OptionFunder");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.OptionRegion", b =>
-                {
-                    b.Property<int>("OptionRegionId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("MAOptionId");
-
-                    b.Property<int>("RegionId");
-
-                    b.HasKey("OptionRegionId");
-
-                    b.HasIndex("MAOptionId");
-
-                    b.HasIndex("RegionId");
-
-                    b.ToTable("OptionRegion");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Project", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Project", b =>
                 {
                     b.Property<int>("ProjectId")
                         .ValueGeneratedOnAdd();
@@ -514,8 +349,6 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.Property<string>("Link")
                         .HasMaxLength(450);
 
-                    b.Property<int?>("MAOptionId");
-
                     b.Property<string>("ProjectDescription");
 
                     b.Property<int>("ProjectManagerId");
@@ -540,11 +373,6 @@ namespace NCCRD.Services.DataV2.Migrations
 
                     b.HasKey("ProjectId");
 
-                    b.HasAlternateKey("ProjectTitle")
-                        .HasName("ProjectTitleIndex");
-
-                    b.HasIndex("MAOptionId");
-
                     b.HasIndex("ProjectManagerId");
 
                     b.HasIndex("ProjectStatusId");
@@ -558,7 +386,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectFunder", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectFunder", b =>
                 {
                     b.Property<int>("ProjectFunderId")
                         .ValueGeneratedOnAdd();
@@ -580,7 +408,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ProjectFunder");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectLocation", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectLocation", b =>
                 {
                     b.Property<int>("ProjectLocationId")
                         .ValueGeneratedOnAdd();
@@ -598,7 +426,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ProjectLocation");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectRegion", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectRegion", b =>
                 {
                     b.Property<int>("ProjectRegionId")
                         .ValueGeneratedOnAdd();
@@ -616,7 +444,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ProjectRegion");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectStatus", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectStatus", b =>
                 {
                     b.Property<int>("ProjectStatusId")
                         .ValueGeneratedOnAdd();
@@ -632,7 +460,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ProjectStatus");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectSubType", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectSubType", b =>
                 {
                     b.Property<int>("ProjectSubTypeId")
                         .ValueGeneratedOnAdd();
@@ -652,7 +480,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ProjectSubType");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectType", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectType", b =>
                 {
                     b.Property<int>("ProjectTypeId")
                         .ValueGeneratedOnAdd();
@@ -668,7 +496,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ProjectType");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Region", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Region", b =>
                 {
                     b.Property<int>("RegionId")
                         .ValueGeneratedOnAdd();
@@ -692,7 +520,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("Region");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ResearchDetail", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ResearchDetail", b =>
                 {
                     b.Property<int>("ResearchDetailId")
                         .ValueGeneratedOnAdd();
@@ -725,7 +553,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ResearchDetails");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ResearchType", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ResearchType", b =>
                 {
                     b.Property<int>("ResearchTypeId")
                         .ValueGeneratedOnAdd();
@@ -741,7 +569,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ResearchType");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Sector", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Sector", b =>
                 {
                     b.Property<int>("SectorId")
                         .ValueGeneratedOnAdd();
@@ -767,7 +595,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("Sector");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.SectorType", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.SectorType", b =>
                 {
                     b.Property<int>("SectorTypeId")
                         .ValueGeneratedOnAdd();
@@ -781,35 +609,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("SectorType");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.SitePage", b =>
-                {
-                    b.Property<int>("SitePageId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("PageTitle")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.Property<string>("URL")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.HasKey("SitePageId");
-
-                    b.ToTable("SitePages");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Stock", b =>
-                {
-                    b.Property<int>("StockId")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("StockId");
-
-                    b.ToTable("Stocks");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.TargetAudience", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.TargetAudience", b =>
                 {
                     b.Property<int>("TargetAudienceId")
                         .ValueGeneratedOnAdd();
@@ -825,23 +625,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("TargetAudience");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Title", b =>
-                {
-                    b.Property<int>("TitleId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.HasKey("TitleId");
-
-                    b.ToTable("Title");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Typology", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Typology", b =>
                 {
                     b.Property<int>("TypologyId")
                         .ValueGeneratedOnAdd();
@@ -855,21 +639,17 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("Typology");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.User", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool?>("Blocked");
-
-                    b.Property<string>("FaxNumber")
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
                         .HasMaxLength(450);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.Property<string>("JobTitle")
                         .HasMaxLength(450);
 
                     b.Property<string>("MobileNumber")
@@ -879,90 +659,19 @@ namespace NCCRD.Services.DataV2.Migrations
                         .IsRequired()
                         .HasMaxLength(450);
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressCountry")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressLine1")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressLine2")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressLine3")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressPostalCode")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressProvince")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PhysicalAddressTown")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressCountry")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressLine1")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressLine2")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressLine3")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressPostalCode")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressProvince")
-                        .HasMaxLength(450);
-
-                    b.Property<string>("PostalAddressTown")
                         .HasMaxLength(450);
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(450);
 
-                    b.Property<int>("TitleId");
-
-                    b.Property<int>("UserRoleId");
-
-                    b.Property<string>("Username")
-                        .IsRequired();
-
                     b.HasKey("UserId");
-
-                    b.HasIndex("TitleId");
-
-                    b.HasIndex("UserRoleId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.UserRole", b =>
-                {
-                    b.Property<int>("UserRoleId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.HasKey("UserRoleId");
-
-                    b.ToTable("UserRoles");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ValidationStatus", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ValidationStatus", b =>
                 {
                     b.Property<int>("ValidationStatusId")
                         .ValueGeneratedOnAdd();
@@ -978,7 +687,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("ValidationStatus");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.VersionHistory", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.VersionHistory", b =>
                 {
                     b.Property<int>("VersionHistoryId")
                         .ValueGeneratedOnAdd();
@@ -996,7 +705,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("VersionHistory");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.VoluntaryGoldStandard", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.VoluntaryGoldStandard", b =>
                 {
                     b.Property<int>("VoluntaryGoldStandardId")
                         .ValueGeneratedOnAdd();
@@ -1012,7 +721,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("VoluntaryGoldStandard");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.VoluntaryMethodology", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.VoluntaryMethodology", b =>
                 {
                     b.Property<int>("VoluntaryMethodologyId")
                         .ValueGeneratedOnAdd();
@@ -1028,288 +737,193 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.ToTable("VoluntaryMethodology");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AccessRight", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.AdaptationDetail", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.SitePage", "SitePage")
-                        .WithMany()
-                        .HasForeignKey("SitePageId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.UserRole", "UserRole")
-                        .WithMany()
-                        .HasForeignKey("UserRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AdaptationDetail", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.AdaptationPurpose", "AdaptationPurpose")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.AdaptationPurpose", "AdaptationPurpose")
                         .WithMany()
                         .HasForeignKey("AdaptationPurposeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
-                        .WithMany()
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
+                        .WithMany("AdaptationDetails")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Sector", "Sector")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "Sector")
                         .WithMany()
                         .HasForeignKey("SectorId");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.AppLog", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.MitigationDetail", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.User", "ActiveUser")
-                        .WithMany()
-                        .HasForeignKey("ActiveUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Hazard", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Stock", "Stock")
-                        .WithMany()
-                        .HasForeignKey("StockId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.MAOption", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Feasibility", "Feasibility")
-                        .WithMany()
-                        .HasForeignKey("FeasibilityId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Hazard", "Hazard")
-                        .WithMany()
-                        .HasForeignKey("HazardId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Sector", "Sector")
-                        .WithMany()
-                        .HasForeignKey("SectorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.MitigationDetail", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.CDMMethodology", "CDMMethodology")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.CDMMethodology", "CDMMethodology")
                         .WithMany()
                         .HasForeignKey("CDMMethodologyId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.CDMStatus", "CDMStatus")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.CDMStatus", "CDMStatus")
                         .WithMany()
                         .HasForeignKey("CDMStatusId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.CarbonCredit", "CarbonCredit")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.CarbonCredit", "CarbonCredit")
                         .WithMany()
                         .HasForeignKey("CarbonCreditId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.CarbonCreditMarket", "CarbonCreditMarket")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.CarbonCreditMarket", "CarbonCreditMarket")
                         .WithMany()
                         .HasForeignKey("CarbonCreditMarketId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
-                        .WithMany()
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
+                        .WithMany("MitigationDetails")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Sector", "Sector")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "Sector")
                         .WithMany()
                         .HasForeignKey("SectorId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.VoluntaryGoldStandard", "VoluntaryGoldStandard")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.VoluntaryGoldStandard", "VoluntaryGoldStandard")
                         .WithMany()
                         .HasForeignKey("VoluntaryGoldStandardId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.VoluntaryMethodology", "VoluntaryMethodology")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.VoluntaryMethodology", "VoluntaryMethodology")
                         .WithMany()
                         .HasForeignKey("VoluntaryMethodologyId");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.MitigationEmissionsData", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.MitigationEmissionsData", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.OptionFunder", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Project", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Funder", "Funder")
-                        .WithMany()
-                        .HasForeignKey("FunderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.MAOption", "MAOption")
-                        .WithMany()
-                        .HasForeignKey("MAOptionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.OptionRegion", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.MAOption", "MAOption")
-                        .WithMany()
-                        .HasForeignKey("MAOptionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Region", "Region")
-                        .WithMany()
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Project", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.MAOption", "MAOption")
-                        .WithMany()
-                        .HasForeignKey("MAOptionId");
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.User", "ProjectManager")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.User", "ProjectManager")
                         .WithMany()
                         .HasForeignKey("ProjectManagerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.ProjectStatus", "ProjectStatus")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectStatus", "ProjectStatus")
                         .WithMany()
                         .HasForeignKey("ProjectStatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.ProjectSubType", "ProjectSubType")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectSubType", "ProjectSubType")
                         .WithMany()
                         .HasForeignKey("ProjectSubTypeId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.ProjectType", "ProjectType")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectType", "ProjectType")
                         .WithMany()
                         .HasForeignKey("ProjectTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.ValidationStatus", "ValidationStatus")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ValidationStatus", "ValidationStatus")
                         .WithMany()
                         .HasForeignKey("ValidationStatusId");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectFunder", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectFunder", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Funder", "Funder")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Funder", "Funder")
                         .WithMany()
                         .HasForeignKey("FunderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.FundingStatus", "FundingStatus")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.FundingStatus", "FundingStatus")
                         .WithMany()
                         .HasForeignKey("FundingStatusId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectLocation", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectLocation", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Location", "Location")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectRegion", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectRegion", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
-                        .WithMany()
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
+                        .WithMany("ProjectRegions")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Region", "Region")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Region", "Region")
                         .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ProjectSubType", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectSubType", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.ProjectType", "ProjectType")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectType", "ProjectType")
                         .WithMany()
                         .HasForeignKey("ProjectTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Region", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Region", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.LocationType", "LocationType")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.LocationType", "LocationType")
                         .WithMany()
                         .HasForeignKey("LocationTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Region", "ParentRegion")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Region", "ParentRegion")
                         .WithMany()
                         .HasForeignKey("ParentRegionId");
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.ResearchDetail", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ResearchDetail", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Project", "Project")
-                        .WithMany()
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
+                        .WithMany("ResearchDetails")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.ResearchType", "ResearchType")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ResearchType", "ResearchType")
                         .WithMany()
                         .HasForeignKey("ResearchTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Sector", "Sector")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "Sector")
                         .WithMany()
                         .HasForeignKey("SectorId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.TargetAudience", "TargetAudience")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.TargetAudience", "TargetAudience")
                         .WithMany()
                         .HasForeignKey("TargetAudienceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.Sector", b =>
+            modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Sector", b =>
                 {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Sector", "ParentSector")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "ParentSector")
                         .WithMany()
                         .HasForeignKey("ParentSectorId");
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.SectorType", "SectorType")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.SectorType", "SectorType")
                         .WithMany()
                         .HasForeignKey("SectorTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Typology", "Typology")
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.Typology", "Typology")
                         .WithMany()
                         .HasForeignKey("TypologyId");
-                });
-
-            modelBuilder.Entity("NCCRD.Services.DataV2.DBModels.User", b =>
-                {
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.Title", "Title")
-                        .WithMany()
-                        .HasForeignKey("TitleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.DBModels.UserRole", "UserRole")
-                        .WithMany()
-                        .HasForeignKey("UserRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

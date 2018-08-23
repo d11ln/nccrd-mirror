@@ -19,9 +19,8 @@ namespace NCCRD.Services.DataV2.Database.Models
         public string Value { get; set; }
 
         //FK - SectorType
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "The SectorType field is required.")]
         public int SectorTypeId { get; set; }
-        [Required]
         [IgnoreDataMember]
         public SectorType SectorType { get; set; }
 

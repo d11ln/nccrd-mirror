@@ -30,34 +30,5 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             return _context.AdaptationDetails.AsQueryable();
         }
-
-        //Add/Update
-        [EnableQuery]
-        public async Task<IActionResult> Post([FromBody]AdaptationDetail update)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var exiting = _context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == update.AdaptationDetailId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref update);
-                HelperExtensions.ClearNullableInts(ref update);
-                _context.AdaptationDetails.Add(update);
-                await _context.SaveChangesAsync();
-                return Created(update);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(update);
-                await _context.SaveChangesAsync();
-
-                return Updated(exiting);
-            }
-        }
     }
 }
