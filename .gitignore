@@ -309,3 +309,4 @@ paket-files/
 __pycache__/
 *.pyc
 /NCCRD.Services.DataV2/secrets.json
+/NCCRD_API/NCCRD.Services.DataV2/secrets.json
