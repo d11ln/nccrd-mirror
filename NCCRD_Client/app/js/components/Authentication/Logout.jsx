@@ -3,6 +3,8 @@
 import React from 'react'
 import userManager from '../Authentication/userManager'
 
+const o = require("odata")
+
 class Logout extends React.Component {
 
   componentDidMount() {

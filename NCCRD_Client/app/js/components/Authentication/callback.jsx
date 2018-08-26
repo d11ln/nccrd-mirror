@@ -5,6 +5,7 @@ import userManager from '../Authentication/userManager'
 import * as ACTION_TYPES from '../../constants/action-types'
 
 const o = require("odata")
+const _gf = require("../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
   let { globalData: { loading } } = state
@@ -38,7 +39,7 @@ class CallbackPage extends React.Component {
     })
 
     //Redirect
-    location = "#"
+    location = _gf.ReadLastUrl()  //"#"
   }
 
   errorCallbackHandler(e) {
