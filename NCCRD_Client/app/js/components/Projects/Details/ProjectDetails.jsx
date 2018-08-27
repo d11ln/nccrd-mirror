@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import {
   Container, Button, Modal, ModalBody, ModalHeader, ModalFooter,

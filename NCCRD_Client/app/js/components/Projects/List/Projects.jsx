@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'

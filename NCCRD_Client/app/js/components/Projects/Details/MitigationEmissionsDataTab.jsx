@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import { Button, Fa } from 'mdbreact'
 import { apiBaseURL } from "../../../constants/apiBaseURL"

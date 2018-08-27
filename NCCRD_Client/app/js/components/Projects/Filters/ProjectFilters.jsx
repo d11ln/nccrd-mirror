@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import { Button, Collapse } from 'mdbreact'
 import { connect } from 'react-redux'

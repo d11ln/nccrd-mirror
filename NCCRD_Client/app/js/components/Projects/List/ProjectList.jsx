@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'

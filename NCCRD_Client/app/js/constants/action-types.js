@@ -1,4 +1,6 @@
 
+'use strict'
+
 //Details
 export const LOAD_PROJECTS = "LOAD_PROJECTS";
 export const SET_PROJECT_SCROLL = "SET_PROJECT_SCROLL";

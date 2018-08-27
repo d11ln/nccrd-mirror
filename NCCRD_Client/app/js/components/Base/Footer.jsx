@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import { Col, Row, Container, Footer as MDBFooter, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact';
 

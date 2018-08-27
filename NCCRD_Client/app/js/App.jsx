@@ -1,3 +1,5 @@
+'use strict'
+
 //Styles - Ant.Design (has to be loaded before MDB so that MDB can replace all applicable styles)
 import 'antd/lib/style/index.css'
 
@@ -23,12 +25,17 @@ import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
 
+const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
 
 const mapStateToProps = (state, props) => {
   let { globalData: { loading } } = state
   return { loading }
 }
+
+//Enable OIDC Logging
+Oidc.Log.logger = console
+Oidc.Log.level = Oidc.Log.INFO
 
 /**
  * App

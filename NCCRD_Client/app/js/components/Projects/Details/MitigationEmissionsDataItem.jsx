@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import { apiBaseURL } from "../../../constants/apiBaseURL"
 import TextComponent from '../../Shared/TextComponent.jsx'

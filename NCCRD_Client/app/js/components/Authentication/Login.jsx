@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input } from 'mdbreact'
@@ -33,6 +31,9 @@ class Login extends React.Component {
   }
 
   render() {
+
+    console.log("window.location.origin", window.location.origin)
+
     return (
       <>
         <br />

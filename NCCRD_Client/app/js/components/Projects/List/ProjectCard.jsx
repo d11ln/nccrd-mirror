@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import { Card, CardBody, CardText, CardTitle, Button } from 'mdbreact'
 import { connect } from 'react-redux'
