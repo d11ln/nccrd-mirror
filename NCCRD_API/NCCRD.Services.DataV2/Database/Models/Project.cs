@@ -80,6 +80,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public ValidationStatus ValidationStatus { get; set; } //Optional
 
         public virtual ICollection<ProjectRegion> ProjectRegions { get; set; }
+        public virtual ICollection<ProjectLocation> ProjectLocations { get; set; }
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
         public virtual ICollection<ResearchDetail> ResearchDetails { get; set; }

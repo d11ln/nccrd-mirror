@@ -250,6 +250,39 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
+            builder.EntitySet<ProjectLocation>("ProjectLocations")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<Location>("Location")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            //Register ByPolygon function
+            //builder.Namespace = "Extensions";
+            //builder.EntityType<Project>()
+            //    .Collection
+            //    .Action("ByPolygon")
+            //    .Returns<IQueryable<Project>>()
+            //    .Parameter<Polygon>("polygon");
+
+            builder.Namespace = "Extensions";
+            builder.EntityType<Project>()
+                .Collection
+                .Action("ByPolygon")
+                .ReturnsCollectionViaEntitySetPath<Project>("bindingParameter")
+                .Parameter<Polygon>("polygon");
+
             return builder.GetEdmModel();
         }
     }
