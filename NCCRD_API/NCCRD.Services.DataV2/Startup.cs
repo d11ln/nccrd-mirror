@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNet.OData.Extensions;
+﻿using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NCCRD.Services.DataV2.Database.Contexts;
 
 namespace NCCRD.Services.DataV2
@@ -45,10 +38,10 @@ namespace NCCRD.Services.DataV2
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddOData();
             services.AddTransient<ODataModelBuilder>();
 
             services.AddMvc();
+            services.AddOData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +52,6 @@ namespace NCCRD.Services.DataV2
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseCors(builder => builder.WithOrigins("http://localhost:8080", "http://app01.saeon.ac.za/nccrdsite"));
             app.UseCors("CORSPolicy");
 
             app.UseMvc(routeBuilder =>
