@@ -20,7 +20,6 @@ import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
 import CallbackPage from '../js/components/Authentication/callback.jsx';
-import LoggedOut from './components/Authentication/LoggedOut.jsx';
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
@@ -93,7 +92,6 @@ class App extends React.Component {
               <Route path="/projects/:id" component={ProjectDetails} exact />
               <Route path="/login" component={Login} exact />
               <Route path="/logout" component={Logout} exact />
-              <Route path="/loggedout" component={LoggedOut} exact />
               <Route path="/callback" component={CallbackPage} />
             </Switch>
 

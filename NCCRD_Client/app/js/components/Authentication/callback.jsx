@@ -49,7 +49,7 @@ class CallbackPage extends React.Component {
       >
         <div>
           <br />
-          <label>&nbsp;Redirecting...</label>
+          <label style={{ marginLeft: "22px" }}>Logging in...</label>
         </div>
 
       </CallbackComponent>

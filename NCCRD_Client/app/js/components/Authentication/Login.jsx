@@ -37,7 +37,7 @@ class Login extends React.Component {
     return (
       <>
         <br />
-        <label>&nbsp;Redirecting...</label>
+        <label style={{ marginLeft: "22px" }}>Redirecting...</label>
       </>
     )
   }

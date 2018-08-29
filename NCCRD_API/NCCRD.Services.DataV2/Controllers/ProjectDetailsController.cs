@@ -54,7 +54,7 @@ namespace NCCRD.Services.DataV2.Controllers
         }
 
         //Add/Update
-        [Authorize(Roles = "Contributer,Custodian,Configurator,SysAdmin")]
+        [Authorize(Roles = "Contributor,Custodian,Configurator,SysAdmin")]
         [EnableQuery]
         public async Task<IActionResult> Post([FromBody]ProjectDetails data)
         {

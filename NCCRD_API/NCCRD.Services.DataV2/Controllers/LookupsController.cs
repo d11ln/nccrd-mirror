@@ -36,7 +36,7 @@ namespace NCCRD.Services.DataV2.Controllers
 
         //Add/Update
         [EnableQuery]
-        [Authorize(Roles = "Contributer,Custodian,Configurator,SysAdmin")]
+        [Authorize(Roles = "Contributor,Custodian,Configurator,SysAdmin")]
         public async Task<IActionResult> Post([FromBody]Lookups data)
         {
             if (!ModelState.IsValid)
