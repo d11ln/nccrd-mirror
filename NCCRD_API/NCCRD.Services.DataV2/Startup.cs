@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +44,23 @@ namespace NCCRD.Services.DataV2
 
             services.AddMvc();
             services.AddOData();
+
+            services
+                .AddAuthentication(GetAuthenticationOptions)
+                .AddJwtBearer(GetJwtBearerOptions);
+        }
+
+        private static void GetAuthenticationOptions(AuthenticationOptions options)
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+
+        private static void GetJwtBearerOptions(JwtBearerOptions options)
+        {
+            options.Authority = "http://identity.saeon.ac.za";
+            options.Audience = "http://identity.saeon.ac.za/resources";
+            options.RequireHttpsMetadata = false;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,13 +73,15 @@ namespace NCCRD.Services.DataV2
 
             app.UseCors("CORSPolicy");
 
-            app.UseMvc(routeBuilder =>
-            {
-                routeBuilder.MapODataServiceRoute(
-                    "ODataRoutes", 
-                    "odata", 
-                    modelBuilder.GetEdmModel(app.ApplicationServices));
-            });
+            app
+                .UseAuthentication()
+                .UseMvc(routeBuilder =>
+                {
+                    routeBuilder.MapODataServiceRoute(
+                        "ODataRoutes",
+                        "odata",
+                        modelBuilder.GetEdmModel(app.ApplicationServices));
+                });
         }
     }
 }

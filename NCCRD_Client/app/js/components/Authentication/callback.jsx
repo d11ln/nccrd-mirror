@@ -4,7 +4,6 @@ import { CallbackComponent } from "redux-oidc";
 import userManager from '../Authentication/userManager'
 import * as ACTION_TYPES from '../../constants/action-types'
 
-const o = require("odata")
 const _gf = require("../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
@@ -30,13 +29,6 @@ class CallbackPage extends React.Component {
   }
 
   successCallbackHandler(user) {
-
-    //Add auth token to OData config
-    o().config({
-      headers: [
-        { name: "Authorization", value: "Bearer " + (user === null ? "" : user.access_token) }
-      ]
-    })
 
     //Redirect
     location = _gf.ReadLastUrl()  //"#"

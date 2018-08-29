@@ -27,10 +27,12 @@ import Footer from './components/Base/Footer.jsx'
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
+const o = require("odata")
 
 const mapStateToProps = (state, props) => {
   let { globalData: { loading } } = state
-  return { loading }
+  let user = state.oidc.user
+  return { loading, user }
 }
 
 //Enable OIDC Logging
@@ -49,6 +51,24 @@ class App extends React.Component {
     if (location.toString().includes("navbar=hidden")) {
       this.state = { navbar: false }
       _gf.stripURLParam("navbar=hidden")
+    }
+  }
+
+  componentDidUpdate() {
+    let { user } = this.props
+    if (user && !user.expired) {
+      //Add auth token to OData global config
+      o().config({
+        headers: [
+          { name: "Authorization", value: "Bearer " + (user === null ? "" : user.access_token) }
+        ]
+      })
+    }
+    else {
+      //Remove auth token from OData global config
+      o().config({
+        headers: []
+      })
     }
   }
 

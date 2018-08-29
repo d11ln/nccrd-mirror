@@ -86,7 +86,7 @@ class Projects extends React.Component {
         <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
 
           {
-            ((user && !user.expired) || _gf.isLocalhost()) &&
+            ((user && !user.expired) /*|| _gf.isLocalhost()*/) &&
             <div>
               <Button data-tip="Add project" size="sm" floating color="primary" onClick={this.addProject}>
                 <Fa icon="plus" />

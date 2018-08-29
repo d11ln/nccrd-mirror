@@ -632,7 +632,7 @@ class ProjectDetails extends React.Component {
         </Container>
 
         {
-          ((user && !user.expired) || _gf.isLocalhost()) &&
+          ((user && !user.expired) /*|| _gf.isLocalhost()*/) &&
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">
@@ -640,7 +640,7 @@ class ProjectDetails extends React.Component {
 
                   {!editMode &&
                     <div>
-                      <Button /*data-tip="Edit"*/ size="sm" floating color="default" onClick={this.editClick}>
+                      <Button data-tip="Edit" size="sm" floating color="default" onClick={this.editClick}>
                         <Fa icon="pencil" />
                       </Button>
                       <br />
@@ -648,7 +648,7 @@ class ProjectDetails extends React.Component {
 
                   {(activeTabId !== "1" && editMode) &&
                     <div>
-                      <Button /*data-tip="Add Adaptation Details"*/ size="sm" floating color="primary" onClick={this.addClick}>
+                      <Button data-tip="Add Adaptation Details" size="sm" floating color="primary" onClick={this.addClick}>
                         <Fa icon="plus" />
                       </Button>
                     </div>
@@ -656,11 +656,11 @@ class ProjectDetails extends React.Component {
 
                   {editMode &&
                     <div>
-                      <Button /*data-tip="Discard changes"*/ size="sm" floating color="danger" onClick={this.discardClick}>
+                      <Button data-tip="Discard changes" size="sm" floating color="danger" onClick={this.discardClick}>
                         <Fa icon="trash" />
                       </Button>
                       <br />
-                      <Button /*data-tip="Save changes"*/ size="sm" floating color="default" onClick={this.saveClick}>
+                      <Button data-tip="Save changes" size="sm" floating color="default" onClick={this.saveClick}>
                         <Fa icon="save" />
                       </Button>
                     </div>}

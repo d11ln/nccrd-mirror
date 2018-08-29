@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Results;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace NCCRD.Services.DataV2.Controllers
 
         //Add/Update
         [EnableQuery]
+        [Authorize(Roles = "Contributer,Custodian,Configurator,SysAdmin")]
         public async Task<IActionResult> Post([FromBody]Lookups data)
         {
             if (!ModelState.IsValid)
