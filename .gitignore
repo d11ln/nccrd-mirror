@@ -308,3 +308,8 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Custom
+/NCCRD.Services.DataV2/secrets.json
+/NCCRD_API/NCCRD.Services.DataV2/secrets.json
+NCCRD_Client/app/js/secrets.js
