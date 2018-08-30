@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "./app/index.ejs",
   "scripts": {
-    "start": "run webpack-app --optimize-minimize --progress & echo 'Output files are saved in ./dist'",
+    "start": "npm run webpack-app --optimize-minimize --progress & echo 'Output files are saved in ./dist'",
     "app-dev": "webpack-dev-server --hot --watch-poll --progress=true --config ./webpack.dev.config.js",
-    "webpack-app": "./node_modules/.bin/webpack -p",
-    "webpack-dev": "./node_modules/.bin/webpack --progress=true --config ./webpack.dev.config.js"
+    "webpack-app": "./node_modules/.bin/webpack --progress=true -p"
   },
   "author": "SAEON",
   "license": "MIT",

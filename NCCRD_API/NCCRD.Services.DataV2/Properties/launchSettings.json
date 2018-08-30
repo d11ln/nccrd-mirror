@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/NCCRD.Services.DataV2",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:62553/",
       "sslPort": 0
@@ -17,7 +21,7 @@
       }
     },
     "NCCRD.Services.DataV2": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "odata",
       "environmentVariables": {

@@ -164,6 +164,26 @@ class ProjectList extends React.Component {
                 skip = (batchCount - 1) * batchSize
             }
 
+            //Handle error messages with error-config in order 
+            //to get error message back and not just code
+            o().config({
+                error: (code, error) => {
+
+                    console.log("code", code)
+                    console.log("error", error)
+
+                    // //Try to get & parse error message
+                    // let errorJS = JSON.parse(error)
+                    // let message = errorJS.value
+                    // if (typeof message === 'undefined') message = errorJS.error.message
+                    // if (typeof message === 'undefined') message = "(See log for error details)"
+
+                    // //Log error message & details
+                    // this.showMessage("Unable to save changes", message)
+                    // console.error("Unable to save changes", code, errorJS)
+                }
+            })
+
             //Get project list data
             //Setup oHandler
             var oHandler = o(apiBaseURL + "Projects")
@@ -182,9 +202,11 @@ class ProjectList extends React.Component {
                 .orderBy("ProjectTitle")
 
             oHandler.get((data) => {
+                o().config({ error: null }) //Reset error config
                 setLoading(false)
                 loadProjects(data)
             }, (error) => {
+                o().config({ error: null }) //Reset error config
                 setLoading(false)
                 this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
                 console.error("error", error)

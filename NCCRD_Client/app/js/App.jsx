@@ -55,20 +55,20 @@ class App extends React.Component {
 
   componentDidUpdate() {
     let { user } = this.props
+
+    let headers = []
+    headers.push({ name: "Accept", value: "application/json" })
+
     if (user && !user.expired) {
-      //Add auth token to OData global config
-      o().config({
-        headers: [
-          { name: "Authorization", value: "Bearer " + (user === null ? "" : user.access_token) }
-        ]
-      })
+      //Add auth token to headers
+      headers.push({ name: "Authorization", value: "Bearer " + (user === null ? "" : user.access_token) })
     }
-    else {
-      //Remove auth token from OData global config
-      o().config({
-        headers: []
-      })
-    }
+
+    //Add headers to OData global config
+    o().config({
+      headers: headers
+    })
+
   }
 
   render() {

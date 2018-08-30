@@ -27,7 +27,6 @@ class CustomNavbar extends React.Component {
 
         this.onClick = this.onClick.bind(this)
         this.toggle = this.toggle.bind(this)
-        this.Logout = this.Logout.bind(this)
         this.LoginLogout = this.LoginLogout.bind(this)
         this.GetUser = this.GetUser.bind(this)
         this.Register = this.Register.bind(this)
@@ -45,26 +44,23 @@ class CustomNavbar extends React.Component {
         });
     }
 
-    Logout() {
-        console.log("LOGOUT")
-    }
-
     LoginLogout() {
 
         let { user } = this.props
 
         if (!user || user.expired) {
-            return <a className="nav-link" onClick={this.LoginClicked} href="#/login"><b style={{ color: "black" }}>Login</b></a>
+            return <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/login"><b style={{ color: "black" }}>Login</b></a>
         }
         else {
-            return <a className="nav-link" href="#/logout"><b style={{ color: "black" }}>Logout</b></a>
+            return <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/logout"><b style={{ color: "black" }}>Logout</b></a>
         }
     }
 
-    LoginClicked() {
+    LoginLogoutClicked() {
         //Save current URL to cookie
         _gf.SaveCurrentUrl()
     }
+
 
     Register() {
         let { user } = this.props

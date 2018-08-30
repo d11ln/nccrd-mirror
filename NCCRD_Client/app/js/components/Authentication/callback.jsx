@@ -15,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setLoading: payload => {
       dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+    },
+    updateNav: payload => {
+      dispatch({ type: "NAV", payload })
     }
   }
 }
@@ -28,10 +31,19 @@ class CallbackPage extends React.Component {
     this.errorCallbackHandler = this.errorCallbackHandler.bind(this);
   }
 
+  componentDidMount(){
+    this.props.updateNav(location.hash)
+  }
+
   successCallbackHandler(user) {
 
     //Redirect
-    location = _gf.ReadLastUrl()  //"#"
+    let locHash = "#"
+    let lastUrl = _gf.ReadLastUrl()
+    if (!lastUrl.endsWith("logout")) {
+      locHash = lastUrl
+    }
+    location = locHash
   }
 
   errorCallbackHandler(e) {
