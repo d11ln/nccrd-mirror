@@ -13,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setLoading: payload => {
       dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+    },
+    updateNav: payload => {
+      dispatch({ type: "NAV", payload })
     }
   }
 }
@@ -26,6 +29,7 @@ class Login extends React.Component {
   componentDidMount() {
 
     //Hide loading and redirect to IDS
+    this.props.updateNav(location.hash)
     this.props.setLoading(false)
     userManager.signinRedirect()
   }

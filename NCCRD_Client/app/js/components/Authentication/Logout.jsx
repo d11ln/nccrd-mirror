@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import userManager from '../Authentication/userManager'
 
+const _gf = require("../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
@@ -20,58 +21,62 @@ class Logout extends React.Component {
 
   constructor(props) {
     super(props);
+    this.userSignedOut = this.userSignedOut.bind(this)
+    this.state = { signoutRequest: {} }
+  }
 
-    //Set initial state
-    this.state = { errorMsg: "" }
+  userSignedOut() {
+
+    //Back to last page
+    let locHash = "#"
+    let lastUrl = _gf.ReadLastUrl()
+    if (!lastUrl.endsWith("logout")) {
+      locHash = lastUrl
+    }
+    location = locHash
   }
 
   componentDidMount() {
 
+    let { user } = this.props
     this.props.updateNav(location.hash)
 
-    userManager.createSignoutRequest()
-      .then(signoutUrl => {
-        if (signoutUrl) {
-          fetch(signoutUrl)
-            .then(result => {
-              if (result.ok) {
-                userManager.removeUser()
-              }
-            })
-            .catch(ex => {
-              this.setState({ errorMsg: ex.toString() })
-            })
-        }
-      })
+    if (user && !user.expired) {
 
-    //userManager.signoutRedirect();
+      //Register signout event
+      userManager.events.addUserSignedOut(this.userSignedOut)
+
+      //Get signout url and push to state
+      userManager.createSignoutRequest()
+        .then(res => {
+          if (res) {
+            this.setState({ signoutRequest: res })
+          }
+        })
+    }
+  }
+
+  componentWillUnmount() {
+    //Unregister signout event
+    userManager.events.removeUserSignedOut(this.userSignedOut)
   }
 
   render() {
 
-    let { user } = this.props
+    let { signoutRequest } = this.state
 
     return (
       <>
         <br />
         <div style={{ marginLeft: "22px" }}>
-          {(user && !user.expired) &&
-            <div>
-              {(this.state.errorMsg === "") &&
-                <label>Logging out...</label>
-              }
-
-              <br />
-
-              {(this.state.errorMsg !== "") &&
-                <label>{this.state.errorMsg}</label>
-              }
-            </div>
-          }
-          {(!user || user.expired) &&
-            <label>You are logged out.</label>
-          }
+          <label>Logging out...</label>
         </div>
+
+        {/* Handle signout in hidden iframe */}
+        {signoutRequest !== "" &&
+          <iframe hidden src={signoutRequest.url}/>
+        }
+
       </>
     )
   }

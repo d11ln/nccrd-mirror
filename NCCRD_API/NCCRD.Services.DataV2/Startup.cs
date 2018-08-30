@@ -37,7 +37,9 @@ namespace NCCRD.Services.DataV2
             var connectionString = Configuration.GetConnectionString("NCCRD");
             services.AddDbContext<SQLDBContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString, o => {
+                    o.UseRowNumberForPaging(); //Backwards compatibility for for SQL 2008 R2
+                });
             });
 
             services.AddTransient<ODataModelBuilder>();
