@@ -5,7 +5,7 @@ import TextComponent from '../../Shared/TextComponent.jsx'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
-import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import * as ACTION_TYPES from "../../../constants/action-types"
 
 const mapStateToProps = (state, props) => {

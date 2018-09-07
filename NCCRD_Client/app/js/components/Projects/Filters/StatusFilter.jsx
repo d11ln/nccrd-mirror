@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
-import { apiBaseURL } from "../../../constants/apiBaseURL";
+import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 
 const _gf = require("../../../globalFunctions")

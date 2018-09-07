@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
-import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
 import MitigationDetailsTab from './MitigationDetailsTab.jsx'
@@ -16,7 +16,7 @@ import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../constants/ui_config';
+import { UILookup } from '../../../config/ui_config.js'
 import classnames from 'classnames';
 
 const _gf = require("../../../globalFunctions")

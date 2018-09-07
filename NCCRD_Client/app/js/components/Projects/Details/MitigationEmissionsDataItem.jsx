@@ -1,5 +1,5 @@
 import React from 'react'
-import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import TextComponent from '../../Shared/TextComponent.jsx'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'

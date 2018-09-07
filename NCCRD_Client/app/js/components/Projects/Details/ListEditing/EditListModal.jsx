@@ -4,7 +4,7 @@ import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter,
   Select, SelectInput, SelectOptions, SelectOption
 } from 'mdbreact'
-import { apiBaseURL } from "../../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../../config/apiBaseURL.cfg"
 import * as ACTION_TYPES from "../../../../constants/action-types"
 
 const _gf = require("../../../../globalFunctions")

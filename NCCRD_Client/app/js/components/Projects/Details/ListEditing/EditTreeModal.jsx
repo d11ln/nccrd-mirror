@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter
 } from 'mdbreact'
-import { apiBaseURL } from "../../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../../config/apiBaseURL.cfg"
 import * as ACTION_TYPES from "../../../../constants/action-types"
 
 //AntD TreeSelect + Select

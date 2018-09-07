@@ -1,7 +1,7 @@
 import React from 'react'
 import TextareaAutosize from "react-textarea-autosize"
 import { connect } from 'react-redux'
-import { UILookup } from "../../constants/ui_config.js"
+import { UILookup } from "../../config/ui_config.js"
 import { Input } from "mdbreact"
 
 const mapStateToProps = (state, props) => {

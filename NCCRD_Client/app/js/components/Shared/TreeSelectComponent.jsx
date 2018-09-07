@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../constants/action-types"
-import { UILookup } from "../../constants/ui_config.js"
+import { UILookup } from "../../config/ui_config.js"
 
 //AntD Tree-Select
 import TreeSelect from 'antd/lib/tree-select'

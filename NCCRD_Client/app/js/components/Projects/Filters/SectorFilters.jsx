@@ -1,10 +1,10 @@
 import React from 'react'
 import { Button } from 'mdbreact'
-import { apiBaseURL } from "../../../constants/apiBaseURL";
+import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../constants/ui_config';
+import { UILookup } from '../../../config/ui_config.js'
 
 //AntD Tree
 import Tree from 'antd/lib/tree'

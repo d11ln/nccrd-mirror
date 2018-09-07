@@ -23,6 +23,7 @@ import CallbackPage from '../js/components/Authentication/callback.jsx';
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
+import LinkDocument from './components/LinkDocuments/LinkDocument.jsx'
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -93,6 +94,7 @@ class App extends React.Component {
               <Route path="/login" component={Login} exact />
               <Route path="/logout" component={Logout} exact />
               <Route path="/callback" component={CallbackPage} />
+              <Route path="/linkdoc" component={LinkDocument} />
             </Switch>
 
             {navbar && <Footer />}

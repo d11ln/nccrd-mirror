@@ -106,9 +106,9 @@ module.exports = {
     new webpack.IgnorePlugin(/^(fs|ipc|cfg)$/),
     new CopyWebpackPlugin([
       {
-        from: 'js/constants/ui_config.cfg',
-        to: 'ui_config.cfg',
-        toType: 'file'
+        from: 'js/config/*.cfg',
+        to: '[name].[ext]',
+        toType: 'template'
       }
     ])
   ]

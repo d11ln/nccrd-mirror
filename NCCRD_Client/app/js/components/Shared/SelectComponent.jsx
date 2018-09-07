@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as ACTION_TYPES from "../../constants/action-types"
-import { UILookup } from "../../constants/ui_config.js"
+import { UILookup } from "../../config/ui_config.js"
 
 //AntD Tree-Select
 import Select from 'antd/lib/select'
@@ -72,15 +72,6 @@ class SelectComponent extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('click', this.onClick);
-  }
-
-  componentDidUpdate() {
-
-    let { selectedValue, data } = this.props
-
-    // if (selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0) {
-    //   this.onSelect(null)
-    // }
   }
 
   preProcessData(data) {
