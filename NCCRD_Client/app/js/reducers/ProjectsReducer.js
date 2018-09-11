@@ -149,6 +149,11 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, projectDetails: { ...projectDetails, MAOptionId: payload, state: modState } }
         }
 
+        case "SET_PROJECT_DETAILS_REGIONS": {
+            let { projectDetails } = state
+            return { ...state, projectDetails: { ...projectDetails, ProjectRegions: payload, state: modState } }
+        }
+
         case "LOAD_MORE_PROJECTS": {
             const { start, end  } = state
             let newend = end + 25

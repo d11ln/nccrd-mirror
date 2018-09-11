@@ -33,7 +33,9 @@ namespace NCCRD.Services.DataV2.Controllers
         public ProjectDetails Get(int id)
         {
             //Get project and details
-            var project = _context.Project.FirstOrDefault(x => x.ProjectId == id);
+            var project = _context.Project
+                .Include(x => x.ProjectRegions)
+                .FirstOrDefault(x => x.ProjectId == id);
 
             var funders = _context.ProjectFunder.Include(x => x.Funder).Where(x => x.ProjectId == id)
                 .OrderBy(x => x.FunderId).Select(x => x.Funder).ToArray();
@@ -171,15 +173,40 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref project);
                 HelperExtensions.ClearNullableInts(ref project);
                 _context.Project.Add(project);
-                //await _context.SaveChangesAsync();
+                SaveProjectRegions(project);
                 return Created(project);
             }
             else
             {
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(project);
-                //await _context.SaveChangesAsync();
+                SaveProjectRegions(project);
                 return Updated(exiting);
+            }
+        }
+
+        private void SaveProjectRegions(Project project)
+        {
+            //Add new mappings
+            for(var i = 0; i < project.ProjectRegions.Count; i++)
+            {
+                var pr = project.ProjectRegions.ToArray()[i];
+
+                if(!_context.ProjectRegion.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId ))
+                {
+                    HelperExtensions.ClearIdentityValue(ref pr);
+                    HelperExtensions.ClearNullableInts(ref pr);
+                    _context.ProjectRegion.Add(pr);
+                }
+            }
+
+            //Remove deleted mappings
+            foreach(var pr in _context.ProjectRegion.Where(x => x.ProjectId == project.ProjectId))
+            {
+                if(!project.ProjectRegions.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
+                {
+                    _context.Remove(pr);
+                }
             }
         }
 

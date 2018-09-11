@@ -96,6 +96,9 @@ const mapDispatchToProps = (dispatch) => {
     loadSectors: payload => {
       dispatch({ type: "LOAD_SECTOR", payload })
     },
+    loadRegions: payload => {
+      dispatch({ type: "LOAD_REGION", payload })
+    },
     loadSectorType: payload => {
       dispatch({ type: "LOAD_SECTOR_TYPE", payload })
     },
@@ -206,7 +209,7 @@ class ProjectDetails extends React.Component {
 
     let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadUsers, loadValidationStatus,
       loadProjectDetails, loadProjectFunderDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
-      loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadSectorTree, loadCarbonCredit,
+      loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadSectorTree, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
       loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus } = this.props
 
@@ -255,11 +258,11 @@ class ProjectDetails extends React.Component {
 
       let oHandler = o(apiBaseURL + "ProjectDetails")
         .find(projectId)
-        .expand("Project,Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+        .expand("Project($expand=ProjectRegions),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
 
       if (!detailsOnly) {
         oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
-          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Sector,SectorType,TargetAudience,Typology,User," +
+          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Region,Sector,SectorType,TargetAudience,Typology,User," +
           "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
       }
 
@@ -269,6 +272,8 @@ class ProjectDetails extends React.Component {
             //Success
             setLoading(false)
 
+            //console.log("DATA", oHandler.data)
+
             //Dispatch results
             loadProjectDetails(oHandler.data.Project)
             loadProjectFunderDetails(oHandler.data.Funders)
@@ -276,7 +281,7 @@ class ProjectDetails extends React.Component {
             loadMitigationDetails(oHandler.data.MitigationDetails)
             loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
             loadResearchDetails(oHandler.data.ResearchDetails)
-
+    
             if (!detailsOnly) {
               loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
               loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
@@ -288,6 +293,7 @@ class ProjectDetails extends React.Component {
               loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
               loadResearchType(oHandler.data.Lookups.ResearchType)
               loadSectors(oHandler.data.Lookups.Sector)
+              loadRegions(oHandler.data.Lookups.Region)
               loadSectorType(oHandler.data.Lookups.SectorType)
               loadTargetAudience(oHandler.data.Lookups.TargetAudience)
               loadTypology(oHandler.data.Lookups.Typology)

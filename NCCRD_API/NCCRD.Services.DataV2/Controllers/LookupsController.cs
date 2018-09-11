@@ -272,6 +272,7 @@ namespace NCCRD.Services.DataV2.Controllers
             var projectType = _context.ProjectType.OrderBy(x => x.Value).ToArray();
             var projectSubType = _context.ProjectSubType.OrderBy(x => x.Value).ToArray();
             var researchType = _context.ResearchType.OrderBy(x => x.Value).ToArray();
+            var region = _context.Region.OrderBy(x => x.RegionName).ToArray();
             var sector = _context.Sector.OrderBy(x => x.Value).ToArray();
             var sectorType = _context.SectorType.OrderBy(x => x.Name).ToArray();
             var targetAudience = _context.TargetAudience.OrderBy(x => x.Value).ToArray();
@@ -294,6 +295,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 ProjectSubType = projectSubType,
                 ProjectType = projectType,
                 ResearchType = researchType,
+                Region = region,
                 Sector = sector,
                 SectorType = sectorType,
                 TargetAudience = targetAudience,

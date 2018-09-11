@@ -1,33 +1,81 @@
 import React from 'react'
-import { Button, Input } from 'mdbreact'
+import { Button, Input, Row, Col } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
+import TreeSelectMultiple from '../../Shared/TreeSelectMultiple.jsx'
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projectDetails } } = state
-    let { lookupData: { projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions } } = state
-    return { projectDetails, projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions }
+    let { lookupData: { projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions, region } } = state
+    return { projectDetails, projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions, region }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+      setProjectRegions: payload => {
+        dispatch({ type: "SET_PROJECT_DETAILS_REGIONS", payload })
+      }
+    }
+  }
 
 class ProjectDetailsTab extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.regionsChanged = this.regionsChanged.bind(this)
+        this.getProjectRegionsValue = this.getProjectRegionsValue.bind(this)
+    }
+
+    regionsChanged(value) {
+        let { projectDetails, region, setProjectRegions } = this.props
+        let projectRegions = []
+
+        value.sort((a, b) => parseInt(a) - parseInt(b)).forEach(r => {
+            let searchRegion = region.filter(x => x.RegionName === r)
+
+            if (searchRegion.length > 0) {
+                projectRegions.push({
+                    ProjectRegionId: 0,
+                    ProjectId: projectDetails.ProjectId,
+                    RegionId: searchRegion[0].RegionId
+                })
+            }
+        })
+
+        setProjectRegions({ value: projectRegions, state: "modified"})
+    }
+
+    getProjectRegionsValue() {
+
+        let { projectDetails, region } = this.props
+        let value = []
+
+        if (projectDetails.ProjectRegions) {
+            projectDetails.ProjectRegions.forEach(pr => {
+
+                let searchRegion = region.filter(x => x.RegionId === pr.RegionId)
+
+                if (searchRegion.length > 0) {
+                    value.push(searchRegion[0].RegionName)
+                }
+            })
+        }
+
+        return value
     }
 
     render() {
 
-        const { projectDetails } = this.props
+        let { projectDetails, region } = this.props
 
         return (
 
             <>
-                {/* <br /> */}
-
                 <div className="row">
                     <TextAreaComponent
                         col="col-md-12"
@@ -244,9 +292,21 @@ class ProjectDetailsTab extends React.Component {
                         }}
                     />
                 </div>
+
+                <br />
+
+                <Row>
+                    <TreeSelectMultiple
+                        col="col-md-12"
+                        label="Regions:"
+                        selectedValue={this.getProjectRegionsValue()}
+                        data={region}
+                        callback={this.regionsChanged}                        
+                    />
+                </Row>
             </>
         )
     }
 }
 
-export default connect(mapStateToProps)(ProjectDetailsTab)
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailsTab)
