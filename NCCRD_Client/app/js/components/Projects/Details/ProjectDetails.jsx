@@ -423,8 +423,6 @@ class ProjectDetails extends React.Component {
       modified = true
     }
 
-    console.log(dataObj)
-
     const successCallback = (data) => {
 
       this.showMessage("Success", "Changes saved successfully.")

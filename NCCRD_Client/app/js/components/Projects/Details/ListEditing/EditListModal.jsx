@@ -57,8 +57,6 @@ class EditListModal extends React.Component {
 
     if (data.length > 0) {
 
-      console.log("HERE")
-
       let tmpData = [] //_.clone(data)
       data.map(item => {
         let clone = _.clone(item)

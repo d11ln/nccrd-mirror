@@ -52,17 +52,16 @@ class TextComponent extends React.Component {
         if (typeof setValueKey !== 'undefined') {
 
             let value = event.target.value
-            if(numeric)
-            {
-                if(value === ""){
+            if (numeric) {
+                if (value === "") {
                     value = 0
                 }
-                else{
+                else {
                     value = parseFloat(value.replace(/,/g, "").replace("[^a-zA-Z0-9 -]", ""));
                 }
             }
 
-            setValue(setValueKey, { value , id: parentId, state: editMode === true ? "modified" : "original" })
+            setValue(setValueKey, { value, id: parentId, state: editMode === true ? "modified" : "original" })
         }
     }
 
@@ -75,9 +74,23 @@ class TextComponent extends React.Component {
 
         return (
             <div className={col}>
-                <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px" ,fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
-                <Input size="sm" id={id} readOnly={!editMode} value={value.toString()} onChange={this.valueChange.bind(this)}
-                    style={{ height: "22px", marginTop: "-15px", color: _gf.getFontColour(editMode), border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} />
+                <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px", fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
+                <Input
+                    size="sm"
+                    id={id}
+                    readOnly={!editMode}
+                    value={value.toString()}
+                    onChange={this.valueChange.bind(this)}
+                    style={{
+                        height: "22px",
+                        marginTop: "-15px",
+                        marginBottom: "-20px",
+                        color: _gf.getFontColour(editMode),
+                        border: "1px solid lightgrey",
+                        borderRadius: "5px",
+                        padding: "5px"
+                    }}
+                />
             </div>
         )
     }

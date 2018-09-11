@@ -31,8 +31,21 @@ namespace NCCRD.Services.DataV2.Database.Models
         public Sector ParentSector { get; set; }
 
         //FK - Typology
-        public int? TypologyId { get; set; }
-        [IgnoreDataMember]
-        public Typology Typology { get; set; }
+        //public int? TypologyId { get; set; }
+        //[IgnoreDataMember]
+        //public Typology Typology { get; set; }
+
+        /*    
+        Note:
+
+            I removed Typology from Sector as this did not make sence to me any more.
+
+            Instead I now filter Typology based on wether a Project has any Adaptations/Mitigation/Research attahced to it.
+
+            I did this for two reasons,
+            1) With Typology determined by Sector, the Project could be placed in the wrong Typology by an inaccurate Sector allocation.
+            2) We have no Sector that are linked to Research typology, thus filtering on Typology=Research could not work, with the new 
+               approach this now works.      
+        */
     }
 }

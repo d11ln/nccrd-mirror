@@ -126,7 +126,6 @@ class TreeSelectMultiple extends React.Component {
 
     let { callback } = this.props
 
-    //console.log(value);
     this.setState({ value });
 
     if(typeof callback !== 'undefined'){

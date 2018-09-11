@@ -68,8 +68,6 @@ class ProjectFilters extends React.Component {
 
   getBottonColor(state) {
 
-    console.log("state", state)
-
     if (state === true) {
       return DEAGreen
     }
@@ -175,8 +173,6 @@ class ProjectFilters extends React.Component {
   }
 
   render() {
-
-    //console.log("state:", this.state.collapseGeneral)
 
     return (
       <div style={{ marginLeft: "0px", marginRight: "0px", backgroundColor: "white" }}>

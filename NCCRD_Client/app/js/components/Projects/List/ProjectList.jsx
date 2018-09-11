@@ -12,9 +12,10 @@ const mapStateToProps = (state, props) => {
     let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter } } = state
     let user = state.oidc.user
     let { globalData: { loading } } = state
+    let { lookupData: { typology } } = state
     return {
         projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-        listScrollPos, user, loading
+        listScrollPos, user, loading, typology
     }
 }
 
@@ -102,7 +103,7 @@ class ProjectList extends React.Component {
 
         let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
             clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
-            clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user } = this.props
+            clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user, typology } = this.props
 
         if (resetCounts === true) {
             start = 0
@@ -192,7 +193,24 @@ class ProjectList extends React.Component {
             if (statusFilter !== 0) oHandler.filter("ProjectStatusId eq " + statusFilter)
             if (regionFilter != 0) oHandler.filter("ProjectRegions/any(x:x/RegionId eq " + regionFilter + ")")
             if (sectorFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/SectorId eq " + sectorFilter + ") or MitigationDetails/any(x:x/SectorId eq " + sectorFilter + ") or ResearchDetails/any(x:x/SectorId eq " + sectorFilter + "))")
-            if (typologyFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or MitigationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or ResearchDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + "))")
+
+            //if (typologyFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or MitigationDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + ") or ResearchDetails/any(x:x/Sector/TypologyId eq " + typologyFilter + "))")
+            if (typologyFilter !== 0 && typology.length > 0) {
+                let typologyVal = typology.filter(t => t.TypologyId === typologyFilter)[0].Value
+                if (typeof typologyVal !== 'undefined') {
+                    switch (typologyVal) {
+                        case "Adaptation":
+                            oHandler.filter("AdaptationDetails/any(x:x/AdaptationDetailId gt 0)")
+                            break;
+                        case "Mitigation":
+                            oHandler.filter("MitigationDetails/any(x:x/MitigationDetailId gt 0)")
+                            break;
+                        case "Research":
+                            oHandler.filter("ResearchDetails/any(x:x/ResearchDetailId gt 0)")
+                            break;
+                    }
+                }
+            }
 
             //Pagination and ordering
             oHandler

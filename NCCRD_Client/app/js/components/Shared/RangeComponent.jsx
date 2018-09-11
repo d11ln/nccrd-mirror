@@ -108,7 +108,7 @@ class RangeComponent extends React.Component {
 
                 {this.getLabel()}
 
-                <div className="row">
+                <div className="row" style={{ marginBottom: "-15px"}}>
 
                     <span style={{ width: "16px" }} />
 
