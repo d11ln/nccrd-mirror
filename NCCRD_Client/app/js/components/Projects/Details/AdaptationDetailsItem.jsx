@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
+import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { adaptationPurpose, sector, sectorType, typology } } = state
@@ -21,19 +21,6 @@ class AdaptationDetailsItem extends React.Component {
     this.setState({ value });
   }
 
-  // componentDidMount() {
-  //   fetch(apiBaseURL + 'api/sector/GetAllTree', {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => {
-  //       let { dataSource } = res
-  //       this.setState({ treeData: dataSource })
-  //     })
-  // }
-
   render() {
 
     let { details, adaptationPurpose, sector, sectorType, typology } = this.props
@@ -41,7 +28,7 @@ class AdaptationDetailsItem extends React.Component {
     return (
       <>
         {/* <br /> */}
-
+    
         <div className="row">
 
           <TextAreaComponent
@@ -49,7 +36,7 @@ class AdaptationDetailsItem extends React.Component {
             label="Description:"
             id="txtAdaptationDescription"
             value={details.Description}
-            setValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_DESCR}
+            setValueKey={"SET_ADAPTATION_DETAILS_DESCR"}
             parentId={details.AdaptationDetailId}
           />
 
@@ -66,9 +53,9 @@ class AdaptationDetailsItem extends React.Component {
             readOnly="true"
             selectedValue={details.AdaptationPurposeId}
             data={adaptationPurpose}
-            setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE}
+            setSelectedValueKey={"SET_ADAPTATION_DETAILS_PURPOSE"}
             parentId={details.AdaptationDetailId}
-            dispatch={ACTION_TYPES.LOAD_ADAPTATION_PURPOSE}
+            dispatch={"LOAD_ADAPTATION_PURPOSE"}
             persist="AdaptationPurpose"
             allowEdit={true}
             newItemTemplate={{
@@ -84,9 +71,9 @@ class AdaptationDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             data={sector}
-            setSelectedValueKey={ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR}
+            setSelectedValueKey={"SET_ADAPTATION_DETAILS_SECTOR"}
             parentId={details.AdaptationDetailId}
-            dispatch={ACTION_TYPES.LOAD_SECTOR}
+            dispatch={"LOAD_SECTOR"}
             persist="Sector"
             type="tree"
             dependencies={[
@@ -107,7 +94,7 @@ class AdaptationDetailsItem extends React.Component {
         </div>
 
         <br />
-        <hr />
+        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
         <br />
 
         <ReactTooltip delayShow={700} />

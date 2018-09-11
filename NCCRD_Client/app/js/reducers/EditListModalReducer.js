@@ -1,14 +1,12 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 export default function GlobalReducer(state = {}, action) {
 
     const { type, payload } = action
 
     switch (type) {
 
-        case ACTION_TYPES.SET_EDIT_LIST: {
+        case "SET_EDIT_LIST": {
 
             if (typeof payload.show === 'undefined') { payload.show = state.show }
             if (typeof payload.data === 'undefined') { payload.data = state.data }

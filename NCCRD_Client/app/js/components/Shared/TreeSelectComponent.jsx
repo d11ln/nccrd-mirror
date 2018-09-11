@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../constants/action-types"
 import { UILookup } from "../../config/ui_config.js"
+
+const _gf = require('../../globalFunctions')
 
 //AntD Tree-Select
 import TreeSelect from 'antd/lib/tree-select'
@@ -21,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch({ type: key, payload })
         },
         setEditList: (payload) => {
-            dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+            dispatch({ type: "SET_EDIT_LIST", payload })
         }
     }
 }
@@ -35,15 +36,6 @@ class TreeSelectComponent extends React.Component {
 
         // this.onSelect = this.onSelect.bind(this)
         this.getDisabledState = this.getDisabledState.bind(this)
-    }
-
-    getFontColour() {
-        if (this.props.editMode) {
-            return "#2BBBAD"
-        }
-        else {
-            return "black"
-        }
     }
 
     getLabelFontColour(uiconf) {

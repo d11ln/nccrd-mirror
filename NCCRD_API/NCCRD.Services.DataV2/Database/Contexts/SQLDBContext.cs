@@ -31,7 +31,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         public DbSet<SectorType> SectorType { get; set; }
         public DbSet<TargetAudience> TargetAudience { get; set; }
         public DbSet<Typology> Typology { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Person> Person { get; set; }
         public DbSet<ValidationStatus> ValidationStatus { get; set; }
         public DbSet<VersionHistory> VersionHistory { get; set; }
         public DbSet<VoluntaryGoldStandard> VoluntaryGoldStandard { get; set; }

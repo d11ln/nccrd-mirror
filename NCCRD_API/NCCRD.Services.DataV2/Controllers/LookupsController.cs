@@ -267,6 +267,7 @@ namespace NCCRD.Services.DataV2.Controllers
             var carbonCreditMarket = _context.CarbonCreditMarket.OrderBy(x => x.Value).ToArray();
             var cdmMethodology = _context.CDMMethodology.OrderBy(x => x.Value).ToArray();
             var cdmStatus = _context.CDMStatus.OrderBy(x => x.Value).ToArray();
+            var fundingStatus = _context.FundingStatus.OrderByDescending(x => x.FundingStatusId).ToArray();
             var projectStatus = _context.ProjectStatus.OrderBy(x => x.Value).ToArray();
             var projectType = _context.ProjectType.OrderBy(x => x.Value).ToArray();
             var projectSubType = _context.ProjectSubType.OrderBy(x => x.Value).ToArray();
@@ -275,7 +276,7 @@ namespace NCCRD.Services.DataV2.Controllers
             var sectorType = _context.SectorType.OrderBy(x => x.Name).ToArray();
             var targetAudience = _context.TargetAudience.OrderBy(x => x.Value).ToArray();
             var typology = _context.Typology.OrderBy(x => x.Value).ToArray();
-            var user = _context.Users.OrderBy(x => x.FirstName).ThenBy(x => x.Surname).ToArray();
+            var user = _context.Person.OrderBy(x => x.FirstName).ThenBy(x => x.Surname).ToArray();
             var validationStatus = _context.ValidationStatus.OrderBy(x => x.Value).ToArray();
             var voluntaryGoldStandard = _context.VoluntaryGoldStandard.OrderBy(x => x.Value).ToArray();
             var voluntaryMethodology = _context.VoluntaryMethodology.OrderBy(x => x.Value).ToArray();
@@ -288,6 +289,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 CarbonCreditMarket = carbonCreditMarket,
                 CDMMethodology = cdmMethodology,
                 CDMStatus = cdmStatus,
+                FundingStatus = fundingStatus,
                 ProjectStatus = projectStatus,
                 ProjectSubType = projectSubType,
                 ProjectType = projectType,

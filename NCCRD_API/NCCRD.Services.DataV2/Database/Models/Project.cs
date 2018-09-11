@@ -72,7 +72,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         [ForeignKey("ProjectManager")]
         public int ProjectManagerId { get; set; }
         [IgnoreDataMember]
-        public User ProjectManager { get; set; }
+        public Person ProjectManager { get; set; }
 
         //FK - ValidationStatus
         public int? ValidationStatusId { get; set; }
@@ -84,5 +84,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
         public virtual ICollection<ResearchDetail> ResearchDetails { get; set; }
+        public virtual ICollection<ProjectFunder> ProjectFunders { get; set; }
     }
 }

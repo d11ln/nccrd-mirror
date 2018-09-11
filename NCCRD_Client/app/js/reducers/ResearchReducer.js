@@ -1,7 +1,5 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 const _gf = require("../globalFunctions")
 const _ = require('lodash')
 
@@ -36,11 +34,11 @@ export default function ResearchReducer(state = {}, action) {
 
     switch (type) {
 
-        case ACTION_TYPES.LOAD_RESEARCH_DETAILS: {
+        case "LOAD_RESEARCH_DETAILS": {
             return { ...state, researchDetails: payload }
         }
 
-        case ACTION_TYPES.RESET_RESEARCH_STATE: {
+        case "RESET_RESEARCH_STATE": {
             let { researchDetails } = state
 
             //Get item and Id
@@ -52,7 +50,7 @@ export default function ResearchReducer(state = {}, action) {
             return { ...state, researchDetails: [...researchDetails, { ...details.item, state: "original" }] }
         }
 
-        case ACTION_TYPES.ADD_RESEARCH_DETAILS: {
+        case "ADD_RESEARCH_DETAILS": {
 
             let { researchDetails, projectDetails } = state
 
@@ -70,7 +68,7 @@ export default function ResearchReducer(state = {}, action) {
             return { ...state, researchDetails: [...researchDetails, newItem] }
         }
 
-        case ACTION_TYPES.SET_RESEARCH_AUTHOR: {
+        case "SET_RESEARCH_AUTHOR": {
             let { researchDetails } = state
 
             //Get item and Id
@@ -82,7 +80,7 @@ export default function ResearchReducer(state = {}, action) {
             return { ...state, researchDetails: [...researchDetails, { ...details.item, Author: payload, state: modState }] }
         }
 
-        case ACTION_TYPES.SET_RESEARCH_PAPER_LINK: {
+        case "SET_RESEARCH_PAPER_LINK": {
             let { researchDetails } = state
 
             //Get item and Id
@@ -94,7 +92,7 @@ export default function ResearchReducer(state = {}, action) {
             return { ...state, researchDetails: [...researchDetails, { ...details.item, PaperLink: payload, state: modState }] }
         }
 
-        case ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE: {
+        case "SET_RESEARCH_RESEARCH_TYPE": {
             let { researchDetails } = state
 
             //Get item and Id
@@ -106,7 +104,7 @@ export default function ResearchReducer(state = {}, action) {
             return { ...state, researchDetails: [...researchDetails, { ...details.item, ResearchTypeId: payload, state: modState }] }
         }
 
-        case ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE: {
+        case "SET_RESEARCH_TARGET_AUDIENCE": {
             let { researchDetails } = state
 
             //Get item and Id
@@ -118,7 +116,7 @@ export default function ResearchReducer(state = {}, action) {
             return { ...state, researchDetails: [...researchDetails, { ...details.item, TargetAudienceId: payload, state: modState }] }
         }
 
-        case ACTION_TYPES.SET_RESEARCH_SECTOR: {
+        case "SET_RESEARCH_SECTOR": {
             let { researchDetails } = state
 
             //Get item and Id

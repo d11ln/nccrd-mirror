@@ -4,7 +4,6 @@ import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter
 } from 'mdbreact'
 import { apiBaseURL } from "../../../../config/apiBaseURL.cfg"
-import * as ACTION_TYPES from "../../../../constants/action-types"
 
 //AntD TreeSelect + Select
 import Tree from 'antd/lib/tree'
@@ -29,10 +28,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setEditList: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+      dispatch({ type: "SET_EDIT_LIST", payload })
     },
     setLoading: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     dispatchToStore: (key, payload) => {
       dispatch({ type: key, payload })

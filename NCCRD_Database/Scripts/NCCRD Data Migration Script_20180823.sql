@@ -1,5 +1,5 @@
 -- ## NCCRD Data Migration Script ## --
-USE NCCRDv2_TEST
+USE NCCRD_TEST
 GO
 SET ANSI_NULLS ON
 GO
@@ -28,10 +28,10 @@ GO
 USE MASTER
 
 --Typology--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.Typology) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.Typology) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.Typology
+		[NCCRD_TEST].dbo.Typology
 		(
 			[Value]
 		)
@@ -43,10 +43,10 @@ BEGIN
 END
 
 --ProjectType--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.ProjectType) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.ProjectType) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.ProjectType
+		[NCCRD_TEST].dbo.ProjectType
 		(
 			[Value]
 		)
@@ -64,10 +64,10 @@ BEGIN
 END
 
 --ProjectStatus--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.ProjectStatus) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.ProjectStatus) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.ProjectStatus
+		[NCCRD_TEST].dbo.ProjectStatus
 		(
 			[Value]
 		)
@@ -85,10 +85,10 @@ BEGIN
 END
 
 --CarbonCredit--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.CarbonCredit) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.CarbonCredit) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.CarbonCredit
+		[NCCRD_TEST].dbo.CarbonCredit
 		(
 			[Value]
 		)
@@ -106,10 +106,10 @@ BEGIN
 END
 
 --CarbonCreditMarket--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.CarbonCreditMarket) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.CarbonCreditMarket) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.CarbonCreditMarket
+		[NCCRD_TEST].dbo.CarbonCreditMarket
 		(
 			[Value]
 		)
@@ -127,10 +127,10 @@ BEGIN
 END
 
 --CDMStatus--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.CDMStatus) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.CDMStatus) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.CDMStatus
+		[NCCRD_TEST].dbo.CDMStatus
 		(
 			[Value]
 		)
@@ -148,10 +148,10 @@ BEGIN
 END
 
 --ValidationStatus--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.ValidationStatus) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.ValidationStatus) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.ValidationStatus
+		[NCCRD_TEST].dbo.ValidationStatus
 		(
 			[Value]
 		)
@@ -169,10 +169,10 @@ BEGIN
 END
 
 --CDMMethodology--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.CDMMethodology) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.CDMMethodology) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.CDMMethodology
+		[NCCRD_TEST].dbo.CDMMethodology
 		(
 			[Value]
 		)
@@ -190,10 +190,10 @@ BEGIN
 END
 
 --VoluntaryGoldStandard--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.VoluntaryGoldStandard) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.VoluntaryGoldStandard) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.VoluntaryGoldStandard
+		[NCCRD_TEST].dbo.VoluntaryGoldStandard
 		(
 			[Value]
 		)
@@ -211,10 +211,10 @@ BEGIN
 END
 
 --ResearchType--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.ResearchType) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.ResearchType) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.ResearchType
+		[NCCRD_TEST].dbo.ResearchType
 		(
 			[Value]
 		)
@@ -232,10 +232,10 @@ BEGIN
 END
 
 --TargetAudience--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.TargetAudience) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.TargetAudience) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.TargetAudience
+		[NCCRD_TEST].dbo.TargetAudience
 		(
 			[Value]
 		)
@@ -253,10 +253,10 @@ BEGIN
 END
 
 --AdaptationPurpose--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.AdaptationPurpose) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.AdaptationPurpose) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.AdaptationPurpose
+		[NCCRD_TEST].dbo.AdaptationPurpose
 		(
 			[Value]
 		)
@@ -274,10 +274,10 @@ BEGIN
 END
 
 --FundingStatus--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.FundingStatus) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.FundingStatus) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.FundingStatus
+		[NCCRD_TEST].dbo.FundingStatus
 		(
 			[Value]
 		)
@@ -295,10 +295,10 @@ BEGIN
 END
 
 --LocationType--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.LocationType) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.LocationType) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.LocationType
+		[NCCRD_TEST].dbo.LocationType
 		(
 			[Value]
 		)
@@ -310,10 +310,10 @@ BEGIN
 END
 
 --ProjectSubType--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.ProjectSubType) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.ProjectSubType) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.ProjectSubType
+		[NCCRD_TEST].dbo.ProjectSubType
 		(
 			[Value],
 			ProjectTypeId
@@ -337,42 +337,55 @@ BEGIN
 		) LU
 		ON LU.ItemNum = PST.ProjectTypeId
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[ProjectType] PT
+		[NCCRD_TEST].[dbo].[ProjectType] PT
 		ON PT.[Value] = LU.ItemDisplay		
 END
 
 --Funder--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.Funders) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.Funders) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.Funders
+		[NCCRD_TEST].dbo.Funders
 		(
-			[Name]
+			FundingAgency,
+			PartnerDepsOrgs,
+			FundingStatusId
 		)
 	SELECT DISTINCT
-		FND.Funder
+		FND.FundingOrganisation,
+		FND.FundingPartner,
+		FS.FundingStatusId
 	FROM
+
+		[NCCRD].[dbo].[tb_erm_project_details] FND
+	LEFT OUTER JOIN
 		(
-			SELECT LTRIM(RTRIM(HostPartner)) AS [Funder] FROM [NCCRD].[dbo].[tb_erm_project_details]
-			UNION ALL
-			SELECT LTRIM(RTRIM(FundingOrganisation)) AS [Funder] FROM [NCCRD].[dbo].[tb_erm_project_details]
-			WHERE FundingOrganisation NOT LIKE '%French Development Bank'
-			UNION ALL
-			SELECT LTRIM(RTRIM(FundingPartner)) AS [Funder] FROM [NCCRD].[dbo].[tb_erm_project_details]
-			UNION ALL
-			SELECT 'French Development Bank' AS [Funder]
-		) FND
+			SELECT
+				PLV.*,
+				FS.FundingStatusId
+			FROM
+				[NCCRD].[dbo].[tb_erm_picklist] PL
+			INNER JOIN
+				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
+				ON PL.ListId = PLV.ListId
+			INNER JOIN
+				[NCCRD_TEST].[dbo].[FundingStatus] FS
+				ON FS.[Value] = PLV.ItemDisplay
+			WHERE
+				PL.ListName = 'Funding Status'
+		) FS
+		ON FS.ItemNum = FND.FUNDINGSTATUS
 	WHERE
-		FND.Funder <> ''
+		FND.FundingOrganisation <> ''
 	ORDER BY
-		FND.Funder
+		FND.FundingOrganisation
 END
 
 --SectorTypes--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].dbo.SectorType) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].dbo.SectorType) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.SectorType
+		[NCCRD_TEST].dbo.SectorType
 		(
 			[Name]
 		)
@@ -385,7 +398,7 @@ BEGIN
 
 	--HostSector--
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.Sector
+		[NCCRD_TEST].dbo.Sector
 		(
 			[Value],
 			SectorTypeId,
@@ -393,8 +406,8 @@ BEGIN
 		)
 	SELECT
 		PLV.ItemDisplay,
-		(SELECT SectorTypeId FROM [NCCRDv2_TEST].dbo.SectorType WHERE [Name] = 'HostSector'),
-		(SELECT TypologyID FROM [NCCRDv2_TEST].dbo.Typology WHERE [Value] = 'Adaptation')
+		(SELECT SectorTypeId FROM [NCCRD_TEST].dbo.SectorType WHERE [Name] = 'HostSector'),
+		(SELECT TypologyID FROM [NCCRD_TEST].dbo.Typology WHERE [Value] = 'Adaptation')
 	FROM
 		[NCCRD].dbo.tb_erm_picklist PL
 	INNER JOIN
@@ -407,7 +420,7 @@ BEGIN
 
 	--HostSector--
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.Sector
+		[NCCRD_TEST].dbo.Sector
 		(
 			[Value],
 			SectorTypeId,
@@ -415,8 +428,8 @@ BEGIN
 		)
 	SELECT
 		PLV.ItemDisplay,
-		(SELECT SectorTypeId FROM [NCCRDv2_TEST].dbo.SectorType WHERE [Name] = 'HostSector'),
-		(SELECT TypologyID FROM [NCCRDv2_TEST].dbo.Typology WHERE [Value] = 'Mitigation')
+		(SELECT SectorTypeId FROM [NCCRD_TEST].dbo.SectorType WHERE [Name] = 'HostSector'),
+		(SELECT TypologyID FROM [NCCRD_TEST].dbo.Typology WHERE [Value] = 'Mitigation')
 	FROM
 		[NCCRD].dbo.tb_erm_picklist PL
 	INNER JOIN
@@ -427,7 +440,7 @@ BEGIN
 
 	--MainSubSector--
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.Sector
+		[NCCRD_TEST].dbo.Sector
 		(
 			[Value],
 			SectorTypeId,
@@ -436,8 +449,8 @@ BEGIN
 		)
 	SELECT
 		MSS.MainSubSectorType,
-		(SELECT SectorTypeId FROM [NCCRDv2_TEST].dbo.SectorType WHERE [Name] = 'MainSubSector'),
-		(SELECT TypologyID FROM [NCCRDv2_TEST].dbo.Typology WHERE [Value] = 'Mitigation'),
+		(SELECT SectorTypeId FROM [NCCRD_TEST].dbo.SectorType WHERE [Name] = 'MainSubSector'),
+		(SELECT TypologyID FROM [NCCRD_TEST].dbo.Typology WHERE [Value] = 'Mitigation'),
 		PS.SectorId
 	FROM
 		[NCCRD].[dbo].[tb_erm_Mitigation_MainSubSector] MSS
@@ -459,12 +472,12 @@ BEGIN
 			SELECT
 				S.*
 			FROM
-				[NCCRDv2_TEST].dbo.Sector S
+				[NCCRD_TEST].dbo.Sector S
 			INNER JOIN
-				[NCCRDv2_TEST].dbo.SectorType ST
+				[NCCRD_TEST].dbo.SectorType ST
 				ON S.SectorTypeId = ST.SectorTypeId
 			INNER JOIN
-				[NCCRDv2_TEST].dbo.Typology T
+				[NCCRD_TEST].dbo.Typology T
 				ON T.TypologyID = S.TypologyID
 			WHERE
 				ST.Name = 'HostSector'	
@@ -475,7 +488,7 @@ BEGIN
 
 	--SubSector--
 	INSERT INTO
-		[NCCRDv2_TEST].dbo.Sector
+		[NCCRD_TEST].dbo.Sector
 		(
 			[Value],
 			SectorTypeId,
@@ -484,8 +497,8 @@ BEGIN
 		)
 	SELECT
 		SS.SubSectorType,
-		(SELECT SectorTypeId FROM [NCCRDv2_TEST].dbo.SectorType WHERE [Name] = 'SubSector'),
-		(SELECT TypologyID FROM [NCCRDv2_TEST].dbo.Typology WHERE [Value] = 'Mitigation'),
+		(SELECT SectorTypeId FROM [NCCRD_TEST].dbo.SectorType WHERE [Name] = 'SubSector'),
+		(SELECT TypologyID FROM [NCCRD_TEST].dbo.Typology WHERE [Value] = 'Mitigation'),
 		PS.SectorId
 	FROM
 		[NCCRD].[dbo].[tb_erm_Mitigation_SubSector] SS
@@ -497,12 +510,12 @@ BEGIN
 			SELECT
 				S.*
 			FROM
-				[NCCRDv2_TEST].dbo.Sector S
+				[NCCRD_TEST].dbo.Sector S
 			INNER JOIN
-				[NCCRDv2_TEST].dbo.SectorType ST
+				[NCCRD_TEST].dbo.SectorType ST
 				ON S.SectorTypeId = ST.SectorTypeId
 			INNER JOIN
-				[NCCRDv2_TEST].dbo.Typology T
+				[NCCRD_TEST].dbo.Typology T
 				ON T.TypologyID = S.TypologyID
 			WHERE
 				ST.Name = 'MainSubSector'	
@@ -512,11 +525,11 @@ BEGIN
 		ON PS.Value = MSS.MainSubSectorType
 END
 
---Users--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[Users]) = 0
+--Person--
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[Person]) = 0
 BEGIN
 INSERT INTO
-	[NCCRDv2_TEST].[dbo].[Users]
+	[NCCRD_TEST].[dbo].[Person]
     (
 		[EmailAddress]
         ,[FirstName]
@@ -533,57 +546,29 @@ INSERT INTO
 		R.UserPhoneNumber,
 		R.UserMobileNumber
 	FROM
-		[NCCRD].[dbo].[tb_erm_appusers] R
-	INNER JOIN
-		(
-			SELECT
-				PLV.*
-			FROM
-				[NCCRD].[dbo].[tb_erm_picklist] PL
-			INNER JOIN	
-				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
-				ON PL.ListId = PLV.ListId
-			WHERE
-				PL.ListName = 'User Title'
-		) LUT
-		ON LUT.ItemNum = R.UserTitle
-	INNER JOIN
-		[NCCRD].[dbo].[tb_erm_roles] LUR
-		ON LUR.RoleID = R.RoleID
-	INNER JOIN
-		(
-			SELECT
-				PLV.*
-			FROM
-				[NCCRD].[dbo].[tb_erm_picklist] PL
-			INNER JOIN	
-				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
-				ON PL.ListId = PLV.ListId
-			WHERE
-				PL.ListName = 'Country'
-		) LUC
-		ON LUC.ItemNum = R.PhyCountry
-		
+		[NCCRD].[dbo].[tb_erm_appusers] R	
+	WHERE
+		R.UserFirstName IS NOT NULL
 END
 
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[Region]) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[Region]) = 0
 BEGIN
 	--Province--
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[Region]
+		[NCCRD_TEST].[dbo].[Region]
 		(
 			RegionName,
 			LocationTypeId
 		)
 	SELECT
 		P.ProvinceName,
-		(SELECT LocationTypeId FROM [NCCRDv2_TEST].[dbo].LocationType WHERE [Value] = 'Province')
+		(SELECT LocationTypeId FROM [NCCRD_TEST].[dbo].LocationType WHERE [Value] = 'Province')
 	FROM
 		[NCCRD].[dbo].[tb_erm_Province] P
 
 	--DistrictMunicipality--
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[Region]
+		[NCCRD_TEST].[dbo].[Region]
 		(
 			RegionName,
 			LocationTypeId,
@@ -591,7 +576,7 @@ BEGIN
 		)
 	SELECT
 		DMP.MetroName,
-		(SELECT LocationTypeId FROM [NCCRDv2_TEST].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality'),
+		(SELECT LocationTypeId FROM [NCCRD_TEST].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality'),
 		REG.RegionId
 	FROM
 		[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
@@ -599,13 +584,13 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_Province] PRV
 		ON PRV.ProvinceID = DMP.ProvinceID
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Region] REG
+		[NCCRD_TEST].[dbo].[Region] REG
 		ON REG.RegionName = PRV.ProvinceName
-		AND REG.LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2_TEST].[dbo].LocationType WHERE [Value] = 'Province')
+		AND REG.LocationTypeId = (SELECT LocationTypeId FROM [NCCRD_TEST].[dbo].LocationType WHERE [Value] = 'Province')
 
 	--LocalMunicipality--
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[Region]
+		[NCCRD_TEST].[dbo].[Region]
 		(
 			RegionName,
 			LocationTypeId,
@@ -613,7 +598,7 @@ BEGIN
 		)
 	SELECT
 		LMP.LocalMunicipalityName,
-		(SELECT LocationTypeId FROM [NCCRDv2_TEST].[dbo].LocationType WHERE [Value] = 'LocalMunicipality'),
+		(SELECT LocationTypeId FROM [NCCRD_TEST].[dbo].LocationType WHERE [Value] = 'LocalMunicipality'),
 		REG.RegionId
 	FROM
 		[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
@@ -621,16 +606,16 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 		ON DMP.MetroID = LMP.MetroID
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Region] REG
+		[NCCRD_TEST].[dbo].[Region] REG
 		ON REG.RegionName = DMP.MetroName
-		AND REG.LocationTypeId = (SELECT LocationTypeId FROM [NCCRDv2_TEST].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality')
+		AND REG.LocationTypeId = (SELECT LocationTypeId FROM [NCCRD_TEST].[dbo].LocationType WHERE [Value] = 'DistrictMunicipality')
 END
 
 --PROJECTS--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[Project]) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[Project]) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[Project]
+		[NCCRD_TEST].[dbo].[Project]
 		(
 			ProjectTitle,
 			ProjectDescription,
@@ -668,7 +653,7 @@ BEGIN
 		PTID.ProjectTypeId,
 		PMD.ProjectTypeId,
 		PS.ProjectStatusId,
-		USR.UserId,
+		PRSN.PersonId,
 		VS.ValidationStatusID
 	FROM
 		[NCCRD].[dbo].[tb_erm_project_details] PD
@@ -683,7 +668,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[ProjectType] PT
+				[NCCRD_TEST].[dbo].[ProjectType] PT
 				ON PT.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Type of Project'
@@ -700,7 +685,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[ProjectStatus] PS
+				[NCCRD_TEST].[dbo].[ProjectStatus] PS
 				ON PS.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Status'
@@ -713,10 +698,10 @@ BEGIN
 			FROM
 				[NCCRD].[dbo].[tb_erm_appusers] AUSR
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Users] USR
-				ON USR.EmailAddress = AUSR.AppUserName
-		) USR
-		ON USR.AppUserID = PD.ProjectManager
+				[NCCRD_TEST].[dbo].[Person] PRSN
+				ON PRSN.EmailAddress = AUSR.AppUserName
+		) PRSN
+		ON PRSN.AppUserID = PD.ProjectManager
 	LEFT OUTER JOIN
 		(
 			SELECT
@@ -728,7 +713,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[ValidationStatus] PVS
+				[NCCRD_TEST].[dbo].[ValidationStatus] PVS
 				ON PVS.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'DEAT Validation Status'
@@ -745,59 +730,40 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_Project_SubType] PST
 				ON PST.ProjectSubTypeId = MD.ProjectSubType
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[ProjectSubType] PST2
+				[NCCRD_TEST].[dbo].[ProjectSubType] PST2
 				ON PST2.[Value] = PST.ProjectSubType
 		) PMD
 		ON PMD.ProjectDetailsId = PD.ProjectDetailsId
 
 		--Fix ProjectTitles with no-ascii characters--
 		UPDATE
-			[NCCRDv2_TEST].[dbo].[Project]
+			[NCCRD_TEST].[dbo].[Project]
 		SET
-			ProjectTitle = [NCCRDv2_TEST].dbo.fn_npclean_string(LTRIM(RTRIM(ProjectTitle)))
+			ProjectTitle = [NCCRD_TEST].dbo.fn_npclean_string(LTRIM(RTRIM(ProjectTitle)))
 
 		--ProjectFunders--
 		INSERT INTO
-			[NCCRDv2_TEST].[dbo].[ProjectFunder]
+			[NCCRD_TEST].[dbo].[ProjectFunder]
 			(
 				ProjectId,
-				FunderId,
-				FundingStatusId
+				FunderId
 			)
 		SELECT
 			P.ProjectId,
-			FND.FunderId,
-			FS.FundingStatusId
+			FND.FunderId
 		FROM
 			[NCCRD].[dbo].[tb_erm_project_details] PD
 		INNER JOIN
-			[NCCRDv2_TEST].[dbo].[Project] P
+			[NCCRD_TEST].[dbo].[Project] P
 			ON P.ProjectTitle = PD.ProjectTitle
 		INNER JOIN
-			[NCCRDv2_TEST].[dbo].[Funders] FND
-			ON FND.[Name] = LTRIM(RTRIM(PD.FundingOrganisation))
-		LEFT OUTER JOIN
-			(
-				SELECT
-					PLV.*,
-					FS.FundingStatusId
-				FROM
-					[NCCRD].[dbo].[tb_erm_picklist] PL
-				INNER JOIN
-					[NCCRD].[dbo].[tb_erm_picklist_value] PLV
-					ON PL.ListId = PLV.ListId
-				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[FundingStatus] FS
-					ON FS.[Value] = PLV.ItemDisplay
-				WHERE
-					PL.ListName = 'Funding Status'
-			) FS
-			ON FS.ItemNum = Pd.FUNDINGSTATUS
+			[NCCRD_TEST].[dbo].[Funders] FND
+			ON FND.FundingAgency = LTRIM(RTRIM(PD.FundingOrganisation))
 END
 
 
 --PROJECT LOCATION DATA--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[ProjectLocation]) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[ProjectLocation]) = 0
 BEGIN
 	DECLARE @LD TABLE
 	(
@@ -823,7 +789,7 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_project_details] PD
 		ON PD.ProjectDetailsId = PLD.ProjectDetailsId
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Project] P
+		[NCCRD_TEST].[dbo].[Project] P
 		ON P.ProjectTitle = PD.ProjectTitle
 
 	WHILE (SELECT COUNT(*) FROM @LD) > 0
@@ -842,7 +808,7 @@ BEGIN
 			@LD
 
 		INSERT INTO
-			[NCCRDv2_TEST].[dbo].[Location]
+			[NCCRD_TEST].[dbo].[Location]
 			(
 				LatDegree,
 				LatMinutes,
@@ -874,7 +840,7 @@ BEGIN
 		SET @NLID = @@IDENTITY
 
 		INSERT INTO
-			[NCCRDv2_TEST].[dbo].[ProjectLocation]
+			[NCCRD_TEST].[dbo].[ProjectLocation]
 			(
 				LocationId,
 				ProjectId
@@ -888,10 +854,10 @@ END
 
 
 --PROJECT REGION--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].ProjectRegion) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].ProjectRegion) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[ProjectRegion]
+		[NCCRD_TEST].[dbo].[ProjectRegion]
 		(
 			ProjectId,
 			RegionId
@@ -907,7 +873,7 @@ BEGIN
 		FROM
 			[NCCRD].[dbo].[tb_erm_project_details] PD
 		INNER JOIN
-			[NCCRDv2_TEST].[dbo].[Project] P
+			[NCCRD_TEST].[dbo].[Project] P
 			ON P.ProjectTitle = PD.ProjectTitle
 		INNER JOIN
 			[NCCRD].[dbo].[tb_erm_Project_Location_Data] PLD
@@ -920,10 +886,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = LMP.LocalMunicipalityName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'LocalMunicipality'
@@ -937,10 +903,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = DMP.MetroName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'DistrictMunicipality'
@@ -954,10 +920,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Province] PRV
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = PRV.ProvinceName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'Province'
@@ -972,7 +938,7 @@ BEGIN
 		FROM
 			[NCCRD].[dbo].[tb_erm_project_details] PD
 		INNER JOIN
-			[NCCRDv2_TEST].[dbo].[Project] P
+			[NCCRD_TEST].[dbo].[Project] P
 			ON P.ProjectTitle = PD.ProjectTitle
 		INNER JOIN
 			[NCCRD].[dbo].[tb_erm_Project_Adaptation_Data] PAD
@@ -985,10 +951,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = LMP.LocalMunicipalityName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'LocalMunicipality'
@@ -1002,10 +968,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = DMP.MetroName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'DistrictMunicipality'
@@ -1019,10 +985,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Province] PRV
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = PRV.ProvinceName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'Province'
@@ -1037,7 +1003,7 @@ BEGIN
 		FROM
 			[NCCRD].[dbo].[tb_erm_project_details] PD
 		INNER JOIN
-			[NCCRDv2_TEST].[dbo].[Project] P
+			[NCCRD_TEST].[dbo].[Project] P
 			ON P.ProjectTitle = PD.ProjectTitle
 		INNER JOIN
 			[NCCRD].[dbo].[tb_erm_Project_Research_Data] PRD
@@ -1050,10 +1016,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Local_Municipalities] LMP
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = LMP.LocalMunicipalityName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'LocalMunicipality'
@@ -1067,10 +1033,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Metro_DistrictMunicipality] DMP
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = DMP.MetroName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'DistrictMunicipality'
@@ -1084,10 +1050,10 @@ BEGIN
 				FROM
 					[NCCRD].[dbo].[tb_erm_Province] PRV
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[Region] REG
+					[NCCRD_TEST].[dbo].[Region] REG
 					ON REG.RegionName = PRV.ProvinceName
 				INNER JOIN
-					[NCCRDv2_TEST].[dbo].[LocationType] LT
+					[NCCRD_TEST].[dbo].[LocationType] LT
 					ON LT.LocationTypeId = REG.LocationTypeId
 				WHERE
 					LT.[Value] = 'Province'
@@ -1097,11 +1063,11 @@ BEGIN
 END
 
 --[MITIGATION DETAILS]--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[MitigationDetails]) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[MitigationDetails]) = 0
 BEGIN
 	--[VoluntaryMethodology]--
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[VoluntaryMethodology]
+		[NCCRD_TEST].[dbo].[VoluntaryMethodology]
 		(
 			[Value]
 		)
@@ -1114,7 +1080,7 @@ BEGIN
 
 	--[MitigationDetails]--
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[MitigationDetails]
+		[NCCRD_TEST].[dbo].[MitigationDetails]
 		(
 			CarbonCreditId,
 			CarbonCreditMarketId,
@@ -1142,7 +1108,7 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_project_details] PD
 		ON PD.ProjectDetailsId = MD.ProjectDetailsId
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Project] P
+		[NCCRD_TEST].[dbo].[Project] P
 		ON P.ProjectTitle = PD.ProjectTitle
 	INNER JOIN
 		(
@@ -1152,13 +1118,13 @@ BEGIN
 			FROM
 				[NCCRD].[dbo].[tb_erm_Mitigation_MainSubSector] MSS
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Sector] SEC
+				[NCCRD_TEST].[dbo].[Sector] SEC
 				ON SEC.[Value] = MSS.MainSubSectorType
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[SectorType] ST
+				[NCCRD_TEST].[dbo].[SectorType] ST
 				ON ST.SectorTypeId = SEC.SectorTypeId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Typology] T
+				[NCCRD_TEST].[dbo].[Typology] T
 				ON T.TypologyID = SEC.TypologyID
 			WHERE
 				ST.[Name] = 'MainSubSector'
@@ -1174,13 +1140,13 @@ BEGIN
 			FROM
 				[NCCRD].[dbo].[tb_erm_Mitigation_SubSector] SS
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Sector] SEC
+				[NCCRD_TEST].[dbo].[Sector] SEC
 				ON SEC.[Value] = SS.SubSectorType
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[SectorType] ST
+				[NCCRD_TEST].[dbo].[SectorType] ST
 				ON ST.SectorTypeId = SEC.SectorTypeId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Typology] T
+				[NCCRD_TEST].[dbo].[Typology] T
 				ON T.TypologyID = SEC.TypologyID
 			WHERE
 				ST.[Name] = 'SubSector'
@@ -1199,7 +1165,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[CarbonCredit] CC
+				[NCCRD_TEST].[dbo].[CarbonCredit] CC
 				ON CC.Value = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Carbon credits'
@@ -1216,7 +1182,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[CarbonCreditMarket] CCM
+				[NCCRD_TEST].[dbo].[CarbonCreditMarket] CCM
 				ON CCM.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Carbon credit Market'
@@ -1233,7 +1199,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[CDMStatus] CDM
+				[NCCRD_TEST].[dbo].[CDMStatus] CDM
 				ON CDM.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'CDM Status'
@@ -1250,19 +1216,19 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[CDMMethodology] CDM
+				[NCCRD_TEST].[dbo].[CDMMethodology] CDM
 				ON CDM.Value = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'CDM Approved Methodology'
 		) CDM2
 		ON CDM2.ItemNum = MD.CDMMethodoloy
 	LEFT OUTER JOIN
-		[NCCRDv2_TEST].[dbo].[VoluntaryMethodology] VM
+		[NCCRD_TEST].[dbo].[VoluntaryMethodology] VM
 		ON VM.Value = MD.VolMethodoloy
 	
 	--[MitigationEmissionsData]--
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[MitigationEmissionsData]
+		[NCCRD_TEST].[dbo].[MitigationEmissionsData]
 		(
 			[Year],
 			CO2,
@@ -1329,16 +1295,16 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_project_details] PD
 		ON PD.ProjectDetailsId = PLD.ProjectDetailsId
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Project] P
+		[NCCRD_TEST].[dbo].[Project] P
 		ON P.ProjectTitle = PD.ProjectTitle
 END
 
 
 --[ADAPTATION DETAILS]--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[AdaptationDetails]) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[AdaptationDetails]) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[AdaptationDetails]
+		[NCCRD_TEST].[dbo].[AdaptationDetails]
 		(
 			AdaptationPurposeId,
 			ProjectId,
@@ -1354,7 +1320,7 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_project_details] PD
 		ON PD.ProjectDetailsId = PAD.ProjectDetailsId
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Project] P
+		[NCCRD_TEST].[dbo].[Project] P
 		ON P.ProjectTitle = PD.ProjectTitle
 	INNER JOIN
 		(
@@ -1367,7 +1333,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[AdaptationPurpose] AP
+				[NCCRD_TEST].[dbo].[AdaptationPurpose] AP
 				ON AP.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Purpose of adaptation'			
@@ -1384,13 +1350,13 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Sector] SEC
+				[NCCRD_TEST].[dbo].[Sector] SEC
 				ON SEC.[Value] = PLV.ItemDisplay
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[SectorType] ST
+				[NCCRD_TEST].[dbo].[SectorType] ST
 				ON ST.SectorTypeId = SEC.SectorTypeId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[Typology] T
+				[NCCRD_TEST].[dbo].[Typology] T
 				ON T.TypologyID = SEC.TypologyID
 			WHERE
 				PL.ListName = 'Adaptation Host Sector'	
@@ -1404,10 +1370,10 @@ END
 
 
 --[RESEARCH DETAILS]--
-IF (SELECT COUNT(*) FROM [NCCRDv2_TEST].[dbo].[ResearchDetails]) = 0
+IF (SELECT COUNT(*) FROM [NCCRD_TEST].[dbo].[ResearchDetails]) = 0
 BEGIN
 	INSERT INTO
-		[NCCRDv2_TEST].[dbo].[ResearchDetails]
+		[NCCRD_TEST].[dbo].[ResearchDetails]
 		(
 			Author,
 			PaperLink,
@@ -1434,7 +1400,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[ResearchType] RT
+				[NCCRD_TEST].[dbo].[ResearchType] RT
 				ON RT.[Value] = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Type of research'			
@@ -1451,7 +1417,7 @@ BEGIN
 				[NCCRD].[dbo].[tb_erm_picklist_value] PLV
 				ON PL.ListId = PLV.ListId
 			INNER JOIN
-				[NCCRDv2_TEST].[dbo].[TargetAudience] TA
+				[NCCRD_TEST].[dbo].[TargetAudience] TA
 				ON TA.Value = PLV.ItemDisplay
 			WHERE
 				PL.ListName = 'Target audience'			
@@ -1461,6 +1427,6 @@ BEGIN
 		[NCCRD].[dbo].[tb_erm_project_details] PD
 		ON PD.ProjectDetailsId = RD.ProjectDetailsId
 	INNER JOIN
-		[NCCRDv2_TEST].[dbo].[Project] P
+		[NCCRD_TEST].[dbo].[Project] P
 		ON P.ProjectTitle = PD.ProjectTitle
 END

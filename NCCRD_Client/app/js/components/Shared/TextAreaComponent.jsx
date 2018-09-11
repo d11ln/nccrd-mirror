@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from "mdbreact"
 
+const _gf = require('../../globalFunctions')
+
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
     return { editMode }
@@ -30,15 +32,6 @@ class TextAreaComponent extends React.Component {
         }
 
         return value
-    }
-
-    getFontColour() {
-        if (this.props.editMode) {
-            return "#2BBBAD"
-        }
-        else {
-            return "black"
-        }
     }
 
     valueChange(event) {
@@ -75,7 +68,7 @@ class TextAreaComponent extends React.Component {
                         border: "1px solid lightgrey",
                         borderRadius: "5px",
                         padding: "5px",
-                        color: this.getFontColour(),
+                        color: _gf.getFontColour(editMode),
                         width: "100%"
                     }}
                     value={value}

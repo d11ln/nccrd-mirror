@@ -2,20 +2,20 @@ import React from 'react'
 import { Button, Fa } from 'mdbreact'
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { connect } from 'react-redux'
-import AdaptationDetailsItem from './AdaptationDetailsItem.jsx'
+import ProjectFundersItem from './ProjectFundersItem.jsx'
 
 const mapStateToProps = (state, props) => {
-    let { adaptationData: { adaptationDetails } } = state
+    let { projectFundersData: { projectFunderDetails } } = state
     let { projectData: { projectDetails } } = state
     let { globalData: { editMode } } = state
-    return { adaptationDetails, editMode, projectDetails }
+    return { projectFunderDetails, editMode, projectDetails }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {}
 }
 
-class AdaptationDetailsTab extends React.Component {
+class ProjectFundersTab extends React.Component {
 
     constructor(props) {
         super(props)
@@ -23,12 +23,12 @@ class AdaptationDetailsTab extends React.Component {
 
     loadDetails() {
 
-        let { adaptationDetails } = this.props
+        let { projectFunderDetails } = this.props
         let details = []
 
-        if (typeof adaptationDetails !== 'undefined') {
-            for (let i of adaptationDetails.sort((a, b) => parseInt(a.AdaptationDetailId) - parseInt(b.AdaptationDetailId))) {
-                details.push(<AdaptationDetailsItem key={i.AdaptationDetailId} details={i} />)
+        if (typeof projectFunderDetails !== 'undefined') {
+            for (let i of projectFunderDetails.sort((a, b) => parseInt(a.FunderId) - parseInt(b.FunderId))) {
+                details.push(<ProjectFundersItem key={i.FunderId + i.key} details={i} />)
             }
 
             return details
@@ -45,4 +45,4 @@ class AdaptationDetailsTab extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdaptationDetailsTab)
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectFundersTab)

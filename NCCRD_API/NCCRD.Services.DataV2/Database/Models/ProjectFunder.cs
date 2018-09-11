@@ -25,10 +25,5 @@ namespace NCCRD.Services.DataV2.Database.Models
         public int ProjectId { get; set; }
         [IgnoreDataMember]
         public Project Project { get; set; }
-
-        //FK - FundingStatus
-        public int? FundingStatusId { get; set; }
-        [IgnoreDataMember]
-        public FundingStatus FundingStatus { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from 'mdbreact'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 
@@ -18,10 +17,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadData: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_STATUS, payload })
+            dispatch({ type: "LOAD_PROJECT_STATUS", payload })
         },
         loadStatusFilter: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_STATUS_FILTER, payload })
+            dispatch({ type: "LOAD_STATUS_FILTER", payload })
         }
     }
 }
@@ -71,7 +70,7 @@ class StatusFilter extends React.Component {
                 label="Status:"
                 selectedValue={statusFilter}
                 data={this.props.projectStatus}
-                setSelectedValueKey={ACTION_TYPES.LOAD_STATUS_FILTER}
+                setSelectedValueKey={"LOAD_STATUS_FILTER"}
                 editModeOverride={true}
                 allowEdit={false}
             />

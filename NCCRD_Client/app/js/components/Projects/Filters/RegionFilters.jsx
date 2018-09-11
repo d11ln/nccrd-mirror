@@ -2,7 +2,6 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'
 
@@ -23,14 +22,11 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // loadData: payload => {
-        //     dispatch({ type: ACTION_TYPES.LOAD_REGION_TREE, payload })
-        // },
         loadRegionFilter: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_REGION_FILTER, payload })
+            dispatch({ type: "LOAD_REGION_FILTER", payload })
         },
         loadRegions: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_REGION, payload })
+            dispatch({ type: "LOAD_REGION", payload })
         }
     }
 }

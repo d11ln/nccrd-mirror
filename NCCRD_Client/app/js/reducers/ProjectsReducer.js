@@ -1,7 +1,5 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 const _ = require('lodash')
 
 function extractItemAndId(array, key, value) {
@@ -35,13 +33,13 @@ export default function ProjectsReducer(state = {}, action) {
 
     switch (type) {
 
-        case ACTION_TYPES.RESET_PROJECT_STATE: {
+        case "RESET_PROJECT_STATE": {
             return {
                 ...state, projectDetails: { ...state.projectDetails, state: "original" }
             }
         }
 
-        case ACTION_TYPES.LOAD_PROJECTS: {
+        case "LOAD_PROJECTS": {
             let { projects, end } = state
 
             if(end === 25){
@@ -52,106 +50,106 @@ export default function ProjectsReducer(state = {}, action) {
             }
         }
 
-        case ACTION_TYPES.LOAD_PROJECT_DETAILS: {
+        case "LOAD_PROJECT_DETAILS": {
             return { ...state, projectDetails: { ...payload } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_TITLE: {
+        case "SET_PROJECT_DETAILS_TITLE": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectTitle: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM: {
+        case "SET_PROJECT_DETAILS_YEAR_FROM": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, StartYear: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO: {
+        case "SET_PROJECT_DETAILS_YEAR_TO": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, EndYear: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_BUDGET_FROM: {
+        case "SET_PROJECT_DETAILS_BUDGET_FROM": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, BudgetLower: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_BUDGET_TO: {
+        case "SET_PROJECT_DETAILS_BUDGET_TO": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, BudgetUpper: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_DESCRIPTION: {
+        case "SET_PROJECT_DETAILS_DESCRIPTION": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectDescription: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_LEAD_AGENT: {
+        case "SET_PROJECT_DETAILS_LEAD_AGENT": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, LeadAgent: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_HOST_PARTNER: {
+        case "SET_PROJECT_DETAILS_HOST_PARTNER": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, HostPartner: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_HOST_ORG: {
+        case "SET_PROJECT_DETAILS_HOST_ORG": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, HostOrganisation: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT: {
+        case "SET_PROJECT_DETAILS_ALT_CONTACT": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, AlternativeContact: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT_EMAIL: {
+        case "SET_PROJECT_DETAILS_ALT_CONTACT_EMAIL": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, AlternativeContactEmail: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_LINK: {
+        case "SET_PROJECT_DETAILS_LINK": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, Link: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_COMMENTS: {
+        case "SET_PROJECT_DETAILS_VALIDATION_COMMENTS": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ValidationComments: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_TYPE: {
+        case "SET_PROJECT_DETAILS_PROJECT_TYPE": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectTypeId: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE: {
+        case "SET_PROJECT_DETAILS_PROJECT_SUBTYPE": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectSubTypeId: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_STATUS: {
+        case "SET_PROJECT_DETAILS_PROJECT_STATUS": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectStatusId: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER: {
+        case "SET_PROJECT_DETAILS_PROJECT_MANAGER": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectManagerId: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_STATUS: {
+        case "SET_PROJECT_DETAILS_VALIDATION_STATUS": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ValidationStatusId: payload, state: modState } }
         }
 
-        case ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION: {
+        case "SET_PROJECT_DETAILS_MAOPTION": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, MAOptionId: payload, state: modState } }
         }
 
-        case ACTION_TYPES.LOAD_MORE_PROJECTS: {
+        case "LOAD_MORE_PROJECTS": {
             const { start, end  } = state
             let newend = end + 25
             let newstart = start
@@ -159,11 +157,11 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, start: newstart, end: newend }
         }
 
-        case ACTION_TYPES.RESET_PROJECT_COUNTS:{
+        case "RESET_PROJECT_COUNTS":{
             return { ...state, start: 0, end: 25 }
         }
 
-        case ACTION_TYPES.SET_PROJECT_SCROLL:{
+        case "SET_PROJECT_SCROLL":{
             return { ...state, listScrollPos: payload }
         }
 

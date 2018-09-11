@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
 
+const _gf = require('../../globalFunctions')
+
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
     return { editMode }
@@ -43,36 +45,39 @@ class TextComponent extends React.Component {
         }
     }
 
-    getFontColour() {
-        if (this.props.editMode) {
-            return "#2BBBAD"
-        }
-        else {
-            return "black"
-        }
-    }
-
     valueChange(event) {
 
-        let { setValue, setValueKey, parentId, editMode } = this.props
+        let { setValue, setValueKey, parentId, editMode, numeric } = this.props
 
         if (typeof setValueKey !== 'undefined') {
-            setValue(setValueKey, { value: event.target.value, id: parentId, state: editMode === true ? "modified" : "original" })
+
+            let value = event.target.value
+            if(numeric)
+            {
+                if(value === ""){
+                    value = 0
+                }
+                else{
+                    value = parseFloat(value.replace(/,/g, "").replace("[^a-zA-Z0-9 -]", ""));
+                }
+            }
+
+            setValue(setValueKey, { value , id: parentId, state: editMode === true ? "modified" : "original" })
         }
     }
 
     render() {
 
         let { col, label, id, editMode, value } = this.props
-        value = this.fixNullOrUndefinedValue(value)
-
         let uiconf = UILookup(id, label)
+
+        value = this.fixNullOrUndefinedValue(value)
 
         return (
             <div className={col}>
                 <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px" ,fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
                 <Input size="sm" id={id} readOnly={!editMode} value={value.toString()} onChange={this.valueChange.bind(this)}
-                    style={{ height: "22px", marginTop: "-15px", color: this.getFontColour(), border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} />
+                    style={{ height: "22px", marginTop: "-15px", color: _gf.getFontColour(editMode), border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }} />
             </div>
         )
     }

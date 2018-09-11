@@ -1,42 +1,40 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 export default function FilterReducer(state = {}, action) {
 
     const { type, payload } = action
 
     switch (type) {
 
-        case ACTION_TYPES.LOAD_TITLE_FILTER: {
+        case "LOAD_TITLE_FILTER": {
             return { ...state, titleFilterInternal: payload, titleFilter: payload }
         }
 
-        case ACTION_TYPES.LOAD_TITLE_FILTER_INTERNAL: {
+        case "LOAD_TITLE_FILTER_INTERNAL": {
             return { ...state, titleFilterInternal: payload }
         }
 
-        case ACTION_TYPES.LOAD_STATUS_FILTER: {
+        case "LOAD_STATUS_FILTER": {
             return { ...state, statusFilter: payload.value }
         }
 
-        case ACTION_TYPES.LOAD_TYPOLOGY_FILTER: {
+        case "LOAD_TYPOLOGY_FILTER": {
             return { ...state, typologyFilter: payload.value }
         }
 
-        case ACTION_TYPES.LOAD_REGION_FILTER: {
+        case "LOAD_REGION_FILTER": {
             return { ...state, regionFilter: payload}
         }
 
-        case ACTION_TYPES.LOAD_SECTOR_FILTER: {
+        case "LOAD_SECTOR_FILTER": {
             return { ...state, sectorFilter: payload }
         }
 
-        case ACTION_TYPES.LOAD_POLYGON_FILTER: {
+        case "LOAD_POLYGON_FILTER": {
             return { ...state, polygonFilter: payload }
         }
 
-        case ACTION_TYPES.CLEAR_FILTERS: {
+        case "CLEAR_FILTERS": {
             return {
                 ...state,
                 titleFilter: "",

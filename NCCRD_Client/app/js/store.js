@@ -37,6 +37,10 @@ const store = createStore(
             listScrollPos: 0
         },
 
+        projectFundersData: {
+            projectFunderDetails: []
+        },
+
         adaptationData: {
             adaptationDetails: []
         },

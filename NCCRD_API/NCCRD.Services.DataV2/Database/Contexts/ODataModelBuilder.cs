@@ -25,6 +25,24 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
+            builder.EntitySet<ProjectFunder>("ProjectFunders")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
+            builder.EntitySet<Funder>("Funder")
+                .EntityType
+                .Filter() // Allow for the $filter Command
+                .Count() // Allow for the $count Command
+                .Expand() // Allow for the $expand Command
+                .OrderBy() // Allow for the $orderby Command
+                .Page() // Allow for the $top and $skip Commands
+                .Select();// Allow for the $select Command; 
+
             builder.EntitySet<ProjectDetails>("ProjectDetails")
                 .EntityType
                 .Filter() // Allow for the $filter Command
@@ -214,7 +232,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
-            builder.EntitySet<User>("User")
+            builder.EntitySet<Person>("User")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command

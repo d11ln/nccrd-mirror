@@ -1,7 +1,5 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 const _gf = require("../globalFunctions")
 const _ = require('lodash')
 
@@ -35,11 +33,11 @@ export default function AdaptationsReducer(state = {}, action) {
 
     switch (type) {
 
-        case ACTION_TYPES.LOAD_ADAPTATION_DETAILS: {
+        case "LOAD_ADAPTATION_DETAILS": {
             return { ...state, adaptationDetails: payload }
         }
 
-        case ACTION_TYPES.RESET_ADAPTATION_STATE: {
+        case "RESET_ADAPTATION_STATE": {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -51,7 +49,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, state: "original" }] }
         }
 
-        case ACTION_TYPES.ADD_ADAPTATION_DETAILS: {
+        case "ADD_ADAPTATION_DETAILS": {
 
             let { adaptationDetails, projectDetails } = state
 
@@ -67,7 +65,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, newItem] }
         }
 
-        case ACTION_TYPES.SET_ADAPTATION_DETAILS_DESCR: {
+        case "SET_ADAPTATION_DETAILS_DESCR": {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -79,7 +77,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload, state: modState }] }
         }
 
-        case ACTION_TYPES.SET_ADAPTATION_DETAILS_PURPOSE: {
+        case "SET_ADAPTATION_DETAILS_PURPOSE": {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -91,7 +89,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, AdaptationPurposeId: payload, state: modState }] }
         }
 
-        case ACTION_TYPES.SET_ADAPTATION_DETAILS_SECTOR: {
+        case "SET_ADAPTATION_DETAILS_SECTOR": {
             let { adaptationDetails } = state
 
             //Get item and Id

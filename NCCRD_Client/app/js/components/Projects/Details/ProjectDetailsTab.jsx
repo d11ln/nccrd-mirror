@@ -6,7 +6,6 @@ import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
-import * as ACTION_TYPES from "../../../constants/action-types"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projectDetails } } = state
@@ -35,7 +34,7 @@ class ProjectDetailsTab extends React.Component {
                         label="Project title:"
                         id="txtProjectTitle"
                         value={projectDetails.ProjectTitle}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_TITLE}
+                        setValueKey={"SET_PROJECT_DETAILS_TITLE"}
                     />
                 </div>
 
@@ -48,8 +47,8 @@ class ProjectDetailsTab extends React.Component {
                         label=""
                         inputWidth="75px"
                         valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
-                        setValueFromKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_FROM}
-                        setValueToKey={ACTION_TYPES.SET_PROJECT_DETAILS_YEAR_TO}
+                        setValueFromKey={"SET_PROJECT_DETAILS_YEAR_FROM"}
+                        setValueToKey={"SET_PROJECT_DETAILS_YEAR_TO"}
                     />
                 </div>
 
@@ -61,7 +60,7 @@ class ProjectDetailsTab extends React.Component {
                         label="Description:"
                         id="txtProjectDescription"
                         value={projectDetails.ProjectDescription}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_DESCRIPTION}
+                        setValueKey={"SET_PROJECT_DETAILS_DESCRIPTION"}
                     />
                 </div>
 
@@ -73,7 +72,7 @@ class ProjectDetailsTab extends React.Component {
                         label="Lead agent:"
                         id="txtProjectLeadAgent"
                         value={projectDetails.LeadAgent}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_LEAD_AGENT}
+                        setValueKey={"SET_PROJECT_DETAILS_LEAD_AGENT"}
                     />
                     <TextComponent
                         col="col-md-4"
@@ -81,14 +80,14 @@ class ProjectDetailsTab extends React.Component {
                         label="Host partner:"
                         id="txtProjectHostPartner"
                         value={projectDetails.HostPartner}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_HOST_PARTNER}
+                        setValueKey={"SET_PROJECT_DETAILS_HOST_PARTNER"}
                     />
                     <TextComponent
                         col="col-md-4"
                         label="Host organisation:"
                         id="txtProjectHostOrganisation"
                         value={projectDetails.HostOrganisation}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_HOST_ORG}
+                        setValueKey={"SET_PROJECT_DETAILS_HOST_ORG"}
                     />
                 </div>
 
@@ -100,21 +99,21 @@ class ProjectDetailsTab extends React.Component {
                         label="Contact (alt):"
                         id="txtProjectAlternativeContact"
                         value={projectDetails.AlternativeContact}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT}
+                        setValueKey={"SET_PROJECT_DETAILS_ALT_CONTACT"}
                     />
                     <TextComponent
                         col="col-md-4"
                         label="Contact email (alt):"
                         id="txtProjectAlternativeContactEmail"
                         value={projectDetails.AlternativeContactEmail}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_ALT_CONTACT_EMAIL}
+                        setValueKey={"SET_PROJECT_DETAILS_ALT_CONTACT_EMAIL"}
                     />
                     <TextComponent
                         col="col-md-4"
                         label="Link:"
                         id="txtProjectLink"
                         value={projectDetails.Link}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_LINK}
+                        setValueKey={"SET_PROJECT_DETAILS_LINK"}
                     />
                 </div>
 
@@ -126,7 +125,7 @@ class ProjectDetailsTab extends React.Component {
                         label="Validation comments:"
                         id="txtProjectValidationComments"
                         value={projectDetails.ValidationComments}
-                        setValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_COMMENTS}
+                        setValueKey={"SET_PROJECT_DETAILS_VALIDATION_COMMENTS"}
                     />
                 </div>
 
@@ -141,8 +140,8 @@ class ProjectDetailsTab extends React.Component {
                         inputWidth="125px"
                         valueFrom={projectDetails.BudgetLower}
                         valueTo={projectDetails.BudgetUpper}
-                        setValueFromKey={ACTION_TYPES.SET_PROJECT_DETAILS_BUDGET_FROM}
-                        setValueToKey={ACTION_TYPES.SET_PROJECT_DETAILS_BUDGET_TO}
+                        setValueFromKey={"SET_PROJECT_DETAILS_BUDGET_FROM"}
+                        setValueToKey={"SET_PROJECT_DETAILS_BUDGET_TO"}
                     />
                 </div>
 
@@ -155,8 +154,8 @@ class ProjectDetailsTab extends React.Component {
                         label="Project type:"
                         selectedValue={projectDetails.ProjectTypeId}
                         data={this.props.projectTypes}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_TYPE}
-                        dispatch={ACTION_TYPES.LOAD_PROJECT_TYPE}
+                        setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_TYPE"}
+                        dispatch={"LOAD_PROJECT_TYPE"}
                         persist="ProjectType"
                         allowEdit={true}
                         newItemTemplate={{
@@ -173,8 +172,8 @@ class ProjectDetailsTab extends React.Component {
                         data={this.props.projectSubTypes}
                         dataFilterKey={"ProjectTypeId"}
                         dataFilterValue={projectDetails.ProjectTypeId}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_SUBTYPE}
-                        dispatch={ACTION_TYPES.LOAD_PROJECT_SUBTYPE}
+                        setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_SUBTYPE"}
+                        dispatch={"LOAD_PROJECT_SUBTYPE"}
                         persist="ProjectSubType"
                         allowEdit={true}
                         dependencies={[
@@ -193,8 +192,8 @@ class ProjectDetailsTab extends React.Component {
                         label="Project status:"
                         selectedValue={projectDetails.ProjectStatusId}
                         data={this.props.projectStatus}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_STATUS}
-                        dispatch={ACTION_TYPES.LOAD_PROJECT_STATUS}
+                        setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_STATUS"}
+                        dispatch={"LOAD_PROJECT_STATUS"}
                         persist="ProjectStatus"
                         allowEdit={true}
                         newItemTemplate={{
@@ -214,8 +213,8 @@ class ProjectDetailsTab extends React.Component {
                         label="Validation status:"
                         selectedValue={projectDetails.ValidationStatusId}
                         data={this.props.validationStatus}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_VALIDATION_STATUS}
-                        dispatch={ACTION_TYPES.LOAD_VALIDATION_STATUS}
+                        setSelectedValueKey={"SET_PROJECT_DETAILS_VALIDATION_STATUS"}
+                        dispatch={"LOAD_VALIDATION_STATUS"}
                         persist="ValidationStatus"
                         allowEdit={true}
                         newItemTemplate={{
@@ -230,9 +229,9 @@ class ProjectDetailsTab extends React.Component {
                         label="Project manager:"
                         selectedValue={projectDetails.ProjectManagerId}
                         data={this.props.users}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_PROJECT_MANAGER}
+                        setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_MANAGER"}
                         allowEdit={false}
-                        dispatch={ACTION_TYPES.LOAD_USERS}
+                        dispatch={"LOAD_USERS"}
                         persist="User"
                         newItemTemplate={{
                             "UserId": 0,
@@ -244,17 +243,6 @@ class ProjectDetailsTab extends React.Component {
                             "MobileNumber": ""
                         }}
                     />
-                    {/* <SelectComponent
-                        id="selProjectMAOptions"
-                        col="col-md-4"
-                        label="MAOptions:"
-                        selectedValue={projectDetails.MAOptionId}
-                        data={this.props.maOptions}
-                        setSelectedValueKey={ACTION_TYPES.SET_PROJECT_DETAILS_MAOPTION}
-                        // dispatch={ACTION_TYPES.LOAD_MA_OPTIONS}
-                        // persist="MAOptions"
-                        allowEdit={false}
-                    /> */}
                 </div>
             </>
         )

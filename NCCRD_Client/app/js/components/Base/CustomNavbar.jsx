@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input } from 'mdbreact'
-import * as ACTION_TYPES from "../../constants/action-types"
 import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
 import userManager from '../Authentication/userManager'
 import { ssoBaseURL } from '../../config/ssoBaseURL.cfg'
+import {DEAGreen} from '../../config/colours.cfg'
 
 const _gf = require("../../globalFunctions")
 
@@ -61,39 +61,39 @@ class CustomNavbar extends React.Component {
     let { locationHash, user } = this.props
 
     return (
-      <Navbar size="sm" color="white" dark expand="md" style={{ boxShadow: "none", borderTop: "1px solid gainsboro" }} >
+      <Navbar size="sm" color="white" light expand="md" style={{ boxShadow: "none", borderTop: "1px solid gainsboro" }} >
         {!this.state.isWideEnough && <NavbarToggler style={{ backgroundColor: "#2BBBAD" }} onClick={this.onClick} />}
         <Collapse isOpen={this.state.collapse} navbar>
 
           {/* LEFT */}
           <NavbarNav left>
             <NavItem style={{ borderBottom: (locationHash === "#/" ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
-              <a className="nav-link" href="#"><b style={{ color: "black" }}>Home</b></a>
+              <NavLink to="/"><b>Home</b></NavLink>
             </NavItem>
 
-            <NavItem style={{ borderBottom: (locationHash.startsWith("#/projects") ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
-              <a className="nav-link" href="#/projects"><b style={{ color: "black" }}>Projects</b></a>
+            <NavItem style={{ borderBottom: (locationHash === "#/projects" ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
+              <NavLink to="/projects"><b>Project List</b></NavLink>
             </NavItem>
 
-            {/* Link new document */}
-            <NavItem style={{ borderBottom: (locationHash.startsWith("#/linkdoc") ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
-              <a className="nav-link" href="#/linkdoc">
-                <b style={{ color: "black" }}>
-                  Add new plan
-                </b>
-              </a>
-            </NavItem>
+            {(user && !user.expired) &&
+              <NavItem>
+                {/* <NavLink to="projects/add"><b>Add New Project</b></NavLink> */}
+                <Button size="sm" color="" style={{ backgroundColor: DEAGreen}}
+                 onClick={() => { location.hash = "projects/add"}}>
+                Add New Project</Button>
+              </NavItem>
+            }
+
           </NavbarNav>
 
           {/* RIGHT */}
           <NavbarNav right>
 
-            
             {/* Username */}
             {(user && !user.expired) &&
               <NavItem style={{ marginLeft: "15px" }}>
                 <span className="nav-link">
-                  <b style={{ color: "#2BBBAD" }}>
+                  <b style={{ color: DEAGreen }}>
                     {"Hello, " + user.profile.email}
                   </b>
                 </span>

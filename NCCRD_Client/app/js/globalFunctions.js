@@ -1,6 +1,20 @@
 'use strict'
 
 import React from 'react'
+import {DEAGreen, DEAGreenDark} from './config/colours.cfg'
+
+export function fixEmptyValue(value, defaultValue) {
+
+  if (isEmptyValue(value)) {
+    return defaultValue
+  }
+  
+  return value
+}
+
+export function isEmptyValue(value){
+  return (typeof value === 'undefined' || value === "" || value === null)
+}
 
 export function stripURLParam(paramKey) {
   let i = location.toString().indexOf("?")
@@ -15,6 +29,15 @@ export function stripURLParam(paramKey) {
   }
   else if (queryString.includes("&" + paramKey)) {
     location = location.toString().replace("&" + paramKey, "")
+  }
+}
+
+export function getFontColour(editMode) {
+  if (editMode) {
+      return DEAGreen
+  }
+  else {
+      return "black"
   }
 }
 

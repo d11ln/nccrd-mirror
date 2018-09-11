@@ -2,7 +2,6 @@ import React from 'react'
 import { Button } from 'mdbreact'
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'
 
@@ -24,10 +23,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadSectorFilter: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_SECTOR_FILTER, payload })
+            dispatch({ type: "LOAD_SECTOR_FILTER", payload })
         },
         loadSectors: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_SECTOR, payload })
+            dispatch({ type: "LOAD_SECTOR", payload })
         }
     }
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import { Button, Fa } from 'mdbreact'
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {

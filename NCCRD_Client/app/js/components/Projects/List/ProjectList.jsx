@@ -1,7 +1,6 @@
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { Container, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "mdbreact"
 
@@ -22,34 +21,34 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setScrollPos: payload => {
-            dispatch({ type: ACTION_TYPES.SET_PROJECT_SCROLL, payload })
+            dispatch({ type: "SET_PROJECT_SCROLL", payload })
         },
         loadProjects: payload => {
-            dispatch({ type: ACTION_TYPES.LOAD_PROJECTS, payload })
+            dispatch({ type: "LOAD_PROJECTS", payload })
         },
         setLoading: payload => {
-            dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+            dispatch({ type: "SET_LOADING", payload })
         },
         clearProjectDetails: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_PROJECT_DETAILS, payload: [] })
+            dispatch({ type: "LOAD_PROJECT_DETAILS", payload: [] })
         },
         clearAdaptationDetails: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_DETAILS, payload: [] })
+            dispatch({ type: "LOAD_ADAPTATION_DETAILS", payload: [] })
         },
         clearMitigationDetails: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_DETAILS, payload: [] })
+            dispatch({ type: "LOAD_MITIGATION_DETAILS", payload: [] })
         },
         clearEmissionsData: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_EMISSIONS, payload: [] })
+            dispatch({ type: "LOAD_MITIGATION_EMISSIONS", payload: [] })
         },
         clearResearchDetails: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_DETAILS, payload: [] })
+            dispatch({ type: "LOAD_RESEARCH_DETAILS", payload: [] })
         },
         loadMoreProjects: () => {
-            dispatch({ type: ACTION_TYPES.LOAD_MORE_PROJECTS })
+            dispatch({ type: "LOAD_MORE_PROJECTS" })
         },
         resetProjectCounts: () => {
-            dispatch({ type: ACTION_TYPES.RESET_PROJECT_COUNTS })
+            dispatch({ type: "RESET_PROJECT_COUNTS" })
         }
     }
 }

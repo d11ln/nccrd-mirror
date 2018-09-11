@@ -3,9 +3,9 @@ import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
+import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
@@ -36,9 +36,9 @@ class MitigationDetailsItem extends React.Component {
             label="Carbon credit:"
             selectedValue={details.CarbonCreditId}
             data={carbonCredit}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT}
+            setSelectedValueKey={"SET_MITIGATION_CARBON_CREDIT"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT}
+            dispatch={"LOAD_CARBON_CREDIT"}
             persist="CarbonCredit"
             allowEdit={true}
             newItemTemplate={{
@@ -53,9 +53,9 @@ class MitigationDetailsItem extends React.Component {
             label="Carbon credit market:"
             selectedValue={details.CarbonCreditMarketId}
             data={carbonCreditMarket}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CARBON_CREDIT_MARKET}
+            setSelectedValueKey={"SET_MITIGATION_CARBON_CREDIT_MARKET"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET}
+            dispatch={"LOAD_CARBON_CREDIT_MARKET"}
             persist="CarbonCreditMarket"
             allowEdit={true}
             newItemTemplate={{
@@ -70,9 +70,9 @@ class MitigationDetailsItem extends React.Component {
             label="CDM status:"
             selectedValue={details.CDMStatusId}
             data={cdmStatus}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_STATUS}
+            setSelectedValueKey={"SET_MITIGATION_CDM_STATUS"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_CDM_STATUS}
+            dispatch={"LOAD_CDM_STATUS"}
             persist="CDMStatus"
             allowEdit={true}
             newItemTemplate={{
@@ -92,9 +92,9 @@ class MitigationDetailsItem extends React.Component {
             label="CDM methodology:"
             selectedValue={details.CDMMethodologyId}
             data={cdmMethodology}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_CDM_METHODOLOGY}
+            setSelectedValueKey={"SET_MITIGATION_CDM_METHODOLOGY"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_CDM_METHODOLOGY}
+            dispatch={"LOAD_CDM_METHODOLOGY"}
             persist="CDMMethodology"
             allowEdit={true}
             newItemTemplate={{
@@ -109,9 +109,9 @@ class MitigationDetailsItem extends React.Component {
             label="Voluntary methodology:"
             selectedValue={details.VoluntaryMethodologyId}
             data={voluntaryMethodology}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_METHODOLOGY}
+            setSelectedValueKey={"SET_MITIGATION_VOLUNTARY_METHODOLOGY"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY}
+            dispatch={"LOAD_VOLUNTARY_METHODOLOGY"}
             persist="VoluntaryMethodology"
             allowEdit={true}
             newItemTemplate={{
@@ -126,9 +126,9 @@ class MitigationDetailsItem extends React.Component {
             label="Voluntary gold standard:"
             selectedValue={details.VoluntaryGoldStandardId}
             data={voluntaryGoldStandard}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_VOLUNTARY_GOLD_STANDARD}
+            setSelectedValueKey={"SET_MITIGATION_VOLUNTARY_GOLD_STANDARD"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD}
+            dispatch={"LOAD_VOLUNTARY_GOLD_STANDARD"}
             persist="VoluntaryGoldStandard"
             allowEdit={true}
             newItemTemplate={{
@@ -147,7 +147,7 @@ class MitigationDetailsItem extends React.Component {
             label="CDM project number:"
             id="txtMitigationCDMProjectNumber"
             value={details.CDMProjectNumber}
-            setValueKey={ACTION_TYPES.SET_MITIGATION_CDM_PROJECT_NUMBER}
+            setValueKey={"SET_MITIGATION_CDM_PROJECT_NUMBER"}
             parentId={details.MitigationDetailId}
           />
           <TextComponent
@@ -155,7 +155,7 @@ class MitigationDetailsItem extends React.Component {
             label="Other description:"
             id="txtMitigationOtherDescription"
             value={details.OtherDescription}
-            setValueKey={ACTION_TYPES.SET_MITIGATION_OTHER_DESCR}
+            setValueKey={"SET_MITIGATION_OTHER_DESCR"}
             parentId={details.MitigationDetailId}
           />
           <TreeSelectComponent
@@ -164,9 +164,9 @@ class MitigationDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             data={sector}
-            setSelectedValueKey={ACTION_TYPES.SET_MITIGATION_SECTOR}
+            setSelectedValueKey={"SET_MITIGATION_SECTOR"}
             parentId={details.MitigationDetailId}
-            dispatch={ACTION_TYPES.LOAD_SECTOR}
+            dispatch={"LOAD_SECTOR"}
             persist="Sector"
             type="tree"
             dependencies={[
@@ -186,7 +186,7 @@ class MitigationDetailsItem extends React.Component {
         </div>
 
         <br />
-        <hr />
+        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
         <br />
 
         <ReactTooltip delayShow={700} />

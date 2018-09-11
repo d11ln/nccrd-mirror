@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
 
 namespace NCCRD.Services.DataV2.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitialcreateV2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +14,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     AdaptationPurposeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,8 +28,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     CarbonCreditId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,8 +42,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     CarbonCreditMarketId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,8 +56,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     CDMMethodologyId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -71,26 +70,12 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     CDMStatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CDMStatus", x => x.CDMStatusId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Funders",
-                columns: table => new
-                {
-                    FunderId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Funders", x => x.FunderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,8 +84,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     FundingStatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,16 +98,16 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     LocationId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    LatCalculated = table.Column<double>(nullable: true),
                     LatDegree = table.Column<double>(nullable: true),
-                    LatDirection = table.Column<double>(nullable: true),
                     LatMinutes = table.Column<double>(nullable: true),
                     LatSeconds = table.Column<double>(nullable: true),
-                    LonCalculated = table.Column<double>(nullable: true),
+                    LatDirection = table.Column<double>(nullable: true),
+                    LatCalculated = table.Column<double>(nullable: true),
                     LonDegree = table.Column<double>(nullable: true),
-                    LonDirection = table.Column<double>(nullable: true),
                     LonMinutes = table.Column<double>(nullable: true),
-                    LonSeconds = table.Column<double>(nullable: true)
+                    LonSeconds = table.Column<double>(nullable: true),
+                    LonDirection = table.Column<double>(nullable: true),
+                    LonCalculated = table.Column<double>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -143,13 +128,33 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Person",
+                columns: table => new
+                {
+                    PersonId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EmailAddress = table.Column<string>(maxLength: 450, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 450, nullable: false),
+                    Surname = table.Column<string>(maxLength: 450, nullable: false),
+                    AddressLine1 = table.Column<string>(nullable: true),
+                    AddressLine2 = table.Column<string>(nullable: true),
+                    Organisation = table.Column<string>(maxLength: 450, nullable: false),
+                    PhoneNumber = table.Column<string>(maxLength: 450, nullable: true),
+                    MobileNumber = table.Column<string>(maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Person", x => x.PersonId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectStatus",
                 columns: table => new
                 {
                     ProjectStatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,8 +167,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     ProjectTypeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -176,8 +181,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     ResearchTypeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,8 +208,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     TargetAudienceId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -225,31 +230,13 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmailAddress = table.Column<string>(maxLength: 450, nullable: false),
-                    FirstName = table.Column<string>(maxLength: 450, nullable: false),
-                    MobileNumber = table.Column<string>(maxLength: 450, nullable: true),
-                    Organisation = table.Column<string>(maxLength: 450, nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 450, nullable: true),
-                    Surname = table.Column<string>(maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ValidationStatus",
                 columns: table => new
                 {
                     ValidationStatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,9 +249,9 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     VersionHistoryId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Comments = table.Column<string>(nullable: true),
+                    VersionNumber = table.Column<string>(maxLength: 450, nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    VersionNumber = table.Column<string>(maxLength: 450, nullable: false)
+                    Comments = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -277,8 +264,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     VoluntaryGoldStandardId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,8 +278,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     VoluntaryMethodologyId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -305,10 +292,10 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     RegionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    LocationTypeId = table.Column<int>(nullable: false),
-                    ParentRegionId = table.Column<int>(nullable: true),
+                    RegionName = table.Column<string>(maxLength: 450, nullable: false),
                     RegionDesription = table.Column<string>(nullable: true),
-                    RegionName = table.Column<string>(maxLength: 450, nullable: false)
+                    LocationTypeId = table.Column<int>(nullable: false),
+                    ParentRegionId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -328,14 +315,45 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Funders",
+                columns: table => new
+                {
+                    FunderId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FundingAgency = table.Column<string>(nullable: false),
+                    GrantProgName = table.Column<string>(nullable: true),
+                    TotalBudget = table.Column<decimal>(nullable: true),
+                    AnnualBudget = table.Column<decimal>(nullable: true),
+                    PartnerDepsOrgs = table.Column<string>(nullable: true),
+                    ProjectCoordinatorId = table.Column<int>(nullable: true),
+                    FundingStatusId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funders", x => x.FunderId);
+                    table.ForeignKey(
+                        name: "FK_Funders_FundingStatus_FundingStatusId",
+                        column: x => x.FundingStatusId,
+                        principalTable: "FundingStatus",
+                        principalColumn: "FundingStatusId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Funders_Person_ProjectCoordinatorId",
+                        column: x => x.ProjectCoordinatorId,
+                        principalTable: "Person",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectSubType",
                 columns: table => new
                 {
                     ProjectSubTypeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    ProjectTypeId = table.Column<int>(nullable: false),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    ProjectTypeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -354,10 +372,10 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     SectorId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ParentSectorId = table.Column<int>(nullable: true),
+                    Value = table.Column<string>(maxLength: 450, nullable: false),
                     SectorTypeId = table.Column<int>(nullable: false),
-                    TypologyId = table.Column<int>(nullable: true),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
+                    ParentSectorId = table.Column<int>(nullable: true),
+                    TypologyId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -388,34 +406,34 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     ProjectId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ProjectTitle = table.Column<string>(maxLength: 450, nullable: false),
+                    ProjectDescription = table.Column<string>(nullable: true),
+                    LeadAgent = table.Column<string>(maxLength: 450, nullable: false),
+                    HostPartner = table.Column<string>(maxLength: 450, nullable: true),
+                    HostOrganisation = table.Column<string>(maxLength: 450, nullable: false),
+                    StartYear = table.Column<int>(nullable: false),
+                    EndYear = table.Column<int>(nullable: false),
+                    ReminderSent = table.Column<bool>(nullable: true),
                     AlternativeContact = table.Column<string>(maxLength: 450, nullable: true),
                     AlternativeContactEmail = table.Column<string>(maxLength: 450, nullable: true),
+                    Link = table.Column<string>(maxLength: 450, nullable: true),
+                    ValidationComments = table.Column<string>(nullable: true),
                     BudgetLower = table.Column<decimal>(nullable: true),
                     BudgetUpper = table.Column<decimal>(nullable: true),
-                    EndYear = table.Column<int>(nullable: false),
-                    HostOrganisation = table.Column<string>(maxLength: 450, nullable: false),
-                    HostPartner = table.Column<string>(maxLength: 450, nullable: true),
-                    LeadAgent = table.Column<string>(maxLength: 450, nullable: false),
-                    Link = table.Column<string>(maxLength: 450, nullable: true),
-                    ProjectDescription = table.Column<string>(nullable: true),
-                    ProjectManagerId = table.Column<int>(nullable: false),
-                    ProjectStatusId = table.Column<int>(nullable: false),
-                    ProjectSubTypeId = table.Column<int>(nullable: true),
-                    ProjectTitle = table.Column<string>(maxLength: 450, nullable: false),
                     ProjectTypeId = table.Column<int>(nullable: false),
-                    ReminderSent = table.Column<bool>(nullable: true),
-                    StartYear = table.Column<int>(nullable: false),
-                    ValidationComments = table.Column<string>(nullable: true),
+                    ProjectSubTypeId = table.Column<int>(nullable: true),
+                    ProjectStatusId = table.Column<int>(nullable: false),
+                    ProjectManagerId = table.Column<int>(nullable: false),
                     ValidationStatusId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Project", x => x.ProjectId);
                     table.ForeignKey(
-                        name: "FK_Project_Users_ProjectManagerId",
+                        name: "FK_Project_Person_ProjectManagerId",
                         column: x => x.ProjectManagerId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalTable: "Person",
+                        principalColumn: "PersonId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Project_ProjectStatus_ProjectStatusId",
@@ -449,8 +467,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     AdaptationDetailId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AdaptationPurposeId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
+                    AdaptationPurposeId = table.Column<int>(nullable: false),
                     ProjectId = table.Column<int>(nullable: false),
                     SectorId = table.Column<int>(nullable: true)
                 },
@@ -483,18 +501,18 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     MitigationDetailId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CDMMethodologyId = table.Column<int>(nullable: true),
-                    CDMProjectNumber = table.Column<string>(maxLength: 450, nullable: true),
-                    CDMStatusId = table.Column<int>(nullable: true),
-                    CarbonCreditId = table.Column<int>(nullable: false),
-                    CarbonCreditMarketId = table.Column<int>(nullable: true),
+                    VCS = table.Column<int>(nullable: true),
                     Other = table.Column<int>(nullable: true),
                     OtherDescription = table.Column<string>(nullable: true),
-                    ProjectId = table.Column<int>(nullable: false),
-                    SectorId = table.Column<int>(nullable: true),
-                    VCS = table.Column<int>(nullable: true),
+                    CDMProjectNumber = table.Column<string>(maxLength: 450, nullable: true),
+                    CarbonCreditId = table.Column<int>(nullable: false),
+                    CarbonCreditMarketId = table.Column<int>(nullable: true),
+                    CDMStatusId = table.Column<int>(nullable: true),
+                    CDMMethodologyId = table.Column<int>(nullable: true),
+                    VoluntaryMethodologyId = table.Column<int>(nullable: true),
                     VoluntaryGoldStandardId = table.Column<int>(nullable: true),
-                    VoluntaryMethodologyId = table.Column<int>(nullable: true)
+                    ProjectId = table.Column<int>(nullable: false),
+                    SectorId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -555,33 +573,33 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     MitigationEmissionsDataId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BioWaste = table.Column<double>(nullable: true),
-                    BioWaste_CO2e = table.Column<double>(nullable: true),
+                    Year = table.Column<int>(nullable: false),
+                    CO2 = table.Column<double>(nullable: true),
                     CH4 = table.Column<double>(nullable: true),
                     CH4_CO2e = table.Column<double>(nullable: true),
-                    CO2 = table.Column<double>(nullable: true),
-                    FossilFuelElecRed = table.Column<double>(nullable: true),
-                    FossilFuelElecRed_CO2e = table.Column<double>(nullable: true),
-                    Geothermal = table.Column<double>(nullable: true),
-                    Geothermal_CO2e = table.Column<double>(nullable: true),
-                    HFC = table.Column<double>(nullable: true),
-                    HFC_CO2e = table.Column<double>(nullable: true),
-                    Hydro = table.Column<double>(nullable: true),
-                    Hydro_CO2e = table.Column<double>(nullable: true),
                     N2O = table.Column<double>(nullable: true),
                     N2O_CO2e = table.Column<double>(nullable: true),
+                    HFC = table.Column<double>(nullable: true),
+                    HFC_CO2e = table.Column<double>(nullable: true),
                     PFC = table.Column<double>(nullable: true),
                     PFC_CO2e = table.Column<double>(nullable: true),
-                    ProjectId = table.Column<int>(nullable: false),
                     SF6 = table.Column<double>(nullable: true),
                     SF6_CO2e = table.Column<double>(nullable: true),
-                    Solar = table.Column<double>(nullable: true),
-                    Solar_CO2e = table.Column<double>(nullable: true),
+                    Hydro = table.Column<double>(nullable: true),
+                    Hydro_CO2e = table.Column<double>(nullable: true),
                     Tidal = table.Column<double>(nullable: true),
                     Tidal_CO2e = table.Column<double>(nullable: true),
                     Wind = table.Column<double>(nullable: true),
                     Wind_CO2e = table.Column<double>(nullable: true),
-                    Year = table.Column<int>(nullable: false)
+                    Solar = table.Column<double>(nullable: true),
+                    Solar_CO2e = table.Column<double>(nullable: true),
+                    FossilFuelElecRed = table.Column<double>(nullable: true),
+                    FossilFuelElecRed_CO2e = table.Column<double>(nullable: true),
+                    BioWaste = table.Column<double>(nullable: true),
+                    BioWaste_CO2e = table.Column<double>(nullable: true),
+                    Geothermal = table.Column<double>(nullable: true),
+                    Geothermal_CO2e = table.Column<double>(nullable: true),
+                    ProjectId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -601,7 +619,6 @@ namespace NCCRD.Services.DataV2.Migrations
                     ProjectFunderId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FunderId = table.Column<int>(nullable: false),
-                    FundingStatusId = table.Column<int>(nullable: true),
                     ProjectId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -613,12 +630,6 @@ namespace NCCRD.Services.DataV2.Migrations
                         principalTable: "Funders",
                         principalColumn: "FunderId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectFunder_FundingStatus_FundingStatusId",
-                        column: x => x.FundingStatusId,
-                        principalTable: "FundingStatus",
-                        principalColumn: "FundingStatusId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProjectFunder_Project_ProjectId",
                         column: x => x.ProjectId,
@@ -633,8 +644,8 @@ namespace NCCRD.Services.DataV2.Migrations
                 {
                     ProjectLocationId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    LocationId = table.Column<int>(nullable: false),
-                    ProjectId = table.Column<int>(nullable: false)
+                    ProjectId = table.Column<int>(nullable: false),
+                    LocationId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -687,10 +698,10 @@ namespace NCCRD.Services.DataV2.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Author = table.Column<string>(maxLength: 450, nullable: false),
                     PaperLink = table.Column<string>(maxLength: 450, nullable: true),
-                    ProjectId = table.Column<int>(nullable: false),
                     ResearchTypeId = table.Column<int>(nullable: false),
-                    SectorId = table.Column<int>(nullable: true),
-                    TargetAudienceId = table.Column<int>(nullable: false)
+                    TargetAudienceId = table.Column<int>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: false),
+                    SectorId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -735,6 +746,16 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "IX_AdaptationDetails_SectorId",
                 table: "AdaptationDetails",
                 column: "SectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Funders_FundingStatusId",
+                table: "Funders",
+                column: "FundingStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Funders_ProjectCoordinatorId",
+                table: "Funders",
+                column: "ProjectCoordinatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MitigationDetails_CDMMethodologyId",
@@ -810,11 +831,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "IX_ProjectFunder_FunderId",
                 table: "ProjectFunder",
                 column: "FunderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectFunder_FundingStatusId",
-                table: "ProjectFunder",
-                column: "FundingStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectFunder_ProjectId",
@@ -943,9 +959,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "Funders");
 
             migrationBuilder.DropTable(
-                name: "FundingStatus");
-
-            migrationBuilder.DropTable(
                 name: "Location");
 
             migrationBuilder.DropTable(
@@ -964,10 +977,13 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "TargetAudience");
 
             migrationBuilder.DropTable(
+                name: "FundingStatus");
+
+            migrationBuilder.DropTable(
                 name: "LocationType");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Person");
 
             migrationBuilder.DropTable(
                 name: "ProjectStatus");

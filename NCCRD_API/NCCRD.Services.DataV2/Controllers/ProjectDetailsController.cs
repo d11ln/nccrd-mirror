@@ -34,23 +34,37 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             //Get project and details
             var project = _context.Project.FirstOrDefault(x => x.ProjectId == id);
-            var adaptations = _context.AdaptationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.AdaptationDetailId).ToArray();
-            var mitigations = _context.MitigationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationDetailId).ToArray();
-            var emissions = _context.MitigationEmissionsData.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationEmissionsDataId).ToArray();
-            var research = _context.ResearchDetails.Where(x => x.ProjectId == id).OrderBy(x => x.ResearchDetailId).ToArray();
+
+            var funders = _context.ProjectFunder.Include(x => x.Funder).Where(x => x.ProjectId == id)
+                .OrderBy(x => x.FunderId).Select(x => x.Funder).ToArray();
+
+            var adaptations = _context.AdaptationDetails.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.AdaptationDetailId).ToArray();
+
+            var mitigations = _context.MitigationDetails.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.MitigationDetailId).ToArray();
+
+            var emissions = _context.MitigationEmissionsData.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.MitigationEmissionsDataId).ToArray();
+
+            var research = _context.ResearchDetails.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.ResearchDetailId).ToArray();
 
             var lookups = new LookupsController(_context).GetLookups();
 
-            return new ProjectDetails()
+            var res =  new ProjectDetails()
             {
                 Id = id == 0 ? int.Parse(DateTime.Now.ToString("HHmmssfff")) : id,
                 Project = project,
+                Funders = funders,
                 AdaptationDetails = adaptations,
                 MitigationDetails = mitigations,
                 MitigationEmissionsData = emissions,
                 ResearchDetails = research,
                 Lookups = lookups
             };
+
+            return res;
         }
 
         //Add/Update
@@ -73,8 +87,21 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
+            //Save Funders
+            if (data.Funders != null)
+            {
+                foreach (var funder in data.Funders)
+                {
+                    var result = SaveFundersAsync(funder, data.Id);
+                    if (!(result is CreatedODataResult<Funder> || result is UpdatedODataResult<Funder>))
+                    {
+                        return result;
+                    }
+                }
+            }
+
             //Save Adaptations
-            if(data.AdaptationDetails != null)
+            if (data.AdaptationDetails != null)
             {
                 foreach(var adaptation in data.AdaptationDetails)
                 {
@@ -152,6 +179,31 @@ namespace NCCRD.Services.DataV2.Controllers
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(project);
                 //await _context.SaveChangesAsync();
+                return Updated(exiting);
+            }
+        }
+
+        private IActionResult SaveFundersAsync(Funder funder, int projectId)
+        {
+            var exiting = _context.Funders.FirstOrDefault(x => x.FunderId == funder.FunderId);
+            if (exiting == null)
+            {
+                //ADD
+                HelperExtensions.ClearIdentityValue(ref funder);
+                HelperExtensions.ClearNullableInts(ref funder);
+                _context.Funders.Add(funder);
+                _context.ProjectFunder.Add(new ProjectFunder
+                {
+                    Funder = funder,
+                    ProjectId = projectId
+                });
+
+                return Created(funder);
+            }
+            else
+            {
+                //UPDATE
+                _context.Entry(exiting).CurrentValues.SetValues(funder);
                 return Updated(exiting);
             }
         }
