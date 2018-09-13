@@ -156,7 +156,7 @@ class EditListModal extends React.Component {
 
   confirmSave() {
 
-    let { dispatchToStore, dispatch, persist, setLoading, data, user } = this.props
+    let { dispatchToStore, dispatch, persist, setLoading, data, user, newItemTemplate } = this.props
     let { _data } = this.state
 
     //Update items
@@ -165,9 +165,16 @@ class EditListModal extends React.Component {
     //Get changed items
     let postData = { Id: 123456 }
     let postDataItems = []
-    _data.filter(x => x.modifiedState === true).forEach(x => {
-      let clone = _.clone(x)
-      delete clone.modifiedState
+    _data.filter(item => item.modifiedState === true).forEach(item => {
+      let clone = _.clone(item)
+
+      //Remove keys not in the server model
+      Object.keys(item).forEach(key => {
+        if (!Object.keys(newItemTemplate).includes(key)) {
+          delete clone[key]
+        }
+      })
+
       postDataItems.push(clone)
     })
     postData[persist] = postDataItems
@@ -203,7 +210,7 @@ class EditListModal extends React.Component {
 
           //Merge changes into props
           let merged = _.merge(_data)
-          let valueKey = Object.keys(merged[0])[1].toString()
+          let valueKey = Object.keys(merged[0]).includes("Value") ? "Value" : Object.keys(merged[0])[1].toString()
           merged = _.orderBy(merged, valueKey, 'asc'); // Use Lodash to sort array by 'Value'
 
           //Dispatch to store
@@ -250,7 +257,7 @@ class EditListModal extends React.Component {
 
       processedItems.push({
         id: item[Object.keys(item)[0]],
-        value: item[Object.keys(item)[1]],
+        value: Object.keys(item).includes("Value") ? item.Value : item[Object.keys(item)[1]],
         modifiedState: item.modifiedState
       })
 
@@ -285,14 +292,17 @@ class EditListModal extends React.Component {
     processedItems.map(item => {
       if (item.id > 0) {
         let { selectedItemId } = this.state
-        listItems.push(<ListGroupItem style={{
-          cursor: "pointer",
-          backgroundColor: (selectedItemId === item.id ? "#2BBBAD" : "white")
-        }}
-          hover={true}
-          onClick={this.listItemClick.bind(this, item.id)}
-          key={item.id}
-        >&nbsp;{(item.modifiedState === true ? "* " : "") + item.value}</ListGroupItem>)
+        listItems.push(
+          <ListGroupItem
+            style={{
+              cursor: "pointer",
+              backgroundColor: (selectedItemId === item.id ? "#2BBBAD" : "white")
+            }}
+            hover={true}
+            onClick={this.listItemClick.bind(this, item.id)}
+            key={item.id}>
+            {(item.modifiedState === true ? "* " : "") + item.value}
+          </ListGroupItem>)
       }
     })
 

@@ -109,6 +109,19 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
+            //Save Person
+            if (data.Person != null)
+            {
+                foreach (var person in data.Person)
+                {
+                    var result = SavePersonAsync(person);
+                    if (!(result is CreatedODataResult<Person> || result is UpdatedODataResult<Person>))
+                    {
+                        return result;
+                    }
+                }
+            }
+
             //Save ProjectStatus
             if (data.ProjectStatus != null)
             {
@@ -213,9 +226,6 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
-            //Save User
-            //...
-
             //Save ValidationStatus
             if (data.ValidationStatus != null)
             {
@@ -300,7 +310,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 SectorType = sectorType,
                 TargetAudience = targetAudience,
                 Typology = typology,
-                User = user,
+                Person = user,
                 ValidationStatus = validationStatus,
                 VoluntaryGoldStandard = voluntaryGoldStandard,
                 VoluntaryMethodology = voluntaryMethodology
@@ -422,6 +432,31 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref item);
                 HelperExtensions.ClearNullableInts(ref item);
                 _context.CDMStatus.Add(item);
+                return Created(item);
+            }
+            else
+            {
+                //UPDATE
+                _context.Entry(exiting).CurrentValues.SetValues(item);
+                return Updated(exiting);
+            }
+        }
+
+        private IActionResult SavePersonAsync(Person item)
+        {
+            //Check that Value/Name is unique
+            if (_context.Person.AsNoTracking().FirstOrDefault(x => x.EmailAddress == item.EmailAddress && x.PersonId != item.PersonId) != null)
+            {
+                return BadRequest("Duplicate entry/value found.");
+            }
+
+            var exiting = _context.Person.FirstOrDefault(x => x.PersonId == item.PersonId);
+            if (exiting == null)
+            {
+                //ADD
+                HelperExtensions.ClearIdentityValue(ref item);
+                HelperExtensions.ClearNullableInts(ref item);
+                _context.Person.Add(item);
                 return Created(item);
             }
             else

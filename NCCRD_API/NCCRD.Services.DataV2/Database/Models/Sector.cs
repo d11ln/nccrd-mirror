@@ -38,9 +38,9 @@ namespace NCCRD.Services.DataV2.Database.Models
         /*    
         Note:
 
-            I removed Typology from Sector as this did not make sence to me any more.
+            I removed Typology from Sector as this did not make sense to me any more.
 
-            Instead I now filter Typology based on wether a Project has any Adaptations/Mitigation/Research attahced to it.
+            Instead I now filter Typology based on wether a Project has any Adaptations/Mitigation/Research attached to it.
 
             I did this for two reasons,
             1) With Typology determined by Sector, the Project could be placed in the wrong Typology by an inaccurate Sector allocation.

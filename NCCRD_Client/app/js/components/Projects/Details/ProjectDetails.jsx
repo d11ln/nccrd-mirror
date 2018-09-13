@@ -262,7 +262,7 @@ class ProjectDetails extends React.Component {
 
       if (!detailsOnly) {
         oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
-          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Region,Sector,SectorType,TargetAudience,Typology,User," +
+          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Region,Sector,SectorType,TargetAudience,Typology,Person," +
           "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
       }
 
@@ -299,10 +299,11 @@ class ProjectDetails extends React.Component {
               loadTypology(oHandler.data.Lookups.Typology)
               loadFundingStatus(oHandler.data.Lookups.FundingStatus)
 
-              loadUsers(oHandler.data.Lookups.User.map(x => {
-                x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
-                return x
-              }))
+              // loadUsers(oHandler.data.Lookups.Person.map(x => {
+              //   x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
+              //   return x
+              // }))
+              loadUsers(oHandler.data.Lookups.Person)
 
               loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
               loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)

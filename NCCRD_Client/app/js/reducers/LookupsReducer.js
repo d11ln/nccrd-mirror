@@ -39,6 +39,9 @@ export default function LookupsReducer(state = {}, action) {
         }
 
         case "LOAD_USERS": {
+            payload.forEach(x => {
+                x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
+            })
             return { ...state, users: payload }
         }
 

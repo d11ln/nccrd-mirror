@@ -84,22 +84,12 @@ class SelectComponent extends React.Component {
 
       let parentKeys = Object.keys(item).filter(key => key.startsWith("Parent") && key.endsWith("Id"))
 
-      if (parentKeys.length > 0) {
-        //Push item with parentId
-        preProcessedItems.push({
-          id: item[Object.keys(item)[0]],
-          value: item[Object.keys(item)[1]],
-          parentId: item[parentKeys[0]]
-        })
-      }
-      else {
-        //Push item without parentId
-        preProcessedItems.push({
-          id: item[Object.keys(item)[0]],
-          value: item[Object.keys(item)[1]],
-          parentId: null
-        })
-      }
+      //Push item
+      preProcessedItems.push({
+        id: item[Object.keys(item)[0]],
+        value: Object.keys(item).includes("Value") ? item.Value : item[Object.keys(item)[1]],
+        parentId: parentKeys.length > 0 ? item[parentKeys[0]] : null
+      })
     })
 
     return preProcessedItems

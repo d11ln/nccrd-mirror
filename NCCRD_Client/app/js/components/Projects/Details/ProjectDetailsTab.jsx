@@ -278,11 +278,11 @@ class ProjectDetailsTab extends React.Component {
                         selectedValue={projectDetails.ProjectManagerId}
                         data={this.props.users}
                         setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_MANAGER"}
-                        allowEdit={false}
+                        allowEdit={true}
                         dispatch={"LOAD_USERS"}
-                        persist="User"
+                        persist="Person"
                         newItemTemplate={{
-                            "UserId": 0,
+                            "PersonId": 0,
                             "EmailAddress": "",
                             "FirstName": "",
                             "Surname": "",
