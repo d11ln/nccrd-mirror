@@ -101,6 +101,18 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, SectorId: payload, state: modState }] }
         }
 
+        case "SET_ADAPTATION_DETAILS_HAZARD": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, HazardId: payload, state: modState }] }
+        }
+        
         default: {
             return state
         }

@@ -8,8 +8,8 @@ import ReactTooltip from 'react-tooltip'
 import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
-  let { lookupData: { adaptationPurpose, sector, sectorType, typology } } = state
-  return { adaptationPurpose, sector, sectorType, typology }
+  let { lookupData: { adaptationPurpose, sector, sectorType, typology, hazards } } = state
+  return { adaptationPurpose, sector, sectorType, typology, hazards }
 }
 
 class AdaptationDetailsItem extends React.Component {
@@ -23,7 +23,7 @@ class AdaptationDetailsItem extends React.Component {
 
   render() {
 
-    let { details, adaptationPurpose, sector, sectorType, typology } = this.props
+    let { details, adaptationPurpose, sector, sectorType, typology, hazards } = this.props
     
     return (
       <>
@@ -89,6 +89,32 @@ class AdaptationDetailsItem extends React.Component {
               "ParentSectorId": 0,
               "TypologyId": 0
             }}
+          />
+
+          <TreeSelectComponent
+            id="selAdaptationHazard"
+            col="col-md-4"
+            label="Hazard:"
+            selectedValue={details.HazardId}
+            data={hazards}
+            setSelectedValueKey={"SET_ADAPTATION_DETAILS_HAZARD"}
+            parentId={details.AdaptationDetailId}
+            dispatch={"LOAD_HAZARDS"}
+            //persist="Sector"
+            type="tree"
+            // dependencies={[
+            //   { key: "SectorTypeId", value: sectorType, type: "std" },
+            //   { key: "ParentSectorId", value: sector, type: "tree" },
+            //   { key: "TypologyId", value: typology, type: "std" }
+            // ]}
+            allowEdit={false}
+            // newItemTemplate={{
+            //   "SectorId": 0,
+            //   "Value": "",
+            //   "SectorTypeId": 0,
+            //   "ParentSectorId": 0,
+            //   "TypologyId": 0
+            // }}
           />
 
         </div>

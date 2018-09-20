@@ -78,7 +78,8 @@ const store = createStore(
             voluntaryMethodology: [],
             voluntaryGoldStandard: [],
             researchType: [],
-            targetAudience: []
+            targetAudience: [],
+            hazards: []
         },
 
         filterData: {

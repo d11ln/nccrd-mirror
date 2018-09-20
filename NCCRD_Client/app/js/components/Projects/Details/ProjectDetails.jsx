@@ -132,6 +132,9 @@ const mapDispatchToProps = (dispatch) => {
     loadTypology: payload => {
       dispatch({ type: "LOAD_TYPOLOGY", payload })
     },
+    loadHazards: payload => {
+      dispatch({ type: "LOAD_HAZARDS", payload })
+    },
     resetProjectState: payload => {
       dispatch({ type: "RESET_PROJECT_STATE", payload })
     },
@@ -211,7 +214,7 @@ class ProjectDetails extends React.Component {
       loadProjectDetails, loadProjectFunderDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
       loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadSectorTree, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus } = this.props
+      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards } = this.props
 
     let { projectId } = this.state
 
@@ -224,100 +227,112 @@ class ProjectDetails extends React.Component {
       location.hash = "/projects"
     }
 
-    if (this.state.projectId === 'add') {
+    //Get Project details & lookups
+    let oHandler = o(apiBaseURL + "ProjectDetails")
+      .find(projectId === 'add' ? 0 : projectId)
+      .expand("Project($expand=ProjectRegions),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
 
-      let newProject = {
-        "ProjectId": Date().valueOf(),
-        "ProjectTitle": "",
-        "ProjectDescription": "",
-        "LeadAgent": "",
-        "HostPartner": "",
-        "HostOrganisation": "",
-        "StartYear": 0,
-        "EndYear": 0,
-        "AlternativeContact": "",
-        "AlternativeContactEmail": "",
-        "Link": "",
-        "ValidationComments": "",
-        "BudgetLower": 0,
-        "BudgetUpper": 0,
-        "ProjectTypeId": 0,
-        "ProjectSubTypeId": 0,
-        "ProjectStatusId": 0,
-        "ProjectManagerId": 0,
-        "ValidationStatusId": 0,
-        "MAOptionId": 0,
-        "state": "modified"
-      }
-
-      setLoading(false)
-      setEditMode(true)
-      loadProjectDetails(newProject)
+    if (!detailsOnly) {
+      oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
+        "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Region,Sector,SectorType,TargetAudience,Typology,Person," +
+        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
     }
-    else {
 
-      let oHandler = o(apiBaseURL + "ProjectDetails")
-        .find(projectId)
-        .expand("Project($expand=ProjectRegions),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+    oHandler.get()
+      .then(
+        (oHandler) => {
+          //Success
+          setLoading(false)
 
-      if (!detailsOnly) {
-        oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
-          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Region,Sector,SectorType,TargetAudience,Typology,Person," +
-          "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
-      }
+          //console.log("DATA", oHandler.data)
 
-      oHandler.get()
-        .then(
-          (oHandler) => {
-            //Success
-            setLoading(false)
-
-            //console.log("DATA", oHandler.data)
-
-            //Dispatch results
-            loadProjectDetails(oHandler.data.Project)
-            loadProjectFunderDetails(oHandler.data.Funders)
-            loadAdaptationDetails(oHandler.data.AdaptationDetails)
-            loadMitigationDetails(oHandler.data.MitigationDetails)
-            loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
-            loadResearchDetails(oHandler.data.ResearchDetails)
-    
-            if (!detailsOnly) {
-              loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
-              loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
-              loadCarbonCreditMarket(oHandler.data.Lookups.CarbonCreditMarket)
-              loadCDMMethodology(oHandler.data.Lookups.CDMMethodology)
-              loadCDMStatus(oHandler.data.Lookups.CDMStatus)
-              loadProjectStatus(oHandler.data.Lookups.ProjectStatus)
-              loadProjectTypes(oHandler.data.Lookups.ProjectType)
-              loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
-              loadResearchType(oHandler.data.Lookups.ResearchType)
-              loadSectors(oHandler.data.Lookups.Sector)
-              loadRegions(oHandler.data.Lookups.Region)
-              loadSectorType(oHandler.data.Lookups.SectorType)
-              loadTargetAudience(oHandler.data.Lookups.TargetAudience)
-              loadTypology(oHandler.data.Lookups.Typology)
-              loadFundingStatus(oHandler.data.Lookups.FundingStatus)
-
-              // loadUsers(oHandler.data.Lookups.Person.map(x => {
-              //   x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
-              //   return x
-              // }))
-              loadUsers(oHandler.data.Lookups.Person)
-
-              loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
-              loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
-              loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
+          if (this.state.projectId === 'add') {
+            oHandler.data.Project = {
+              "ProjectId": Date().valueOf(),
+              "ProjectTitle": "",
+              "ProjectDescription": "",
+              "LeadAgent": "",
+              "HostPartner": "",
+              "HostOrganisation": "",
+              "StartYear": 0,
+              "EndYear": 0,
+              "AlternativeContact": "",
+              "AlternativeContactEmail": "",
+              "Link": "",
+              "ValidationComments": "",
+              "BudgetLower": 0,
+              "BudgetUpper": 0,
+              "ProjectTypeId": 0,
+              "ProjectSubTypeId": 0,
+              "ProjectStatusId": 0,
+              "ProjectManagerId": 0,
+              "ValidationStatusId": 0,
+              "MAOptionId": 0,
+              "state": "modified"
             }
-          },
-          (ex) => {
-            //Failed
-            setLoading(false)
-            this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
-            console.error("An error occurred while trying to fetch data from the server", ex)
+
+            oHandler.data.Funders = []
+            oHandler.data.AdaptationDetails = []
+            oHandler.data.MitigationDetails = []
+            oHandler.data.MitigationEmissionsData = []
+            oHandler.data.ResearchDetails = []
+
+            setEditMode(true)
           }
-        )
-    }
+
+          //Dispatch results
+          loadProjectDetails(oHandler.data.Project)
+          loadProjectFunderDetails(oHandler.data.Funders)
+          loadAdaptationDetails(oHandler.data.AdaptationDetails)
+          loadMitigationDetails(oHandler.data.MitigationDetails)
+          loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
+          loadResearchDetails(oHandler.data.ResearchDetails)
+
+          if (!detailsOnly) {
+            loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
+            loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
+            loadCarbonCreditMarket(oHandler.data.Lookups.CarbonCreditMarket)
+            loadCDMMethodology(oHandler.data.Lookups.CDMMethodology)
+            loadCDMStatus(oHandler.data.Lookups.CDMStatus)
+            loadProjectStatus(oHandler.data.Lookups.ProjectStatus)
+            loadProjectTypes(oHandler.data.Lookups.ProjectType)
+            loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
+            loadResearchType(oHandler.data.Lookups.ResearchType)
+            loadSectors(oHandler.data.Lookups.Sector)
+            loadRegions(oHandler.data.Lookups.Region)
+            loadSectorType(oHandler.data.Lookups.SectorType)
+            loadTargetAudience(oHandler.data.Lookups.TargetAudience)
+            loadTypology(oHandler.data.Lookups.Typology)
+            loadFundingStatus(oHandler.data.Lookups.FundingStatus)
+            loadUsers(oHandler.data.Lookups.Person)
+            loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
+            loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
+            loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
+          }
+        },
+        (ex) => {
+          //Failed
+          setLoading(false)
+          this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
+          console.error("An error occurred while trying to fetch data from the server", ex)
+        }
+      )
+
+    //Get (external) Hazards
+    fetch("http://localhost:64161/api/hazards/flat",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        loadHazards(res.items)
+      })
+      .catch(res => {
+        console.log("Error details:", res)
+      })
   }
 
   componentDidMount() {

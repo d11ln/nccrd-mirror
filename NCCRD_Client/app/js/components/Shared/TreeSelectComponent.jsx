@@ -64,6 +64,10 @@ class TreeSelectComponent extends React.Component {
 
     transformDataTree(effectiveData, globalData, level = 0) {
 
+        if (this.props.label === "Hazard:") {
+            console.log("data", effectiveData)
+        }
+
         let treeNodes = []
         let parentIdKey = "Parent" + Object.keys(effectiveData[0])[0].toString()
 
@@ -157,18 +161,18 @@ class TreeSelectComponent extends React.Component {
 
     getDisabledState() {
         let { editMode, editModeOverride } = this.props
-    
+
         let disabledState = true
-    
+
         if (typeof editModeOverride !== "undefined" && editModeOverride === true) {
-          disabledState = false
+            disabledState = false
         }
         else if (typeof editMode !== "undefined" && editMode === true) {
-          disabledState = false
+            disabledState = false
         }
-    
+
         return disabledState
-      }
+    }
 
     render() {
 

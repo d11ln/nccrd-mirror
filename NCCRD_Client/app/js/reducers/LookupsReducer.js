@@ -102,6 +102,26 @@ export default function LookupsReducer(state = {}, action) {
             return { ...state, targetAudience: payload }
         }
 
+        case "LOAD_HAZARDS": {
+
+            //Transform data
+            let data = [];
+            payload.forEach(x => {
+                let item = { Id: x.id, Text: x.value, ParentId: null }
+
+                if(x.additionalData.length > 0){
+                    let addData = x.additionalData.filter(x => x.key === "ParentId")
+                    if(addData.length > 0){
+                        item.ParentId = addData[0].value
+                    }
+                }
+
+                data.push(item)
+            })
+
+            return { ...state, hazards: data }
+        }
+
         default: {
             return state
         }

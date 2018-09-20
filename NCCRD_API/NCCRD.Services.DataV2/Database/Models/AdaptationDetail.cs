@@ -22,6 +22,9 @@ namespace NCCRD.Services.DataV2.Database.Models
         [IgnoreDataMember]
         public AdaptationPurpose AdaptationPurpose { get; set; }
 
+        //FK - External - VMS Hazards Vocabualry
+        public int? HazardId { get; set; }
+
         //FK - Project
         [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
