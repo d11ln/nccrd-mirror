@@ -1,6 +1,6 @@
 import React from 'react'
 import { Col, Row, Container } from 'mdbreact';
-import {DEAGreenDark} from '../../config/colours.cfg'
+import { DEAGreen, DEAGreenDark } from '../../config/colours.cfg'
 
 //Images
 import environmental_affairs_logo from '../../../images/environmental_affairs_logo.png'
@@ -28,7 +28,12 @@ class Header extends React.Component {
             <Col md="6">
               <h1 style={{ textAlign: "center", marginTop: "4%", letterSpacing: "2px", color: DEAGreenDark }}>
                 <b>NCCRD</b>
+                {/* BETA tag */}
+                <sub style={{ fontSize: "18px", backgroundColor: DEAGreen, borderRadius: "5px", padding: "2px" }}>
+                  <i>BETA</i>
+                </sub>
               </h1>
+              <p></p>
               <h5 style={{ textAlign: "center", letterSpacing: "2px", marginTop: "-8px", color: "grey" }}>
                 <b>National Climate Change Response Database</b>
               </h5>
