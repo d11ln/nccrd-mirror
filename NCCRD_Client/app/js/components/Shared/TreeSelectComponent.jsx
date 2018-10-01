@@ -64,10 +64,6 @@ class TreeSelectComponent extends React.Component {
 
     transformDataTree(effectiveData, globalData, level = 0) {
 
-        if (this.props.label === "Hazard:") {
-            console.log("data", effectiveData)
-        }
-
         let treeNodes = []
         let parentIdKey = "Parent" + Object.keys(effectiveData[0])[0].toString()
 

@@ -281,13 +281,6 @@ class ProjectDetails extends React.Component {
           }
 
           //Dispatch results
-          loadProjectDetails(oHandler.data.Project)
-          loadProjectFunderDetails(oHandler.data.Funders)
-          loadAdaptationDetails(oHandler.data.AdaptationDetails)
-          loadMitigationDetails(oHandler.data.MitigationDetails)
-          loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
-          loadResearchDetails(oHandler.data.ResearchDetails)
-
           if (!detailsOnly) {
             loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
             loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
@@ -309,6 +302,13 @@ class ProjectDetails extends React.Component {
             loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
             loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
           }
+          
+          loadProjectDetails(oHandler.data.Project)
+          loadProjectFunderDetails(oHandler.data.Funders)
+          loadAdaptationDetails(oHandler.data.AdaptationDetails)
+          loadMitigationDetails(oHandler.data.MitigationDetails)
+          loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
+          loadResearchDetails(oHandler.data.ResearchDetails)
         },
         (ex) => {
           //Failed
