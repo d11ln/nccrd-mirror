@@ -23,7 +23,6 @@ import CallbackPage from '../js/components/Authentication/callback.jsx';
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
-
 import { processSilentRenew } from 'redux-oidc'
 
 const Oidc = require("oidc-client")
