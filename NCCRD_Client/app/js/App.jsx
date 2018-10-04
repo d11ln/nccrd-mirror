@@ -24,6 +24,8 @@ import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
 
+import { processSilentRenew } from 'redux-oidc'
+
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
 const o = require("odata")
@@ -51,6 +53,10 @@ class App extends React.Component {
       this.state = { navbar: false }
       _gf.stripURLParam("navbar=hidden")
     }
+  }
+
+  async componentDidMount(){
+    processSilentRenew()
   }
 
   componentDidUpdate() {
