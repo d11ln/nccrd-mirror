@@ -23,7 +23,7 @@ import CallbackPage from '../js/components/Authentication/callback.jsx';
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
-import { processSilentRenew } from 'redux-oidc'
+import userManager from './components/Authentication/userManager'
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -54,8 +54,8 @@ class App extends React.Component {
     }
   }
 
-  async componentDidMount(){
-    processSilentRenew()
+  componentDidMount(){
+    userManager.signinSilent()
   }
 
   componentDidUpdate() {
