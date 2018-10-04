@@ -154,6 +154,11 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, projectDetails: { ...projectDetails, ProjectRegions: payload, state: modState } }
         }
 
+        case "SET_PROJECT_LINKED_DAO_GOAL_ID": {
+            let { projectDetails } = state
+            return { ...state, projectDetails: { ...projectDetails, LinkedDAOGoalId: payload, state: modState } }
+        }
+
         case "LOAD_MORE_PROJECTS": {
             const { start, end  } = state
             let newend = end + 25

@@ -1,5 +1,5 @@
 import React from 'react'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreenDark } from '../../../config/colours.cfg'

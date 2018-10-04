@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'mdbreact'
 import { connect } from 'react-redux'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 
 const _gf = require("../../../globalFunctions")

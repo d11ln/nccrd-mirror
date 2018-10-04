@@ -1,5 +1,5 @@
 import React from 'react'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'

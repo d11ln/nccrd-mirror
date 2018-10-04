@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'mdbreact'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'

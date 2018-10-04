@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Button, Input } from 'mdbreact'
 import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
 import userManager from '../Authentication/userManager'
-import { ssoBaseURL } from '../../config/ssoBaseURL.cfg'
+import { ssoBaseURL } from '../../config/serviceURLs.cfg'
 import {DEAGreen} from '../../config/colours.cfg'
 
 const _gf = require("../../globalFunctions")

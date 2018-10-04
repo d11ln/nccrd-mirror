@@ -6,7 +6,7 @@ import {
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL, vmsBaseURL } from "../../../config/serviceURLs.cfg"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import ProjectFundersTab from './ProjectFundersTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
@@ -19,6 +19,7 @@ import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'
 import classnames from 'classnames';
 import { DEAGreen, DEAGreenDark } from '../../../config/colours.cfg'
+import LinkedDAO from './LinkedDAO.jsx'
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
@@ -167,6 +168,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addResearchDetails: payload => {
       dispatch({ type: "ADD_RESEARCH_DETAILS", payload })
+    },
+    setLinkedLinkedDAOGoalId: payload => {
+      dispatch({ type: "SET_PROJECT_LINKED_DAO_GOAL_ID", payload })
     }
   }
 }
@@ -194,6 +198,7 @@ class ProjectDetails extends React.Component {
       discardModal: false,
       saveModal: false,
       messageModal: false,
+      doaModal: false,
       navBack: false,
       title: "message",
       message: ""
@@ -302,7 +307,7 @@ class ProjectDetails extends React.Component {
             loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
             loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
           }
-          
+
           loadProjectDetails(oHandler.data.Project)
           loadProjectFunderDetails(oHandler.data.Funders)
           loadAdaptationDetails(oHandler.data.AdaptationDetails)
@@ -319,7 +324,7 @@ class ProjectDetails extends React.Component {
       )
 
     //Get (external) Hazards
-    fetch("http://localhost:64161/api/hazards/flat",
+    fetch(`${vmsBaseURL}hazards/flat`,
       {
         method: "GET",
         headers: {
@@ -598,7 +603,7 @@ class ProjectDetails extends React.Component {
 
   render() {
 
-    let { projectDetails, editMode, user } = this.props
+    let { projectDetails, editMode, user, setLinkedLinkedDAOGoalId } = this.props
     let activeTabId = this.state.activeItemTabs
 
     return (
@@ -642,8 +647,23 @@ class ProjectDetails extends React.Component {
               <TabContent activeItem={activeTabId}>
                 <TabPane tabId="1">
                   <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                    Back to list
                   </Button>
+                  <Button
+                    style={{ margin: "0px 0px 20px 15px" }}
+                    color={projectDetails.LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000" ? "red" : "green"}
+                    size="sm"
+                    onClick={() => { this.setState({ doaModal: true }) }}
+                  >
+                    <i
+                      className={projectDetails.LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000" ? "fa fa-unlink" : "fa fa-link"}
+                      aria-hidden="true"
+                      style={{ marginRight: "15px" }}
+                    />
+                    Linked DAO Details
+                  </Button>
+
                   <ProjectDetailsTab />
                   <br />
                   <br />
@@ -741,7 +761,7 @@ class ProjectDetails extends React.Component {
 
         <Container>
           <Modal fade={false} isOpen={this.state.discardModal} centered>
-            <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
+            <ModalHeader>Confirm Discard</ModalHeader>
             <ModalBody>
               Are you sure you want to discard all changes?
             </ModalBody>
@@ -754,7 +774,7 @@ class ProjectDetails extends React.Component {
 
         <Container>
           <Modal fade={false} isOpen={this.state.saveModal} centered>
-            <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
+            <ModalHeader>Confirm Save</ModalHeader>
             <ModalBody>
               Are you sure you want to save all changes?
             </ModalBody>
@@ -766,8 +786,8 @@ class ProjectDetails extends React.Component {
         </Container>
 
         <Container>
-          <Modal fade={false} isOpen={this.state.messageModal} toggle={this.toggle} centered>
-            <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
+          <Modal fade={false} isOpen={this.state.messageModal} centered>
+            <ModalHeader>{this.state.title}</ModalHeader>
             <ModalBody>
               <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>
                 {_gf.StringToHTML(this.state.message)}
@@ -776,6 +796,44 @@ class ProjectDetails extends React.Component {
             <ModalFooter>
               <Button size="sm" style={{ width: "100px" }} color="" onClick={() => this.setState({ messageModal: false })} style={{ backgroundColor: DEAGreen }} >Close</Button>
             </ModalFooter>
+          </Modal>
+        </Container>
+
+        <Container>
+          <Modal fade={false} isOpen={this.state.doaModal} toggle={() => { this.setState({ doaModal: false }) }} size="lg" centered>
+            <ModalHeader toggle={() => { this.setState({ doaModal: false }) }}>
+              Linked DAO Details
+              {projectDetails.LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000" &&
+                <div
+                  style={{
+                    backgroundColor: "red",
+                    borderRadius: "5px",
+                    padding: "5px 10px 4px 10px",
+                    margin: "-33px 0px 0px 220px",
+                    fontSize: "14px"
+                  }}>
+                  No DAO Linked
+                </div>
+              }
+              {projectDetails.LinkedDAOGoalId !== "00000000-0000-0000-0000-000000000000" &&
+                <div
+                  style={{
+                    backgroundColor: "green",
+                    color: "white",
+                    borderRadius: "5px",
+                    padding: "5px 10px 4px 10px",
+                    margin: "-33px 0px 0px 220px",
+                    fontSize: "14px"
+                  }}>
+                  DAO Linked
+                </div>
+              }
+            </ModalHeader>
+            <ModalBody>
+              <LinkedDAO
+                LinkedDAOGoalId={projectDetails.LinkedDAOGoalId}
+                linkCallback={(id) => { setLinkedLinkedDAOGoalId({ value: id, state: 'modified' }) }} />
+            </ModalBody>
           </Modal>
         </Container>
 

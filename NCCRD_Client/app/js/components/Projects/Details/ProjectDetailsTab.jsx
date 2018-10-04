@@ -6,7 +6,7 @@ import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import TreeSelectMultiple from '../../Shared/TreeSelectMultiple.jsx'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 
 const mapStateToProps = (state, props) => {
     let { projectData: { projectDetails } } = state

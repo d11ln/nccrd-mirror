@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button, Fa } from 'mdbreact'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
-import MitigationEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
+import MitigatioanEmissionsDataItem from './MitigationEmissionsDataItem.jsx'
 
 const mapStateToProps = (state, props) => {
   let { emissionsData: { emissionsData } } = state

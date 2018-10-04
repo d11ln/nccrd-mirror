@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -49,6 +50,8 @@ namespace NCCRD.Services.DataV2.Database.Models
         public decimal? BudgetLower { get; set; }
 
         public decimal? BudgetUpper { get; set; }
+
+        public Guid LinkedDAOGoalId { get; set; }
 
         //FK - ProjectType
         [Range(1, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]

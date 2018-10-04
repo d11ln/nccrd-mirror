@@ -1,7 +1,7 @@
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
-import { apiBaseURL } from "../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import { Container, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "mdbreact"
 
 const _gf = require("../../../globalFunctions")

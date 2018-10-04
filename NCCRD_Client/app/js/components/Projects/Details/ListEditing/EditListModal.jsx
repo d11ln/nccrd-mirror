@@ -4,7 +4,7 @@ import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter,
   Select, SelectInput, SelectOptions, SelectOption
 } from 'mdbreact'
-import { apiBaseURL } from "../../../../config/apiBaseURL.cfg"
+import { apiBaseURL } from "../../../../config/serviceURLs.cfg"
 
 const _gf = require("../../../../globalFunctions")
 const _ = require('lodash')
