@@ -59,7 +59,6 @@ class CustomNavbar extends React.Component {
   render() {
 
     let { locationHash, user } = this.props
-    let hideAddProject = location.hash.includes("projects") && !location.hash.endsWith("projects")
 
     return (
       <Navbar size="sm" color="white" light expand="md" style={{ boxShadow: "none", borderTop: "1px solid gainsboro" }} >
@@ -75,15 +74,6 @@ class CustomNavbar extends React.Component {
             <NavItem style={{ borderBottom: (locationHash === "#/projects" ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
               <NavLink to="/projects"><b>Project List</b></NavLink>
             </NavItem>
-
-            {(user && !user.expired && !hideAddProject) &&
-              <NavItem>
-                {/* <NavLink to="projects/add"><b>Add New Project</b></NavLink> */}
-                <Button size="sm" color="" style={{ backgroundColor: DEAGreen}}
-                 onClick={() => { location.hash = "projects/add"}}>
-                Add New Project</Button>
-              </NavItem>
-            }
 
           </NavbarNav>
 

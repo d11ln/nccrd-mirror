@@ -12,7 +12,8 @@ const store = createStore(
 
         globalData: {
             loading: false,
-            editMode: false
+            editMode: false,
+            daoid: null
         },
 
         navigation: {

@@ -24,6 +24,7 @@ import LinkedDAO from './LinkedDAO.jsx'
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
 const _ = require("lodash")
+const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
 
@@ -192,6 +193,15 @@ class ProjectDetails extends React.Component {
     this.showMessage = this.showMessage.bind(this)
 
     let projectId = this.props.match.params.id
+    let daoid = null
+
+    if(projectId === "add"){
+      const parsedHash = queryString.parse(location.hash.replace("/projects/add?", ""))
+      if (typeof parsedHash.daoid !== 'undefined') {        
+        daoid = parsedHash.daoid
+      }
+    }
+
     this.state = {
       activeItemTabs: '1',
       projectId,
@@ -201,7 +211,8 @@ class ProjectDetails extends React.Component {
       doaModal: false,
       navBack: false,
       title: "message",
-      message: ""
+      message: "",
+      daoid
     }
   }
 
@@ -273,7 +284,13 @@ class ProjectDetails extends React.Component {
               "ProjectManagerId": 0,
               "ValidationStatusId": 0,
               "MAOptionId": 0,
+              "LinkedDAOGoalId": "00000000-0000-0000-0000-000000000000",
               "state": "modified"
+            }
+
+            if(this.state.daoid !== null){
+              oHandler.data.Project.LinkedDAOGoalId = this.state.daoid
+              this.setState({ daoid: null })
             }
 
             oHandler.data.Funders = []

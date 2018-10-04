@@ -14,6 +14,10 @@ export default function GlobalReducer(state = {}, action) {
             return { ...state, editMode: payload }
         }
 
+        case "SET_DAOID": {
+            console.log("SET_DAOID", payload)
+            return { ...state, daoid: payload }
+        }
         default: {
             return state
         }

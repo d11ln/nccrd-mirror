@@ -37,7 +37,7 @@ class LinkedDAO extends React.Component {
           (LinkedDAOGoalId !== "00000000-0000-0000-0000-000000000000") &&
           <div>
 
-            {editMode &&
+            {(editMode && (user && !user.expired)) &&
               <Button
                 color=""
                 style={{ backgroundColor: DEAGreen, marginLeft: "-1px", marginBottom: "20px" }}
@@ -78,9 +78,25 @@ class LinkedDAO extends React.Component {
 
                   if (data.value.length === 0) {
                     goalDetails.push(
-                      <p key={new Date().valueOf()}>
+                      <p key={"msg_nf_001"}>
                         Goal details not found.
                     </p>
+                    )
+                    goalDetails.push(
+                      <p key={"msg_nf_002"}>
+                        <i>
+                          This is normal if you have not submitted your DAO Goal yet.
+                          Once your Goal has successfully been submitted its details will become available here.
+                        </i>
+                      </p>
+                    )
+                    goalDetails.push(
+                      <p key={"msg_nf_003"}>
+                        <i>
+                          If you have already submitted your DAO Goal and you keep getting this message, 
+                          please contact the site administrator for assistance.
+                        </i>
+                      </p>
                     )
                   }
                   else {
