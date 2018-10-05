@@ -10,7 +10,7 @@ namespace NCCRD.Services.DataV2.Database.Models
     [Table("Project")]
     public class Project
     {
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectId field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectId field is required.")]
         public int ProjectId { get; set; }
 
         [Required]

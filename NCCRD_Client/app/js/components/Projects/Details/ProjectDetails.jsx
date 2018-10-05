@@ -264,7 +264,7 @@ class ProjectDetails extends React.Component {
 
           if (this.state.projectId === 'add') {
             oHandler.data.Project = {
-              "ProjectId": Date().valueOf(),
+              "ProjectId": new Date().valueOf(),
               "ProjectTitle": "",
               "ProjectDescription": "",
               "LeadAgent": "",
@@ -283,7 +283,6 @@ class ProjectDetails extends React.Component {
               "ProjectStatusId": 0,
               "ProjectManagerId": 0,
               "ValidationStatusId": 0,
-              "MAOptionId": 0,
               "LinkedDAOGoalId": "00000000-0000-0000-0000-000000000000",
               "state": "modified"
             }
@@ -391,11 +390,12 @@ class ProjectDetails extends React.Component {
     setLoading(true)
 
     let modified = false
-    let dataObj = { Id: projectId }
+    let dataObj = { Id: (projectId === 'add' ? 0 : projectId) }
 
     //Add Project
     if (projectDetails.state === 'modified') {
       let projectData = _.clone(projectDetails)
+      projectData.ProjectId = projectId === 'add' ? 0 : projectId   
       delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
       dataObj.Project = projectData
       modified = true
@@ -466,9 +466,11 @@ class ProjectDetails extends React.Component {
       this.showMessage("Success", "Changes saved successfully.")
       setEditMode(false)
       o().config({ error: null }) //Reset error config
-
-      //Refresh data to get ID's from DB
-      this.loadData(true)
+      
+      this.setState({ projectId: data.Id }, () => { 
+        //Refresh data to get ID's from DB
+        this.loadData(true)
+      })
     }
 
     const errorCallback = (status) => {

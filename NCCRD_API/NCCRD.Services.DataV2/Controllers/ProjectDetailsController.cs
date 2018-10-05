@@ -155,7 +155,11 @@ namespace NCCRD.Services.DataV2.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok("success");
+
+            //Update & return ID
+            data.Id = data.Project.ProjectId;
+
+            return Ok(data);
         }
 
         private IActionResult SaveProjectAsync(Project project)
@@ -188,6 +192,11 @@ namespace NCCRD.Services.DataV2.Controllers
         private void SaveProjectRegions(Project project)
         {
             //Add new mappings
+            if(project.ProjectRegions == null)
+            {
+                project.ProjectRegions = new List<ProjectRegion>();
+            }
+
             for(var i = 0; i < project.ProjectRegions.Count; i++)
             {
                 var pr = project.ProjectRegions.ToArray()[i];
