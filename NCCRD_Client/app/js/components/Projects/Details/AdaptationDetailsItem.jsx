@@ -8,8 +8,8 @@ import ReactTooltip from 'react-tooltip'
 import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
-  let { lookupData: { adaptationPurpose, sector, sectorType, typology, hazards } } = state
-  return { adaptationPurpose, sector, sectorType, typology, hazards }
+  let { lookupData: { adaptationPurpose, sector, sectorType, typology, hazards, projectStatus } } = state
+  return { adaptationPurpose, sector, sectorType, typology, hazards, projectStatus }
 }
 
 class AdaptationDetailsItem extends React.Component {
@@ -23,12 +23,12 @@ class AdaptationDetailsItem extends React.Component {
 
   render() {
 
-    let { details, adaptationPurpose, sector, sectorType, typology, hazards } = this.props
-    
+    let { details, adaptationPurpose, sector, sectorType, typology, hazards, projectStatus } = this.props
+
     return (
       <>
         {/* <br /> */}
-    
+
         <div className="row">
 
           <TextAreaComponent
@@ -100,23 +100,30 @@ class AdaptationDetailsItem extends React.Component {
             setSelectedValueKey={"SET_ADAPTATION_DETAILS_HAZARD"}
             parentId={details.AdaptationDetailId}
             dispatch={"LOAD_HAZARDS"}
-            //persist="Sector"
             type="tree"
-            // dependencies={[
-            //   { key: "SectorTypeId", value: sectorType, type: "std" },
-            //   { key: "ParentSectorId", value: sector, type: "tree" },
-            //   { key: "TypologyId", value: typology, type: "std" }
-            // ]}
             allowEdit={false}
-            // newItemTemplate={{
-            //   "SectorId": 0,
-            //   "Value": "",
-            //   "SectorTypeId": 0,
-            //   "ParentSectorId": 0,
-            //   "TypologyId": 0
-            // }}
           />
+        </div>
+        <br />
 
+        <div className="row">
+          <SelectComponent
+            id="selProjectStatus"
+            col="col-md-4"
+            label="Status:"
+            selectedValue={details.ProjectStatusId}
+            data={this.props.projectStatus}
+            setSelectedValueKey={"SET_ADAPTATION_DETAILS_PROJECT_STATUS"}
+            parentId={details.AdaptationDetailId}
+            dispatch={"LOAD_PROJECT_STATUS"}
+            persist="ProjectStatus"
+            allowEdit={true}
+            newItemTemplate={{
+              "ProjectStatusId": 0,
+              "Value": "",
+              "Description": ""
+            }}
+          />
         </div>
 
         <br />

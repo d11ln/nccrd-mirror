@@ -8,10 +8,10 @@ import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
-  let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
+  let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
     voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } } = state
   return {
-    carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
+    carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
     voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology
   }
 }
@@ -24,7 +24,7 @@ class MitigationDetailsItem extends React.Component {
 
   render() {
 
-    let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology,
+    let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
       voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } = this.props
 
     return (
@@ -181,6 +181,27 @@ class MitigationDetailsItem extends React.Component {
               "SectorTypeId": 0,
               "ParentSectorId": 0,
               "TypologyId": 0
+            }}
+          />
+        </div>
+        <br />
+
+        <div className="row">
+          <SelectComponent
+            id="selProjectStatus"
+            col="col-md-4"
+            label="Status:"
+            selectedValue={details.ProjectStatusId}
+            data={this.props.projectStatus}
+            setSelectedValueKey={"SET_MITIGATION_DETAILS_PROJECT_STATUS"}
+            parentId={details.MitigationDetailId}
+            dispatch={"LOAD_PROJECT_STATUS"}
+            persist="ProjectStatus"
+            allowEdit={true}
+            newItemTemplate={{
+              "ProjectStatusId": 0,
+              "Value": "",
+              "Description": ""
             }}
           />
         </div>

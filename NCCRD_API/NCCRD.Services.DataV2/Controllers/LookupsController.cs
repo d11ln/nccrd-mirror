@@ -278,7 +278,7 @@ namespace NCCRD.Services.DataV2.Controllers
             var cdmMethodology = _context.CDMMethodology.OrderBy(x => x.Value).ToArray();
             var cdmStatus = _context.CDMStatus.OrderBy(x => x.Value).ToArray();
             var fundingStatus = _context.FundingStatus.OrderByDescending(x => x.FundingStatusId).ToArray();
-            var projectStatus = _context.ProjectStatus.OrderBy(x => x.Value).ToArray();
+            var projectStatus = _context.ProjectStatus.OrderBy(x => x.ProjectStatusId).ToArray();
             var projectType = _context.ProjectType.OrderBy(x => x.Value).ToArray();
             var projectSubType = _context.ProjectSubType.OrderBy(x => x.Value).ToArray();
             var researchType = _context.ResearchType.OrderBy(x => x.Value).ToArray();

@@ -61,5 +61,11 @@ namespace NCCRD.Services.DataV2.Database.Models
         //FK - Sector
         public int? SectorId { get; set; }
         public Sector Sector { get; set; }
+
+        //FK - ProjectStatus
+        [Range(1, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
+        public int ProjectStatusId { get; set; }
+        [IgnoreDataMember]
+        public ProjectStatus ProjectStatus { get; set; }
     }
 }

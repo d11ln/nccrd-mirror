@@ -33,6 +33,8 @@ namespace NCCRD.Services.DataV2.Migrations
 
                     b.Property<int>("ProjectId");
 
+                    b.Property<int>("ProjectStatusId");
+
                     b.Property<int?>("SectorId");
 
                     b.HasKey("AdaptationDetailId");
@@ -40,6 +42,8 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasIndex("AdaptationPurposeId");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("ProjectStatusId");
 
                     b.HasIndex("SectorId");
 
@@ -247,6 +251,8 @@ namespace NCCRD.Services.DataV2.Migrations
 
                     b.Property<int>("ProjectId");
 
+                    b.Property<int>("ProjectStatusId");
+
                     b.Property<int?>("SectorId");
 
                     b.Property<int?>("VCS");
@@ -266,6 +272,8 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasIndex("CarbonCreditMarketId");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("ProjectStatusId");
 
                     b.HasIndex("SectorId");
 
@@ -412,13 +420,11 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.Property<string>("Link")
                         .HasMaxLength(450);
 
-                    b.Property<Guid>("LinkedDAOGoalId");
+                    b.Property<Guid?>("LinkedDAOGoalId");
 
                     b.Property<string>("ProjectDescription");
 
                     b.Property<int>("ProjectManagerId");
-
-                    b.Property<int>("ProjectStatusId");
 
                     b.Property<int?>("ProjectSubTypeId");
 
@@ -439,8 +445,6 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasKey("ProjectId");
 
                     b.HasIndex("ProjectManagerId");
-
-                    b.HasIndex("ProjectStatusId");
 
                     b.HasIndex("ProjectSubTypeId");
 
@@ -784,64 +788,83 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.AdaptationPurpose", "AdaptationPurpose")
                         .WithMany()
                         .HasForeignKey("AdaptationPurposeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany("AdaptationDetails")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectStatus", "ProjectStatus")
+                        .WithMany("AdaptationDetails")
+                        .HasForeignKey("ProjectStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "Sector")
                         .WithMany()
-                        .HasForeignKey("SectorId");
+                        .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Funder", b =>
                 {
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.FundingStatus", "FundingStatus")
                         .WithMany()
-                        .HasForeignKey("FundingStatusId");
+                        .HasForeignKey("FundingStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Person", "ProjectCoordinator")
                         .WithMany()
-                        .HasForeignKey("ProjectCoordinatorId");
+                        .HasForeignKey("ProjectCoordinatorId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.MitigationDetail", b =>
                 {
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.CDMMethodology", "CDMMethodology")
                         .WithMany()
-                        .HasForeignKey("CDMMethodologyId");
+                        .HasForeignKey("CDMMethodologyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.CDMStatus", "CDMStatus")
                         .WithMany()
-                        .HasForeignKey("CDMStatusId");
+                        .HasForeignKey("CDMStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.CarbonCredit", "CarbonCredit")
                         .WithMany()
                         .HasForeignKey("CarbonCreditId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.CarbonCreditMarket", "CarbonCreditMarket")
                         .WithMany()
-                        .HasForeignKey("CarbonCreditMarketId");
+                        .HasForeignKey("CarbonCreditMarketId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany("MitigationDetails")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectStatus", "ProjectStatus")
+                        .WithMany("MitigationDetails")
+                        .HasForeignKey("ProjectStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "Sector")
                         .WithMany()
-                        .HasForeignKey("SectorId");
+                        .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.VoluntaryGoldStandard", "VoluntaryGoldStandard")
                         .WithMany()
-                        .HasForeignKey("VoluntaryGoldStandardId");
+                        .HasForeignKey("VoluntaryGoldStandardId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.VoluntaryMethodology", "VoluntaryMethodology")
                         .WithMany()
-                        .HasForeignKey("VoluntaryMethodologyId");
+                        .HasForeignKey("VoluntaryMethodologyId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.MitigationEmissionsData", b =>
@@ -849,7 +872,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Project", b =>
@@ -857,25 +880,22 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Person", "ProjectManager")
                         .WithMany()
                         .HasForeignKey("ProjectManagerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectStatus", "ProjectStatus")
-                        .WithMany()
-                        .HasForeignKey("ProjectStatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectSubType", "ProjectSubType")
                         .WithMany()
-                        .HasForeignKey("ProjectSubTypeId");
+                        .HasForeignKey("ProjectSubTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectType", "ProjectType")
                         .WithMany()
                         .HasForeignKey("ProjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.ValidationStatus", "ValidationStatus")
                         .WithMany()
-                        .HasForeignKey("ValidationStatusId");
+                        .HasForeignKey("ValidationStatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectFunder", b =>
@@ -883,12 +903,12 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Funder", "Funder")
                         .WithMany()
                         .HasForeignKey("FunderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany("ProjectFunders")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectLocation", b =>
@@ -896,12 +916,12 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany("ProjectLocations")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectRegion", b =>
@@ -909,12 +929,12 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany("ProjectRegions")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Region", "Region")
                         .WithMany()
                         .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ProjectSubType", b =>
@@ -922,7 +942,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.ProjectType", "ProjectType")
                         .WithMany()
                         .HasForeignKey("ProjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Region", b =>
@@ -930,11 +950,12 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.LocationType", "LocationType")
                         .WithMany()
                         .HasForeignKey("LocationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Region", "ParentRegion")
                         .WithMany()
-                        .HasForeignKey("ParentRegionId");
+                        .HasForeignKey("ParentRegionId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.ResearchDetail", b =>
@@ -942,33 +963,35 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Project", "Project")
                         .WithMany("ResearchDetails")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.ResearchType", "ResearchType")
                         .WithMany()
                         .HasForeignKey("ResearchTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "Sector")
                         .WithMany()
-                        .HasForeignKey("SectorId");
+                        .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.TargetAudience", "TargetAudience")
                         .WithMany()
                         .HasForeignKey("TargetAudienceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NCCRD.Services.DataV2.Database.Models.Sector", b =>
                 {
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.Sector", "ParentSector")
                         .WithMany()
-                        .HasForeignKey("ParentSectorId");
+                        .HasForeignKey("ParentSectorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NCCRD.Services.DataV2.Database.Models.SectorType", "SectorType")
                         .WithMany()
                         .HasForeignKey("SectorTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

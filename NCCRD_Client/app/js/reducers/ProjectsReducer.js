@@ -129,11 +129,6 @@ export default function ProjectsReducer(state = {}, action) {
             return { ...state, projectDetails: { ...projectDetails, ProjectSubTypeId: payload, state: modState } }
         }
 
-        case "SET_PROJECT_DETAILS_PROJECT_STATUS": {
-            let { projectDetails } = state
-            return { ...state, projectDetails: { ...projectDetails, ProjectStatusId: payload, state: modState } }
-        }
-
         case "SET_PROJECT_DETAILS_PROJECT_MANAGER": {
             let { projectDetails } = state
             return { ...state, projectDetails: { ...projectDetails, ProjectManagerId: payload, state: modState } }

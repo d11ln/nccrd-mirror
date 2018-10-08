@@ -51,7 +51,7 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public decimal? BudgetUpper { get; set; }
 
-        public Guid LinkedDAOGoalId { get; set; }
+        public Guid? LinkedDAOGoalId { get; set; }
 
         //FK - ProjectType
         [Range(1, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
@@ -63,12 +63,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         public int? ProjectSubTypeId { get; set; }
         [IgnoreDataMember]
         public ProjectSubType ProjectSubType { get; set; } //Optional
-
-        //FK - ProjectStatus
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
-        public int ProjectStatusId { get; set; }
-        [IgnoreDataMember]
-        public ProjectStatus ProjectStatus { get; set; }
 
         //FK - ProjectManager
         [Range(1, int.MaxValue, ErrorMessage = "The ProjectManager field is required.")]

@@ -22,6 +22,8 @@ namespace NCCRD.Services.DataV2.Controllers
     [EnableCors("CORSPolicy")]
     public class ProjectDetailsController : ODataController
     {
+        private bool _projectAdded = false;
+
         public SQLDBContext _context { get; }
         public ProjectDetailsController(SQLDBContext context)
         {
@@ -74,6 +76,8 @@ namespace NCCRD.Services.DataV2.Controllers
         [EnableQuery]
         public async Task<IActionResult> Post([FromBody]ProjectDetails data)
         {
+            _projectAdded = false;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -157,7 +161,10 @@ namespace NCCRD.Services.DataV2.Controllers
             await _context.SaveChangesAsync();
 
             //Update & return ID
-            data.Id = data.Project.ProjectId;
+            if (_projectAdded)
+            {
+                data.Id = data.Project.ProjectId;
+            }
 
             return Ok(data);
         }
@@ -178,6 +185,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearNullableInts(ref project);
                 _context.Project.Add(project);
                 SaveProjectRegions(project);
+                _projectAdded = true;
                 return Created(project);
             }
             else

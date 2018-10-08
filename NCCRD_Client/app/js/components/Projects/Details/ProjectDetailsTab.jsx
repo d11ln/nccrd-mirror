@@ -234,7 +234,7 @@ class ProjectDetailsTab extends React.Component {
                             "ProjectTypeId": 0
                         }}
                     />
-                    <SelectComponent
+                    {/* <SelectComponent
                         id="selProjectStatus"
                         col="col-md-4"
                         label="Project status:"
@@ -249,7 +249,7 @@ class ProjectDetailsTab extends React.Component {
                             "Value": "",
                             "Description": ""
                         }}
-                    />
+                    /> */}
                 </div>
 
                 <br />

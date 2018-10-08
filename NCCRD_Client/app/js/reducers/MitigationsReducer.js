@@ -187,6 +187,18 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, SectorId: payload, state: modState }] }
         }
 
+        case "SET_MITIGATION_DETAILS_PROJECT_STATUS": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ProjectStatusId: payload, state: modState }] }
+        }
+
         default: {
             return state
         }
