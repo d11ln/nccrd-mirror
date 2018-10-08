@@ -264,7 +264,7 @@ class ProjectDetails extends React.Component {
 
           if (this.state.projectId === 'add') {
             oHandler.data.Project = {
-              "ProjectId": new Date().valueOf(),
+              "ProjectId": _gf.getRndInteger(1111111, 9999999),
               "ProjectTitle": "",
               "ProjectDescription": "",
               "LeadAgent": "",
@@ -279,11 +279,10 @@ class ProjectDetails extends React.Component {
               "BudgetLower": 0,
               "BudgetUpper": 0,
               "ProjectTypeId": 0,
-              "ProjectSubTypeId": 0,
-              "ProjectStatusId": 0,
+              "ProjectSubTypeId": 0,              
               "ProjectManagerId": 0,
               "ValidationStatusId": 0,
-              "LinkedDAOGoalId": "00000000-0000-0000-0000-000000000000",
+              "LinkedDAOGoalId": null,
               "state": "modified"
             }
 
@@ -406,7 +405,7 @@ class ProjectDetails extends React.Component {
       let adaptationData = []
       adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         adaptationData.push(item)
       })
       dataObj.AdaptationDetails = adaptationData
@@ -418,7 +417,7 @@ class ProjectDetails extends React.Component {
       let mitigationData = []
       mitigationDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         mitigationData.push(item)
       })
       dataObj.MitigationDetails = mitigationData
@@ -430,7 +429,7 @@ class ProjectDetails extends React.Component {
       let mitigationEmissionsData = []
       emissionsData.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         mitigationEmissionsData.push(item)
       })
       dataObj.MitigationEmissionsData = mitigationEmissionsData
@@ -442,7 +441,7 @@ class ProjectDetails extends React.Component {
       let researchData = []
       researchDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         researchData.push(item)
       })
       dataObj.ResearchDetails = researchData
@@ -453,6 +452,7 @@ class ProjectDetails extends React.Component {
     if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
       let funderData = []
       projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
+        item.ProjectId = projectId === 'add' ? 0 : projectId
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
         delete item.key //OData can only bind to the original object spec which does not contain 'key'
         funderData.push(item)
@@ -478,6 +478,8 @@ class ProjectDetails extends React.Component {
       o().config({ error: null }) //Reset error config
       setLoading(false)
     }
+
+    console.log("dataObj", dataObj)
 
     if (modified) {
 
@@ -671,12 +673,12 @@ class ProjectDetails extends React.Component {
                   </Button>
                   <Button
                     style={{ margin: "0px 0px 20px 15px" }}
-                    color={projectDetails.LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000" ? "red" : "green"}
+                    color={projectDetails.LinkedDAOGoalId === null ? "red" : "green"}
                     size="sm"
                     onClick={() => { this.setState({ doaModal: true }) }}
                   >
                     <i
-                      className={projectDetails.LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000" ? "fa fa-unlink" : "fa fa-link"}
+                      className={projectDetails.LinkedDAOGoalId === null ? "fa fa-unlink" : "fa fa-link"}
                       aria-hidden="true"
                       style={{ marginRight: "15px" }}
                     />
@@ -822,7 +824,7 @@ class ProjectDetails extends React.Component {
           <Modal fade={false} isOpen={this.state.doaModal} toggle={() => { this.setState({ doaModal: false }) }} size="lg" centered>
             <ModalHeader toggle={() => { this.setState({ doaModal: false }) }}>
               Linked DAO Details
-              {projectDetails.LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000" &&
+              {projectDetails.LinkedDAOGoalId === null &&
                 <div
                   style={{
                     backgroundColor: "red",
@@ -834,7 +836,7 @@ class ProjectDetails extends React.Component {
                   No DAO Linked
                 </div>
               }
-              {projectDetails.LinkedDAOGoalId !== "00000000-0000-0000-0000-000000000000" &&
+              {projectDetails.LinkedDAOGoalId !== null &&
                 <div
                   style={{
                     backgroundColor: "green",

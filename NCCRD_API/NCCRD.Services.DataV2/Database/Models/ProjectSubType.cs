@@ -21,7 +21,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public string Description { get; set; }
 
         //FK - ProjectType
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
         public int ProjectTypeId { get; set; }
         [IgnoreDataMember]
         public ProjectType ProjectType { get; set; }

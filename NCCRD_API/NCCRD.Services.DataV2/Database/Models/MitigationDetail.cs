@@ -22,7 +22,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public string CDMProjectNumber { get; set; } //Don't know what this links to
 
         //FK - CarbonCredit
-        [Range(1, int.MaxValue, ErrorMessage = "The CarbonCredit field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The CarbonCredit field is required.")]
         public int CarbonCreditId { get; set; }
         [IgnoreDataMember]
         public CarbonCredit CarbonCredit { get; set; }
@@ -53,7 +53,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public VoluntaryGoldStandard VoluntaryGoldStandard { get; set; }
 
         //FK - Project
-        [Range(1, int.MaxValue, ErrorMessage = "The Project field is reqiured.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The Project field is reqiured.")]
         public int ProjectId { get; set; }
         [IgnoreDataMember]
         public Project Project { get; set; }
@@ -63,7 +63,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public Sector Sector { get; set; }
 
         //FK - ProjectStatus
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
         public int ProjectStatusId { get; set; }
         [IgnoreDataMember]
         public ProjectStatus ProjectStatus { get; set; }

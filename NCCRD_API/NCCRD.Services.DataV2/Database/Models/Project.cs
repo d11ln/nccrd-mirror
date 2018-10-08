@@ -54,7 +54,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public Guid? LinkedDAOGoalId { get; set; }
 
         //FK - ProjectType
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
         public int ProjectTypeId { get; set; }
         [IgnoreDataMember]
         public ProjectType ProjectType { get; set; }
@@ -65,7 +65,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public ProjectSubType ProjectSubType { get; set; } //Optional
 
         //FK - ProjectManager
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectManager field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectManager field is required.")]
         [ForeignKey("ProjectManager")]
         public int ProjectManagerId { get; set; }
         [IgnoreDataMember]

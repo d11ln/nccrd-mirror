@@ -478,7 +478,7 @@ class EditTreeModal extends React.Component {
     })
 
     //Setup and insert data item
-    let newItemId = parseInt(_gf.GetUID())
+    let newItemId = _gf.getRndInteger(1111111, 9999999)
     let newItemText = "Item_" + newItemId.toString() //"ENTER VALUE HERE"
     newItem[Object.keys(newItem)[0]] = newItemId
     newItem[Object.keys(newItem)[1]] = newItemText

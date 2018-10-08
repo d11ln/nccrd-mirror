@@ -56,7 +56,7 @@ export default function ProjectFundersReducer(state = {}, action) {
             let { projectFunderDetails, projectDetails } = state
 
             let newItem = {
-                "FunderId": parseInt(_gf.GetUID()),
+                "FunderId": _gf.getRndInteger(1111111, 9999999),
                 "GrantProgName": "",
                 "TotalBudget": null,
                 "AnnualBudget": null,

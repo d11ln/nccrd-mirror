@@ -93,6 +93,53 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
+            if (_projectAdded)
+            {
+                //Save new Project to get valid Id
+                //Update ProjectId where needed
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    data.Id = data.Project.ProjectId;
+
+                    if(data.AdaptationDetails != null)
+                    {
+                        foreach(var item in data.AdaptationDetails)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+
+                    if (data.MitigationDetails != null)
+                    {
+                        foreach (var item in data.MitigationDetails)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+
+                    if (data.MitigationEmissionsData != null)
+                    {
+                        foreach (var item in data.MitigationEmissionsData)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+
+                    if (data.ResearchDetails != null)
+                    {
+                        foreach (var item in data.ResearchDetails)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
             //Save Funders
             if (data.Funders != null)
             {
@@ -158,14 +205,16 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
-            await _context.SaveChangesAsync();
-
-            //Update & return ID
-            if (_projectAdded)
+            try
             {
-                data.Id = data.Project.ProjectId;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
+            //return data object
             return Ok(data);
         }
 

@@ -21,7 +21,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public string RegionDesription { get; set; }
 
         //FK - LocationType
-        [Range(1, int.MaxValue, ErrorMessage = "The LocationType field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The LocationType field is required.")]
         public int LocationTypeId { get; set; }
         [IgnoreDataMember]
         public LocationType LocationType { get; set; }

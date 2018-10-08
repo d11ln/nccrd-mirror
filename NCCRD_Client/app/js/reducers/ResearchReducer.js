@@ -55,7 +55,7 @@ export default function ResearchReducer(state = {}, action) {
             let { researchDetails, projectDetails } = state
 
             let newItem = {
-                "ResearchDetailId": parseInt(_gf.GetUID()),
+                "ResearchDetailId": _gf.getRndInteger(1111111, 9999999),
                 "Author": "",
                 "PaperLink": "",
                 "ResearchTypeId": 0,

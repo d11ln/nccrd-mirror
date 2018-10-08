@@ -54,7 +54,7 @@ export default function EmissionsReducer(state = {}, action) {
             let { emissionsData, projectDetails } = state
 
             let newItem = {
-                "MitigationEmissionsDataId": parseInt(_gf.GetUID()),
+                "MitigationEmissionsDataId": _gf.getRndInteger(1111111, 9999999),
                 "Year": new Date().getFullYear(),
                 "CO2": null,
                 "CH4": null,

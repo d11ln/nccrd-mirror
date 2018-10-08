@@ -54,11 +54,12 @@ export default function AdaptationsReducer(state = {}, action) {
             let { adaptationDetails, projectDetails } = state
 
             let newItem = {
-                "AdaptationDetailId": parseInt(_gf.GetUID()),
+                "AdaptationDetailId": _gf.getRndInteger(1111111, 9999999),
                 "Description": "",
                 "AdaptationPurposeId": 0,
                 "ProjectId": payload,
                 "SectorId": 0,
+                "ProjectStatusId": 0,
                 "state": "modified"
             }
 

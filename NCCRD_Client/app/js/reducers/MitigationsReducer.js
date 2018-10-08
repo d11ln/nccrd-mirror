@@ -54,7 +54,7 @@ export default function MitigationsReducer(state = {}, action) {
             let { mitigationDetails, projectDetails } = state
 
             let newItem = {
-                "MitigationDetailId": parseInt(_gf.GetUID()),
+                "MitigationDetailId": _gf.getRndInteger(1111111, 9999999),
                 "VCS": 0,
                 "Other": 0,
                 "OtherDescription": "",
@@ -67,6 +67,7 @@ export default function MitigationsReducer(state = {}, action) {
                 "VoluntaryGoldStandardId": 0,
                 "ProjectId": payload,
                 "SectorId": 0,
+                "ProjectStatusId": 0,
                 "state": "modified"
             }
 

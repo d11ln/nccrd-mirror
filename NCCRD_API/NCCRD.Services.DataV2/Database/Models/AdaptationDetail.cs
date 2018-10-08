@@ -17,7 +17,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public string Description { get; set; } //Optional
 
         //FK - AdaptationPurpose
-        [Range(1, int.MaxValue, ErrorMessage = "The AdaptationPurpose field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The AdaptationPurpose field is required.")]
         public int AdaptationPurposeId { get; set; }
         [IgnoreDataMember]
         public AdaptationPurpose AdaptationPurpose { get; set; }
@@ -26,7 +26,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public int? HazardId { get; set; }
 
         //FK - Project
-        [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
         [IgnoreDataMember]
         public Project Project { get; set; }
@@ -36,7 +36,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public Sector Sector { get; set; }
 
         //FK - ProjectStatus
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
         public int ProjectStatusId { get; set; }
         [IgnoreDataMember]
         public ProjectStatus ProjectStatus { get; set; }
