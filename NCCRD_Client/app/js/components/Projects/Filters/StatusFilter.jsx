@@ -50,7 +50,7 @@ class StatusFilter extends React.Component {
         //Get data
         var oHandler = o(apiBaseURL + "ProjectStatus")
             .select("ProjectStatusId,Value")
-            .orderBy("Value")
+            .orderBy("ProjectStatusId")
 
         oHandler.get(function (data) {
             loadData(data)

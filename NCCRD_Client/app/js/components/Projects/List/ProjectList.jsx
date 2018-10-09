@@ -88,7 +88,7 @@ class ProjectList extends React.Component {
     //Read initial filter from URL
     const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
     if (typeof parsedHash.daoid !== 'undefined') {
-      await this.props.setDAOID(parsedHash.daoid) 
+      await this.props.setDAOID(parsedHash.daoid)
     }
 
     this.getProjectList()
@@ -125,7 +125,7 @@ class ProjectList extends React.Component {
     if (pStart !== start || pEnd !== end) {
       nextBatchNeeded = true
     }
-
+    
     if (filtersChanged === true || nextBatchNeeded === true) {
       this.getProjectList(filtersChanged)
     }
@@ -152,7 +152,7 @@ class ProjectList extends React.Component {
     }
   }
 
-  getProjectList(resetCounts) {
+  async getProjectList(resetCounts) {
 
     let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
@@ -213,76 +213,136 @@ class ProjectList extends React.Component {
       let batchSize = 25
       let skip = 0
       let batchCount = Math.floor(end / batchSize)
+      let filters = {}
+
+      //BATCH//
       if (batchCount > 0) {
         skip = (batchCount - 1) * batchSize
       }
 
-      //Handle error messages with error-config in order 
-      //to get error message back and not just code
-      o().config({
-        error: (code, error) => {
-
-          console.log("code", code)
-          console.log("error", error)
-
-          // //Try to get & parse error message
-          // let errorJS = JSON.parse(error)
-          // let message = errorJS.value
-          // if (typeof message === 'undefined') message = errorJS.error.message
-          // if (typeof message === 'undefined') message = "(See log for error details)"
-
-          // //Log error message & details
-          // this.showMessage("Unable to save changes", message)
-          // console.error("Unable to save changes", code, errorJS)
-        }
-      })
-
-      //Get project list data
-      //Setup oHandler
-      var oHandler = o(apiBaseURL + "Projects")
-
-      //Conditional filters
-      if (titleFilter !== "") oHandler.search(["ProjectTitle"], titleFilter)
-      if (statusFilter !== 0) oHandler.filter("ProjectStatusId eq " + statusFilter)
-      if (regionFilter != 0) oHandler.filter("ProjectRegions/any(x:x/RegionId eq " + regionFilter + ")")
-      if (sectorFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/SectorId eq " + sectorFilter + ") or MitigationDetails/any(x:x/SectorId eq " + sectorFilter + ") or ResearchDetails/any(x:x/SectorId eq " + sectorFilter + "))")
-
-      if (typologyFilter !== 0 && typology.length > 0) {
-        let typologyVal = typology.filter(t => t.TypologyId === typologyFilter)[0].Value
-        if (typeof typologyVal !== 'undefined') {
-          switch (typologyVal) {
-            case "Adaptation":
-              oHandler.filter("AdaptationDetails/any(x:x/AdaptationDetailId gt 0)")
-              break;
-            case "Mitigation":
-              oHandler.filter("MitigationDetails/any(x:x/MitigationDetailId gt 0)")
-              break;
-            case "Research":
-              oHandler.filter("ResearchDetails/any(x:x/ResearchDetailId gt 0)")
-              break;
-          }
-        }
+      //ADD FILTERS//
+      //Title//
+      if (titleFilter !== "") {
+        filters.title = titleFilter
       }
 
-      //DAO Goal Filter
-      if (_gf.IsValidGuid(daoid)) oHandler.filter(`LinkedDAOGoalId eq ${daoid}`)
+      //Status//
+      if (statusFilter !== 0) {
+        filters.status = statusFilter
+      }
 
-      //Pagination and ordering
-      oHandler
-        .skip(skip)
-        .top(batchSize)
-        .orderBy("ProjectTitle")
+      //Typology//
+      if (typologyFilter !== 0) {
+        filters.typology = typologyFilter
+      }
 
-      oHandler.get((data) => {
-        o().config({ error: null }) //Reset error config
+      //Region//
+      if (regionFilter != 0) {
+        filters.region = regionFilter
+      }
+
+      //Sector//
+      if (sectorFilter != 0) {
+        filters.sector = sectorFilter
+      }
+
+      //DAO Goal Filter//
+      if (_gf.IsValidGuid(daoid)){
+        filters.daoid = daoid
+      }
+
+      //GET PROJECTS FILTERED//
+      try {
+
+        var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+
+        //Pagination and ordering
+        oHandler
+          .skip(skip)
+          .top(batchSize)
+          .orderBy("ProjectTitle")
+
+        //Select
+        oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+
+        let res = await oHandler.post(filters).save()
         setLoading(false)
-        loadProjects(data)
-      }, (error) => {
-        o().config({ error: null }) //Reset error config
+        loadProjects(res.data)
+      }
+      catch (ex) {
+        console.error("error", ex)
         setLoading(false)
         this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-        console.error("error", error)
-      })
+      }
+
+      // //Handle error messages with error-config in order 
+      // //to get error message back and not just code
+      // o().config({
+      //   error: (code, error) => {
+
+      //     console.log("code", code)
+      //     console.log("error", error)
+
+      //     // //Try to get & parse error message
+      //     // let errorJS = JSON.parse(error)
+      //     // let message = errorJS.value
+      //     // if (typeof message === 'undefined') message = errorJS.error.message
+      //     // if (typeof message === 'undefined') message = "(See log for error details)"
+
+      //     // //Log error message & details
+      //     // this.showMessage("Unable to save changes", message)
+      //     // console.error("Unable to save changes", code, errorJS)
+      //   }
+      // })
+
+      // //Get project list data
+      // //Setup oHandler
+      // var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+
+      // //Conditional filters
+      // if (titleFilter !== "") oHandler.search(["ProjectTitle"], titleFilter)
+
+      // if (statusFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/ProjectStatusId eq " + statusFilter + ") or MitigationDetails/any(x:x/ProjectStatusId eq " + statusFilter + "))") //"ProjectStatusId eq " + statusFilter)
+
+      // if (regionFilter != 0) oHandler.filter("ProjectRegions/any(x:x/RegionId eq " + regionFilter + ")")
+      // if (sectorFilter !== 0) oHandler.filter("(AdaptationDetails/any(x:x/SectorId eq " + sectorFilter + ") or MitigationDetails/any(x:x/SectorId eq " + sectorFilter + ") or ResearchDetails/any(x:x/SectorId eq " + sectorFilter + "))")
+
+      // if (typologyFilter !== 0 && typology.length > 0) {
+      //   let typologyVal = typology.filter(t => t.TypologyId === typologyFilter)[0].Value
+      //   if (typeof typologyVal !== 'undefined') {
+      //     switch (typologyVal) {
+      //       case "Adaptation":
+      //         oHandler.filter("AdaptationDetails/any(x:x/AdaptationDetailId gt 0)")
+      //         break;
+      //       case "Mitigation":
+      //         oHandler.filter("MitigationDetails/any(x:x/MitigationDetailId gt 0)")
+      //         break;
+      //       case "Research":
+      //         oHandler.filter("ResearchDetails/any(x:x/ResearchDetailId gt 0)")
+      //         break;
+      //     }
+      //   }
+      // }
+
+      // //DAO Goal Filter
+      // if (_gf.IsValidGuid(daoid)) oHandler.filter(`LinkedDAOGoalId eq ${daoid}`)
+
+      // //Pagination and ordering
+      // oHandler
+      //   .skip(skip)
+      //   .top(batchSize)
+      //   .orderBy("ProjectTitle")
+
+      // oHandler.get((data) => {
+      //   o().config({ error: null }) //Reset error config
+      //   setLoading(false)
+      //   loadProjects(data)
+      // }, (error) => {
+      //   o().config({ error: null }) //Reset error config
+      //   setLoading(false)
+      //   this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+      //   console.error("error", error)
+      // })
     }
   }
 

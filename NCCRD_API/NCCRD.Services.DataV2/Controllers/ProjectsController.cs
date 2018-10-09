@@ -59,6 +59,88 @@ namespace NCCRD.Services.DataV2.Controllers
                 .AsQueryable();
         }
 
+        [HttpPost]
+        [EnableQuery]
+        public IQueryable<Project> Filter([FromBody] Filters filters)
+        {
+            string titleFilter = filters.title;
+            int statusFilter = filters.status;
+            int typologyFilter = filters.typology;
+            int regionFilter = filters.region;
+            int sectorFilter = filters.sector;
+            Guid daoidFilter = filters.daoid != null ? new Guid(filters.daoid) : Guid.Empty;
+
+            //REGION//
+            var regionProjectIds = new List<int>();
+            if (regionFilter > 0)
+            {
+                //Get all RegionIds (including children)
+                var allRegionIDs = GetChildRegions(regionFilter, _context.Region.ToList()).Select(r => r.RegionId).Distinct().ToList();
+                allRegionIDs.Add(regionFilter);
+
+                //Get all ProjectIds assigned to these Regions and/or Typology
+                regionProjectIds = _context.ProjectRegion.Where(p => allRegionIDs.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
+            }
+
+            //SECTOR//
+            var sectorProjectIds = new List<int>();
+            if (sectorFilter > 0)
+            {
+                var allSectorIDs = GetChildSectors(sectorFilter, _context.Sector.ToList()).Select(x => (int?)x.SectorId).ToList();
+                allSectorIDs.Add(sectorFilter);
+
+                sectorProjectIds.AddRange(_context.MitigationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.AdaptationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.ResearchDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+
+                //Remove duplicates
+                sectorProjectIds = sectorProjectIds.Distinct().ToList();
+            }
+
+            //TYPOLOGY//
+            var typologyProjectIds = new List<int>();
+            if (typologyFilter > 0)
+            {
+                if (_context.Typology.FirstOrDefault(x => x.TypologyId == typologyFilter).Value == "Adaptation")
+                {
+                    typologyProjectIds.AddRange(_context.AdaptationDetails.Select(x => x.ProjectId).Distinct().ToList());
+                }
+                else if (_context.Typology.FirstOrDefault(x => x.TypologyId == typologyFilter).Value == "Mitigation")
+                {
+                    typologyProjectIds.AddRange(_context.MitigationDetails.Select(x => x.ProjectId).Distinct().ToList());
+                }
+                else if (_context.Typology.FirstOrDefault(x => x.TypologyId == typologyFilter).Value == "Research")
+                {
+                    typologyProjectIds.AddRange(_context.ResearchDetails.Select(x => x.ProjectId).Distinct().ToList());
+                }
+
+                //Remove duplicates
+                typologyProjectIds = typologyProjectIds.Distinct().ToList();
+            }
+
+            //STATUS//
+            var statusProjectIds = new List<int>();
+            if (statusFilter > 0)
+            {
+                statusProjectIds.AddRange(_context.AdaptationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
+                statusProjectIds.AddRange(_context.MitigationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
+                //statusProjectIds.AddRange(_context.ResearchDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList()); //OBSOLETE
+            }
+          
+
+            //GET PORJECTS FILTERED//
+            //Retrieve project details and filter on query params
+            return _context.Project.OrderBy(p => p.ProjectTitle)
+                        .Where(p =>
+                            (string.IsNullOrEmpty(titleFilter) || p.ProjectTitle.ToLower().Contains(titleFilter.ToLower())) &&
+                            (statusFilter == 0 || statusProjectIds.Contains(p.ProjectId)) &&
+                            (regionFilter == 0 || regionProjectIds.Contains(p.ProjectId)) &&
+                            (sectorFilter == 0 || sectorProjectIds.Contains(p.ProjectId)) &&
+                            (typologyFilter == 0 || typologyProjectIds.Contains(p.ProjectId)) &&
+                            (daoidFilter == null || p.LinkedDAOGoalId == daoidFilter)
+                        );
+        }
+
         //##################//
         // Helper Functions //
         //##################//
@@ -97,6 +179,34 @@ namespace NCCRD.Services.DataV2.Controllers
             }
 
             return polygon;
+        }
+
+        private List<Region> GetChildRegions(int regionId, List<Region> regionList)
+        {
+            var regions = regionList.Where(x => x.ParentRegionId == regionId).ToList();
+
+            var childRegions = new List<Region>();
+            foreach (var region in regions)
+            {
+                childRegions.AddRange(GetChildRegions(region.RegionId, regionList));
+            }
+            regions.AddRange(childRegions);
+
+            return regions;
+        }
+
+        private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
+        {
+            var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+
+            var childSectors = new List<Sector>();
+            foreach (var sector in sectors)
+            {
+                childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
+            }
+            sectors.AddRange(childSectors);
+
+            return sectors;
         }
     }
 }

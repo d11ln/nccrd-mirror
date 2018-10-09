@@ -295,11 +295,19 @@ namespace NCCRD.Services.DataV2.Database.Contexts
             //    .Parameter<Polygon>("polygon");
 
             builder.Namespace = "Extensions";
+
             builder.EntityType<Project>()
                 .Collection
                 .Action("ByPolygon")
                 .ReturnsCollectionViaEntitySetPath<Project>("bindingParameter")
                 .Parameter<Polygon>("polygon");
+
+            builder.EntityType<Project>()
+                .Collection
+                .Action("Filter")
+                .ReturnsCollectionViaEntitySetPath<Project>("bindingParameter")
+                .Parameter<Filters>("filters");
+
 
             return builder.GetEdmModel();
         }

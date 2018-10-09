@@ -38,8 +38,7 @@ BEGIN
 	VALUES
 		('Mitigation'),
 		('Adaptation'),
-		('Research'),
-		('Undefined')
+		('Research')
 END
 
 --ProjectType--
