@@ -308,6 +308,11 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .ReturnsCollectionViaEntitySetPath<Project>("bindingParameter")
                 .Parameter<Filters>("filters");
 
+            builder.
+                EntityType<Project>().
+                Collection.
+                Function("GeoJson").
+                Returns<JsonResult>();
 
             return builder.GetEdmModel();
         }

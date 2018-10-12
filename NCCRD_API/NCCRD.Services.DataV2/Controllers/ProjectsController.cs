@@ -126,7 +126,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 statusProjectIds.AddRange(_context.MitigationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
                 //statusProjectIds.AddRange(_context.ResearchDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList()); //OBSOLETE
             }
-          
+
 
             //GET PORJECTS FILTERED//
             //Retrieve project details and filter on query params
@@ -137,8 +137,47 @@ namespace NCCRD.Services.DataV2.Controllers
                             (regionFilter == 0 || regionProjectIds.Contains(p.ProjectId)) &&
                             (sectorFilter == 0 || sectorProjectIds.Contains(p.ProjectId)) &&
                             (typologyFilter == 0 || typologyProjectIds.Contains(p.ProjectId)) &&
-                            (daoidFilter == null || p.LinkedDAOGoalId == daoidFilter)
+                            (daoidFilter == Guid.Empty || p.LinkedDAOGoalId == daoidFilter)
                         );
+        }
+
+        [HttpGet]
+        [EnableQuery]
+        public JsonResult GeoJson()
+        {
+            List<ProjectGeoJson> projectGeo = new List<ProjectGeoJson>();
+
+            //GET PROJECT DATA//
+            var projectData = (from proj in _context.Project
+                               join projLoc in _context.ProjectLocation on proj.ProjectId equals projLoc.ProjectId
+                               join loc in _context.Location on projLoc.LocationId equals loc.LocationId
+                               select new
+                               {
+                                   proj.ProjectId,
+                                   proj.ProjectTitle,
+                                   loc.LatCalculated,
+                                   loc.LonCalculated
+                               }).ToList();
+
+            foreach (var projDat in projectData)
+            {
+                ProjectGeoJson item = new ProjectGeoJson();
+                item.type = "Feature";
+                item.geometry = new GeoJsonGeometry()
+                {
+                    type = "Point",
+                    coordinates = new List<double>() { (double)projDat.LatCalculated, (double)projDat.LonCalculated }
+                };
+                item.properties = new GeoJsonProperties()
+                {
+                    id = projDat.ProjectId.ToString(),
+                    name = projDat.ProjectTitle
+                };
+
+                projectGeo.Add(item);
+            }
+
+            return new JsonResult(projectGeo);
         }
 
         //##################//
