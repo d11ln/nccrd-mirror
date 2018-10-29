@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -116,19 +115,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LocationType",
-                columns: table => new
-                {
-                    LocationTypeId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<string>(maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LocationType", x => x.LocationTypeId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Person",
                 columns: table => new
                 {
@@ -188,19 +174,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ResearchType", x => x.ResearchTypeId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SectorType",
-                columns: table => new
-                {
-                    SectorTypeId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 450, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SectorType", x => x.SectorTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,34 +261,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Region",
-                columns: table => new
-                {
-                    RegionId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RegionName = table.Column<string>(maxLength: 450, nullable: false),
-                    RegionDesription = table.Column<string>(nullable: true),
-                    LocationTypeId = table.Column<int>(nullable: false),
-                    ParentRegionId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Region", x => x.RegionId);
-                    table.ForeignKey(
-                        name: "FK_Region_LocationType_LocationTypeId",
-                        column: x => x.LocationTypeId,
-                        principalTable: "LocationType",
-                        principalColumn: "LocationTypeId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Region_Region_ParentRegionId",
-                        column: x => x.ParentRegionId,
-                        principalTable: "Region",
-                        principalColumn: "RegionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Funders",
                 columns: table => new
                 {
@@ -368,33 +313,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sector",
-                columns: table => new
-                {
-                    SectorId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<string>(maxLength: 450, nullable: false),
-                    SectorTypeId = table.Column<int>(nullable: false),
-                    ParentSectorId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sector", x => x.SectorId);
-                    table.ForeignKey(
-                        name: "FK_Sector_Sector_ParentSectorId",
-                        column: x => x.ParentSectorId,
-                        principalTable: "Sector",
-                        principalColumn: "SectorId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Sector_SectorType_SectorTypeId",
-                        column: x => x.SectorTypeId,
-                        principalTable: "SectorType",
-                        principalColumn: "SectorTypeId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
@@ -415,6 +333,7 @@ namespace NCCRD.Services.DataV2.Migrations
                     BudgetLower = table.Column<decimal>(nullable: true),
                     BudgetUpper = table.Column<decimal>(nullable: true),
                     LinkedDAOGoalId = table.Column<Guid>(nullable: true),
+                    ProjectStatusId = table.Column<int>(nullable: true),
                     ProjectTypeId = table.Column<int>(nullable: false),
                     ProjectSubTypeId = table.Column<int>(nullable: true),
                     ProjectManagerId = table.Column<int>(nullable: false),
@@ -428,6 +347,12 @@ namespace NCCRD.Services.DataV2.Migrations
                         column: x => x.ProjectManagerId,
                         principalTable: "Person",
                         principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_ProjectStatus_ProjectStatusId",
+                        column: x => x.ProjectStatusId,
+                        principalTable: "ProjectStatus",
+                        principalColumn: "ProjectStatusId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Project_ProjectSubType_ProjectSubTypeId",
@@ -482,12 +407,6 @@ namespace NCCRD.Services.DataV2.Migrations
                         column: x => x.ProjectStatusId,
                         principalTable: "ProjectStatus",
                         principalColumn: "ProjectStatusId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AdaptationDetails_Sector_SectorId",
-                        column: x => x.SectorId,
-                        principalTable: "Sector",
-                        principalColumn: "SectorId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -549,12 +468,6 @@ namespace NCCRD.Services.DataV2.Migrations
                         column: x => x.ProjectStatusId,
                         principalTable: "ProjectStatus",
                         principalColumn: "ProjectStatusId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MitigationDetails_Sector_SectorId",
-                        column: x => x.SectorId,
-                        principalTable: "Sector",
-                        principalColumn: "SectorId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MitigationDetails_VoluntaryGoldStandard_VoluntaryGoldStandardId",
@@ -685,12 +598,6 @@ namespace NCCRD.Services.DataV2.Migrations
                         principalTable: "Project",
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProjectRegion_Region_RegionId",
-                        column: x => x.RegionId,
-                        principalTable: "Region",
-                        principalColumn: "RegionId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -722,12 +629,6 @@ namespace NCCRD.Services.DataV2.Migrations
                         principalColumn: "ResearchTypeId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ResearchDetails_Sector_SectorId",
-                        column: x => x.SectorId,
-                        principalTable: "Sector",
-                        principalColumn: "SectorId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_ResearchDetails_TargetAudience_TargetAudienceId",
                         column: x => x.TargetAudienceId,
                         principalTable: "TargetAudience",
@@ -749,11 +650,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "IX_AdaptationDetails_ProjectStatusId",
                 table: "AdaptationDetails",
                 column: "ProjectStatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AdaptationDetails_SectorId",
-                table: "AdaptationDetails",
-                column: "SectorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Funders_FundingStatusId",
@@ -796,11 +692,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 column: "ProjectStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MitigationDetails_SectorId",
-                table: "MitigationDetails",
-                column: "SectorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MitigationDetails_VoluntaryGoldStandardId",
                 table: "MitigationDetails",
                 column: "VoluntaryGoldStandardId");
@@ -819,6 +710,11 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "IX_Project_ProjectManagerId",
                 table: "Project",
                 column: "ProjectManagerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_ProjectStatusId",
+                table: "Project",
+                column: "ProjectStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_ProjectSubTypeId",
@@ -861,24 +757,9 @@ namespace NCCRD.Services.DataV2.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectRegion_RegionId",
-                table: "ProjectRegion",
-                column: "RegionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectSubType_ProjectTypeId",
                 table: "ProjectSubType",
                 column: "ProjectTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Region_LocationTypeId",
-                table: "Region",
-                column: "LocationTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Region_ParentRegionId",
-                table: "Region",
-                column: "ParentRegionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResearchDetails_ProjectId",
@@ -891,41 +772,9 @@ namespace NCCRD.Services.DataV2.Migrations
                 column: "ResearchTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ResearchDetails_SectorId",
-                table: "ResearchDetails",
-                column: "SectorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ResearchDetails_TargetAudienceId",
                 table: "ResearchDetails",
                 column: "TargetAudienceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sector_ParentSectorId",
-                table: "Sector",
-                column: "ParentSectorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sector_SectorTypeId",
-                table: "Sector",
-                column: "SectorTypeId");
-
-            //ADD POLYGON SP
-            StringBuilder storedProcedureCode = new StringBuilder();
-            storedProcedureCode.Append("CREATE PROCEDURE dbo.PolygonFilter" + Environment.NewLine);
-            storedProcedureCode.Append("@WKT VARCHAR(MAX)" + Environment.NewLine);
-            storedProcedureCode.Append("AS" + Environment.NewLine);
-            storedProcedureCode.Append("BEGIN" + Environment.NewLine);
-            storedProcedureCode.Append("DECLARE @QUERY VARCHAR(MAX) = " + Environment.NewLine);
-            storedProcedureCode.Append("'SELECT Project.*" + Environment.NewLine);
-            storedProcedureCode.Append("FROM  Location" + Environment.NewLine);
-            storedProcedureCode.Append("INNER JOIN ProjectLocation ON Location.LocationId = ProjectLocation.LocationId" + Environment.NewLine);
-            storedProcedureCode.Append("INNER JOIN Project ON ProjectLocation.ProjectId = Project.ProjectId" + Environment.NewLine);
-            storedProcedureCode.Append("WHERE geometry::STGeomFromText(''~WKT~'', 0).MakeValid().STIntersects(geometry::STGeomFromText(''POINT('' + CAST(Location.LonCalculated as VARCHAR(MAX)) + '' '' + CAST(Location.LatCalculated as VARCHAR(MAX)) + '')'', 0)) = 1';" + Environment.NewLine);
-            storedProcedureCode.Append("SET @QUERY = REPLACE(@QUERY, '~WKT~', @WKT)" + Environment.NewLine);
-            storedProcedureCode.Append("EXEC(@QUERY);" + Environment.NewLine);
-            storedProcedureCode.Append("END" + Environment.NewLine);
-            migrationBuilder.Sql(storedProcedureCode.ToString());
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -973,9 +822,6 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "CarbonCreditMarket");
 
             migrationBuilder.DropTable(
-                name: "ProjectStatus");
-
-            migrationBuilder.DropTable(
                 name: "VoluntaryGoldStandard");
 
             migrationBuilder.DropTable(
@@ -988,16 +834,10 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "Location");
 
             migrationBuilder.DropTable(
-                name: "Region");
-
-            migrationBuilder.DropTable(
                 name: "Project");
 
             migrationBuilder.DropTable(
                 name: "ResearchType");
-
-            migrationBuilder.DropTable(
-                name: "Sector");
 
             migrationBuilder.DropTable(
                 name: "TargetAudience");
@@ -1006,10 +846,10 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "FundingStatus");
 
             migrationBuilder.DropTable(
-                name: "LocationType");
+                name: "Person");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "ProjectStatus");
 
             migrationBuilder.DropTable(
                 name: "ProjectSubType");
@@ -1018,13 +858,7 @@ namespace NCCRD.Services.DataV2.Migrations
                 name: "ValidationStatus");
 
             migrationBuilder.DropTable(
-                name: "SectorType");
-
-            migrationBuilder.DropTable(
                 name: "ProjectType");
-
-            //DROP POLYGON SP
-            migrationBuilder.Sql("DROP PROCEDURE dbo.PolygonFilter");
         }
     }
 }

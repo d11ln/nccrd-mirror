@@ -106,15 +106,6 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
 
-            builder.EntitySet<Region>("Regions")
-                .EntityType
-                .Filter() // Allow for the $filter Command
-                .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
-                .OrderBy() // Allow for the $orderby Command
-                .Page() // Allow for the $top and $skip Commands
-                .Select();// Allow for the $select Command;  
-
             builder.EntitySet<AdaptationPurpose>("AdaptationPurpose")
                 .EntityType
                 .Filter() // Allow for the $filter Command
@@ -188,24 +179,6 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .Select();// Allow for the $select Command; 
 
             builder.EntitySet<ResearchType>("ResearchType")
-                .EntityType
-                .Filter() // Allow for the $filter Command
-                .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
-                .OrderBy() // Allow for the $orderby Command
-                .Page() // Allow for the $top and $skip Commands
-                .Select();// Allow for the $select Command; 
-
-            builder.EntitySet<Sector>("Sector")
-                .EntityType
-                .Filter() // Allow for the $filter Command
-                .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
-                .OrderBy() // Allow for the $orderby Command
-                .Page() // Allow for the $top and $skip Commands
-                .Select();// Allow for the $select Command; 
-
-            builder.EntitySet<SectorType>("SectorType")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command

@@ -104,9 +104,6 @@ const mapDispatchToProps = (dispatch) => {
     loadSectorType: payload => {
       dispatch({ type: "LOAD_SECTOR_TYPE", payload })
     },
-    loadSectorTree: payload => {
-      dispatch({ type: "LOAD_SECTOR_TREE", payload })
-    },
     loadCarbonCredit: payload => {
       dispatch({ type: "LOAD_CARBON_CREDIT", payload })
     },
@@ -195,9 +192,9 @@ class ProjectDetails extends React.Component {
     let projectId = this.props.match.params.id
     let daoid = null
 
-    if(projectId === "add"){
+    if (projectId === "add") {
       const parsedHash = queryString.parse(location.hash.replace("/projects/add?", ""))
-      if (typeof parsedHash.daoid !== 'undefined') {        
+      if (typeof parsedHash.daoid !== 'undefined') {
         daoid = parsedHash.daoid
       }
     }
@@ -228,7 +225,7 @@ class ProjectDetails extends React.Component {
 
     let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadUsers, loadValidationStatus,
       loadProjectDetails, loadProjectFunderDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
-      loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadSectorTree, loadCarbonCredit,
+      loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
       loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards } = this.props
 
@@ -250,7 +247,7 @@ class ProjectDetails extends React.Component {
 
     if (!detailsOnly) {
       oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
-        "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Region,Sector,SectorType,TargetAudience,Typology,Person," +
+        "ProjectStatus,ProjectType,ProjectSubType,ResearchType,TargetAudience,Typology,Person," +
         "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
     }
 
@@ -279,14 +276,15 @@ class ProjectDetails extends React.Component {
               "BudgetLower": 0,
               "BudgetUpper": 0,
               "ProjectTypeId": 0,
-              "ProjectSubTypeId": 0,              
+              "ProjectStatusId": 0,
+              "ProjectSubTypeId": 0,
               "ProjectManagerId": 0,
               "ValidationStatusId": 0,
               "LinkedDAOGoalId": null,
               "state": "modified"
             }
 
-            if(this.state.daoid !== null){
+            if (this.state.daoid !== null) {
               oHandler.data.Project.LinkedDAOGoalId = this.state.daoid
               this.setState({ daoid: null })
             }
@@ -311,9 +309,6 @@ class ProjectDetails extends React.Component {
             loadProjectTypes(oHandler.data.Lookups.ProjectType)
             loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
             loadResearchType(oHandler.data.Lookups.ResearchType)
-            loadSectors(oHandler.data.Lookups.Sector)
-            loadRegions(oHandler.data.Lookups.Region)
-            loadSectorType(oHandler.data.Lookups.SectorType)
             loadTargetAudience(oHandler.data.Lookups.TargetAudience)
             loadTypology(oHandler.data.Lookups.Typology)
             loadFundingStatus(oHandler.data.Lookups.FundingStatus)
@@ -349,6 +344,38 @@ class ProjectDetails extends React.Component {
       .then(res => res.json())
       .then(res => {
         loadHazards(res.items)
+      })
+      .catch(res => {
+        console.log("Error details:", res)
+      })
+
+    //Get (external) Regions
+    fetch(`${vmsBaseURL}regions/flat`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        loadRegions(res.items)
+      })
+      .catch(res => {
+        console.log("Error details:", res)
+      })
+
+    //Get (external) Sectors
+    fetch(`${vmsBaseURL}sectors/flat`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        loadSectors(res.items)
       })
       .catch(res => {
         console.log("Error details:", res)
@@ -394,7 +421,7 @@ class ProjectDetails extends React.Component {
     //Add Project
     if (projectDetails.state === 'modified') {
       let projectData = _.clone(projectDetails)
-      projectData.ProjectId = projectId === 'add' ? 0 : projectId   
+      projectData.ProjectId = projectId === 'add' ? 0 : projectId
       delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
       dataObj.Project = projectData
       modified = true
@@ -466,8 +493,8 @@ class ProjectDetails extends React.Component {
       this.showMessage("Success", "Changes saved successfully.")
       setEditMode(false)
       o().config({ error: null }) //Reset error config
-      
-      this.setState({ projectId: data.Id }, () => { 
+
+      this.setState({ projectId: data.Id }, () => {
         //Refresh data to get ID's from DB
         this.loadData(true)
       })

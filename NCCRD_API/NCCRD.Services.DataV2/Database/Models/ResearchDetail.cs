@@ -42,6 +42,5 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         //FK - Sector
         public int? SectorId { get; set; }
-        public Sector Sector { get; set; }
     }
 }

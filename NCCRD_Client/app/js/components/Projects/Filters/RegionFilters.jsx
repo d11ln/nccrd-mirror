@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'mdbreact'
-import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import { vmsBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'
@@ -55,21 +55,27 @@ class RegionFilters extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         //Load data
         let { loadRegions } = this.props
 
         //Get data
-        var oHandler = o(apiBaseURL + "Regions")
-            .select("RegionId,RegionName,LocationTypeId,ParentRegionId")
-            .orderBy("RegionName")
+        try {
+            let res = await fetch(vmsBaseURL + "Regions/flat")
 
-        oHandler.get(function (data) {
-            loadRegions(data)
-        }, function (error) {
-            console.error(error)
-        })
+            if (res.ok) {
+                res = await res.json()
+
+                if (res.items && res.items.length > 0) {
+                    let data = res.items
+                    loadRegions(data)
+                }
+            }
+        }
+        catch (ex) {
+            console.error(ex)
+        }
     }
 
     expandAllNodes() {
@@ -85,31 +91,35 @@ class RegionFilters extends React.Component {
         this.setState({ expandedKeys: [] })
     }
 
-    transformDataToTree(data) {
+    transformDataToTree(effectiveData, globalData, level = 0) {
 
-        let tree = []
+        let treeNodes = []
+        let parentIdKey = "ParentId"
 
-        data.filter(x => x.LocationTypeId === 4).map(p => {
+        if (typeof globalData === 'undefined') {
+            globalData = effectiveData
+        }
 
-            //Districts
-            let districtChildren = []
-            data.filter(px => px.ParentRegionId === p.RegionId && px.LocationTypeId === 3).map(d => {
+        if (level === 0) {
+            effectiveData = effectiveData.filter(x => x[parentIdKey] === null)
+        }
 
-                //Municipalities
-                let municipalityChildren = []
-                data.filter(dx => dx.ParentRegionId === d.RegionId && dx.LocationTypeId === 2).map(m => {
-                    municipalityChildren.push({ id: m.RegionId, text: m.RegionName })
-                })
+        effectiveData.map(item => {
 
-                //Add District
-                districtChildren.push({ id: d.RegionId, text: d.RegionName, children: municipalityChildren })
-            })
+            let newTreeNode = {
+                id: item.Id,
+                text: item.Text
+            }
 
-            //Add Province
-            tree.push({ id: p.RegionId, text: p.RegionName, children: districtChildren })
+            let children = globalData.filter(x => x[parentIdKey] == newTreeNode.id)
+            if (children.length > 0) {
+                newTreeNode.children = this.transformDataToTree(children, globalData, (level + 1))
+            }
+
+            treeNodes.push(newTreeNode)
         })
 
-        return tree
+        return treeNodes
     }
 
     renderTreeNodes(data) {
@@ -170,7 +180,7 @@ class RegionFilters extends React.Component {
         let selectedValue = "All"
 
         if (regionFilter > 0 && region.length > 0) {
-            selectedValue = region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName
+            selectedValue = region.filter(x => x.Id == regionFilter)[0].Text
         }
 
         let uiconf = UILookup("treeRegionFilter", "Region filter:")

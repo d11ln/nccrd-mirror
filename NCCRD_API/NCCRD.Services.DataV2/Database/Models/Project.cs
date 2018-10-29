@@ -53,6 +53,11 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public Guid? LinkedDAOGoalId { get; set; }
 
+        //FK - ProjectStatus
+        public int? ProjectStatusId { get; set; }
+        [IgnoreDataMember]
+        public ProjectStatus ProjectStatus { get; set; }
+
         //FK - ProjectType
         [Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
         public int ProjectTypeId { get; set; }

@@ -20,9 +20,6 @@ namespace NCCRD.Services.DataV2.ViewModels
         public ProjectType[] ProjectType { get; set; }
         public ProjectSubType[] ProjectSubType { get; set; }
         public ResearchType[] ResearchType { get; set; }
-        public Region[] Region { get; set; }
-        public Sector[] Sector { get; set; }
-        public SectorType[] SectorType { get; set; }
         public TargetAudience[] TargetAudience { get; set; }
         public Typology[] Typology { get; set; }
         public Person[] Person { get; set; }

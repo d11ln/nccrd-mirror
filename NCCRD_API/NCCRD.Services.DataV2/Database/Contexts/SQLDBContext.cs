@@ -15,7 +15,6 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         public DbSet<Funder> Funders { get; set; }
         public DbSet<FundingStatus> FundingStatus { get; set; }
         public DbSet<Location> Location { get; set; }
-        public DbSet<LocationType> LocationType { get; set; }
         public DbSet<MitigationDetail> MitigationDetails { get; set; }
         public DbSet<MitigationEmissionsData> MitigationEmissionsData { get; set; }
         public DbSet<Project> Project { get; set; }
@@ -25,11 +24,8 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         public DbSet<ProjectStatus> ProjectStatus { get; set; }
         public DbSet<ProjectSubType> ProjectSubType { get; set; }
         public DbSet<ProjectType> ProjectType { get; set; }
-        public DbSet<Region> Region { get; set; }
         public DbSet<ResearchDetail> ResearchDetails { get; set; }
         public DbSet<ResearchType> ResearchType { get; set; }
-        public DbSet<Sector> Sector { get; set; }
-        public DbSet<SectorType> SectorType { get; set; }
         public DbSet<TargetAudience> TargetAudience { get; set; }
         public DbSet<Typology> Typology { get; set; }
         public DbSet<Person> Person { get; set; }

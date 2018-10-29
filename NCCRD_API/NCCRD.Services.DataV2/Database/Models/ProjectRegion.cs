@@ -23,7 +23,5 @@ namespace NCCRD.Services.DataV2.Database.Models
         //FK - Region
         [Range(0, int.MaxValue, ErrorMessage = "The Region field is required.")]
         public int RegionId { get; set; }
-        //[IgnoreDataMember]
-        public Region Region { get; set; }
     }
 }

@@ -124,7 +124,7 @@ class ProjectFilters extends React.Component {
 
         filterChips.push(
           <div className="chip blue lighten-1" key="regionFilterChip">
-            {"Region: " + region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName}
+            {"Region: " + region.filter(x => x.Id == regionFilter)[0].Text}
             <i className="close fa fa-times" onClick={() => this.deleteFilterChip("region")}></i>
           </div>
         )
@@ -133,7 +133,7 @@ class ProjectFilters extends React.Component {
       if (sectorFilter > 0 && sector.length > 0) {
         filterChips.push(
           <div className="chip blue lighten-1" key="sectorFilterChip">
-            {"Sector: " + sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value}
+            {"Sector: " + sector.filter(x => x.Id == sectorFilter)[0].Text}
             <i className="close fa fa-times" onClick={() => this.deleteFilterChip("sector")}></i>
           </div>
         )

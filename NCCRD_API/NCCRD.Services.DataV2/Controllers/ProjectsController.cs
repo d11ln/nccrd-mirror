@@ -4,15 +4,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NCCRD.Services.DataV2.Database.Contexts;
 using NCCRD.Services.DataV2.Database.Models;
 using NCCRD.Services.DataV2.Extensions;
 using NCCRD.Services.DataV2.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -25,9 +30,12 @@ namespace NCCRD.Services.DataV2.Controllers
     public class ProjectsController : ODataController
     {
         public SQLDBContext _context { get; }
-        public ProjectsController(SQLDBContext context)
+        IConfiguration _config { get; }
+
+        public ProjectsController(SQLDBContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         [HttpGet]
@@ -75,7 +83,7 @@ namespace NCCRD.Services.DataV2.Controllers
             if (regionFilter > 0)
             {
                 //Get all RegionIds (including children)
-                var allRegionIDs = GetChildRegions(regionFilter, _context.Region.ToList()).Select(r => r.RegionId).Distinct().ToList();
+                var allRegionIDs = GetChildren(regionFilter, GetVMSData("regions/flat").Result).Select(r => r).Distinct().ToList();
                 allRegionIDs.Add(regionFilter);
 
                 //Get all ProjectIds assigned to these Regions and/or Typology
@@ -86,12 +94,12 @@ namespace NCCRD.Services.DataV2.Controllers
             var sectorProjectIds = new List<int>();
             if (sectorFilter > 0)
             {
-                var allSectorIDs = GetChildSectors(sectorFilter, _context.Sector.ToList()).Select(x => (int?)x.SectorId).ToList();
+                var allSectorIDs = GetChildren(sectorFilter, GetVMSData("sectors/flat").Result).Select(r => r).Distinct().ToList();
                 allSectorIDs.Add(sectorFilter);
 
-                sectorProjectIds.AddRange(_context.MitigationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
-                sectorProjectIds.AddRange(_context.AdaptationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
-                sectorProjectIds.AddRange(_context.ResearchDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains(x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.MitigationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.AdaptationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.ResearchDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
 
                 //Remove duplicates
                 sectorProjectIds = sectorProjectIds.Distinct().ToList();
@@ -124,7 +132,6 @@ namespace NCCRD.Services.DataV2.Controllers
             {
                 statusProjectIds.AddRange(_context.AdaptationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
                 statusProjectIds.AddRange(_context.MitigationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
-                //statusProjectIds.AddRange(_context.ResearchDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList()); //OBSOLETE
             }
 
 
@@ -220,32 +227,60 @@ namespace NCCRD.Services.DataV2.Controllers
             return polygon;
         }
 
-        private List<Region> GetChildRegions(int regionId, List<Region> regionList)
+        private async Task<List<StandardVocabItem>> GetVMSData(string relativeURL)
         {
-            var regions = regionList.Where(x => x.ParentRegionId == regionId).ToList();
+            var result = new StandardVocabOutput();
 
-            var childRegions = new List<Region>();
-            foreach (var region in regions)
+            //Setup http-client
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_config.GetValue<string>("VmsApiBaseUrl"));
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Get data from VMS API
+            var response = await client.GetAsync(relativeURL);
+            if (response != null)
             {
-                childRegions.AddRange(GetChildRegions(region.RegionId, regionList));
+                var jsonString = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<StandardVocabOutput>(jsonString);
             }
-            regions.AddRange(childRegions);
 
-            return regions;
+            return result.Items;
         }
 
-        private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
+        private List<int> GetChildren(int filterID, List<StandardVocabItem> data)
         {
-            var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+            var children = data
+                .Where(x =>
+                    x.AdditionalData.Any(y => y.Key == "ParentId" && y.Value == filterID.ToString())
+                )
+                .Select(x => int.Parse(x.Id))
+                .ToList();
 
-            var childSectors = new List<Sector>();
-            foreach (var sector in sectors)
+            var addChildren = new List<int>();
+            foreach (var child in children)
             {
-                childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
+                //Add to temp list so as to not modify 'children' during iteration
+                addChildren.AddRange(GetChildren(child, data));
             }
-            sectors.AddRange(childSectors);
+            //Transfer to actual list
+            children.AddRange(addChildren);
 
-            return sectors;
+            return children;
         }
+
+        //private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
+        //{
+        //    var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+
+        //    var childSectors = new List<Sector>();
+        //    foreach (var sector in sectors)
+        //    {
+        //        childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
+        //    }
+        //    sectors.AddRange(childSectors);
+
+        //    return sectors;
+        //}
     }
 }

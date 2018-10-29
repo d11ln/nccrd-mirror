@@ -174,32 +174,6 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
-            //Save Sector
-            if (data.Sector != null)
-            {
-                foreach (var sector in data.Sector)
-                {
-                    var result = SaveSectorAsync(sector);
-                    if (!(result is CreatedODataResult<Sector> || result is UpdatedODataResult<Sector>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            //Save SectorType
-            if (data.SectorType != null)
-            {
-                foreach (var sectorType in data.SectorType)
-                {
-                    var result = SaveSectorTypeAsync(sectorType);
-                    if (!(result is CreatedODataResult<SectorType> || result is UpdatedODataResult<SectorType>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
             //Save TargetAudience
             if (data.TargetAudience != null)
             {
@@ -282,9 +256,6 @@ namespace NCCRD.Services.DataV2.Controllers
             var projectType = _context.ProjectType.OrderBy(x => x.Value).ToArray();
             var projectSubType = _context.ProjectSubType.OrderBy(x => x.Value).ToArray();
             var researchType = _context.ResearchType.OrderBy(x => x.Value).ToArray();
-            var region = _context.Region.OrderBy(x => x.RegionName).ToArray();
-            var sector = _context.Sector.OrderBy(x => x.Value).ToArray();
-            var sectorType = _context.SectorType.OrderBy(x => x.Name).ToArray();
             var targetAudience = _context.TargetAudience.OrderBy(x => x.Value).ToArray();
             var typology = _context.Typology.OrderBy(x => x.Value).ToArray();
             var user = _context.Person.OrderBy(x => x.FirstName).ThenBy(x => x.Surname).ToArray();
@@ -305,9 +276,6 @@ namespace NCCRD.Services.DataV2.Controllers
                 ProjectSubType = projectSubType,
                 ProjectType = projectType,
                 ResearchType = researchType,
-                Region = region,
-                Sector = sector,
-                SectorType = sectorType,
                 TargetAudience = targetAudience,
                 Typology = typology,
                 Person = user,
@@ -557,56 +525,6 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref item);
                 HelperExtensions.ClearNullableInts(ref item);
                 _context.ResearchType.Add(item);
-                return Created(item);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(item);
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveSectorAsync(Sector item)
-        {
-            //Check that Value/Name is unique
-            if (_context.Sector.AsNoTracking().FirstOrDefault(x => x.Value == item.Value && x.SectorId != item.SectorId) != null)
-            {
-                return BadRequest("Duplicate entry/value found.");
-            }
-
-            var exiting = _context.Sector.FirstOrDefault(x => x.SectorId == item.SectorId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref item);
-                HelperExtensions.ClearNullableInts(ref item);
-                _context.Sector.Add(item);
-                return Created(item);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(item);
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveSectorTypeAsync(SectorType item)
-        {
-            //Check that Value/Name is unique
-            if (_context.SectorType.AsNoTracking().FirstOrDefault(x => x.Name == item.Name && x.SectorTypeId != item.SectorTypeId) != null)
-            {
-                return BadRequest("Duplicate entry/value found.");
-            }
-
-            var exiting = _context.SectorType.FirstOrDefault(x => x.SectorTypeId == item.SectorTypeId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref item);
-                HelperExtensions.ClearNullableInts(ref item);
-                _context.SectorType.Add(item);
                 return Created(item);
             }
             else
