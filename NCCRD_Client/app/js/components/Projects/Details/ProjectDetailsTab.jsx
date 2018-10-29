@@ -235,22 +235,22 @@ class ProjectDetailsTab extends React.Component {
               "ProjectTypeId": 0
             }}
           />
-          {/* <SelectComponent
-                        id="selProjectStatus"
-                        col="col-md-4"
-                        label="Project status:"
-                        selectedValue={projectDetails.ProjectStatusId}
-                        data={this.props.projectStatus}
-                        setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_STATUS"}
-                        dispatch={"LOAD_PROJECT_STATUS"}
-                        persist="ProjectStatus"
-                        allowEdit={true}
-                        newItemTemplate={{
-                            "ProjectStatusId": 0,
-                            "Value": "",
-                            "Description": ""
-                        }}
-                    /> */}
+          <SelectComponent
+            id="selProjectStatus"
+            col="col-md-4"
+            label="Project status:"
+            selectedValue={projectDetails.ProjectStatusId}
+            data={this.props.projectStatus}
+            setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_STATUS"}
+            dispatch={"LOAD_PROJECT_STATUS"}
+            persist="ProjectStatus"
+            allowEdit={true}
+            newItemTemplate={{
+              "ProjectStatusId": 0,
+              "Value": "",
+              "Description": ""
+            }}
+          />
         </div>
 
         <br />

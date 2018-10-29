@@ -48,6 +48,10 @@ export default function LookupsReducer(state = {}, action) {
       return { ...state, projectSubTypes: payload }
     }
 
+    case "LOAD_PROJECT_STATUS": {
+      return { ...state, projectStatus: payload }
+    }
+
     case "LOAD_USERS": {
       payload.forEach(x => {
         x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")

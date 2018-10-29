@@ -144,7 +144,7 @@ namespace NCCRD.Services.DataV2.Controllers
                             (regionFilter == 0 || regionProjectIds.Contains(p.ProjectId)) &&
                             (sectorFilter == 0 || sectorProjectIds.Contains(p.ProjectId)) &&
                             (typologyFilter == 0 || typologyProjectIds.Contains(p.ProjectId)) &&
-                            (daoidFilter == Guid.Empty || p.LinkedDAOGoalId == daoidFilter)
+                            (daoidFilter == Guid.Empty || p.ProjectDAOs.Any(dao => dao.DAOId == daoidFilter))
                         );
         }
 

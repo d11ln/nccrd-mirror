@@ -37,6 +37,7 @@ namespace NCCRD.Services.DataV2.Controllers
             //Get project and details
             var project = _context.Project
                 .Include(x => x.ProjectRegions)
+                .Include(x => x.ProjectDAOs)
                 .FirstOrDefault(x => x.ProjectId == id);
 
             var funders = _context.ProjectFunder.Include(x => x.Funder).Where(x => x.ProjectId == id)
@@ -234,6 +235,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearNullableInts(ref project);
                 _context.Project.Add(project);
                 SaveProjectRegions(project);
+                SaveProjectDAOs(project);
                 _projectAdded = true;
                 return Created(project);
             }
@@ -242,6 +244,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(project);
                 SaveProjectRegions(project);
+                SaveProjectDAOs(project);
                 return Updated(exiting);
             }
         }
@@ -270,6 +273,36 @@ namespace NCCRD.Services.DataV2.Controllers
             foreach(var pr in _context.ProjectRegion.Where(x => x.ProjectId == project.ProjectId))
             {
                 if(!project.ProjectRegions.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
+                {
+                    _context.Remove(pr);
+                }
+            }
+        }
+
+        private void SaveProjectDAOs(Project project)
+        {
+            //Add new mappings
+            if (project.ProjectDAOs == null)
+            {
+                project.ProjectDAOs = new List<ProjectDAO>();
+            }
+
+            for (var i = 0; i < project.ProjectDAOs.Count; i++)
+            {
+                var dao = project.ProjectDAOs.ToArray()[i];
+
+                if (!_context.ProjectDAOs.Any(x => x.ProjectId == dao.ProjectId && x.DAOId == dao.DAOId))
+                {
+                    HelperExtensions.ClearIdentityValue(ref dao);
+                    HelperExtensions.ClearNullableInts(ref dao);
+                    _context.ProjectDAOs.Add(dao);
+                }
+            }
+
+            //Remove deleted mappings
+            foreach (var pr in _context.ProjectDAOs.Where(x => x.ProjectId == project.ProjectId))
+            {
+                if (!project.ProjectDAOs.Any(x => x.ProjectId == pr.ProjectId && x.DAOId == pr.DAOId))
                 {
                     _context.Remove(pr);
                 }

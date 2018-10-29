@@ -51,7 +51,7 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public decimal? BudgetUpper { get; set; }
 
-        public Guid? LinkedDAOGoalId { get; set; }
+        //public Guid? LinkedDAOGoalId { get; set; }
 
         //FK - ProjectStatus
         public int? ProjectStatusId { get; set; }
@@ -87,5 +87,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
         public virtual ICollection<ResearchDetail> ResearchDetails { get; set; }
         public virtual ICollection<ProjectFunder> ProjectFunders { get; set; }
+        public virtual ICollection<ProjectDAO> ProjectDAOs { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         public DbSet<MitigationDetail> MitigationDetails { get; set; }
         public DbSet<MitigationEmissionsData> MitigationEmissionsData { get; set; }
         public DbSet<Project> Project { get; set; }
+        public DbSet<ProjectDAO> ProjectDAOs { get; set; }
         public DbSet<ProjectFunder> ProjectFunder { get; set; }
         public DbSet<ProjectLocation> ProjectLocation { get; set; }
         public DbSet<ProjectRegion> ProjectRegion { get; set; }

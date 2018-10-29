@@ -243,7 +243,7 @@ class ProjectDetails extends React.Component {
     //Get Project details & lookups
     let oHandler = o(apiBaseURL + "ProjectDetails")
       .find(projectId === 'add' ? 0 : projectId)
-      .expand("Project($expand=ProjectRegions),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+      .expand("Project($expand=ProjectRegions,ProjectDAOs),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
 
     if (!detailsOnly) {
       oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
@@ -488,6 +488,8 @@ class ProjectDetails extends React.Component {
       modified = true
     }
 
+    console.log("dataObj", dataObj)
+
     const successCallback = (data) => {
 
       this.showMessage("Success", "Changes saved successfully.")
@@ -505,8 +507,6 @@ class ProjectDetails extends React.Component {
       o().config({ error: null }) //Reset error config
       setLoading(false)
     }
-
-    console.log("dataObj", dataObj)
 
     if (modified) {
 
@@ -700,12 +700,12 @@ class ProjectDetails extends React.Component {
                   </Button>
                   <Button
                     style={{ margin: "0px 0px 20px 15px" }}
-                    color={projectDetails.LinkedDAOGoalId === null ? "red" : "green"}
+                    color={ (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
                     size="sm"
                     onClick={() => { this.setState({ doaModal: true }) }}
                   >
                     <i
-                      className={projectDetails.LinkedDAOGoalId === null ? "fa fa-unlink" : "fa fa-link"}
+                      className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
                       aria-hidden="true"
                       style={{ marginRight: "15px" }}
                     />
@@ -879,8 +879,8 @@ class ProjectDetails extends React.Component {
             </ModalHeader>
             <ModalBody>
               <LinkedDAO
-                LinkedDAOGoalId={projectDetails.LinkedDAOGoalId}
-                linkCallback={(id) => { setLinkedLinkedDAOGoalId({ value: id, state: 'modified' }) }} />
+                ProjectDAOs={projectDetails.ProjectDAOs}
+                linkCallback={(id, action) => { setLinkedLinkedDAOGoalId({ value: id, action, state: 'modified' }) }} />
             </ModalBody>
           </Modal>
         </Container>

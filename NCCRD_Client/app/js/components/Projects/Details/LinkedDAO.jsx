@@ -28,322 +28,327 @@ class LinkedDAO extends React.Component {
 
   render() {
 
-    let { LinkedDAOGoalId, user, linkCallback, editMode, setEditMode } = this.props
+    let { ProjectDAOs, user, linkCallback, editMode, setEditMode } = this.props
 
     return (
       <>
-        {/* LINKED */}
-        {
-          (LinkedDAOGoalId !== "00000000-0000-0000-0000-000000000000") &&
-          <div>
 
-            {(editMode && (user && !user.expired)) &&
-              <Button
-                color=""
-                style={{ backgroundColor: DEAGreen, marginLeft: "-1px", marginBottom: "20px" }}
-                onClick={() => {
-                  if (linkCallback) {
-                    setTimeout(linkCallback("00000000-0000-0000-0000-000000000000"), 1000)
-                  }
-                }}>
-                Unlink
-              </Button>
-            }
+        <div>
+          {(!user || user.expires) &&
+            <b><i><a href="#/login">Login</a> to allow editing</i></b>
+          }
 
-            <OData
-              baseUrl={ccisBaseURL + `Goal1?$filter=Id eq ${LinkedDAOGoalId}`}
-            >
-              {({ loading, error, data }) => {
-
-                if (loading) {
-                  return (
-                    <h6>
-                      Fetching your goals...
-                    </h6>
-                  )
-                }
-
-                if (error) {
-                  console.error(error)
-                  return (
-                    <p>
-                      Unable to fetch goals. (See log for details)
-                    </p>
-                  )
-                }
-
-                if (data) {
-
-                  let goalDetails = []
-
-                  if (data.value.length === 0) {
-                    goalDetails.push(
-                      <p key={"msg_nf_001"}>
-                        Goal details not found.
-                    </p>
-                    )
-                    goalDetails.push(
-                      <p key={"msg_nf_002"}>
-                        <i>
-                          This is normal if you have not submitted your DAO Goal yet.
-                          Once your Goal has successfully been submitted its details will become available here.
-                        </i>
-                      </p>
-                    )
-                    goalDetails.push(
-                      <p key={"msg_nf_003"}>
-                        <i>
-                          If you have already submitted your DAO Goal and you keep getting this message, 
-                          please contact the site administrator for assistance.
-                        </i>
-                      </p>
-                    )
-                  }
-                  else {
-                    goalDetails.push(
-                      <p key="docLink" style={{ marginBottom: "10px" }}>
-                        <b>Document Link:</b><br />{data.value[0].DocumentLink}
-                      </p>
-                    )
-                    goalDetails.push(
-                      <p key="hasAssessment" style={{ marginBottom: "10px" }}>
-                        <b>Has Assessment:</b> {data.value[0].HasAssessment === 1 ? "Yes" : "No"}
-                      </p>
-                    )
-                    goalDetails.push(
-                      <p key="docLastUpdated" style={{ marginBottom: "10px" }}>
-                        <b>Document Last Updated:</b> {data.value[0].DocLastUpdated}
-                      </p>
-                    )
-                    goalDetails.push(
-                      <p key="created" style={{ marginBottom: "10px" }}>
-                        <b>Goal Created:</b> {data.value[0].Created}
-                      </p>
-                    )
-                    goalDetails.push(
-                      <p key="lastUpdated" style={{ marginBottom: "10px" }}>
-                        <b>Goal Last Updated:</b> {
-                          data.value[0].LastUpdated === null ? data.value[0].Created : data.value[0].LastUpdated
-                        }
-                      </p>
-                    )
-
-                  }
-
-                  return goalDetails
-                }
-
-              }}
-            </OData>
-
-            {(!editMode && (user && !user.expired)) &&
-              <div>
-                <hr />
-                <b>
-                  <i>
-                    Enable
-                    &nbsp;
+          {(!editMode && (user && !user.expired)) &&
+            <b>
+              <i>
+                Enable
+                &nbsp;
                   <span style={{ color: "blue", cursor: "pointer" }} onClick={() => { setEditMode(true) }}>
-                      EDIT-MODE
+                  EDIT-MODE
                   </span>
-                    &nbsp;
-                    to allow editing
-                  </i>
-                </b>
-              </div>
-            }
+                &nbsp;
+                to allow editing
+                </i>
+            </b>
+          }
+        </div>
 
-            {(!user || user.expires) &&
-              <div>
-                <hr />
-                <b><i><a href="#/login">Login</a> to allow editing</i></b>
-              </div>
-            }
+        {/* LINKED */}
+        {editMode &&
+          <div>
+            <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "mediumblue" }}>
+              Linked DAOs:
+        </h5>
 
+            <div>
+              <OData
+                baseUrl={ccisBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}
+              >
+                {({ loading, error, data }) => {
+
+                  if (loading) {
+                    return (
+                      <h6>
+                        Fetching your goals...
+                    </h6>
+                    )
+                  }
+
+                  if (error) {
+                    console.error(error)
+                    return (
+                      <p>
+                        Unable to fetch goals. (See log for details)
+                    </p>
+                    )
+                  }
+
+                  if (data) {
+                    let yourGoals = []
+
+                    if (data.value.length === 0) {
+                      yourGoals.push(
+                        <p key={new Date().valueOf()}>
+                          No goals found.
+                      </p>
+                      )
+                    }
+                    else {
+                      data.value.forEach(item => {
+
+                        let docLink = ""
+                        let hasAssessment = ""
+                        let docLastUpated = ""
+
+                        //Get DocumentLink
+                        let tmp = item.Questions.filter(q => q.Key === "DocumentLink")
+                        if (tmp.length > 0) {
+                          docLink = tmp[0].Value
+                        }
+
+                        //Get HasAssessment
+                        tmp = item.Questions.filter(q => q.Key === "HasAssessment")
+                        if (tmp.length > 0) {
+                          hasAssessment = tmp[0].Value === 'true' ? "Yes" : "No"
+                        }
+
+                        //Get DocLastUpdated
+                        tmp = item.Questions.filter(q => q.Key === "DocLastUpdated")
+                        if (tmp.length > 0) {
+                          docLastUpated = tmp[0].Value
+                        }
+
+                        yourGoals.push(
+                          <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
+                            <CardBody>
+
+                              <div style={{ color: "grey" }}>
+                                <b>Document Link:</b><br />
+                                <div style={{ marginLeft: "15px" }}>
+                                  <a href={docLink} target="blank">
+                                    {docLink}
+                                  </a>
+                                </div>
+                                <div>
+                                  <b>Has Assessment:</b> {hasAssessment}
+                                </div>
+                                <div>
+                                  <b>Document Last Updated:</b> {docLastUpated}
+                                </div>
+                                <div>
+                                  <b>Goal Created:</b> {item.CreateDate}
+                                </div>
+                                <div>
+                                  <b>Goal Last Updated: </b> {
+                                    item.UpdateDate === null ? item.CreateDate : item.UpdateDate
+                                  }
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                color=""
+                                style={{ backgroundColor: DEAGreen, marginLeft: "0px", marginTop: "15px" }}
+                                onClick={() => {
+                                  if (linkCallback) {
+                                    setTimeout(linkCallback(item.Id, "remove"), 1000)
+                                  }
+                                }}>
+                                Unlink
+                        </Button>
+                            </CardBody>
+                          </Card>
+                        )
+                      })
+                    }
+
+                    return yourGoals
+                  }
+
+                }}
+              </OData>
+
+            </div>
+
+            <hr style={{ margin: "30px 0px 25px 0px" }} />
           </div>
         }
 
         {/* NOT LINKED */}
-        {(LinkedDAOGoalId === "00000000-0000-0000-0000-000000000000") &&
+        <div>
 
-          <div>
+          {editMode &&
+            <div>
+              <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "mediumblue" }}>
+                Search for DAOs:
+              </h5>
 
-            {(!user || user.expires) &&
-              <b><i><a href="#/login">Login</a> to allow editing</i></b>
-            }
+              <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
+                Recently added goals (top 25):
+              </h5>
 
-            {(!editMode && (user && !user.expired)) &&
-              <b>
-                <i>
-                  Enable
-                  &nbsp;
-                  <span style={{ color: "blue", cursor: "pointer" }} onClick={() => { setEditMode(true) }}>
-                    EDIT-MODE
-                  </span>
-                  &nbsp;
-                  to allow editing
-                </i>
-              </b>
-            }
+              <OData
+                baseUrl={ccisBaseURL + "Goals"}
+                query={{
+                  filter: {
+                    and: [
+                      { Type: 1 },
+                      ProjectDAOs.map(x => ({
+                        Id: { ne: { type: 'guid', value: x.DAOId } }
+                      }))
+                    ]
+                  },
+                  top: 25,
+                  select: ['Id', 'CreateDate', 'UpdateDate'],
+                  orderBy: ["CreateDate DESC"],
+                }}
+              >
+                {({ loading, error, data }) => {
 
-            {editMode &&
-              <div>
-                <h5 style={{ marginBottom: "15px", fontWeight: "bold" }}>
-                  Search for DAO:
+                  if (loading) {
+                    return (
+                      <h6>
+                        Fetching your goals...
+                    </h6>
+                    )
+                  }
+
+                  if (error) {
+                    console.error(error)
+                    return (
+                      <p>
+                        Unable to fetch goals. (See log for details)
+                    </p>
+                    )
+                  }
+
+                  if (data) {
+                    let yourGoals = []
+
+                    if (data.value.length === 0) {
+                      yourGoals.push(
+                        <p key={new Date().valueOf()}>
+                          No goals found.
+                      </p>
+                      )
+                    }
+                    else {
+                      data.value.forEach(item => {
+                        yourGoals.push(
+                          <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
+                            <CardBody>
+                              <CardText>
+                                <b>Created on: </b>{item.CreateDate}
+                                <br />
+                                <b>Last updated on: </b>{item.UpdateDate === null ? item.CreateDate : item.UpdateDate}
+                              </CardText>
+                              <Button
+                                size="sm"
+                                color=""
+                                style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
+                                onClick={() => {
+                                  if (linkCallback) {
+                                    setTimeout(linkCallback(item.Id, "add"), 1000)
+                                  }
+                                }}>
+                                Link
+                            </Button>
+                            </CardBody>
+                          </Card>
+                        )
+                      })
+                    }
+
+                    return yourGoals
+                  }
+
+                }}
+              </OData>
+
+              <br />
+              <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
+                Your goals:
                 </h5>
 
-                <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
-                  Recently added goals (top 25):
-                </h5>
+              <OData
+                baseUrl={ccisBaseURL + "Goals"}
+                query={{
+                  filter: {
+                    and: [
+                      { CreateUser: { eq: { type: 'guid', value: user ? user.profile.UserId : "" } } },
+                      { Type: 1 },
+                      ProjectDAOs.map(x => ({
+                        Id: { ne: { type: 'guid', value: x.DAOId } }
+                      }))
+                    ]
+                  },
+                  select: ['Id', 'CreateDate', 'UpdateDate'],
+                  orderBy: ["CreateDate DESC"]
+                }}
+              >
+                {({ loading, error, data }) => {
 
-                <OData
-                  baseUrl={ccisBaseURL + "Goal1"}
-                  query={{
-                    top: 25,
-                    select: ['Id', 'Created', 'LastUpdated'],
-                    orderBy: ["Created DESC"]
-                  }}
-                >
-                  {({ loading, error, data }) => {
-
-                    if (loading) {
-                      return (
-                        <h6>
-                          Fetching your goals...
+                  if (loading) {
+                    return (
+                      <h6>
+                        Fetching your goals...
                     </h6>
-                      )
-                    }
+                    )
+                  }
 
-                    if (error) {
-                      console.error(error)
-                      return (
-                        <p>
-                          Unable to fetch goals. (See log for details)
+                  if (error) {
+                    console.error(error)
+                    return (
+                      <p>
+                        Unable to fetch goals. (See log for details)
                     </p>
-                      )
-                    }
+                    )
+                  }
 
-                    if (data) {
-                      let yourGoals = []
+                  if (data) {
+                    let yourGoals = []
 
-                      if (data.value.length === 0) {
-                        yourGoals.push(
-                          <p key={new Date().valueOf()}>
-                            No goals found.
+                    if (data.value.length === 0) {
+                      yourGoals.push(
+                        <p key={new Date().valueOf()}>
+                          No goals found.
                       </p>
-                        )
-                      }
-                      else {
-                        data.value.forEach(item => {
-                          yourGoals.push(
-                            <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
-                              <CardBody>
-                                <CardText>
-                                  <b>Created on: </b>{item.Created}
-                                  <br />
-                                  <b>Last updated on: </b>{item.LastUpdated === null ? item.Created : item.LastUpdated}
-                                </CardText>
-                                <Button
-                                  size="sm"
-                                  color=""
-                                  style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
-                                  onClick={() => {
-                                    if (linkCallback) {
-                                      setTimeout(linkCallback(item.Id), 1000)
-                                    }
-                                  }}>
-                                  Link
-                            </Button>
-                              </CardBody>
-                            </Card>
-                          )
-                        })
-                      }
-
-                      return yourGoals
-                    }
-
-                  }}
-                </OData>
-
-                <br />
-                <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
-                  Your goals:
-            </h5>
-
-                <OData
-                  baseUrl={ccisBaseURL + "Goal1"}
-                  query={{
-                    filter: { CreateUserId: user ? user.profile.UserId : "" },
-                    select: ['Id', 'Created', 'LastUpdated'],
-                    orderBy: ["Created DESC"]
-                  }}
-                >
-                  {({ loading, error, data }) => {
-
-                    if (loading) {
-                      return (
-                        <h6>
-                          Fetching your goals...
-                    </h6>
                       )
                     }
-
-                    if (error) {
-                      console.error(error)
-                      return (
-                        <p>
-                          Unable to fetch goals. (See log for details)
-                    </p>
-                      )
-                    }
-
-                    if (data) {
-                      let yourGoals = []
-
-                      if (data.value.length === 0) {
+                    else {
+                      data.value.forEach(item => {
                         yourGoals.push(
-                          <p key={new Date().valueOf()}>
-                            You have not submitted any goals.
-                      </p>
-                        )
-                      }
-                      else {
-                        data.value.forEach(item => {
-                          yourGoals.push(
-                            <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
-                              <CardBody>
-                                <CardText>
-                                  <b>Created on: </b>{item.Created}
-                                  <br />
-                                  <b>Last updated on: </b>{item.LastUpdated === null ? item.Created : item.LastUpdated}
-                                </CardText>
-                                <Button
-                                  size="sm"
-                                  color=""
-                                  style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
-                                  onClick={() => {
-                                    if (linkCallback) {
-                                      linkCallback(item.Id)
-                                    }
-                                  }}>
-                                  Link
+                          <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
+                            <CardBody>
+                              <CardText>
+                                <b>Created on: </b>{item.CreateDate}
+                                <br />
+                                <b>Last updated on: </b>{item.UpdateDate === null ? item.CreateDate : item.UpdateDate}
+                              </CardText>
+                              <Button
+                                size="sm"
+                                color=""
+                                style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
+                                onClick={() => {
+                                  if (linkCallback) {
+                                    setTimeout(linkCallback(item.Id, "add"), 1000)
+                                  }
+                                }}>
+                                Link
                             </Button>
-                              </CardBody>
-                            </Card>
-                          )
-                        })
-                      }
-
-                      return yourGoals
+                            </CardBody>
+                          </Card>
+                        )
+                      })
                     }
 
-                  }}
-                </OData>
-              </div>
-            }
-          </div>
-        }
+                    return yourGoals
+                  }
+
+                }}
+              </OData>
+            </div>
+          }
+        </div>
 
       </>
     )
