@@ -280,12 +280,16 @@ class ProjectDetails extends React.Component {
               "ProjectSubTypeId": 0,
               "ProjectManagerId": 0,
               "ValidationStatusId": 0,
-              "LinkedDAOGoalId": null,
+              "ProjectDAOs": [],
               "state": "modified"
             }
 
             if (this.state.daoid !== null) {
-              oHandler.data.Project.LinkedDAOGoalId = this.state.daoid
+              oHandler.data.Project.ProjectDAOs.push({
+                ProjectDAOId: 0,
+                ProjectId: oHandler.data.Project.ProjectId,
+                DAOId: this.state.daoid
+              })
               this.setState({ daoid: null })
             }
 
@@ -487,8 +491,6 @@ class ProjectDetails extends React.Component {
       dataObj.Funders = funderData
       modified = true
     }
-
-    console.log("dataObj", dataObj)
 
     const successCallback = (data) => {
 

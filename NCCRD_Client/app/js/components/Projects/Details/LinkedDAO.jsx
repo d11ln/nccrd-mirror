@@ -58,12 +58,11 @@ class LinkedDAO extends React.Component {
           <div>
             <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "mediumblue" }}>
               Linked DAOs:
-        </h5>
+            </h5>
 
             <div>
               <OData
-                baseUrl={ccisBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}
-              >
+                baseUrl={ccisBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}>
                 {({ loading, error, data }) => {
 
                   if (loading) {
@@ -87,11 +86,22 @@ class LinkedDAO extends React.Component {
                     let yourGoals = []
 
                     if (data.value.length === 0) {
+
                       yourGoals.push(
-                        <p key={new Date().valueOf()}>
+                        <p key="linked_no_goals_msg">
                           No goals found.
-                      </p>
+                        </p>
                       )
+
+                      if(ProjectDAOs && ProjectDAOs.length > 0){
+                        yourGoals.push(
+                          <p key="linked_no_goals_msg_2">
+                            This is normal if your goal has not been submitted yet.
+                            <br/>
+                            Once you have submitted your goal in the CCIS, your goal's details will become available here.
+                          </p>
+                        )
+                      }
                     }
                     else {
                       data.value.forEach(item => {
