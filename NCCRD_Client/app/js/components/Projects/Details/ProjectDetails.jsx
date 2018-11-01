@@ -191,13 +191,18 @@ class ProjectDetails extends React.Component {
 
     let projectId = this.props.match.params.id
     let daoid = null
+    let readonly = false
 
-    if (projectId === "add") {
-      const parsedHash = queryString.parse(location.hash.replace("/projects/add?", ""))
-      if (typeof parsedHash.daoid !== 'undefined') {
-        daoid = parsedHash.daoid
-      }
+    const parsedHash = queryString.parse(location.hash.replace(`/projects/${projectId}?`, ""))
+    if (typeof parsedHash.daoid !== 'undefined') {
+      daoid = parsedHash.daoid
     }
+
+    if (typeof parsedHash.readonly !== 'undefined' && parsedHash.readonly === 'true') {
+      readonly = true
+    }
+
+    console.log("daoid", daoid)
 
     this.state = {
       activeItemTabs: '1',
@@ -209,7 +214,8 @@ class ProjectDetails extends React.Component {
       navBack: false,
       title: "message",
       message: "",
-      daoid
+      daoid,
+      readonly
     }
   }
 
@@ -284,7 +290,8 @@ class ProjectDetails extends React.Component {
               "state": "modified"
             }
 
-            if (this.state.daoid !== null) {
+            let { daoid } = this.state
+            if (daoid !== null && daoid !== 'hidden') {
               oHandler.data.Project.ProjectDAOs.push({
                 ProjectDAOId: 0,
                 ProjectId: oHandler.data.Project.ProjectId,
@@ -654,7 +661,10 @@ class ProjectDetails extends React.Component {
   render() {
 
     let { projectDetails, editMode, user, setLinkedLinkedDAOGoalId } = this.props
+    let { daoid, readonly, projectId } = this.state
     let activeTabId = this.state.activeItemTabs
+
+    let tabTo = location.hash.replace(`#/projects/${projectId}`, "")
 
     return (
       <>
@@ -663,32 +673,32 @@ class ProjectDetails extends React.Component {
             <Col md="12">
               <Nav pills color="default" className="nav-justified" style={{ border: "1px solid gainsboro", backgroundColor: "whitesmoke", marginBottom: "-20px" }}>
                 <NavItem >
-                  <NavLink to="#" style={{ backgroundColor: (activeTabId === "1" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('1'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "1" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('1'); }}>
                     Project
                   </NavLink>
                 </NavItem>
                 <NavItem >
-                  <NavLink to="#" style={{ backgroundColor: (activeTabId === "6" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('6'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "6" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('6'); }}>
                     Funding
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" style={{ backgroundColor: (activeTabId === "2" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('2'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "2" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('2'); }}>
                     Adaptation
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" style={{ backgroundColor: (activeTabId === "3" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('3'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "3" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('3'); }}>
                     Mitigation
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" style={{ backgroundColor: (activeTabId === "4" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('4'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "4" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('4'); }}>
                     Emissions
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
                     Research
                   </NavLink>
                 </NavItem>
@@ -696,23 +706,27 @@ class ProjectDetails extends React.Component {
 
               <TabContent activeItem={activeTabId}>
                 <TabPane tabId="1">
+
                   <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
                     Back to list
                   </Button>
-                  <Button
-                    style={{ margin: "0px 0px 20px 15px" }}
-                    color={ (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
-                    size="sm"
-                    onClick={() => { this.setState({ doaModal: true }) }}
-                  >
-                    <i
-                      className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
-                      aria-hidden="true"
-                      style={{ marginRight: "15px" }}
-                    />
-                    Linked DAO Details
+
+                  {(daoid !== 'hidden') &&
+                    <Button
+                      style={{ margin: "0px 0px 20px 15px" }}
+                      color={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
+                      size="sm"
+                      onClick={() => { this.setState({ doaModal: true }) }}
+                    >
+                      <i
+                        className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
+                        aria-hidden="true"
+                        style={{ marginRight: "15px" }}
+                      />
+                      Linked DAO Details
                   </Button>
+                  }
 
                   <ProjectDetailsTab />
                   <br />
@@ -770,7 +784,7 @@ class ProjectDetails extends React.Component {
         </Container>
 
         {
-          ((user && !user.expired) /*|| _gf.isLocalhost()*/) &&
+          ((user && !user.expired) && !readonly) &&
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">

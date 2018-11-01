@@ -11,7 +11,7 @@ import 'mdbreact/dist/css/mdb.css'
 //Components
 import React from 'react'
 import { connect } from 'react-redux'
-import { Spinner } from 'mdbreact/'
+import { Spinner, Container } from 'mdbreact/'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import Home from './components/Base/Home.jsx'
 import Projects from './components/Projects/List/Projects.jsx'
@@ -50,7 +50,7 @@ class App extends React.Component {
     this.state = { navbar: true }
     if (location.toString().includes("navbar=hidden")) {
       this.state = { navbar: false }
-      _gf.stripURLParam("navbar=hidden")
+      //_gf.stripURLParam("navbar=hidden")
     }
   }
 
@@ -84,7 +84,7 @@ class App extends React.Component {
     let { navbar } = this.state
 
     return (
-      <div className="container">
+      <div style={{ padding: "0px 25px 0px 25px", margin: "auto" }}>
         <Router>
           <div>
 
