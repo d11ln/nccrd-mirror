@@ -202,8 +202,6 @@ class ProjectDetails extends React.Component {
       readonly = true
     }
 
-    console.log("daoid", daoid)
-
     this.state = {
       activeItemTabs: '1',
       projectId,
@@ -249,7 +247,7 @@ class ProjectDetails extends React.Component {
     //Get Project details & lookups
     let oHandler = o(apiBaseURL + "ProjectDetails")
       .find(projectId === 'add' ? 0 : projectId)
-      .expand("Project($expand=ProjectRegions,ProjectDAOs),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+      .expand("Project($expand=ProjectRegions,ProjectDAOs,ProjectLocations($expand=Location)),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
 
     if (!detailsOnly) {
       oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
@@ -260,6 +258,7 @@ class ProjectDetails extends React.Component {
     oHandler.get()
       .then(
         (oHandler) => {
+
           //Success
           setLoading(false)
 
@@ -665,6 +664,7 @@ class ProjectDetails extends React.Component {
     let activeTabId = this.state.activeItemTabs
 
     let tabTo = location.hash.replace(`#/projects/${projectId}`, "")
+    if(tabTo === "") tabTo = "#"
 
     return (
       <>

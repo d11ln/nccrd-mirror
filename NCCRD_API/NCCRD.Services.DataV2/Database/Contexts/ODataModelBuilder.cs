@@ -15,12 +15,13 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         public IEdmModel GetEdmModel(IServiceProvider serviceProvider)
         {
             var builder = new ODataConventionModelBuilder(serviceProvider);
+            int maxExpandDepth = 0;
 
             builder.EntitySet<Project>("Projects")
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -29,7 +30,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -38,7 +39,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -47,7 +48,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command;   
@@ -56,7 +57,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command;  
@@ -65,7 +66,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -74,7 +75,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -83,7 +84,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -92,7 +93,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -101,7 +102,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -110,7 +111,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -119,7 +120,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -128,7 +129,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -137,7 +138,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -146,7 +147,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -155,7 +156,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -164,7 +165,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -173,7 +174,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -182,7 +183,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -191,7 +192,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -200,7 +201,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -209,7 +210,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -218,7 +219,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -227,7 +228,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -236,7 +237,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -245,7 +246,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -254,7 +255,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 
@@ -263,7 +264,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 .EntityType
                 .Filter() // Allow for the $filter Command
                 .Count() // Allow for the $count Command
-                .Expand() // Allow for the $expand Command
+                .Expand(maxExpandDepth) // Allow for the $expand Command
                 .OrderBy() // Allow for the $orderby Command
                 .Page() // Allow for the $top and $skip Commands
                 .Select();// Allow for the $select Command; 

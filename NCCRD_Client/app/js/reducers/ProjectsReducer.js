@@ -1,5 +1,6 @@
 'use strict'
 
+const _gf = require("../globalFunctions")
 const _ = require('lodash')
 
 function extractItemAndId(array, key, value) {
@@ -186,6 +187,64 @@ export default function ProjectsReducer(state = {}, action) {
       }
 
       return { ...state, projectDetails: { ...projectDetails, ProjectDAOs: linkedDAOs, state: modState } }
+    }
+
+    case "SET_PROJECT_LOCATION": {
+
+      let { projectDetails } = state
+      let plFiltered = []
+
+      if (id === 0) {
+
+        //Get next id
+        let nextId = 1000
+        if(projectDetails.ProjectLocations.length > 0){
+          nextId = Math.max(...projectDetails.ProjectLocations.map(x => x.ProjectLocationId)) + 1
+          if(nextId < 1000) nextId += 1000
+        }
+
+        //ADD
+        plFiltered = [{
+          ProjectLocationId: nextId,
+          ProjectId: projectDetails.ProjectId,
+          Location: {
+            LatCalculated: 0,
+            LonCalculated: 0
+          }
+        }]
+      }
+      else{
+        //EDIT
+        plFiltered = projectDetails.ProjectLocations.filter(x => x.ProjectLocationId == id)
+      }
+
+      if (plFiltered.length > 0) {
+
+        //Remove from ProjectLocations
+        let index = (projectDetails.ProjectLocations.indexOf(plFiltered[0]))
+        if (index > -1) {
+          projectDetails.ProjectLocations.splice(index, 1);
+        }
+
+        if (payload === null) {
+          return { ...state, projectDetails: { ...projectDetails, ProjectLocations: [...projectDetails.ProjectLocations], state: modState } }
+        }
+        else {
+
+          let values = payload.split(",")
+          if (values.length === 2) {
+
+            //Update values
+            plFiltered[0].Location.LatCalculated = values[0].trim()
+            plFiltered[0].Location.LonCalculated = values[1].trim()
+
+            //Add back in
+            return { ...state, projectDetails: { ...projectDetails, ProjectLocations: [...projectDetails.ProjectLocations, plFiltered[0]], state: modState } }
+          }
+        }
+      }
+
+      return state
     }
 
     case "LOAD_MORE_PROJECTS": {

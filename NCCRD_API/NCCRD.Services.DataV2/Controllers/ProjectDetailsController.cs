@@ -30,7 +30,7 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 0)]
         [ODataRoute("({id})")]
         public ProjectDetails Get(int id)
         {
@@ -38,6 +38,7 @@ namespace NCCRD.Services.DataV2.Controllers
             var project = _context.Project
                 .Include(x => x.ProjectRegions)
                 .Include(x => x.ProjectDAOs)
+                .Include(x => x.ProjectLocations).ThenInclude(x => x.Location)
                 .FirstOrDefault(x => x.ProjectId == id);
 
             var funders = _context.ProjectFunder.Include(x => x.Funder).Where(x => x.ProjectId == id)

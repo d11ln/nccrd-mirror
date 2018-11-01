@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input, Row, Col } from 'mdbreact'
+import { Button, Input, Row, Col, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
@@ -7,6 +7,8 @@ import RangeComponent from '../../Shared/RangeComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import TreeSelectMultiple from '../../Shared/TreeSelectMultiple.jsx'
 import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import LocationInput from '../../Shared/LocationInput.jsx'
+import { DEAGreen, DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
   let { projectData: { projectDetails } } = state
@@ -18,6 +20,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setProjectRegions: payload => {
       dispatch({ type: "SET_PROJECT_DETAILS_REGIONS", payload })
+    },
+    setProjectLocation: (payload) => {
+      dispatch({ type: "SET_PROJECT_LOCATION", payload })
     }
   }
 }
@@ -305,9 +310,61 @@ class ProjectDetailsTab extends React.Component {
             callback={this.regionsChanged}
           />
         </Row>
+
+        <br />
+
+        <Row>
+          <Col md="4">
+            <label style={{ fontWeight: "bold", marginBottom: "0px" }} >Locations:</label>
+            <Button
+              size="sm"
+              color=""
+              style={{
+                backgroundColor: DEAGreen,
+                height: "24px",
+                padding: "1px 20px 0px 20px",
+                marginTop: "3px"
+              }}
+              onClick={() => {
+                this.props.setProjectLocation({
+                  id: 0,
+                  value: "-30.5595, 22.9375"
+                })
+              }} >
+              <Fa icon="plus" />
+              &nbsp;&nbsp;
+              Add
+            </Button>
+            {this.renderLocations(projectDetails.ProjectLocations)}
+          </Col>
+        </Row>
       </>
     )
   }
+
+  renderLocations(projectLocations) {
+
+    let locations = []
+
+    if (projectLocations && projectLocations.length > 0) {
+      projectLocations.sort((a, b) => parseInt(a.ProjectLocationId) - parseInt(b.ProjectLocationId)).map(pl => {
+        locations.push(
+          <LocationInput
+            key={`${pl.ProjectLocationId}_${pl.Location.LatCalculated}_${pl.Location.LonCalculated}`}
+            data={pl}
+          />
+        )
+      })
+    }
+    else{
+      locations.push(
+        <p key="no_locations"><i>No locations found.</i></p>
+      )
+    }
+
+    return locations
+  }
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailsTab)
