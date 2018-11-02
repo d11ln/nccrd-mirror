@@ -668,7 +668,7 @@ class ProjectDetails extends React.Component {
 
     return (
       <>
-        <Container className="mt-2">
+        {/* <Container className="mt-2"> */}
           <Row>
             <Col md="12">
               <Nav pills color="default" className="nav-justified" style={{ border: "1px solid gainsboro", backgroundColor: "whitesmoke", marginBottom: "-20px" }}>
@@ -781,7 +781,7 @@ class ProjectDetails extends React.Component {
               </TabContent>
             </Col>
           </Row>
-        </Container>
+        {/* </Container> */}
 
         {
           ((user && !user.expired) && !readonly) &&

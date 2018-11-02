@@ -191,6 +191,8 @@ export default function ProjectsReducer(state = {}, action) {
 
     case "SET_PROJECT_LOCATION": {
 
+      console.log("modState", modState)
+
       let { projectDetails } = state
       let plFiltered = []
 

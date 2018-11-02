@@ -210,6 +210,7 @@ namespace NCCRD.Services.DataV2.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                RemovedUnusedLocations();
             }
             catch (Exception ex)
             {
@@ -222,6 +223,8 @@ namespace NCCRD.Services.DataV2.Controllers
 
         private IActionResult SaveProjectAsync(Project project)
         {
+            IActionResult result = null;
+
             //Check that ProjectTitle is unique
             if (_context.Project.AsNoTracking().FirstOrDefault(x => x.ProjectTitle == project.ProjectTitle && x.ProjectId != project.ProjectId) != null)
             {
@@ -235,19 +238,22 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref project);
                 HelperExtensions.ClearNullableInts(ref project);
                 _context.Project.Add(project);
-                SaveProjectRegions(project);
-                SaveProjectDAOs(project);
                 _projectAdded = true;
-                return Created(project);
+                result = Created(project);
             }
             else
             {
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(project);
-                SaveProjectRegions(project);
-                SaveProjectDAOs(project);
-                return Updated(exiting);
+                result = Updated(exiting);
             }
+
+            //Save project related data
+            SaveProjectRegions(project);
+            SaveProjectDAOs(project);
+            SaveProjectLocations(project);
+
+            return result;
         }
 
         private void SaveProjectRegions(Project project)
@@ -308,6 +314,75 @@ namespace NCCRD.Services.DataV2.Controllers
                     _context.Remove(pr);
                 }
             }
+        }
+
+        private void SaveProjectLocations(Project project)
+        {
+            //Add new mappings
+            if (project.ProjectLocations == null)
+            {
+                project.ProjectLocations = new List<ProjectLocation>();
+            }
+
+            //Save new locations and link existing ones before saving ProjectLocations
+            SaveLocations(project.ProjectLocations.ToList());
+
+            for (var i = 0; i < project.ProjectLocations.Count; i++)
+            {
+                var pl = project.ProjectLocations.ToArray()[i];
+
+                if (!_context.ProjectLocation.Any(x => x.ProjectId == pl.ProjectId && x.LocationId == pl.LocationId))
+                {
+                    HelperExtensions.ClearIdentityValue(ref pl);
+                    HelperExtensions.ClearNullableInts(ref pl);
+                    _context.ProjectLocation.Add(pl);
+                }
+            }
+
+            //Remove deleted mappings
+            foreach (var pr in _context.ProjectLocation.Where(x => x.ProjectId == project.ProjectId))
+            {
+                if (!project.ProjectLocations.Any(x => x.ProjectId == pr.ProjectId && x.LocationId == pr.LocationId))
+                {
+                    _context.Remove(pr);
+                }
+            }
+        }
+
+        private void SaveLocations(List<ProjectLocation> projectLocations)
+        {
+            foreach(var prLoc in projectLocations)
+            {
+                var loc = prLoc.Location;
+
+                //Check if locations exists - Lat/Lon
+                var searchLoc = _context.Location.FirstOrDefault(l => l.LatCalculated == loc.LatCalculated && l.LonCalculated == loc.LonCalculated);
+                               
+                if(searchLoc != null) //If yes, get Id & ref
+                {
+                    prLoc.Location = searchLoc;
+                    prLoc.LocationId = searchLoc.LocationId;
+                }
+                else //If not, add it and get Id & ref
+                {
+                    HelperExtensions.ClearIdentityValue(ref loc);
+                    HelperExtensions.ClearNullableInts(ref loc);
+                    _context.Location.Add(loc);
+                    _context.SaveChanges();
+
+                    prLoc.Location = loc;
+                    prLoc.LocationId = loc.LocationId;
+                }             
+            }         
+        }
+
+        private void RemovedUnusedLocations()
+        {
+            var usedLocationIDs = _context.ProjectLocation.Select(pl => pl.LocationId).Distinct().ToList();
+            var unusedLocations = _context.Location.Where(l => !usedLocationIDs.Contains(l.LocationId)).ToArray();
+
+            _context.Location.RemoveRange(unusedLocations);
+            _context.SaveChangesAsync();
         }
 
         private IActionResult SaveFundersAsync(Funder funder, int projectId)

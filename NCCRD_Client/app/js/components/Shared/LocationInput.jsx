@@ -68,7 +68,8 @@ class LocationInput extends React.Component {
   removeButtonClick() {
     this.props.setProjectLocation({
       id: this.props.data.ProjectLocationId,
-      value: null
+      value: null,
+      state: "modified"
     })
   }
 
@@ -118,7 +119,8 @@ class LocationInput extends React.Component {
       let { marker } = this.state
       this.props.setProjectLocation({
         id: this.props.data.ProjectLocationId,
-        value: `${marker.lat.toFixed(4)}, ${marker.lng.toFixed(4)}`
+        value: `${marker.lat.toFixed(4)}, ${marker.lng.toFixed(4)}`,
+        state: "modified"
       })
     }
     else {
@@ -138,7 +140,7 @@ class LocationInput extends React.Component {
 
   render() {
 
-    let { data } = this.props
+    let { data, editMode } = this.props
     let { viewport, marker, hasLocation, mapModal } = this.state
 
     let value = ""
@@ -174,34 +176,40 @@ class LocationInput extends React.Component {
                   readOnly
                 />
               </td>
-              <td>
-                <Button
-                  size="sm"
-                  color="danger"
-                  style={{
-                    width: "35px",
-                    padding: "5px 0px 5px 0px",
-                    marginTop: "10px",
-                    marginLeft: "15px"
-                  }}
-                  onClick={this.removeButtonClick}>
-                  <Fa size="2x" icon="trash" />
-                </Button>
-              </td>
-              <td>
-                <Button
-                  size="sm"
-                  color="grey"
-                  style={{
-                    width: "35px",
-                    padding: "5px 0px 5px 0px",
-                    marginTop: "10px",
-                    marginLeft: "-4px",
-                  }}
-                  onClick={this.mapButtonClick}>
-                  <Fa size="2x" icon="globe" />
-                </Button>
-              </td>
+              {
+                editMode &&
+                <td>
+                  <Button
+                    size="sm"
+                    color="danger"
+                    style={{
+                      width: "35px",
+                      padding: "5px 0px 5px 0px",
+                      marginTop: "10px",
+                      marginLeft: "15px"
+                    }}
+                    onClick={this.removeButtonClick}>
+                    <Fa size="2x" icon="trash" />
+                  </Button>
+                </td>
+              }
+              {
+                editMode &&
+                <td>
+                  <Button
+                    size="sm"
+                    color="grey"
+                    style={{
+                      width: "35px",
+                      padding: "5px 0px 5px 0px",
+                      marginTop: "10px",
+                      marginLeft: "-4px",
+                    }}
+                    onClick={this.mapButtonClick}>
+                    <Fa size="2x" icon="globe" />
+                  </Button>
+                </td>
+              }
             </tr>
           </tbody>
         </table>
@@ -212,7 +220,7 @@ class LocationInput extends React.Component {
             <Button
               size="sm"
               onClick={this.findMyLocationClick}
-              style={{ marginTop: "3px", marginLeft: "15px"}}
+              style={{ marginTop: "3px", marginLeft: "15px" }}
             >
               Find my location
             </Button>

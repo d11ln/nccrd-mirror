@@ -11,9 +11,10 @@ import LocationInput from '../../Shared/LocationInput.jsx'
 import { DEAGreen, DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
+  let { globalData: { editMode } } = state
   let { projectData: { projectDetails } } = state
   let { lookupData: { projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions, region } } = state
-  return { projectDetails, projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions, region }
+  return { projectDetails, projectTypes, projectSubTypes, projectStatus, users, validationStatus, maOptions, region, editMode }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -77,7 +78,7 @@ class ProjectDetailsTab extends React.Component {
 
   render() {
 
-    let { projectDetails, region } = this.props
+    let { projectDetails, region, editMode } = this.props
 
     return (
 
@@ -316,25 +317,28 @@ class ProjectDetailsTab extends React.Component {
         <Row>
           <Col md="4">
             <label style={{ fontWeight: "bold", marginBottom: "0px" }} >Locations:</label>
-            <Button
-              size="sm"
-              color=""
-              style={{
-                backgroundColor: DEAGreen,
-                height: "24px",
-                padding: "1px 20px 0px 20px",
-                marginTop: "3px"
-              }}
-              onClick={() => {
-                this.props.setProjectLocation({
-                  id: 0,
-                  value: "-30.5595, 22.9375"
-                })
-              }} >
-              <Fa icon="plus" />
-              &nbsp;&nbsp;
-              Add
-            </Button>
+            {
+              editMode &&
+              <Button
+                size="sm"
+                color=""
+                style={{
+                  backgroundColor: DEAGreen,
+                  height: "24px",
+                  padding: "1px 20px 0px 20px",
+                  marginTop: "3px"
+                }}
+                onClick={() => {
+                  this.props.setProjectLocation({
+                    id: 0,
+                    value: "-30.5595, 22.9375"
+                  })
+                }} >
+                <Fa icon="plus" />
+                &nbsp;&nbsp;
+                Add
+              </Button>
+            }
             {this.renderLocations(projectDetails.ProjectLocations)}
           </Col>
         </Row>
@@ -356,7 +360,7 @@ class ProjectDetailsTab extends React.Component {
         )
       })
     }
-    else{
+    else {
       locations.push(
         <p key="no_locations"><i>No locations found.</i></p>
       )
