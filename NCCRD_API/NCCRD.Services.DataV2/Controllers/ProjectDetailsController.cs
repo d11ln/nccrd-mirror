@@ -355,23 +355,28 @@ namespace NCCRD.Services.DataV2.Controllers
             {
                 var loc = prLoc.Location;
 
-                //Check if locations exists - Lat/Lon
-                var searchLoc = _context.Location.FirstOrDefault(l => l.LatCalculated == loc.LatCalculated && l.LonCalculated == loc.LonCalculated);
+                //Check if location exists
+                var exiting = _context.Location.FirstOrDefault(l => l.LocationId == loc.LocationId);
                                
-                if(searchLoc != null) //If yes, get Id & ref
+                if(exiting == null)
                 {
-                    prLoc.Location = searchLoc;
-                    prLoc.LocationId = searchLoc.LocationId;
-                }
-                else //If not, add it and get Id & ref
-                {
+                    //ADD
                     HelperExtensions.ClearIdentityValue(ref loc);
                     HelperExtensions.ClearNullableInts(ref loc);
                     _context.Location.Add(loc);
-                    _context.SaveChanges();
 
+                    //Have to save to get actual/valid ID
+                    _context.SaveChanges(); 
+
+                    //Update references
                     prLoc.Location = loc;
                     prLoc.LocationId = loc.LocationId;
+                    
+                }
+                else
+                {
+                    //UPDATE
+                    _context.Entry(exiting).CurrentValues.SetValues(loc);
                 }             
             }         
         }
