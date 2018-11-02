@@ -152,39 +152,90 @@ namespace NCCRD.Services.DataV2.Controllers
         [EnableQuery]
         public JsonResult GeoJson()
         {
-            List<ProjectGeoJson> projectGeo = new List<ProjectGeoJson>();
+            var typologyData = _context.Typology.ToList();
+            var geoJSON = _context.ProjectLocation
+                            .Include(pl => pl.Project)
+                            .Include(pl => pl.Project.AdaptationDetails)
+                            .Include(pl => pl.Project.MitigationDetails)
+                            .Include(pl => pl.Project.ResearchDetails)
+                            .Include(pl => pl.Project.ProjectRegions)
+                            .Select(pl => new
+                            {
+                                type = "Feature",
+                                geometry = new
+                                {
+                                    type = "Point",
+                                    coordinates = new double[] {
+                                        (double)pl.Location.LatCalculated,
+                                        (double)pl.Location.LonCalculated
+                                    }
+                                },
+                                properties = new
+                                {
+                                    id = pl.ProjectId,
+                                    name = pl.Project.ProjectTitle,
+                                    regions = pl.Project.ProjectRegions.Select(pr => pr.RegionId).ToArray(),
+                                    sectors = GetProjectSectors(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails),
+                                    typology = GetProjectTypology(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails, typologyData),
+                                    status = pl.Project.ProjectStatusId
+                                },
+                                data = new
+                                {
+                                    budgetLower = pl.Project.BudgetLower,
+                                    budgetUpper = pl.Project.BudgetUpper,
+                                    startYear = pl.Project.StartYear,
+                                    endYear = pl.Project.EndYear
+                                },
+                                adaptation = pl.Project
+                                    .AdaptationDetails
+                                    .Select(a => new
+                                    {
+                                        hazard = a.HazardId
+                                    }),
+                                mitigation = pl.Project
+                                    .MitigationEmissionsData
+                                    .Select(e => new
+                                    {
+                                        year = e.Year,
+                                        CO2 = (double)e.CO2
+                                    })
+                            })
+                            .Distinct()
+                            .ToList();
 
-            //GET PROJECT DATA//
-            var projectData = (from proj in _context.Project
-                               join projLoc in _context.ProjectLocation on proj.ProjectId equals projLoc.ProjectId
-                               join loc in _context.Location on projLoc.LocationId equals loc.LocationId
-                               select new
-                               {
-                                   proj.ProjectId,
-                                   proj.ProjectTitle,
-                                   loc.LatCalculated,
-                                   loc.LonCalculated
-                               }).ToList();
+            return new JsonResult(geoJSON);
+        }
 
-            foreach (var projDat in projectData)
+        private int[] GetProjectSectors(IEnumerable<AdaptationDetail> adaptations, IEnumerable<MitigationDetail> mitigations, IEnumerable<ResearchDetail> research)
+        {
+            var sectors = new List<int>();
+
+            sectors.AddRange(adaptations.Where(a => a.SectorId != null).Select(a => (int)a.SectorId));
+            sectors.AddRange(mitigations.Where(m => m.SectorId != null).Select(a => (int)a.SectorId));
+            sectors.AddRange(research.Where(r => r.SectorId != null).Select(a => (int)a.SectorId));
+
+            return sectors.ToArray();
+        }
+
+        private int GetProjectTypology(IEnumerable<AdaptationDetail> adaptations, IEnumerable<MitigationDetail> mitigations, IEnumerable<ResearchDetail> research, IEnumerable<Typology> typologyData)
+        {
+            var typologyName = "";
+
+            if (adaptations.Count() > 0)
             {
-                ProjectGeoJson item = new ProjectGeoJson();
-                item.type = "Feature";
-                item.geometry = new GeoJsonGeometry()
-                {
-                    type = "Point",
-                    coordinates = new List<double>() { (double)projDat.LatCalculated, (double)projDat.LonCalculated }
-                };
-                item.properties = new GeoJsonProperties()
-                {
-                    id = projDat.ProjectId.ToString(),
-                    name = projDat.ProjectTitle
-                };
-
-                projectGeo.Add(item);
+                typologyName = "Adaptation";
+            }
+            else if (mitigations.Count() > 0)
+            {
+                typologyName = "Mitigation";
+            }
+            else if (research.Count() > 0)
+            {
+                typologyName = "Research";
             }
 
-            return new JsonResult(projectGeo);
+            var typology = typologyData.FirstOrDefault(t => t.Value == typologyName);
+            return typology != null ? typology.TypologyId : 0;
         }
 
         //##################//

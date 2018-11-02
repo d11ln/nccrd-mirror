@@ -85,6 +85,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public virtual ICollection<ProjectLocation> ProjectLocations { get; set; }
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
+        public virtual ICollection<MitigationEmissionsData> MitigationEmissionsData { get; set; }
         public virtual ICollection<ResearchDetail> ResearchDetails { get; set; }
         public virtual ICollection<ProjectFunder> ProjectFunders { get; set; }
         public virtual ICollection<ProjectDAO> ProjectDAOs { get; set; }
