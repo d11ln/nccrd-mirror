@@ -90,7 +90,8 @@ const store = createStore(
             typologyFilter: 0,
             regionFilter: 0,
             sectorFilter: 0,
-            polygonFilter: ""
+            polygonFilter: "",
+            favoritesFilter: false
         }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

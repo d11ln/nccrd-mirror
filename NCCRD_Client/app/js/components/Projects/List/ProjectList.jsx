@@ -17,13 +17,13 @@ const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let { projectData: { projects, start, end, listScrollPos } } = state
-  let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter } } = state
+  let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter } } = state
   let user = state.oidc.user
   let { globalData: { loading, daoid } } = state
   let { lookupData: { typology } } = state
   return {
     projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-    listScrollPos, user, loading, typology, daoid
+    listScrollPos, user, loading, typology, daoid, favoritesFilter
   }
 }
 
@@ -61,6 +61,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+    },
+    toggleFavorites: async payload => {
+      dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
     }
   }
 }
@@ -78,12 +81,12 @@ class ProjectList extends React.Component {
       regionFilter: 0,
       sectorFilter: 0,
       polygonFilter: "",
+      favoritesFilter: false,
       start: 0,
       end: 25,
       messageModal: false,
       title: "",
       message: "",
-      favorite: false,
       ellipsisMenu: false
     }
 
@@ -110,14 +113,16 @@ class ProjectList extends React.Component {
     let pRegionFilter = this.props.regionFilter
     let pSectorFilter = this.props.sectorFilter
     let pPolygonFilter = this.props.polygonFilter
+    let pfavoritesFilter = this.props.favoritesFilter
     let pStart = this.props.start
     let pEnd = this.props.end
-    let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end } = this.state
+    let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end, favoritesFilter } = this.state
 
     //If any filters changed...refetch projects
     let filtersChanged = false
     if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-      pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter) {
+      pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
+      pfavoritesFilter !== favoritesFilter) {
 
       filtersChanged = true
     }
@@ -144,7 +149,7 @@ class ProjectList extends React.Component {
   async getProjectList(resetCounts) {
 
     let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
-      clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData,
+      clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
       clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user, typology, daoid } = this.props
 
     if (resetCounts === true) {
@@ -160,6 +165,7 @@ class ProjectList extends React.Component {
       regionFilter: regionFilter,
       sectorFilter: sectorFilter,
       polygonFilter: polygonFilter,
+      favoritesFilter: favoritesFilter,
       start: start,
       end: end
     })
@@ -210,7 +216,7 @@ class ProjectList extends React.Component {
       }
 
       //ADD FILTERS//
-      if(this.state.favorite){
+      if (favoritesFilter) {
         filters.favorites = _gf.ReadCookie("NCCRD_Project_Favorites")
       }
 
@@ -285,8 +291,8 @@ class ProjectList extends React.Component {
 
   render() {
 
-    let { user, daoid } = this.props
-    let { favorite, ellipsisMenu } = this.state
+    let { user, daoid, favoritesFilter } = this.props
+    let { ellipsisMenu } = this.state
 
     const projComps = this.buildList()
     let projectlist = []
@@ -332,24 +338,22 @@ class ProjectList extends React.Component {
                 </p>
                 <Button
                   size="sm"
-                  color={ favorite ? "primary" : "grey"}
+                  color={favoritesFilter ? "primary" : "grey"}
                   style={{ padding: "4px 10px 5px 10px", marginTop: "1px", marginRight: "-1px", width: "40px" }}
-                  onClick={() => { 
-                    this.setState({ favorite: !favorite, ellipsisMenu: false}, () => {
-                      this.getProjectList(true)
-                    }) 
+                  onClick={() => {
+                    this.props.toggleFavorites(!favoritesFilter)
+                    this.setState({ ellipsisMenu: false })
                   }}
                 >
                   On
                 </Button>
                 <Button
                   size="sm"
-                  color={ !favorite ? "primary" : "grey"}
+                  color={!favoritesFilter ? "primary" : "grey"}
                   style={{ padding: "4px 10px 5px 10px", marginTop: "1px", marginLeft: "-1px", width: "40px" }}
-                  onClick={() => { 
-                    this.setState({ favorite: !favorite, ellipsisMenu: false}, () => {
-                      this.getProjectList(true)
-                    }) 
+                  onClick={() => {
+                    this.props.toggleFavorites(!favoritesFilter)
+                    this.setState({ ellipsisMenu: false })
                   }}
                 >
                   Off

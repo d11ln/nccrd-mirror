@@ -1,8 +1,13 @@
 import React from 'react'
 import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'
+import TitleFilter from '../Filters/TitleFilter.jsx'
+import StatusFilter from '../Filters/StatusFilter.jsx'
+import TypologyFilter from '../Filters/TypologyFilter.jsx'
+import RegionFilters from '../Filters/RegionFilters.jsx'
+import SectorFilters from '../Filters/SectorFilters.jsx'
 import { connect } from 'react-redux'
-import { Fa, Button, ButtonFixed, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
+import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreen } from '../../../config/colours.cfg'
 
@@ -93,8 +98,18 @@ class Projects extends React.Component {
 
         </div>
 
+        <Row>
+          <Col md="3">
+            <TitleFilter />
+          </Col>
+          <StatusFilter />
+          <TypologyFilter />
+          <RegionFilters />
+          <SectorFilters />
+        </Row>
+
         <ProjectFilters />
-        <div style={{ height: "15px", backgroundColor: "whitesmoke"}} />
+        <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
         <ProjectList />
 
         <ReactTooltip delayShow={700} />

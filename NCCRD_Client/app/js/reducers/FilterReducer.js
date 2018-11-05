@@ -53,6 +53,11 @@ export default function FilterReducer(state = {}, action) {
             return { ...state, polygonFilter: payload }
         }
 
+        case "TOGGLE_FAVS_FILTER": {
+            return { ...state, favoritesFilter: payload }
+        }
+
+
         case "CLEAR_FILTERS": {
             return {
                 ...state,
