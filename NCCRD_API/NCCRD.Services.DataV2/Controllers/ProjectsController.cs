@@ -319,19 +319,5 @@ namespace NCCRD.Services.DataV2.Controllers
 
             return children;
         }
-
-        //private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
-        //{
-        //    var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
-
-        //    var childSectors = new List<Sector>();
-        //    foreach (var sector in sectors)
-        //    {
-        //        childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
-        //    }
-        //    sectors.AddRange(childSectors);
-
-        //    return sectors;
-        //}
     }
 }
