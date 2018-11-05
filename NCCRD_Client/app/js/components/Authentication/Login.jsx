@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input } from 'mdbreact'
-import * as ACTION_TYPES from '../../constants/action-types'
 import userManager from '../Authentication/userManager'
 
 const mapStateToProps = (state, props) => {
@@ -12,7 +11,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setLoading: payload => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     updateNav: payload => {
       dispatch({ type: "NAV", payload })
@@ -35,8 +34,6 @@ class Login extends React.Component {
   }
 
   render() {
-
-    console.log("window.location.origin", window.location.origin)
 
     return (
       <>

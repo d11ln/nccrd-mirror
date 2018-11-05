@@ -15,15 +15,12 @@ namespace NCCRD.Services.DataV2.Database.Models
         public int ProjectRegionId { get; set; }
 
         //FK - Project
-        [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
-        [IgnoreDataMember]
         public Project Project { get; set; }
 
         //FK - Region
-        [Range(1, int.MaxValue, ErrorMessage = "The Region field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The Region field is required.")]
         public int RegionId { get; set; }
-        [IgnoreDataMember]
-        public Region Region { get; set; }
     }
 }

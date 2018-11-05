@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button, Input, FormInline } from 'mdbreact'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
-import { UILookup } from '../../../constants/ui_config';
+import { UILookup } from '../../../config/ui_config.js'
 
 const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
@@ -15,10 +14,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadTitleFilter: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER, payload })
+      dispatch({ type: "LOAD_TITLE_FILTER", payload })
     },
     loadTitleFilterInternal: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER_INTERNAL, payload })
+      dispatch({ type: "LOAD_TITLE_FILTER_INTERNAL", payload })
     }
   }
 }
@@ -73,7 +72,7 @@ class TitleFilter extends React.Component {
         <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
         <Input size="sm"
           className="form-control"
-          style={{ padding: "5px", marginTop: "-24px", width: "100%", border: "1px solid lightgrey", borderRadius: "5px" }}
+          style={{ padding: "5px", marginTop: "-24px", width: "100%", height: "24px", border: "1px solid lightgrey", borderRadius: "5px" }}
           onChange={this.onChange.bind(this)} value={titleFilterInternal} icon="search" hint="Search..."
           onKeyDown={this.test.bind(this)}
         />

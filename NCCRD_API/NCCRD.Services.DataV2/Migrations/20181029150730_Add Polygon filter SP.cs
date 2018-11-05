@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace NCCRD.Services.DataV2.Migrations
 {
-    public partial class AddpolygonfilterSP : Migration
+    public partial class AddPolygonfilterSP : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

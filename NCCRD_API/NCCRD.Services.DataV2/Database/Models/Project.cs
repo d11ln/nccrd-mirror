@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,7 @@ namespace NCCRD.Services.DataV2.Database.Models
     [Table("Project")]
     public class Project
     {
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectId field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectId field is required.")]
         public int ProjectId { get; set; }
 
         [Required]
@@ -50,8 +51,15 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public decimal? BudgetUpper { get; set; }
 
+        //public Guid? LinkedDAOGoalId { get; set; }
+
+        //FK - ProjectStatus
+        public int? ProjectStatusId { get; set; }
+        [IgnoreDataMember]
+        public ProjectStatus ProjectStatus { get; set; }
+
         //FK - ProjectType
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
         public int ProjectTypeId { get; set; }
         [IgnoreDataMember]
         public ProjectType ProjectType { get; set; }
@@ -61,18 +69,12 @@ namespace NCCRD.Services.DataV2.Database.Models
         [IgnoreDataMember]
         public ProjectSubType ProjectSubType { get; set; } //Optional
 
-        //FK - ProjectStatus
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
-        public int ProjectStatusId { get; set; }
-        [IgnoreDataMember]
-        public ProjectStatus ProjectStatus { get; set; }
-
         //FK - ProjectManager
-        [Range(1, int.MaxValue, ErrorMessage = "The ProjectManager field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The ProjectManager field is required.")]
         [ForeignKey("ProjectManager")]
         public int ProjectManagerId { get; set; }
         [IgnoreDataMember]
-        public User ProjectManager { get; set; }
+        public Person ProjectManager { get; set; }
 
         //FK - ValidationStatus
         public int? ValidationStatusId { get; set; }
@@ -83,6 +85,9 @@ namespace NCCRD.Services.DataV2.Database.Models
         public virtual ICollection<ProjectLocation> ProjectLocations { get; set; }
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
+        public virtual ICollection<MitigationEmissionsData> MitigationEmissionsData { get; set; }
         public virtual ICollection<ResearchDetail> ResearchDetails { get; set; }
+        public virtual ICollection<ProjectFunder> ProjectFunders { get; set; }
+        public virtual ICollection<ProjectDAO> ProjectDAOs { get; set; }
     }
 }

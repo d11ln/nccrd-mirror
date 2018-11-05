@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { CallbackComponent } from "redux-oidc";
 import userManager from '../Authentication/userManager'
-import * as ACTION_TYPES from '../../constants/action-types'
 
 const _gf = require("../../globalFunctions")
 
@@ -14,7 +13,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setLoading: payload => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     updateNav: payload => {
       dispatch({ type: "NAV", payload })

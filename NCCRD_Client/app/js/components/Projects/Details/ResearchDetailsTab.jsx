@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button, Fa } from 'mdbreact'
-import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 
 const mapStateToProps = (state, props) => {

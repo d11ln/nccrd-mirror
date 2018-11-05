@@ -24,9 +24,9 @@ namespace NCCRD.Services.DataV2.Controllers
         }
 
         [EnableQuery]
-        public IQueryable<User> Get()
+        public IQueryable<Person> Get()
         {
-            return _context.Users.AsQueryable();
+            return _context.Person.AsQueryable();
         }
     }
 }

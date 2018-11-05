@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter
 } from 'mdbreact'
-import { apiBaseURL } from "../../../../constants/apiBaseURL"
-import * as ACTION_TYPES from "../../../../constants/action-types"
+import { apiBaseURL } from "../../../../config/serviceURLs.cfg"
 
 //AntD TreeSelect + Select
 import Tree from 'antd/lib/tree'
@@ -29,10 +28,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setEditList: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+      dispatch({ type: "SET_EDIT_LIST", payload })
     },
     setLoading: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     dispatchToStore: (key, payload) => {
       dispatch({ type: key, payload })
@@ -479,7 +478,7 @@ class EditTreeModal extends React.Component {
     })
 
     //Setup and insert data item
-    let newItemId = parseInt(_gf.GetUID())
+    let newItemId = _gf.getRndInteger(1111111, 9999999)
     let newItemText = "Item_" + newItemId.toString() //"ENTER VALUE HERE"
     newItem[Object.keys(newItem)[0]] = newItemId
     newItem[Object.keys(newItem)[1]] = newItemText

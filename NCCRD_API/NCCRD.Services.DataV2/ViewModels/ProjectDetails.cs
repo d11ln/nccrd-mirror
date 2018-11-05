@@ -15,6 +15,7 @@ namespace NCCRD.Services.DataV2.ViewModels
         public Project Project { get; set; }
 
         //Project details
+        public Funder[] Funders { get; set; }
         public AdaptationDetail[] AdaptationDetails { get; set; }
         public MitigationDetail[] MitigationDetails { get; set; }
         public MitigationEmissionsData[] MitigationEmissionsData { get; set; }

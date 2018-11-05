@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace NCCRD.Services.DataV2.Database.Models
 {
-    [Table("Users")]
-    public class User
+    public class Person
     {
-        public int UserId { get; set; }
+        public int PersonId { get; set; }
 
         [Required]
         [MaxLength(450)]
@@ -25,6 +24,9 @@ namespace NCCRD.Services.DataV2.Database.Models
         [Required]
         [MaxLength(450)]
         public string Surname { get; set; }
+
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
 
         [Required]
         [MaxLength(450)]

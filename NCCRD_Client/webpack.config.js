@@ -20,7 +20,7 @@ module.exports = {
   context: path.join(cwd, 'app'),
   mode,
   entry: {
-    app: ['./js/index.jsx'],
+    app: ["babel-polyfill", './js/index.jsx'],
     silentRenew: ["./silent_renew/silent_renew.js"],
     react: [
       'react',
@@ -106,9 +106,9 @@ module.exports = {
     new webpack.IgnorePlugin(/^(fs|ipc|cfg)$/),
     new CopyWebpackPlugin([
       {
-        from: 'js/constants/ui_config.cfg',
-        to: 'ui_config.cfg',
-        toType: 'file'
+        from: 'js/config/*.cfg',
+        to: '[name].[ext]',
+        toType: 'template'
       }
     ])
   ]

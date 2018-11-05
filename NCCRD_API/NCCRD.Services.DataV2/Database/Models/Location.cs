@@ -12,23 +12,23 @@ namespace NCCRD.Services.DataV2.Database.Models
     {
         public int LocationId { get; set; }
 
-        public double? LatDegree { get; set; }
+        //public double? LatDegree { get; set; }
 
-        public double? LatMinutes { get; set; }
+        //public double? LatMinutes { get; set; }
 
-        public double? LatSeconds { get; set; }
+        //public double? LatSeconds { get; set; }
 
-        public double? LatDirection { get; set; }
+        //public double? LatDirection { get; set; }
 
         public double? LatCalculated { get; set; }
 
-        public double? LonDegree { get; set; }
+        //public double? LonDegree { get; set; }
 
-        public double? LonMinutes { get; set; }
+        //public double? LonMinutes { get; set; }
 
-        public double? LonSeconds { get; set; }
+        //public double? LonSeconds { get; set; }
 
-        public double? LonDirection { get; set; }
+        //public double? LonDirection { get; set; }
 
         public double? LonCalculated { get; set; }
     }

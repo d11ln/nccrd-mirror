@@ -4,8 +4,7 @@ import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter,
   Select, SelectInput, SelectOptions, SelectOption
 } from 'mdbreact'
-import { apiBaseURL } from "../../../../constants/apiBaseURL"
-import * as ACTION_TYPES from "../../../../constants/action-types"
+import { apiBaseURL } from "../../../../config/serviceURLs.cfg"
 
 const _gf = require("../../../../globalFunctions")
 const _ = require('lodash')
@@ -20,10 +19,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setEditList: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+      dispatch({ type: "SET_EDIT_LIST", payload })
     },
     setLoading: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     dispatchToStore: (key, payload) => {
       dispatch({ type: key, payload })
@@ -58,8 +57,6 @@ class EditListModal extends React.Component {
 
     if (data.length > 0) {
 
-      console.log("HERE")
-
       let tmpData = [] //_.clone(data)
       data.map(item => {
         let clone = _.clone(item)
@@ -90,7 +87,7 @@ class EditListModal extends React.Component {
     })
 
     //Set Id to GUID
-    let newItemId = parseInt(_gf.GetUID())
+    let newItemId = _gf.getRndInteger(1111111, 9999999)
     newItem[Object.keys(newItem)[0]] = newItemId
     newItem[Object.keys(newItem)[1]] = "ENTER VALUE HERE"
     newItem.modifiedState = true
@@ -159,7 +156,7 @@ class EditListModal extends React.Component {
 
   confirmSave() {
 
-    let { dispatchToStore, dispatch, persist, setLoading, data, user } = this.props
+    let { dispatchToStore, dispatch, persist, setLoading, data, user, newItemTemplate } = this.props
     let { _data } = this.state
 
     //Update items
@@ -168,9 +165,16 @@ class EditListModal extends React.Component {
     //Get changed items
     let postData = { Id: 123456 }
     let postDataItems = []
-    _data.filter(x => x.modifiedState === true).forEach(x => {
-      let clone = _.clone(x)
-      delete clone.modifiedState
+    _data.filter(item => item.modifiedState === true).forEach(item => {
+      let clone = _.clone(item)
+
+      //Remove keys not in the server model
+      Object.keys(item).forEach(key => {
+        if (!Object.keys(newItemTemplate).includes(key)) {
+          delete clone[key]
+        }
+      })
+
       postDataItems.push(clone)
     })
     postData[persist] = postDataItems
@@ -206,7 +210,7 @@ class EditListModal extends React.Component {
 
           //Merge changes into props
           let merged = _.merge(_data)
-          let valueKey = Object.keys(merged[0])[1].toString()
+          let valueKey = Object.keys(merged[0]).includes("Value") ? "Value" : Object.keys(merged[0])[1].toString()
           merged = _.orderBy(merged, valueKey, 'asc'); // Use Lodash to sort array by 'Value'
 
           //Dispatch to store
@@ -253,7 +257,7 @@ class EditListModal extends React.Component {
 
       processedItems.push({
         id: item[Object.keys(item)[0]],
-        value: item[Object.keys(item)[1]],
+        value: Object.keys(item).includes("Value") ? item.Value : item[Object.keys(item)[1]],
         modifiedState: item.modifiedState
       })
 
@@ -288,14 +292,17 @@ class EditListModal extends React.Component {
     processedItems.map(item => {
       if (item.id > 0) {
         let { selectedItemId } = this.state
-        listItems.push(<ListGroupItem style={{
-          cursor: "pointer",
-          backgroundColor: (selectedItemId === item.id ? "#2BBBAD" : "white")
-        }}
-          hover={true}
-          onClick={this.listItemClick.bind(this, item.id)}
-          key={item.id}
-        >&nbsp;{(item.modifiedState === true ? "* " : "") + item.value}</ListGroupItem>)
+        listItems.push(
+          <ListGroupItem
+            style={{
+              cursor: "pointer",
+              backgroundColor: (selectedItemId === item.id ? "#2BBBAD" : "white")
+            }}
+            hover={true}
+            onClick={this.listItemClick.bind(this, item.id)}
+            key={item.id}>
+            {(item.modifiedState === true ? "* " : "") + item.value}
+          </ListGroupItem>)
       }
     })
 

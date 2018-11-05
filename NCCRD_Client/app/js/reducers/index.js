@@ -10,10 +10,12 @@ import LookupsReducer from './LookupsReducer'
 import FilterReducer from './FilterReducer'
 import EditListModalReducer from './EditListModalReducer'
 import NavigationReducer from './NavigationReducer'
+import ProjectFundersReducer from './ProjectFundersReducer'
 
 export default {
     globalData: GlobalReducer,
     projectData: ProjectsReducer,
+    projectFundersData: ProjectFundersReducer,
     adaptationData: AdaptationsReducer,
     mitigationData: MitigationsReducer,
     emissionsData: EmissionsReducer,

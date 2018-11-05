@@ -12,10 +12,10 @@ namespace NCCRD.Services.DataV2.Database.Models
     [Table("MitigationEmissionsData")]
     public class MitigationEmissionsData
     {
-        [Range(1, int.MaxValue, ErrorMessage = "The MitigationEmissionsDataId field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The MitigationEmissionsDataId field is required.")]
         public int MitigationEmissionsDataId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "The Year field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The Year field is required.")]
         public int Year { get; set; }
 
         public double? CO2 { get; set; }
@@ -69,7 +69,7 @@ namespace NCCRD.Services.DataV2.Database.Models
         public double? Geothermal_CO2e { get; set; }
 
         //FK - Project
-        [Range(1, int.MaxValue, ErrorMessage = "The Project field is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
         [IgnoreDataMember]
         public Project Project { get; set; }

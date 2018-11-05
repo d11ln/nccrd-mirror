@@ -1,11 +1,11 @@
 import React from 'react'
-import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
+import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { researchType, targetAudience, sector, sectorType, typology } } = state
@@ -32,7 +32,7 @@ class ResearchDetailsItem extends React.Component {
             label="Author:"
             id="txtResearchAuthor"
             value={details.Author}
-            setValueKey={ACTION_TYPES.SET_RESEARCH_AUTHOR}
+            setValueKey={"SET_RESEARCH_AUTHOR"}
             parentId={details.ResearchDetailId}
           />
           <TextComponent
@@ -40,7 +40,7 @@ class ResearchDetailsItem extends React.Component {
             label="Paper link:"
             id="txtResearchPaperLink"
             value={details.PaperLink}
-            setValueKey={ACTION_TYPES.SET_RESEARCH_PAPER_LINK}
+            setValueKey={"SET_RESEARCH_PAPER_LINK"}
             parentId={details.ResearchDetailId}
           />
           <SelectComponent
@@ -49,9 +49,9 @@ class ResearchDetailsItem extends React.Component {
             label="Research type:"
             selectedValue={details.ResearchTypeId}
             data={researchType}
-            setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_RESEARCH_TYPE}
+            setSelectedValueKey={"SET_RESEARCH_RESEARCH_TYPE"}
             parentId={details.ResearchDetailId}
-            dispatch={ACTION_TYPES.LOAD_RESEARCH_TYPE}
+            dispatch={"LOAD_RESEARCH_TYPE"}
             persist="ResearchType"
             allowEdit={true}
             newItemTemplate={{
@@ -71,9 +71,9 @@ class ResearchDetailsItem extends React.Component {
             label="Target audience:"
             selectedValue={details.TargetAudienceId}
             data={targetAudience}
-            setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_TARGET_AUDIENCE}
+            setSelectedValueKey={"SET_RESEARCH_TARGET_AUDIENCE"}
             parentId={details.ResearchDetailId}
-            dispatch={ACTION_TYPES.LOAD_TARGET_AUDIENCE}
+            dispatch={"LOAD_TARGET_AUDIENCE"}
             persist="TargetAudience"
             allowEdit={true}
             newItemTemplate={{
@@ -88,9 +88,9 @@ class ResearchDetailsItem extends React.Component {
             label="Sector:"
             selectedValue={details.SectorId}
             data={sector}
-            setSelectedValueKey={ACTION_TYPES.SET_RESEARCH_SECTOR}
+            setSelectedValueKey={"SET_RESEARCH_SECTOR"}
             parentId={details.ResearchDetailId}
-            dispatch={ACTION_TYPES.LOAD_SECTOR}
+            dispatch={"LOAD_SECTOR"}
             persist="Sector"
             type="tree"
             dependencies={[
@@ -110,7 +110,7 @@ class ResearchDetailsItem extends React.Component {
         </div>
 
         <br />
-        <hr />
+        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
         <br />
 
         <ReactTooltip delayShow={700} />

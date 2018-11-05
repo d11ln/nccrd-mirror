@@ -1,6 +1,20 @@
 'use strict'
 
 import React from 'react'
+import { DEAGreen, DEAGreenDark } from './config/colours.cfg'
+
+export function fixEmptyValue(value, defaultValue) {
+
+  if (isEmptyValue(value)) {
+    return defaultValue
+  }
+
+  return value
+}
+
+export function isEmptyValue(value) {
+  return (typeof value === 'undefined' || value === "" || value === null)
+}
 
 export function stripURLParam(paramKey) {
   let i = location.toString().indexOf("?")
@@ -18,8 +32,31 @@ export function stripURLParam(paramKey) {
   }
 }
 
+export function getFontColour(editMode) {
+  if (editMode) {
+    return DEAGreen
+  }
+  else {
+    return "black"
+  }
+}
+
+export function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
 export function GetUID() {
-  return Math.random().toString().substr(2, 9)
+  //return Math.random().toString().substr(2, 9)
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+export function IsValidGuid(guid)
+{
+  let pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+  return pattern.test(guid)
 }
 
 export function StringToHTML(strVal) {

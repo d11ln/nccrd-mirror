@@ -3,8 +3,8 @@ import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'
 import { connect } from 'react-redux'
 import { Fa, Button, ButtonFixed, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
-import * as ACTION_TYPES from "../../../constants/action-types"
 import ReactTooltip from 'react-tooltip'
+import { DEAGreen } from '../../../config/colours.cfg'
 
 const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
@@ -18,10 +18,10 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setLoading: payload => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     loadPolygonFilter: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_POLYGON_FILTER, payload })
+      dispatch({ type: "LOAD_POLYGON_FILTER", payload })
     },
     updateNav: payload => {
       dispatch({ type: "NAV", payload })
@@ -85,18 +85,9 @@ class Projects extends React.Component {
       <>
         <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
 
-          {
-            ((user && !user.expired) /*|| _gf.isLocalhost()*/) &&
-            <div>
-              <Button data-tip="Add project" size="sm" floating color="primary" onClick={this.addProject}>
-                <Fa icon="plus" />
-              </Button>
-              <br />
-            </div>
-          }
-
           {showBackToTop &&
-            <Button data-tip="Back to top" size="sm" floating color="default" onClick={this.backToTop}>
+            <Button data-tip="Back to top" size="sm" floating color="" onClick={this.backToTop}
+              style={{ backgroundColor: DEAGreen }}>
               <Fa icon="arrow-up" />
             </Button>}
 

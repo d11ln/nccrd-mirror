@@ -1,100 +1,130 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 export default function LookupsReducer(state = {}, action) {
 
-    const { type, payload } = action
+  const { type, payload } = action
 
-    switch (type) {
+  const transformVMSData = (payload) => {
+    let data = [];
+    payload.forEach(x => {
+      let item = { Id: x.id, Text: x.value, ParentId: null }
 
-        case ACTION_TYPES.LOAD_PROJECT_STATUS: {
-            return { ...state, projectStatus: payload }
+      if (x.additionalData.length > 0) {
+        let addData = x.additionalData.filter(x => x.key === "ParentId")
+        if (addData.length > 0) {
+          item.ParentId = addData[0].value
         }
+      }
 
-        case ACTION_TYPES.LOAD_TYPOLOGY: {
-            return { ...state, typology: payload }
-        }
+      data.push(item)
+    })
 
-        case ACTION_TYPES.LOAD_REGION_TREE: {
-            return { ...state, regionTree: payload }
-        }
+    return data
+  }
 
-        case ACTION_TYPES.LOAD_SECTOR_TREE: {
-            return { ...state, sectorTree: payload }
-        }
+  switch (type) {
 
-        case ACTION_TYPES.LOAD_PROJECT_TYPE: {
-            return { ...state, projectTypes: payload }
-        }
-
-        case ACTION_TYPES.LOAD_PROJECT_SUBTYPE: {
-            return { ...state, projectSubTypes: payload }
-        }
-
-        case ACTION_TYPES.LOAD_USERS: {
-            return { ...state, users: payload }
-        }
-
-        case ACTION_TYPES.LOAD_VALIDATION_STATUS: {
-            return { ...state, validationStatus: payload }
-        }
-
-        case ACTION_TYPES.LOAD_MA_OPTIONS: {
-            return { ...state, maOptions: payload }
-        }
-
-        case ACTION_TYPES.LOAD_ADAPTATION_PURPOSE: {
-            return { ...state, adaptationPurpose: payload }
-        }
-
-        case ACTION_TYPES.LOAD_SECTOR: {
-            return { ...state, sector: payload }
-        }
-
-        case ACTION_TYPES.LOAD_SECTOR_TYPE: {
-            return { ...state, sectorType: payload }
-        }
-
-        case ACTION_TYPES.LOAD_REGION: {
-            return { ...state, region: payload }
-        }
-
-        case ACTION_TYPES.LOAD_CARBON_CREDIT: {
-            return { ...state, carbonCredit: payload }
-        }
-
-        case ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET: {
-
-            return { ...state, carbonCreditMarket: payload }
-        }
-
-        case ACTION_TYPES.LOAD_CDM_STATUS: {
-            return { ...state, cdmStatus: payload }
-        }
-
-        case ACTION_TYPES.LOAD_CDM_METHODOLOGY: {
-            return { ...state, cdmMethodology: payload }
-        }
-
-        case ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY: {
-            return { ...state, voluntaryMethodology: payload }
-        }
-
-        case ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD: {
-            return { ...state, voluntaryGoldStandard: payload }
-        }
-
-        case ACTION_TYPES.LOAD_RESEARCH_TYPE: {
-            return { ...state, researchType: payload }
-        }
-
-        case ACTION_TYPES.LOAD_TARGET_AUDIENCE: {
-            return { ...state, targetAudience: payload }
-        }
-
-        default: {
-            return state
-        }
+    case "LOAD_PROJECT_STATUS": {
+      return { ...state, projectStatus: payload }
     }
+
+    case "LOAD_FUNDERS": {
+      return { ...state, funders: payload }
+    }
+
+    case "LOAD_FUNDINGSTATUS": {
+      return { ...state, fundingStatus: payload }
+    }
+
+    case "LOAD_TYPOLOGY": {
+      return { ...state, typology: payload }
+    }
+
+    case "LOAD_PROJECT_TYPE": {
+      return { ...state, projectTypes: payload }
+    }
+
+    case "LOAD_PROJECT_SUBTYPE": {
+      return { ...state, projectSubTypes: payload }
+    }
+
+    case "LOAD_PROJECT_STATUS": {
+      return { ...state, projectStatus: payload }
+    }
+
+    case "LOAD_USERS": {
+      payload.forEach(x => {
+        x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
+      })
+      return { ...state, users: payload }
+    }
+
+    case "LOAD_VALIDATION_STATUS": {
+      return { ...state, validationStatus: payload }
+    }
+
+    case "LOAD_MA_OPTIONS": {
+      return { ...state, maOptions: payload }
+    }
+
+    case "LOAD_ADAPTATION_PURPOSE": {
+      return { ...state, adaptationPurpose: payload }
+    }
+
+    case "LOAD_SECTOR": {
+      let data = transformVMSData(payload)
+      return { ...state, sector: data }
+    }
+
+    case "LOAD_SECTOR_TYPE": {
+      return { ...state, sectorType: payload }
+    }
+
+    case "LOAD_REGION": {
+      let data = transformVMSData(payload)
+      return { ...state, region: data }
+    }
+
+    case "LOAD_CARBON_CREDIT": {
+      return { ...state, carbonCredit: payload }
+    }
+
+    case "LOAD_CARBON_CREDIT_MARKET": {
+
+      return { ...state, carbonCreditMarket: payload }
+    }
+
+    case "LOAD_CDM_STATUS": {
+      return { ...state, cdmStatus: payload }
+    }
+
+    case "LOAD_CDM_METHODOLOGY": {
+      return { ...state, cdmMethodology: payload }
+    }
+
+    case "LOAD_VOLUNTARY_METHODOLOGY": {
+      return { ...state, voluntaryMethodology: payload }
+    }
+
+    case "LOAD_VOLUNTARY_GOLD_STANDARD": {
+      return { ...state, voluntaryGoldStandard: payload }
+    }
+
+    case "LOAD_RESEARCH_TYPE": {
+      return { ...state, researchType: payload }
+    }
+
+    case "LOAD_TARGET_AUDIENCE": {
+      return { ...state, targetAudience: payload }
+    }
+
+    case "LOAD_HAZARDS": {
+      let data = transformVMSData(payload)
+      return { ...state, hazards: data }
+    }
+
+    default: {
+      return state
+    }
+  }
 }

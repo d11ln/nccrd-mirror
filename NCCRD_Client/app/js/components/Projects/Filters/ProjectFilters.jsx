@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Collapse } from 'mdbreact'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../../constants/action-types"
+import { DEAGreen } from '../../../config/colours.cfg'
 
 //Filters
 import GeneralFilters from './GeneralFilters.jsx';
@@ -17,27 +17,25 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     clearFilters: payload => {
-      dispatch({ type: ACTION_TYPES.CLEAR_FILTERS, payload })
+      dispatch({ type: "CLEAR_FILTERS", payload })
     },
     clearTitleFilter: () => {
-      dispatch({ type: ACTION_TYPES.LOAD_TITLE_FILTER, payload: "" })
+      dispatch({ type: "LOAD_TITLE_FILTER", payload: "" })
     },
     clearStatusFilter: () => {
-      dispatch({ type: ACTION_TYPES.LOAD_STATUS_FILTER, payload: { id: 0, value: 0 } })
+      dispatch({ type: "LOAD_STATUS_FILTER", payload: { id: 0, value: 0 } })
     },
     clearTypologyFilter: () => {
-      dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY_FILTER, payload: { id: 0, value: 0 } })
+      dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload: { id: 0, value: 0 } })
     },
     clearRegionFilter: () => {
-      dispatch({ type: ACTION_TYPES.LOAD_REGION_FILTER, payload: 0 })
+      dispatch({ type: "LOAD_REGION_FILTER", payload: 0 })
     },
     clearSectorFilter: () => {
-      dispatch({ type: ACTION_TYPES.LOAD_SECTOR_FILTER, payload: 0 })
+      dispatch({ type: "LOAD_SECTOR_FILTER", payload: 0 })
     }
   }
 }
-
-let lastClickTime = new Date().valueOf()
 
 class ProjectFilters extends React.Component {
 
@@ -57,7 +55,7 @@ class ProjectFilters extends React.Component {
   }
 
   toggleGeneral() {
-    this.setState({ collapseGeneral: !this.state.collapseGeneral });
+      this.setState({ collapseGeneral: !this.state.collapseGeneral });
   }
 
   toggleRegion() {
@@ -69,11 +67,12 @@ class ProjectFilters extends React.Component {
   }
 
   getBottonColor(state) {
+
     if (state === true) {
-      return "warning"
+      return DEAGreen
     }
     else {
-      return "default"
+      return "grey"
     }
   }
 
@@ -125,7 +124,7 @@ class ProjectFilters extends React.Component {
 
         filterChips.push(
           <div className="chip blue lighten-1" key="regionFilterChip">
-            {"Region: " + region.filter(x => x.RegionId === parseInt(regionFilter))[0].RegionName}
+            {"Region: " + region.filter(x => x.Id == regionFilter)[0].Text}
             <i className="close fa fa-times" onClick={() => this.deleteFilterChip("region")}></i>
           </div>
         )
@@ -134,7 +133,7 @@ class ProjectFilters extends React.Component {
       if (sectorFilter > 0 && sector.length > 0) {
         filterChips.push(
           <div className="chip blue lighten-1" key="sectorFilterChip">
-            {"Sector: " + sector.filter(x => x.SectorId === parseInt(sectorFilter))[0].Value}
+            {"Sector: " + sector.filter(x => x.Id == sectorFilter)[0].Text}
             <i className="close fa fa-times" onClick={() => this.deleteFilterChip("sector")}></i>
           </div>
         )
@@ -175,8 +174,6 @@ class ProjectFilters extends React.Component {
 
   render() {
 
-    //console.log("state:", this.state.collapseGeneral)
-
     return (
       <div style={{ marginLeft: "0px", marginRight: "0px", backgroundColor: "white" }}>
 
@@ -190,15 +187,15 @@ class ProjectFilters extends React.Component {
 
         <div className="row">
           <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseGeneral)} className="btn-sm" onClick={this.toggleGeneral} style={{ marginBottom: "2px" }}>General filters</Button>
+            <Button block color="" className="btn-sm" onClick={this.toggleGeneral} style={{ marginBottom: "2px", backgroundColor: this.getBottonColor(this.state.collapseGeneral) }}>General filters</Button>
           </div>
 
           <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseRegion)} className="btn-sm" onClick={this.toggleRegion} style={{ marginBottom: "2px" }} >Region filters</Button>
+            <Button block color="" className="btn-sm" onClick={this.toggleRegion} style={{ marginBottom: "2px", backgroundColor: this.getBottonColor(this.state.collapseRegion) }} >Region filters</Button>
           </div>
 
           <div className="col-md-3">
-            <Button block color={this.getBottonColor(this.state.collapseSector)} className="btn-sm" onClick={this.toggleSector} style={{ marginBottom: "2px" }} >Sector filters</Button>
+            <Button block color="" className="btn-sm" onClick={this.toggleSector} style={{ marginBottom: "2px", backgroundColor: this.getBottonColor(this.state.collapseSector) }} >Sector filters</Button>
           </div>
 
           <div className="col-md-3">

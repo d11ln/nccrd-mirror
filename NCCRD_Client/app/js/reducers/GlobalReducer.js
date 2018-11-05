@@ -1,25 +1,23 @@
 'use strict'
 
-import * as ACTION_TYPES from "../constants/action-types"
-
 export default function GlobalReducer(state = {}, action) {
 
     const { type, payload } = action
 
     switch (type) {
 
-        case ACTION_TYPES.SET_LOADING: {
+        case "SET_LOADING": {
             return { ...state, loading: payload }
         }
 
-        case ACTION_TYPES.SET_EDIT_MODE: {
+        case "SET_EDIT_MODE": {
             return { ...state, editMode: payload }
         }
 
-        // case ACTION_TYPES.TOGGLE_EDIT_LIST_MODAL: {
-        //     return { ...state, showEditListModal: payload }
-        // }
-
+        case "SET_DAOID": {
+            console.log("SET_DAOID", payload)
+            return { ...state, daoid: payload }
+        }
         default: {
             return state
         }

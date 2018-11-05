@@ -6,9 +6,9 @@ import {
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
-import * as ACTION_TYPES from "../../../constants/action-types"
-import { apiBaseURL } from "../../../constants/apiBaseURL"
+import { apiBaseURL, vmsBaseURL } from "../../../config/serviceURLs.cfg"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
+import ProjectFundersTab from './ProjectFundersTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
 import MitigationDetailsTab from './MitigationDetailsTab.jsx'
 import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
@@ -16,16 +16,20 @@ import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../constants/ui_config';
+import { UILookup } from '../../../config/ui_config.js'
 import classnames from 'classnames';
+import { DEAGreen, DEAGreenDark } from '../../../config/colours.cfg'
+import LinkedDAO from './LinkedDAO.jsx'
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
 const _ = require("lodash")
+const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
 
   let { projectData: { projectDetails } } = state
+  let { projectFundersData: { projectFunderDetails } } = state
   let { adaptationData: { adaptationDetails } } = state
   let { mitigationData: { mitigationDetails } } = state
   let { emissionsData: { emissionsData } } = state
@@ -36,7 +40,7 @@ const mapStateToProps = (state, props) => {
   let user = state.oidc.user
 
   return {
-    projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading,
+    projectDetails, projectFunderDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading,
     editListModalType, editListModalShow, user
   }
 }
@@ -44,109 +48,127 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadProjectDetails: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_PROJECT_DETAILS, payload })
+      dispatch({ type: "LOAD_PROJECT_DETAILS", payload })
+    },
+    loadProjectFunderDetails: payload => {
+      dispatch({ type: "LOAD_PROJECTFUNDER_DETAILS", payload })
     },
     loadAdaptationDetails: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_DETAILS, payload })
+      dispatch({ type: "LOAD_ADAPTATION_DETAILS", payload })
     },
     loadMitigationDetails: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_DETAILS, payload })
+      dispatch({ type: "LOAD_MITIGATION_DETAILS", payload })
     },
     loadMitigationEmissions: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_MITIGATION_EMISSIONS, payload })
+      dispatch({ type: "LOAD_MITIGATION_EMISSIONS", payload })
     },
     loadResearchDetails: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_DETAILS, payload })
+      dispatch({ type: "LOAD_RESEARCH_DETAILS", payload })
     },
     setLoading: payload => {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, payload })
+      dispatch({ type: "SET_LOADING", payload })
     },
     setEditMode: payload => {
-      dispatch({ type: ACTION_TYPES.SET_EDIT_MODE, payload })
+      dispatch({ type: "SET_EDIT_MODE", payload })
+    },
+    loadFunders: payload => {
+      dispatch({ type: "LOAD_FUNDERS", payload })
+    },
+    loadFundingStatus: payload => {
+      dispatch({ type: "LOAD_FUNDINGSTATUS", payload })
     },
     loadProjectTypes: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_PROJECT_TYPE, payload })
+      dispatch({ type: "LOAD_PROJECT_TYPE", payload })
     },
     loadProjectSubTypes: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_PROJECT_SUBTYPE, payload })
+      dispatch({ type: "LOAD_PROJECT_SUBTYPE", payload })
     },
     loadProjectStatus: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_PROJECT_STATUS, payload })
+      dispatch({ type: "LOAD_PROJECT_STATUS", payload })
     },
     loadUsers: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_USERS, payload })
+      dispatch({ type: "LOAD_USERS", payload })
     },
     loadValidationStatus: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_VALIDATION_STATUS, payload })
+      dispatch({ type: "LOAD_VALIDATION_STATUS", payload })
     },
     loadAdaptationPurpose: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_ADAPTATION_PURPOSE, payload })
+      dispatch({ type: "LOAD_ADAPTATION_PURPOSE", payload })
     },
     loadSectors: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_SECTOR, payload })
+      dispatch({ type: "LOAD_SECTOR", payload })
+    },
+    loadRegions: payload => {
+      dispatch({ type: "LOAD_REGION", payload })
     },
     loadSectorType: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TYPE, payload })
-    },
-    loadSectorTree: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_SECTOR_TREE, payload })
+      dispatch({ type: "LOAD_SECTOR_TYPE", payload })
     },
     loadCarbonCredit: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_CARBON_CREDIT, payload })
+      dispatch({ type: "LOAD_CARBON_CREDIT", payload })
     },
     loadCarbonCreditMarket: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_CARBON_CREDIT_MARKET, payload })
+      dispatch({ type: "LOAD_CARBON_CREDIT_MARKET", payload })
     },
     loadCDMStatus: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_CDM_STATUS, payload })
+      dispatch({ type: "LOAD_CDM_STATUS", payload })
     },
     loadCDMMethodology: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_CDM_METHODOLOGY, payload })
+      dispatch({ type: "LOAD_CDM_METHODOLOGY", payload })
     },
     loadVoluntaryMethodology: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_VOLUNTARY_METHODOLOGY, payload })
+      dispatch({ type: "LOAD_VOLUNTARY_METHODOLOGY", payload })
     },
     loadVoluntaryGoldStandard: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_VOLUNTARY_GOLD_STANDARD, payload })
+      dispatch({ type: "LOAD_VOLUNTARY_GOLD_STANDARD", payload })
     },
     loadResearchType: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_RESEARCH_TYPE, payload })
+      dispatch({ type: "LOAD_RESEARCH_TYPE", payload })
     },
     loadTargetAudience: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_TARGET_AUDIENCE, payload })
+      dispatch({ type: "LOAD_TARGET_AUDIENCE", payload })
     },
     loadTypology: payload => {
-      dispatch({ type: ACTION_TYPES.LOAD_TYPOLOGY, payload })
+      dispatch({ type: "LOAD_TYPOLOGY", payload })
+    },
+    loadHazards: payload => {
+      dispatch({ type: "LOAD_HAZARDS", payload })
     },
     resetProjectState: payload => {
-      dispatch({ type: ACTION_TYPES.RESET_PROJECT_STATE, payload })
+      dispatch({ type: "RESET_PROJECT_STATE", payload })
     },
     resetAdaptationState: payload => {
-      dispatch({ type: ACTION_TYPES.RESET_ADAPTATION_STATE, payload })
+      dispatch({ type: "RESET_ADAPTATION_STATE", payload })
     },
     resetMitigationState: payload => {
-      dispatch({ type: ACTION_TYPES.RESET_MITIGATION_STATE, payload })
+      dispatch({ type: "RESET_MITIGATION_STATE", payload })
     },
     resetEmissionState: payload => {
-      dispatch({ type: ACTION_TYPES.RESET_EMISSION_STATE, payload })
+      dispatch({ type: "RESET_EMISSION_STATE", payload })
     },
     resetResearchState: payload => {
-      dispatch({ type: ACTION_TYPES.RESET_RESEARCH_STATE, payload })
+      dispatch({ type: "RESET_RESEARCH_STATE", payload })
     },
     updateNav: payload => {
       dispatch({ type: "NAV", payload })
     },
+    addProjectFunderDetails: payload => {
+      dispatch({ type: "ADD_PROJECTFUNDER_DETAILS", payload })
+    },
     addAdaptationDetails: payload => {
-      dispatch({ type: ACTION_TYPES.ADD_ADAPTATION_DETAILS, payload })
+      dispatch({ type: "ADD_ADAPTATION_DETAILS", payload })
     },
     addMitigationDetails: payload => {
-      dispatch({ type: ACTION_TYPES.ADD_MITIGATION_DETAILS, payload })
+      dispatch({ type: "ADD_MITIGATION_DETAILS", payload })
     },
     addMitigationEmissions: payload => {
-      dispatch({ type: ACTION_TYPES.ADD_MITIGATION_EMISSIONS, payload })
+      dispatch({ type: "ADD_MITIGATION_EMISSIONS", payload })
     },
     addResearchDetails: payload => {
-      dispatch({ type: ACTION_TYPES.ADD_RESEARCH_DETAILS, payload })
+      dispatch({ type: "ADD_RESEARCH_DETAILS", payload })
+    },
+    setLinkedLinkedDAOGoalId: payload => {
+      dispatch({ type: "SET_PROJECT_LINKED_DAO_GOAL_ID", payload })
     }
   }
 }
@@ -168,15 +190,30 @@ class ProjectDetails extends React.Component {
     this.showMessage = this.showMessage.bind(this)
 
     let projectId = this.props.match.params.id
+    let daoid = null
+    let readonly = false
+
+    const parsedHash = queryString.parse(location.hash.replace(`/projects/${projectId}?`, ""))
+    if (typeof parsedHash.daoid !== 'undefined') {
+      daoid = parsedHash.daoid
+    }
+
+    if (typeof parsedHash.readonly !== 'undefined' && parsedHash.readonly === 'true') {
+      readonly = true
+    }
+
     this.state = {
       activeItemTabs: '1',
       projectId,
       discardModal: false,
       saveModal: false,
       messageModal: false,
+      doaModal: false,
       navBack: false,
       title: "message",
-      message: ""
+      message: "",
+      daoid,
+      readonly
     }
   }
 
@@ -191,10 +228,10 @@ class ProjectDetails extends React.Component {
   loadData(detailsOnly) {
 
     let { setLoading, setEditMode, projectDetails, loadProjectTypes, loadProjectSubTypes, loadProjectStatus, loadUsers, loadValidationStatus,
-      loadProjectDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
-      loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadSectors, loadSectorTree, loadCarbonCredit,
+      loadProjectDetails, loadProjectFunderDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
+      loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-      loadResearchType, loadTargetAudience, user } = this.props
+      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards } = this.props
 
     let { projectId } = this.state
 
@@ -207,94 +244,152 @@ class ProjectDetails extends React.Component {
       location.hash = "/projects"
     }
 
-    if (this.state.projectId === 'add') {
+    //Get Project details & lookups
+    let oHandler = o(apiBaseURL + "ProjectDetails")
+      .find(projectId === 'add' ? 0 : projectId)
+      .expand("Project($expand=ProjectRegions,ProjectDAOs,ProjectLocations($expand=Location)),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
 
-      let newProject = {
-        "ProjectId": Date().valueOf(),
-        "ProjectTitle": "",
-        "ProjectDescription": "",
-        "LeadAgent": "",
-        "HostPartner": "",
-        "HostOrganisation": "",
-        "StartYear": 0,
-        "EndYear": 0,
-        "AlternativeContact": "",
-        "AlternativeContactEmail": "",
-        "Link": "",
-        "ValidationComments": "",
-        "BudgetLower": 0,
-        "BudgetUpper": 0,
-        "ProjectTypeId": 0,
-        "ProjectSubTypeId": 0,
-        "ProjectStatusId": 0,
-        "ProjectManagerId": 0,
-        "ValidationStatusId": 0,
-        "MAOptionId": 0,
-        "state": "modified"
-      }
-
-      setLoading(false)
-      setEditMode(true)
-      loadProjectDetails(newProject)
+    if (!detailsOnly) {
+      oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
+        "ProjectStatus,ProjectType,ProjectSubType,ResearchType,TargetAudience,Typology,Person," +
+        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
     }
-    else {
 
-      let oHandler = o(apiBaseURL + "ProjectDetails")
-        .find(projectId)
-        .expand("Project,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+    oHandler.get()
+      .then(
+        (oHandler) => {
 
-      if (!detailsOnly) {
-        oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
-          "ProjectStatus,ProjectType,ProjectSubType,ResearchType,Sector,SectorType,TargetAudience,Typology,User," +
-          "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology)")
-      }
+          //Success
+          setLoading(false)
 
-      oHandler.get()
-        .then(
-          (oHandler) => {
-            //Success
-            setLoading(false)
+          //console.log("DATA", oHandler.data)
 
-            //Dispatch results
-            loadProjectDetails(oHandler.data.Project)
-            loadAdaptationDetails(oHandler.data.AdaptationDetails)
-            loadMitigationDetails(oHandler.data.MitigationDetails)
-            loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
-            loadResearchDetails(oHandler.data.ResearchDetails)
-
-            if (!detailsOnly) {
-              loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
-              loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
-              loadCarbonCreditMarket(oHandler.data.Lookups.CarbonCreditMarket)
-              loadCDMMethodology(oHandler.data.Lookups.CDMMethodology)
-              loadCDMStatus(oHandler.data.Lookups.CDMStatus)
-              loadProjectStatus(oHandler.data.Lookups.ProjectStatus)
-              loadProjectTypes(oHandler.data.Lookups.ProjectType)
-              loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
-              loadResearchType(oHandler.data.Lookups.ResearchType)
-              loadSectors(oHandler.data.Lookups.Sector)
-              loadSectorType(oHandler.data.Lookups.SectorType)
-              loadTargetAudience(oHandler.data.Lookups.TargetAudience)
-              loadTypology(oHandler.data.Lookups.Typology)
-
-              loadUsers(oHandler.data.Lookups.User.map(x => { 
-                x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
-                return x
-              }))
-
-              loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
-              loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
-              loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
+          if (this.state.projectId === 'add') {
+            oHandler.data.Project = {
+              "ProjectId": _gf.getRndInteger(1111111, 9999999),
+              "ProjectTitle": "",
+              "ProjectDescription": "",
+              "LeadAgent": "",
+              "HostPartner": "",
+              "HostOrganisation": "",
+              "StartYear": 0,
+              "EndYear": 0,
+              "AlternativeContact": "",
+              "AlternativeContactEmail": "",
+              "Link": "",
+              "ValidationComments": "",
+              "BudgetLower": 0,
+              "BudgetUpper": 0,
+              "ProjectTypeId": 0,
+              "ProjectStatusId": 0,
+              "ProjectSubTypeId": 0,
+              "ProjectManagerId": 0,
+              "ValidationStatusId": 0,
+              "ProjectDAOs": [],
+              "state": "modified"
             }
-          },
-          (ex) => {
-            //Failed
-            setLoading(false)
-            this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
-            console.error("An error occurred while trying to fetch data from the server", ex)
+
+            let { daoid } = this.state
+            if (daoid !== null && daoid !== 'hidden') {
+              oHandler.data.Project.ProjectDAOs.push({
+                ProjectDAOId: 0,
+                ProjectId: oHandler.data.Project.ProjectId,
+                DAOId: this.state.daoid
+              })
+              this.setState({ daoid: null })
+            }
+
+            oHandler.data.Funders = []
+            oHandler.data.AdaptationDetails = []
+            oHandler.data.MitigationDetails = []
+            oHandler.data.MitigationEmissionsData = []
+            oHandler.data.ResearchDetails = []
+
+            setEditMode(true)
           }
-        )
-    }
+
+          //Dispatch results
+          if (!detailsOnly) {
+            loadAdaptationPurpose(oHandler.data.Lookups.AdaptationPurpose)
+            loadCarbonCredit(oHandler.data.Lookups.CarbonCredit)
+            loadCarbonCreditMarket(oHandler.data.Lookups.CarbonCreditMarket)
+            loadCDMMethodology(oHandler.data.Lookups.CDMMethodology)
+            loadCDMStatus(oHandler.data.Lookups.CDMStatus)
+            loadProjectStatus(oHandler.data.Lookups.ProjectStatus)
+            loadProjectTypes(oHandler.data.Lookups.ProjectType)
+            loadProjectSubTypes(oHandler.data.Lookups.ProjectSubType)
+            loadResearchType(oHandler.data.Lookups.ResearchType)
+            loadTargetAudience(oHandler.data.Lookups.TargetAudience)
+            loadTypology(oHandler.data.Lookups.Typology)
+            loadFundingStatus(oHandler.data.Lookups.FundingStatus)
+            loadUsers(oHandler.data.Lookups.Person)
+            loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
+            loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
+            loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
+          }
+
+          loadProjectDetails(oHandler.data.Project)
+          loadProjectFunderDetails(oHandler.data.Funders)
+          loadAdaptationDetails(oHandler.data.AdaptationDetails)
+          loadMitigationDetails(oHandler.data.MitigationDetails)
+          loadMitigationEmissions(oHandler.data.MitigationEmissionsData)
+          loadResearchDetails(oHandler.data.ResearchDetails)
+        },
+        (ex) => {
+          //Failed
+          setLoading(false)
+          this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server.\nPlease try again later.\n(See log for error details)")
+          console.error("An error occurred while trying to fetch data from the server", ex)
+        }
+      )
+
+    //Get (external) Hazards
+    fetch(`${vmsBaseURL}hazards/flat`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        loadHazards(res.items)
+      })
+      .catch(res => {
+        console.log("Error details:", res)
+      })
+
+    //Get (external) Regions
+    fetch(`${vmsBaseURL}regions/flat`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        loadRegions(res.items)
+      })
+      .catch(res => {
+        console.log("Error details:", res)
+      })
+
+    //Get (external) Sectors
+    fetch(`${vmsBaseURL}sectors/flat`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(res => {
+        loadSectors(res.items)
+      })
+      .catch(res => {
+        console.log("Error details:", res)
+      })
   }
 
   componentDidMount() {
@@ -318,7 +413,7 @@ class ProjectDetails extends React.Component {
   saveChanges() {
 
     let { setEditMode, setLoading, loadProjectDetails, loadAdaptationDetails, loadMitigationDetails,
-      loadMitigationEmissions, loadResearchDetails, projectDetails, adaptationDetails,
+      loadMitigationEmissions, loadResearchDetails, projectDetails, projectFunderDetails, adaptationDetails,
       mitigationDetails, emissionsData, researchDetails, resetProjectState, resetAdaptationState,
       resetMitigationState, resetEmissionState, resetResearchState } = this.props
 
@@ -331,11 +426,12 @@ class ProjectDetails extends React.Component {
     setLoading(true)
 
     let modified = false
-    let dataObj = { Id: projectId }
+    let dataObj = { Id: (projectId === 'add' ? 0 : projectId) }
 
     //Add Project
     if (projectDetails.state === 'modified') {
       let projectData = _.clone(projectDetails)
+      projectData.ProjectId = projectId === 'add' ? 0 : projectId
       delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
       dataObj.Project = projectData
       modified = true
@@ -346,7 +442,7 @@ class ProjectDetails extends React.Component {
       let adaptationData = []
       adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         adaptationData.push(item)
       })
       dataObj.AdaptationDetails = adaptationData
@@ -358,7 +454,7 @@ class ProjectDetails extends React.Component {
       let mitigationData = []
       mitigationDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         mitigationData.push(item)
       })
       dataObj.MitigationDetails = mitigationData
@@ -370,7 +466,7 @@ class ProjectDetails extends React.Component {
       let mitigationEmissionsData = []
       emissionsData.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         mitigationEmissionsData.push(item)
       })
       dataObj.MitigationEmissionsData = mitigationEmissionsData
@@ -382,10 +478,23 @@ class ProjectDetails extends React.Component {
       let researchData = []
       researchDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
         researchData.push(item)
       })
       dataObj.ResearchDetails = researchData
+      modified = true
+    }
+
+    //Add Funding
+    if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
+      let funderData = []
+      projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
+        item.ProjectId = projectId === 'add' ? 0 : projectId
+        delete item.state //OData can only bind to the original object spec which does not contain 'state'
+        delete item.key //OData can only bind to the original object spec which does not contain 'key'
+        funderData.push(item)
+      })
+      dataObj.Funders = funderData
       modified = true
     }
 
@@ -395,8 +504,10 @@ class ProjectDetails extends React.Component {
       setEditMode(false)
       o().config({ error: null }) //Reset error config
 
-      //Refresh data to get ID's from DB
-      this.loadData(true)
+      this.setState({ projectId: data.Id }, () => {
+        //Refresh data to get ID's from DB
+        this.loadData(true)
+      })
     }
 
     const errorCallback = (status) => {
@@ -539,42 +650,55 @@ class ProjectDetails extends React.Component {
       case "5":
         this.props.addResearchDetails(projectId)
         break;
+
+      case "6":
+        this.props.addProjectFunderDetails(projectId)
+        break;
     }
   }
 
   render() {
 
-    let { projectDetails, editMode, user } = this.props
+    let { projectDetails, editMode, user, setLinkedLinkedDAOGoalId } = this.props
+    let { daoid, readonly, projectId } = this.state
     let activeTabId = this.state.activeItemTabs
+
+    let tabTo = location.hash.replace(`#/projects/${projectId}`, "")
+    if(tabTo === "") tabTo = "#"
 
     return (
       <>
-        <Container className="mt-2">
+        {/* <Container className="mt-2"> */}
           <Row>
             <Col md="12">
               <Nav pills color="default" className="nav-justified" style={{ border: "1px solid gainsboro", backgroundColor: "whitesmoke", marginBottom: "-20px" }}>
                 <NavItem >
-                  <NavLink to="#" className={classnames({ active: activeTabId === '1' })} onClick={() => { this.toggleTabs('1'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "1" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('1'); }}>
                     Project
                   </NavLink>
                 </NavItem>
+                <NavItem >
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "6" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('6'); }}>
+                    Funding
+                  </NavLink>
+                </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '2' })} onClick={() => { this.toggleTabs('2'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "2" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('2'); }}>
                     Adaptation
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '3' })} onClick={() => { this.toggleTabs('3'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "3" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('3'); }}>
                     Mitigation
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '4' })} onClick={() => { this.toggleTabs('4'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "4" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('4'); }}>
                     Emissions
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink to="#" className={classnames({ active: activeTabId === '5' })} onClick={() => { this.toggleTabs('5'); }}>
+                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
                     Research
                   </NavLink>
                 </NavItem>
@@ -582,16 +706,44 @@ class ProjectDetails extends React.Component {
 
               <TabContent activeItem={activeTabId}>
                 <TabPane tabId="1">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                    Back to list
                   </Button>
+
+                  {(daoid !== 'hidden') &&
+                    <Button
+                      style={{ margin: "0px 0px 20px 15px" }}
+                      color={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
+                      size="sm"
+                      onClick={() => { this.setState({ doaModal: true }) }}
+                    >
+                      <i
+                        className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
+                        aria-hidden="true"
+                        style={{ marginRight: "15px" }}
+                      />
+                      Linked DAO Details
+                  </Button>
+                  }
+
                   <ProjectDetailsTab />
                   <br />
                   <br />
                   <br />
                 </TabPane>
+                <TabPane tabId="6">
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                  </Button>
+                  <ProjectFundersTab />
+                  <br />
+                  <br />
+                  <br />
+                </TabPane>
                 <TabPane tabId="2">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
@@ -600,7 +752,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="3">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <MitigationDetailsTab projectId={projectDetails.ProjectId} />
@@ -609,7 +761,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="4">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
@@ -618,7 +770,7 @@ class ProjectDetails extends React.Component {
                   <br />
                 </TabPane>
                 <TabPane tabId="5">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="secondary" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
                     <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
                   </Button>
                   <ResearchDetailsTab projectId={projectDetails.ProjectId} />
@@ -629,10 +781,10 @@ class ProjectDetails extends React.Component {
               </TabContent>
             </Col>
           </Row>
-        </Container>
+        {/* </Container> */}
 
         {
-          ((user && !user.expired) /*|| _gf.isLocalhost()*/) &&
+          ((user && !user.expired) && !readonly) &&
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">
@@ -640,7 +792,7 @@ class ProjectDetails extends React.Component {
 
                   {!editMode &&
                     <div>
-                      <Button data-tip="Edit" size="sm" floating color="default" onClick={this.editClick}>
+                      <Button data-tip="Edit" size="sm" floating color="" onClick={this.editClick} style={{ backgroundColor: DEAGreen }}>
                         <Fa icon="pencil" />
                       </Button>
                       <br />
@@ -648,7 +800,8 @@ class ProjectDetails extends React.Component {
 
                   {(activeTabId !== "1" && editMode) &&
                     <div>
-                      <Button data-tip="Add Adaptation Details" size="sm" floating color="primary" onClick={this.addClick}>
+                      <Button data-tip="Add Adaptation Details" size="sm" floating color="" onClick={this.addClick}
+                        style={{ backgroundColor: DEAGreen }}>
                         <Fa icon="plus" />
                       </Button>
                     </div>
@@ -656,11 +809,11 @@ class ProjectDetails extends React.Component {
 
                   {editMode &&
                     <div>
-                      <Button data-tip="Discard changes" size="sm" floating color="danger" onClick={this.discardClick}>
+                      <Button data-tip="Discard changes" size="sm" floating color="" onClick={this.discardClick} style={{ backgroundColor: "grey" }}>
                         <Fa icon="trash" />
                       </Button>
                       <br />
-                      <Button data-tip="Save changes" size="sm" floating color="default" onClick={this.saveClick}>
+                      <Button data-tip="Save changes" size="sm" floating color="" onClick={this.saveClick} style={{ backgroundColor: DEAGreen }}>
                         <Fa icon="save" />
                       </Button>
                     </div>}
@@ -672,41 +825,79 @@ class ProjectDetails extends React.Component {
 
         <Container>
           <Modal fade={false} isOpen={this.state.discardModal} centered>
-            <ModalHeader toggle={this.toggle}>Confirm Discard</ModalHeader>
+            <ModalHeader>Confirm Discard</ModalHeader>
             <ModalBody>
               Are you sure you want to discard all changes?
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ discardModal: false })} >Cancel</Button>
-              <Button size="sm" style={{ width: "100px" }} color="default" onClick={this.discardChanges} >Discard</Button>
+              <Button size="sm" style={{ width: "100px" }} color="" onClick={() => this.setState({ discardModal: false })} style={{ backgroundColor: "grey" }} >Cancel</Button>
+              <Button size="sm" style={{ width: "100px" }} color="" onClick={this.discardChanges} style={{ backgroundColor: DEAGreen }} >Discard</Button>
             </ModalFooter>
           </Modal>
         </Container>
 
         <Container>
           <Modal fade={false} isOpen={this.state.saveModal} centered>
-            <ModalHeader toggle={this.toggle}>Confirm Save</ModalHeader>
+            <ModalHeader>Confirm Save</ModalHeader>
             <ModalBody>
               Are you sure you want to save all changes?
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" style={{ width: "100px" }} color="secondary" onClick={() => this.setState({ saveModal: false })} >Cancel</Button>
-              <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} >Save</Button>
+              <Button size="sm" style={{ width: "100px" }} color="" onClick={() => this.setState({ saveModal: false })} style={{ backgroundColor: "grey" }} >Cancel</Button>
+              <Button size="sm" style={{ width: "100px" }} color="" onClick={this.saveChanges} style={{ backgroundColor: DEAGreen }} >Save</Button>
             </ModalFooter>
           </Modal>
         </Container>
 
         <Container>
-          <Modal fade={false} isOpen={this.state.messageModal} toggle={this.toggle} centered>
-            <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
+          <Modal fade={false} isOpen={this.state.messageModal} centered>
+            <ModalHeader>{this.state.title}</ModalHeader>
             <ModalBody>
               <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>
                 {_gf.StringToHTML(this.state.message)}
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" style={{ width: "100px" }} color="default" onClick={() => this.setState({ messageModal: false })} >Close</Button>
+              <Button size="sm" style={{ width: "100px" }} color="" onClick={() => this.setState({ messageModal: false })} style={{ backgroundColor: DEAGreen }} >Close</Button>
             </ModalFooter>
+          </Modal>
+        </Container>
+
+        <Container>
+          <Modal fade={false} isOpen={this.state.doaModal} toggle={() => { this.setState({ doaModal: false }) }} size="lg" centered>
+            <ModalHeader toggle={() => { this.setState({ doaModal: false }) }}>
+              Linked DAO Details
+              {projectDetails.LinkedDAOGoalId === null &&
+                <div
+                  style={{
+                    backgroundColor: "red",
+                    borderRadius: "5px",
+                    padding: "5px 10px 4px 10px",
+                    margin: "-33px 0px 0px 220px",
+                    fontSize: "14px"
+                  }}>
+                  No DAO Linked
+                </div>
+              }
+              {projectDetails.LinkedDAOGoalId !== null &&
+                <div
+                  style={{
+                    backgroundColor: "green",
+                    color: "white",
+                    borderRadius: "5px",
+                    padding: "5px 10px 4px 10px",
+                    margin: "-33px 0px 0px 220px",
+                    fontSize: "14px"
+                  }}>
+                  DAO Linked
+                </div>
+              }
+            </ModalHeader>
+            <ModalBody>
+              <LinkedDAO
+                ProjectDAOs={projectDetails.ProjectDAOs}
+                linkCallback={(id, action) => { setLinkedLinkedDAOGoalId({ value: id, action, state: 'modified' }) }} />
+            </ModalBody>
           </Modal>
         </Container>
 

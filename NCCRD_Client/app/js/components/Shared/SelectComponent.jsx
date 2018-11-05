@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as ACTION_TYPES from "../../constants/action-types"
-import { UILookup } from "../../constants/ui_config.js"
+import { UILookup } from "../../config/ui_config.js"
+
+const _gf = require('../../globalFunctions')
 
 //AntD Tree-Select
 import Select from 'antd/lib/select'
@@ -20,7 +21,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: key, payload })
     },
     setEditList: (payload) => {
-      dispatch({ type: ACTION_TYPES.SET_EDIT_LIST, payload })
+      dispatch({ type: "SET_EDIT_LIST", payload })
     }
   }
 }
@@ -74,15 +75,6 @@ class SelectComponent extends React.Component {
     document.removeEventListener('click', this.onClick);
   }
 
-  componentDidUpdate() {
-
-    let { selectedValue, data } = this.props
-
-    // if (selectedValue !== 0 && this.preProcessData(data).filter(x => x.id === selectedValue).length === 0) {
-    //   this.onSelect(null)
-    // }
-  }
-
   preProcessData(data) {
 
     let preProcessedItems = []
@@ -92,22 +84,12 @@ class SelectComponent extends React.Component {
 
       let parentKeys = Object.keys(item).filter(key => key.startsWith("Parent") && key.endsWith("Id"))
 
-      if (parentKeys.length > 0) {
-        //Push item with parentId
-        preProcessedItems.push({
-          id: item[Object.keys(item)[0]],
-          value: item[Object.keys(item)[1]],
-          parentId: item[parentKeys[0]]
-        })
-      }
-      else {
-        //Push item without parentId
-        preProcessedItems.push({
-          id: item[Object.keys(item)[0]],
-          value: item[Object.keys(item)[1]],
-          parentId: null
-        })
-      }
+      //Push item
+      preProcessedItems.push({
+        id: item[Object.keys(item)[0]],
+        value: Object.keys(item).includes("Value") ? item.Value : item[Object.keys(item)[1]],
+        parentId: parentKeys.length > 0 ? item[parentKeys[0]] : null
+      })
     })
 
     return preProcessedItems
@@ -160,15 +142,6 @@ class SelectComponent extends React.Component {
     }
   }
 
-  getFontColour() {
-    if (this.props.editMode) {
-      return "#2BBBAD"
-    }
-    else {
-      return "black"
-    }
-  }
-
   onSelect(value) {
 
     let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
@@ -179,7 +152,9 @@ class SelectComponent extends React.Component {
         selectedValue = -1
       }
       else {
+
         let dataItem = data.filter(x => x.Value === value)[0]
+
         if (typeof dataItem !== 'undefined' && dataItem !== null) {
           selectedValue = parseInt(dataItem[Object.keys(dataItem)[0]])
         }

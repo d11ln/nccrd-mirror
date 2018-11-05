@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { UILookup } from "../../constants/ui_config.js"
+import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
+
+const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
     let { globalData: { editMode } } = state
@@ -23,8 +25,6 @@ class RangeComponent extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.getFontColour = this.getFontColour.bind(this)
     }
 
     getPrefix() {
@@ -70,15 +70,6 @@ class RangeComponent extends React.Component {
         }
     }
 
-    getFontColour() {
-        if (this.props.editMode) {
-            return "#2BBBAD"
-        }
-        else {
-            return "black"
-        }
-    }
-
     valueFromChange(event) {
 
         let { setValueFromKey, setValueFrom, parentId, editMode } = this.props
@@ -117,14 +108,14 @@ class RangeComponent extends React.Component {
 
                 {this.getLabel()}
 
-                <div className="row">
+                <div className="row" style={{ marginBottom: "-15px"}}>
 
                     <span style={{ width: "16px" }} />
 
                     {this.getPrefix()}
 
                     <Input size="sm" id={this.getId("from")} readOnly={!editMode}
-                        style={{ height: "22px", marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                        style={{ height: "22px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                         value={this.fixNullOrUndefinedValue(valueFrom)}
                         onChange={this.valueFromChange.bind(this)} />
 
@@ -135,7 +126,7 @@ class RangeComponent extends React.Component {
                     {this.getPrefix()}
 
                     <Input size="sm" id={this.getId("to")} readOnly={!editMode}
-                        style={{ height: "22px", marginTop: "-31px", marginBottom: "-25px", color: this.getFontColour(), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                        style={{ height: "22px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                         value={this.fixNullOrUndefinedValue(valueTo)}
                         onChange={this.valueToChange.bind(this)} />
 

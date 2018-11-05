@@ -15,15 +15,14 @@ namespace NCCRD.Services.DataV2.ViewModels
         public CarbonCreditMarket[] CarbonCreditMarket { get; set; }
         public CDMMethodology[] CDMMethodology { get; set; }
         public CDMStatus[] CDMStatus { get; set; }
+        public FundingStatus[] FundingStatus { get; set; }
         public ProjectStatus[] ProjectStatus { get; set; }
         public ProjectType[] ProjectType { get; set; }
         public ProjectSubType[] ProjectSubType { get; set; }
         public ResearchType[] ResearchType { get; set; }
-        public Sector[] Sector { get; set; }
-        public SectorType[] SectorType { get; set; }
         public TargetAudience[] TargetAudience { get; set; }
         public Typology[] Typology { get; set; }
-        public User[] User { get; set; }
+        public Person[] Person { get; set; }
         public ValidationStatus[] ValidationStatus { get; set; }
         public VoluntaryGoldStandard[] VoluntaryGoldStandard { get; set; }
         public VoluntaryMethodology[] VoluntaryMethodology { get; set; }

@@ -109,6 +109,19 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
+            //Save Person
+            if (data.Person != null)
+            {
+                foreach (var person in data.Person)
+                {
+                    var result = SavePersonAsync(person);
+                    if (!(result is CreatedODataResult<Person> || result is UpdatedODataResult<Person>))
+                    {
+                        return result;
+                    }
+                }
+            }
+
             //Save ProjectStatus
             if (data.ProjectStatus != null)
             {
@@ -161,32 +174,6 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
-            //Save Sector
-            if (data.Sector != null)
-            {
-                foreach (var sector in data.Sector)
-                {
-                    var result = SaveSectorAsync(sector);
-                    if (!(result is CreatedODataResult<Sector> || result is UpdatedODataResult<Sector>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            //Save SectorType
-            if (data.SectorType != null)
-            {
-                foreach (var sectorType in data.SectorType)
-                {
-                    var result = SaveSectorTypeAsync(sectorType);
-                    if (!(result is CreatedODataResult<SectorType> || result is UpdatedODataResult<SectorType>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
             //Save TargetAudience
             if (data.TargetAudience != null)
             {
@@ -212,9 +199,6 @@ namespace NCCRD.Services.DataV2.Controllers
                     }
                 }
             }
-
-            //Save User
-            //...
 
             //Save ValidationStatus
             if (data.ValidationStatus != null)
@@ -267,15 +251,14 @@ namespace NCCRD.Services.DataV2.Controllers
             var carbonCreditMarket = _context.CarbonCreditMarket.OrderBy(x => x.Value).ToArray();
             var cdmMethodology = _context.CDMMethodology.OrderBy(x => x.Value).ToArray();
             var cdmStatus = _context.CDMStatus.OrderBy(x => x.Value).ToArray();
-            var projectStatus = _context.ProjectStatus.OrderBy(x => x.Value).ToArray();
+            var fundingStatus = _context.FundingStatus.OrderByDescending(x => x.FundingStatusId).ToArray();
+            var projectStatus = _context.ProjectStatus.OrderBy(x => x.ProjectStatusId).ToArray();
             var projectType = _context.ProjectType.OrderBy(x => x.Value).ToArray();
             var projectSubType = _context.ProjectSubType.OrderBy(x => x.Value).ToArray();
             var researchType = _context.ResearchType.OrderBy(x => x.Value).ToArray();
-            var sector = _context.Sector.OrderBy(x => x.Value).ToArray();
-            var sectorType = _context.SectorType.OrderBy(x => x.Name).ToArray();
             var targetAudience = _context.TargetAudience.OrderBy(x => x.Value).ToArray();
             var typology = _context.Typology.OrderBy(x => x.Value).ToArray();
-            var user = _context.Users.OrderBy(x => x.FirstName).ThenBy(x => x.Surname).ToArray();
+            var user = _context.Person.OrderBy(x => x.FirstName).ThenBy(x => x.Surname).ToArray();
             var validationStatus = _context.ValidationStatus.OrderBy(x => x.Value).ToArray();
             var voluntaryGoldStandard = _context.VoluntaryGoldStandard.OrderBy(x => x.Value).ToArray();
             var voluntaryMethodology = _context.VoluntaryMethodology.OrderBy(x => x.Value).ToArray();
@@ -288,15 +271,14 @@ namespace NCCRD.Services.DataV2.Controllers
                 CarbonCreditMarket = carbonCreditMarket,
                 CDMMethodology = cdmMethodology,
                 CDMStatus = cdmStatus,
+                FundingStatus = fundingStatus,
                 ProjectStatus = projectStatus,
                 ProjectSubType = projectSubType,
                 ProjectType = projectType,
                 ResearchType = researchType,
-                Sector = sector,
-                SectorType = sectorType,
                 TargetAudience = targetAudience,
                 Typology = typology,
-                User = user,
+                Person = user,
                 ValidationStatus = validationStatus,
                 VoluntaryGoldStandard = voluntaryGoldStandard,
                 VoluntaryMethodology = voluntaryMethodology
@@ -428,6 +410,31 @@ namespace NCCRD.Services.DataV2.Controllers
             }
         }
 
+        private IActionResult SavePersonAsync(Person item)
+        {
+            //Check that Value/Name is unique
+            if (_context.Person.AsNoTracking().FirstOrDefault(x => x.EmailAddress == item.EmailAddress && x.PersonId != item.PersonId) != null)
+            {
+                return BadRequest("Duplicate entry/value found.");
+            }
+
+            var exiting = _context.Person.FirstOrDefault(x => x.PersonId == item.PersonId);
+            if (exiting == null)
+            {
+                //ADD
+                HelperExtensions.ClearIdentityValue(ref item);
+                HelperExtensions.ClearNullableInts(ref item);
+                _context.Person.Add(item);
+                return Created(item);
+            }
+            else
+            {
+                //UPDATE
+                _context.Entry(exiting).CurrentValues.SetValues(item);
+                return Updated(exiting);
+            }
+        }
+
         private IActionResult SaveProjectStatusAsync(ProjectStatus item)
         {
             //Check that Value/Name is unique
@@ -518,56 +525,6 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref item);
                 HelperExtensions.ClearNullableInts(ref item);
                 _context.ResearchType.Add(item);
-                return Created(item);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(item);
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveSectorAsync(Sector item)
-        {
-            //Check that Value/Name is unique
-            if (_context.Sector.AsNoTracking().FirstOrDefault(x => x.Value == item.Value && x.SectorId != item.SectorId) != null)
-            {
-                return BadRequest("Duplicate entry/value found.");
-            }
-
-            var exiting = _context.Sector.FirstOrDefault(x => x.SectorId == item.SectorId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref item);
-                HelperExtensions.ClearNullableInts(ref item);
-                _context.Sector.Add(item);
-                return Created(item);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(item);
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveSectorTypeAsync(SectorType item)
-        {
-            //Check that Value/Name is unique
-            if (_context.SectorType.AsNoTracking().FirstOrDefault(x => x.Name == item.Name && x.SectorTypeId != item.SectorTypeId) != null)
-            {
-                return BadRequest("Duplicate entry/value found.");
-            }
-
-            var exiting = _context.SectorType.FirstOrDefault(x => x.SectorTypeId == item.SectorTypeId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref item);
-                HelperExtensions.ClearNullableInts(ref item);
-                _context.SectorType.Add(item);
                 return Created(item);
             }
             else

@@ -12,10 +12,11 @@ module.exports = {
   devtool: 'inline-source-map',
   mode,
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    port: 8085
   },
   entry: {
-    app: ['./js/index.jsx'],
+    app: ["babel-polyfill", './js/index.jsx'],
     silentRenew: ["./silent_renew/silent_renew.js"],
     react: [
       'react',
@@ -80,8 +81,7 @@ module.exports = {
       use: [
         'file-loader'
       ]
-    },
-    ]
+    }]
   },
 
   plugins: [

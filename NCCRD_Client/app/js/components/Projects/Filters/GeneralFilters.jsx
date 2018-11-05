@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../constants/ui_config';
+import { UILookup } from '../../../config/ui_config.js'
 
 //Filters
 import TitleFilter from './TitleFilter.jsx'

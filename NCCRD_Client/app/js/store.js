@@ -12,7 +12,8 @@ const store = createStore(
 
         globalData: {
             loading: false,
-            editMode: false
+            editMode: false,
+            daoid: null
         },
 
         navigation: {
@@ -35,6 +36,10 @@ const store = createStore(
             start: 0,
             end: 25,
             listScrollPos: 0
+        },
+
+        projectFundersData: {
+            projectFunderDetails: []
         },
 
         adaptationData: {
@@ -74,7 +79,8 @@ const store = createStore(
             voluntaryMethodology: [],
             voluntaryGoldStandard: [],
             researchType: [],
-            targetAudience: []
+            targetAudience: [],
+            hazards: []
         },
 
         filterData: {

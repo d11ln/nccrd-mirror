@@ -22,35 +22,55 @@ namespace NCCRD.Services.DataV2.Controllers
     [EnableCors("CORSPolicy")]
     public class ProjectDetailsController : ODataController
     {
+        private bool _projectAdded = false;
+
         public SQLDBContext _context { get; }
         public ProjectDetailsController(SQLDBContext context)
         {
             _context = context;
         }
 
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 0)]
         [ODataRoute("({id})")]
         public ProjectDetails Get(int id)
         {
             //Get project and details
-            var project = _context.Project.FirstOrDefault(x => x.ProjectId == id);
-            var adaptations = _context.AdaptationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.AdaptationDetailId).ToArray();
-            var mitigations = _context.MitigationDetails.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationDetailId).ToArray();
-            var emissions = _context.MitigationEmissionsData.Where(x => x.ProjectId == id).OrderBy(x => x.MitigationEmissionsDataId).ToArray();
-            var research = _context.ResearchDetails.Where(x => x.ProjectId == id).OrderBy(x => x.ResearchDetailId).ToArray();
+            var project = _context.Project
+                .Include(x => x.ProjectRegions)
+                .Include(x => x.ProjectDAOs)
+                .Include(x => x.ProjectLocations).ThenInclude(x => x.Location)
+                .FirstOrDefault(x => x.ProjectId == id);
+
+            var funders = _context.ProjectFunder.Include(x => x.Funder).Where(x => x.ProjectId == id)
+                .OrderBy(x => x.FunderId).Select(x => x.Funder).ToArray();
+
+            var adaptations = _context.AdaptationDetails.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.AdaptationDetailId).ToArray();
+
+            var mitigations = _context.MitigationDetails.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.MitigationDetailId).ToArray();
+
+            var emissions = _context.MitigationEmissionsData.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.MitigationEmissionsDataId).ToArray();
+
+            var research = _context.ResearchDetails.Where(x => x.ProjectId == id)
+                .OrderBy(x => x.ResearchDetailId).ToArray();
 
             var lookups = new LookupsController(_context).GetLookups();
 
-            return new ProjectDetails()
+            var res =  new ProjectDetails()
             {
                 Id = id == 0 ? int.Parse(DateTime.Now.ToString("HHmmssfff")) : id,
                 Project = project,
+                Funders = funders,
                 AdaptationDetails = adaptations,
                 MitigationDetails = mitigations,
                 MitigationEmissionsData = emissions,
                 ResearchDetails = research,
                 Lookups = lookups
             };
+
+            return res;
         }
 
         //Add/Update
@@ -58,6 +78,8 @@ namespace NCCRD.Services.DataV2.Controllers
         [EnableQuery]
         public async Task<IActionResult> Post([FromBody]ProjectDetails data)
         {
+            _projectAdded = false;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -73,8 +95,68 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
+            if (_projectAdded)
+            {
+                //Save new Project to get valid Id
+                //Update ProjectId where needed
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    data.Id = data.Project.ProjectId;
+
+                    if(data.AdaptationDetails != null)
+                    {
+                        foreach(var item in data.AdaptationDetails)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+
+                    if (data.MitigationDetails != null)
+                    {
+                        foreach (var item in data.MitigationDetails)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+
+                    if (data.MitigationEmissionsData != null)
+                    {
+                        foreach (var item in data.MitigationEmissionsData)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+
+                    if (data.ResearchDetails != null)
+                    {
+                        foreach (var item in data.ResearchDetails)
+                        {
+                            item.ProjectId = data.Id;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+            //Save Funders
+            if (data.Funders != null)
+            {
+                foreach (var funder in data.Funders)
+                {
+                    var result = SaveFundersAsync(funder, data.Id);
+                    if (!(result is CreatedODataResult<Funder> || result is UpdatedODataResult<Funder>))
+                    {
+                        return result;
+                    }
+                }
+            }
+
             //Save Adaptations
-            if(data.AdaptationDetails != null)
+            if (data.AdaptationDetails != null)
             {
                 foreach(var adaptation in data.AdaptationDetails)
                 {
@@ -125,12 +207,24 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
-            await _context.SaveChangesAsync();
-            return Ok("success");
+            try
+            {
+                await _context.SaveChangesAsync();
+                RemovedUnusedLocations();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            //return data object
+            return Ok(data);
         }
 
         private IActionResult SaveProjectAsync(Project project)
         {
+            IActionResult result = null;
+
             //Check that ProjectTitle is unique
             if (_context.Project.AsNoTracking().FirstOrDefault(x => x.ProjectTitle == project.ProjectTitle && x.ProjectId != project.ProjectId) != null)
             {
@@ -144,14 +238,179 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref project);
                 HelperExtensions.ClearNullableInts(ref project);
                 _context.Project.Add(project);
-                //await _context.SaveChangesAsync();
-                return Created(project);
+                _projectAdded = true;
+                result = Created(project);
             }
             else
             {
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(project);
-                //await _context.SaveChangesAsync();
+                result = Updated(exiting);
+            }
+
+            //Save project related data
+            SaveProjectRegions(project);
+            SaveProjectDAOs(project);
+            SaveProjectLocations(project);
+
+            return result;
+        }
+
+        private void SaveProjectRegions(Project project)
+        {
+            //Add new mappings
+            if(project.ProjectRegions == null)
+            {
+                project.ProjectRegions = new List<ProjectRegion>();
+            }
+
+            for(var i = 0; i < project.ProjectRegions.Count; i++)
+            {
+                var pr = project.ProjectRegions.ToArray()[i];
+
+                if(!_context.ProjectRegion.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId ))
+                {
+                    HelperExtensions.ClearIdentityValue(ref pr);
+                    HelperExtensions.ClearNullableInts(ref pr);
+                    _context.ProjectRegion.Add(pr);
+                }
+            }
+
+            //Remove deleted mappings
+            foreach(var pr in _context.ProjectRegion.Where(x => x.ProjectId == project.ProjectId))
+            {
+                if(!project.ProjectRegions.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
+                {
+                    _context.Remove(pr);
+                }
+            }
+        }
+
+        private void SaveProjectDAOs(Project project)
+        {
+            //Add new mappings
+            if (project.ProjectDAOs == null)
+            {
+                project.ProjectDAOs = new List<ProjectDAO>();
+            }
+
+            for (var i = 0; i < project.ProjectDAOs.Count; i++)
+            {
+                var dao = project.ProjectDAOs.ToArray()[i];
+
+                if (!_context.ProjectDAOs.Any(x => x.ProjectId == dao.ProjectId && x.DAOId == dao.DAOId))
+                {
+                    HelperExtensions.ClearIdentityValue(ref dao);
+                    HelperExtensions.ClearNullableInts(ref dao);
+                    _context.ProjectDAOs.Add(dao);
+                }
+            }
+
+            //Remove deleted mappings
+            foreach (var pr in _context.ProjectDAOs.Where(x => x.ProjectId == project.ProjectId))
+            {
+                if (!project.ProjectDAOs.Any(x => x.ProjectId == pr.ProjectId && x.DAOId == pr.DAOId))
+                {
+                    _context.Remove(pr);
+                }
+            }
+        }
+
+        private void SaveProjectLocations(Project project)
+        {
+            //Add new mappings
+            if (project.ProjectLocations == null)
+            {
+                project.ProjectLocations = new List<ProjectLocation>();
+            }
+
+            //Save new locations and link existing ones before saving ProjectLocations
+            SaveLocations(project.ProjectLocations.ToList());
+
+            for (var i = 0; i < project.ProjectLocations.Count; i++)
+            {
+                var pl = project.ProjectLocations.ToArray()[i];
+
+                if (!_context.ProjectLocation.Any(x => x.ProjectId == pl.ProjectId && x.LocationId == pl.LocationId))
+                {
+                    HelperExtensions.ClearIdentityValue(ref pl);
+                    HelperExtensions.ClearNullableInts(ref pl);
+                    _context.ProjectLocation.Add(pl);
+                }
+            }
+
+            //Remove deleted mappings
+            foreach (var pr in _context.ProjectLocation.Where(x => x.ProjectId == project.ProjectId))
+            {
+                if (!project.ProjectLocations.Any(x => x.ProjectId == pr.ProjectId && x.LocationId == pr.LocationId))
+                {
+                    _context.Remove(pr);
+                }
+            }
+        }
+
+        private void SaveLocations(List<ProjectLocation> projectLocations)
+        {
+            foreach(var prLoc in projectLocations)
+            {
+                var loc = prLoc.Location;
+
+                //Check if location exists
+                var exiting = _context.Location.FirstOrDefault(l => l.LocationId == loc.LocationId);
+                               
+                if(exiting == null)
+                {
+                    //ADD
+                    HelperExtensions.ClearIdentityValue(ref loc);
+                    HelperExtensions.ClearNullableInts(ref loc);
+                    _context.Location.Add(loc);
+
+                    //Have to save to get actual/valid ID
+                    _context.SaveChanges(); 
+
+                    //Update references
+                    prLoc.Location = loc;
+                    prLoc.LocationId = loc.LocationId;
+                    
+                }
+                else
+                {
+                    //UPDATE
+                    _context.Entry(exiting).CurrentValues.SetValues(loc);
+                }             
+            }         
+        }
+
+        private void RemovedUnusedLocations()
+        {
+            var usedLocationIDs = _context.ProjectLocation.Select(pl => pl.LocationId).Distinct().ToList();
+            var unusedLocations = _context.Location.Where(l => !usedLocationIDs.Contains(l.LocationId)).ToArray();
+
+            _context.Location.RemoveRange(unusedLocations);
+            _context.SaveChangesAsync();
+        }
+
+        private IActionResult SaveFundersAsync(Funder funder, int projectId)
+        {
+            var exiting = _context.Funders.FirstOrDefault(x => x.FunderId == funder.FunderId);
+            if (exiting == null)
+            {
+                //ADD
+                HelperExtensions.ClearIdentityValue(ref funder);
+                HelperExtensions.ClearNullableInts(ref funder);
+                _context.Funders.Add(funder);
+                _context.ProjectFunder.Add(new ProjectFunder
+                {
+                    Funder = funder,
+                    ProjectId = projectId
+                });
+
+                return Created(funder);
+            }
+            else
+            {
+                //UPDATE
+                _context.Entry(exiting).CurrentValues.SetValues(funder);
                 return Updated(exiting);
             }
         }

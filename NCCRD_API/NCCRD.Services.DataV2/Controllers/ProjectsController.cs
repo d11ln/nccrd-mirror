@@ -4,15 +4,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NCCRD.Services.DataV2.Database.Contexts;
 using NCCRD.Services.DataV2.Database.Models;
 using NCCRD.Services.DataV2.Extensions;
 using NCCRD.Services.DataV2.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -25,9 +30,12 @@ namespace NCCRD.Services.DataV2.Controllers
     public class ProjectsController : ODataController
     {
         public SQLDBContext _context { get; }
-        public ProjectsController(SQLDBContext context)
+        IConfiguration _config { get; }
+
+        public ProjectsController(SQLDBContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         [HttpGet]
@@ -57,6 +65,177 @@ namespace NCCRD.Services.DataV2.Controllers
             return _context.Project
                 .Where(x => projectIDs.Contains(x.ProjectId))
                 .AsQueryable();
+        }
+
+        [HttpPost]
+        [EnableQuery]
+        public IQueryable<Project> Filter([FromBody] Filters filters)
+        {
+            string titleFilter = filters.title;
+            int statusFilter = filters.status;
+            int typologyFilter = filters.typology;
+            int regionFilter = filters.region;
+            int sectorFilter = filters.sector;
+            Guid daoidFilter = filters.daoid != null ? new Guid(filters.daoid) : Guid.Empty;
+
+            //REGION//
+            var regionProjectIds = new List<int>();
+            if (regionFilter > 0)
+            {
+                //Get all RegionIds (including children)
+                var allRegionIDs = GetChildren(regionFilter, GetVMSData("regions/flat").Result).Select(r => r).Distinct().ToList();
+                allRegionIDs.Add(regionFilter);
+
+                //Get all ProjectIds assigned to these Regions and/or Typology
+                regionProjectIds = _context.ProjectRegion.Where(p => allRegionIDs.Contains(p.RegionId)).Select(p => p.ProjectId).Distinct().ToList();
+            }
+
+            //SECTOR//
+            var sectorProjectIds = new List<int>();
+            if (sectorFilter > 0)
+            {
+                var allSectorIDs = GetChildren(sectorFilter, GetVMSData("sectors/flat").Result).Select(r => r).Distinct().ToList();
+                allSectorIDs.Add(sectorFilter);
+
+                sectorProjectIds.AddRange(_context.MitigationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.AdaptationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
+                sectorProjectIds.AddRange(_context.ResearchDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
+
+                //Remove duplicates
+                sectorProjectIds = sectorProjectIds.Distinct().ToList();
+            }
+
+            //TYPOLOGY//
+            var typologyProjectIds = new List<int>();
+            if (typologyFilter > 0)
+            {
+                if (_context.Typology.FirstOrDefault(x => x.TypologyId == typologyFilter).Value == "Adaptation")
+                {
+                    typologyProjectIds.AddRange(_context.AdaptationDetails.Select(x => x.ProjectId).Distinct().ToList());
+                }
+                else if (_context.Typology.FirstOrDefault(x => x.TypologyId == typologyFilter).Value == "Mitigation")
+                {
+                    typologyProjectIds.AddRange(_context.MitigationDetails.Select(x => x.ProjectId).Distinct().ToList());
+                }
+                else if (_context.Typology.FirstOrDefault(x => x.TypologyId == typologyFilter).Value == "Research")
+                {
+                    typologyProjectIds.AddRange(_context.ResearchDetails.Select(x => x.ProjectId).Distinct().ToList());
+                }
+
+                //Remove duplicates
+                typologyProjectIds = typologyProjectIds.Distinct().ToList();
+            }
+
+            //STATUS//
+            var statusProjectIds = new List<int>();
+            if (statusFilter > 0)
+            {
+                statusProjectIds.AddRange(_context.AdaptationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
+                statusProjectIds.AddRange(_context.MitigationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
+            }
+
+
+            //GET PORJECTS FILTERED//
+            //Retrieve project details and filter on query params
+            return _context.Project.OrderBy(p => p.ProjectTitle)
+                        .Where(p =>
+                            (string.IsNullOrEmpty(titleFilter) || p.ProjectTitle.ToLower().Contains(titleFilter.ToLower())) &&
+                            (statusFilter == 0 || statusProjectIds.Contains(p.ProjectId)) &&
+                            (regionFilter == 0 || regionProjectIds.Contains(p.ProjectId)) &&
+                            (sectorFilter == 0 || sectorProjectIds.Contains(p.ProjectId)) &&
+                            (typologyFilter == 0 || typologyProjectIds.Contains(p.ProjectId)) &&
+                            (daoidFilter == Guid.Empty || p.ProjectDAOs.Any(dao => dao.DAOId == daoidFilter))
+                        );
+        }
+
+        [HttpGet]
+        [EnableQuery]
+        public JsonResult GeoJson()
+        {
+            var typologyData = _context.Typology.ToList();
+            var geoJSON = _context.ProjectLocation
+                            .Include(pl => pl.Project)
+                            .Include(pl => pl.Project.AdaptationDetails)
+                            .Include(pl => pl.Project.MitigationDetails)
+                            .Include(pl => pl.Project.ResearchDetails)
+                            .Include(pl => pl.Project.ProjectRegions)
+                            .Select(pl => new
+                            {
+                                type = "Feature",
+                                geometry = new
+                                {
+                                    type = "Point",
+                                    coordinates = new double[] {
+                                        (double)pl.Location.LatCalculated,
+                                        (double)pl.Location.LonCalculated
+                                    }
+                                },
+                                properties = new
+                                {
+                                    id = pl.ProjectId,
+                                    name = pl.Project.ProjectTitle,
+                                    regions = pl.Project.ProjectRegions.Select(pr => pr.RegionId).ToArray(),
+                                    sectors = GetProjectSectors(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails),
+                                    typology = GetProjectTypology(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails, typologyData),
+                                    status = pl.Project.ProjectStatusId
+                                },
+                                data = new
+                                {
+                                    budgetLower = pl.Project.BudgetLower,
+                                    budgetUpper = pl.Project.BudgetUpper,
+                                    startYear = pl.Project.StartYear,
+                                    endYear = pl.Project.EndYear
+                                },
+                                adaptation = pl.Project
+                                    .AdaptationDetails
+                                    .Select(a => new
+                                    {
+                                        hazard = a.HazardId
+                                    }),
+                                mitigation = pl.Project
+                                    .MitigationEmissionsData
+                                    .Select(e => new
+                                    {
+                                        year = e.Year,
+                                        CO2 = (double)e.CO2
+                                    })
+                            })
+                            .Distinct()
+                            .ToList();
+
+            return new JsonResult(geoJSON);
+        }
+
+        private int[] GetProjectSectors(IEnumerable<AdaptationDetail> adaptations, IEnumerable<MitigationDetail> mitigations, IEnumerable<ResearchDetail> research)
+        {
+            var sectors = new List<int>();
+
+            sectors.AddRange(adaptations.Where(a => a.SectorId != null).Select(a => (int)a.SectorId));
+            sectors.AddRange(mitigations.Where(m => m.SectorId != null).Select(a => (int)a.SectorId));
+            sectors.AddRange(research.Where(r => r.SectorId != null).Select(a => (int)a.SectorId));
+
+            return sectors.ToArray();
+        }
+
+        private int GetProjectTypology(IEnumerable<AdaptationDetail> adaptations, IEnumerable<MitigationDetail> mitigations, IEnumerable<ResearchDetail> research, IEnumerable<Typology> typologyData)
+        {
+            var typologyName = "";
+
+            if (adaptations.Count() > 0)
+            {
+                typologyName = "Adaptation";
+            }
+            else if (mitigations.Count() > 0)
+            {
+                typologyName = "Mitigation";
+            }
+            else if (research.Count() > 0)
+            {
+                typologyName = "Research";
+            }
+
+            var typology = typologyData.FirstOrDefault(t => t.Value == typologyName);
+            return typology != null ? typology.TypologyId : 0;
         }
 
         //##################//
@@ -98,5 +277,61 @@ namespace NCCRD.Services.DataV2.Controllers
 
             return polygon;
         }
+
+        private async Task<List<StandardVocabItem>> GetVMSData(string relativeURL)
+        {
+            var result = new StandardVocabOutput();
+
+            //Setup http-client
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_config.GetValue<string>("VmsApiBaseUrl"));
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Get data from VMS API
+            var response = await client.GetAsync(relativeURL);
+            if (response != null)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<StandardVocabOutput>(jsonString);
+            }
+
+            return result.Items;
+        }
+
+        private List<int> GetChildren(int filterID, List<StandardVocabItem> data)
+        {
+            var children = data
+                .Where(x =>
+                    x.AdditionalData.Any(y => y.Key == "ParentId" && y.Value == filterID.ToString())
+                )
+                .Select(x => int.Parse(x.Id))
+                .ToList();
+
+            var addChildren = new List<int>();
+            foreach (var child in children)
+            {
+                //Add to temp list so as to not modify 'children' during iteration
+                addChildren.AddRange(GetChildren(child, data));
+            }
+            //Transfer to actual list
+            children.AddRange(addChildren);
+
+            return children;
+        }
+
+        //private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
+        //{
+        //    var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+
+        //    var childSectors = new List<Sector>();
+        //    foreach (var sector in sectors)
+        //    {
+        //        childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
+        //    }
+        //    sectors.AddRange(childSectors);
+
+        //    return sectors;
+        //}
     }
 }
