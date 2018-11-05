@@ -24,6 +24,7 @@ import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
 import userManager from './components/Authentication/userManager'
+import DashLayout from './components/Dashboard/DashLayout.jsx';
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -54,7 +55,7 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     userManager.signinSilent()
   }
 
@@ -84,21 +85,30 @@ class App extends React.Component {
     let { navbar } = this.state
 
     return (
-      <div style={{ padding: "0px 25px 0px 25px", margin: "auto" }}>
+      <div style={{ margin: "0px 25px 0px 25px", backgroundColor: "white" }}>
         <Router>
           <div>
 
             {navbar && <Header />}
             {navbar && <CustomNavbar />}
 
-            <Switch>
-              <Route path="/" component={Home} exact />
-              <Route path="/projects" component={Projects} exact />
-              <Route path="/projects/:id" component={ProjectDetails} exact />
-              <Route path="/login" component={Login} exact />
-              <Route path="/logout" component={Logout} exact />
-              <Route path="/callback" component={CallbackPage} />
-            </Switch>
+            <div style={{ height: "15px", backgroundColor: "whitesmoke"}} />
+
+            <div style={{ backgroundColor: "whitesmoke" }}>
+              <div style={{ margin: "0px 15px 0px 15px" }}>
+                <Switch >
+                  {/* <Route path="/" component={Home} exact /> */}
+                  <Route path="/" component={DashLayout} exact />
+                  <Route path="/projects" component={Projects} exact />
+                  <Route path="/projects/:id" component={ProjectDetails} exact />
+                  <Route path="/login" component={Login} exact />
+                  <Route path="/logout" component={Logout} exact />
+                  <Route path="/callback" component={CallbackPage} />
+                </Switch>
+              </div>
+            </div>
+
+            <div style={{ height: "15px", backgroundColor: "whitesmoke"}} />
 
             {navbar && <Footer />}
 
@@ -123,7 +133,6 @@ class App extends React.Component {
             <ReactTooltip delayShow={700} />
 
           </div>
-
         </Router>
       </div>
     )

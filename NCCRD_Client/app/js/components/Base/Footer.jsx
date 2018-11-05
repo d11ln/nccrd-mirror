@@ -21,10 +21,10 @@ class Footer extends React.Component {
   render() {
 
     return (
-      <>
+      <div style={{ padding: "0px 15px 0px 15px", borderTop: "1px solid #E8E8E8" }}>
         <MDBFooter color="light" style={{ color: "black" }}>
-          <hr />
-          <Container>
+          {/* <hr /> */}
+          {/* <Container> */}
             <Row className="align-items-center" style={{ marginBottom: "10px", marginTop: "10px" }}>
               <Col sm="9">
                 <p>
@@ -40,10 +40,10 @@ class Footer extends React.Component {
                 <img onClick={this.toggleModal} src={nrf_seaon} style={{ width: "80%", marginTop: "-8px", cursor: "pointer" }} align="right" />
               </Col>
             </Row>
-          </Container>
+          {/* </Container> */}
         </MDBFooter>
 
-        <Container>
+        {/* <Container> */}
           <Modal isOpen={this.state.showModal} toggle={this.toggleModal} size="fluid" style={{ width: "80%" }} >
             <ModalHeader toggle={this.toggleModal}>What SAEON offers:</ModalHeader>
             <ModalBody>
@@ -58,8 +58,8 @@ class Footer extends React.Component {
               />
             </ModalBody>
           </Modal>
-        </Container>
-      </>
+        {/* </Container> */}
+      </div>
     )
   }
 }

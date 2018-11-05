@@ -94,6 +94,7 @@ class Projects extends React.Component {
         </div>
 
         <ProjectFilters />
+        <div style={{ height: "15px", backgroundColor: "whitesmoke"}} />
         <ProjectList />
 
         <ReactTooltip delayShow={700} />
