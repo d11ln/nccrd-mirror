@@ -103,13 +103,18 @@ class CustomNavbar extends React.Component {
 
           {/* LEFT */}
           <NavbarNav left>
-            <Button
-              color="warning"
-              size="sm"
-              style={{ marginLeft: "0px" }}
-              onClick={() => { location.hash = "projects/add" + (_gf.IsValidGuid(daoid) ? `?daoid=${daoid}` : "") }} >
-              Add New Project
-            </Button>
+
+            {
+              (!location.hash.includes("projects/")) &&
+              <Button
+                color="warning"
+                size="sm"
+                style={{ marginLeft: "0px" }}
+                onClick={() => { location.hash = "projects/add" + (_gf.IsValidGuid(daoid) ? `?daoid=${daoid}` : "") }} >
+                Add New Project
+              </Button>
+            }
+
           </NavbarNav>
 
           {/* RIGHT */}

@@ -93,20 +93,20 @@ class ProjectCard extends React.Component {
     favs = favs.filter(f => !isNaN(f))
 
     console.log("favs2", favs)
-    
+
     // _gf.CreateCookie("NCCRD_Project_Favorites", "", 3650)
 
     let strFavs = ""
-    if(favs.length > 0){
+    if (favs.length > 0) {
       strFavs = favs.map(x => x.toString()).join(",")
     }
-    else if(false.length === 1){
+    else if (false.length === 1) {
       strFavs = favs[0].toString()
     }
 
     console.log("strFavs2", strFavs)
 
-     _gf.CreateCookie("NCCRD_Project_Favorites", strFavs, 3650)
+    _gf.CreateCookie("NCCRD_Project_Favorites", strFavs, 3650)
   }
 
   render() {
@@ -161,17 +161,31 @@ class ProjectCard extends React.Component {
 
           <Button
             size="sm"
-            color=""
-            style={{
-              float: "right",
-              marginTop: "5px",
-              padding: "5px",
-              boxShadow: "none",
-              backgroundColor: "white"
-            }}
+            color="white"
             onClick={this.togleFavorite}
+            style={{
+              backgroundColor: "white",
+              marginLeft: "0px",
+              boxShadow: "none",
+              border: "1px solid silver",
+              borderRadius: "5px",
+              padding: "3px 15px 3px 15px"
+            }}
           >
-            <Fa icon="star" size="2x" style={{ color: favorite ? "#fdd835" : "#D8D8D8" }} />
+            <table>
+              <tbody>
+                <tr>
+                  <td valign="middle">
+                    <Fa icon="star" size="lg" style={{ color: favorite ? "#fdd835" : "#D8D8D8", marginRight: "5px" }} />
+                  </td>
+                  <td valign="middle">
+                    <div style={{ fontSize: "14px", marginTop: "2px" }} >
+                      Favorite
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </Button>
 
         </CardBody>

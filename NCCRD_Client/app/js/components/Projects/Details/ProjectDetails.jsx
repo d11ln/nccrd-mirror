@@ -574,7 +574,7 @@ class ProjectDetails extends React.Component {
 
   navBack() {
     this.props.setLoading(true)
-    location.hash = "/projects"
+    location.hash = ""
   }
 
   backToList() {
@@ -664,124 +664,141 @@ class ProjectDetails extends React.Component {
     let activeTabId = this.state.activeItemTabs
 
     let tabTo = location.hash.replace(`#/projects/${projectId}`, "")
-    if(tabTo === "") tabTo = "#"
+    if (tabTo === "") tabTo = "#"
 
     return (
-      <>
-        {/* <Container className="mt-2"> */}
-          <Row>
-            <Col md="12">
-              <Nav pills color="default" className="nav-justified" style={{ border: "1px solid gainsboro", backgroundColor: "whitesmoke", marginBottom: "-20px" }}>
-                <NavItem >
-                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "1" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('1'); }}>
-                    Project
+      <div style={{ backgroundColor: "white", border: "1px solid #C8C8C8", borderRadius: "10px" }}>
+        <Row>
+          <Col md="12">
+            <Nav pills color="" className="nav-justified"
+              style={{
+                borderBottom: "1px solid #C8C8C8",
+                backgroundColor: "#E0E0E0",
+                marginBottom: "-20px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px"
+              }}
+            >
+              <NavItem >
+                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "1" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('1'); }}>
+                  Project
                   </NavLink>
-                </NavItem>
-                <NavItem >
-                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "6" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('6'); }}>
-                    Funding
+              </NavItem>
+              <NavItem >
+                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "6" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('6'); }}>
+                  Funding
                   </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "2" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('2'); }}>
-                    Adaptation
+              </NavItem>
+              <NavItem>
+                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "2" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('2'); }}>
+                  Adaptation
                   </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "3" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('3'); }}>
-                    Mitigation
+              </NavItem>
+              <NavItem>
+                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "3" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('3'); }}>
+                  Mitigation
                   </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "4" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('4'); }}>
-                    Emissions
+              </NavItem>
+              <NavItem>
+                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "4" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('4'); }}>
+                  Emissions
                   </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
-                    Research
+              </NavItem>
+              <NavItem>
+                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
+                  Research
                   </NavLink>
-                </NavItem>
-              </Nav>
+              </NavItem>
+            </Nav>
 
-              <TabContent activeItem={activeTabId}>
-                <TabPane tabId="1">
+            <TabContent activeItem={activeTabId}>
+              <TabPane tabId="1">
 
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
-                  </Button>
+                <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                  <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                  Back to list
+                </Button>
 
-                  {(daoid !== 'hidden') &&
-                    <Button
-                      style={{ margin: "0px 0px 20px 15px" }}
-                      color={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
-                      size="sm"
-                      onClick={() => { this.setState({ doaModal: true }) }}
-                    >
-                      <i
-                        className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
-                        aria-hidden="true"
-                        style={{ marginRight: "15px" }}
-                      />
-                      Linked DAO Details
+                {(daoid !== 'hidden') &&
+                  <Button
+                    style={{ margin: "0px 0px 20px 15px" }}
+                    color={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
+                    size="sm"
+                    onClick={() => { this.setState({ doaModal: true }) }}
+                  >
+                    <i
+                      className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
+                      aria-hidden="true"
+                      style={{ marginRight: "15px" }}
+                    />
+                    Linked DAO Details
                   </Button>
-                  }
+                }
 
-                  <ProjectDetailsTab />
-                  <br />
-                  <br />
-                  <br />
-                </TabPane>
-                <TabPane tabId="6">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
-                  </Button>
-                  <ProjectFundersTab />
-                  <br />
-                  <br />
-                  <br />
-                </TabPane>
-                <TabPane tabId="2">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
-                  </Button>
-                  <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
-                  <br />
-                  <br />
-                  <br />
-                </TabPane>
-                <TabPane tabId="3">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
-                  </Button>
-                  <MitigationDetailsTab projectId={projectDetails.ProjectId} />
-                  <br />
-                  <br />
-                  <br />
-                </TabPane>
-                <TabPane tabId="4">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
-                  </Button>
-                  <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
-                  <br />
-                  <br />
-                  <br />
-                </TabPane>
-                <TabPane tabId="5">
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
-                  </Button>
-                  <ResearchDetailsTab projectId={projectDetails.ProjectId} />
-                  <br />
-                  <br />
-                  <br />
-                </TabPane>
-              </TabContent>
-            </Col>
-          </Row>
-        {/* </Container> */}
+                <div style={{ height: "10px" }} />
+                <ProjectDetailsTab />
+                <br />
+                <br />
+                <br />
+              </TabPane>
+              <TabPane tabId="6">
+                <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                  <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                </Button>
+
+                <div style={{ height: "10px" }} />
+                <ProjectFundersTab />
+                <br />
+                <br />
+                <br />
+              </TabPane>
+              <TabPane tabId="2">
+                <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                </Button>
+
+                <div style={{ height: "10px" }} />
+                <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
+                <br />
+                <br />
+                <br />
+              </TabPane>
+              <TabPane tabId="3">
+                <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                </Button>
+
+                <div style={{ height: "10px" }} />
+                <MitigationDetailsTab projectId={projectDetails.ProjectId} />
+                <br />
+                <br />
+                <br />
+              </TabPane>
+              <TabPane tabId="4">
+                <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                </Button>
+
+                <div style={{ height: "10px" }} />
+                <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
+                <br />
+                <br />
+                <br />
+              </TabPane>
+              <TabPane tabId="5">
+                <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" id="btnBackToList" onClick={this.backToList}>
+                  <i className="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;&nbsp;Back to list
+                </Button>
+
+                <div style={{ height: "10px" }} />
+                <ResearchDetailsTab projectId={projectDetails.ProjectId} />
+                <br />
+                <br />
+                <br />
+              </TabPane>
+            </TabContent>
+          </Col>
+        </Row>
 
         {
           ((user && !user.expired) && !readonly) &&
@@ -905,7 +922,7 @@ class ProjectDetails extends React.Component {
 
         <ReactTooltip delayShow={700} />
 
-      </>
+      </div>
     )
   }
 }

@@ -9,9 +9,12 @@ import RegionFilters from './RegionFilters.jsx';
 import SectorFilters from './SectorFilters.jsx';
 
 const mapStateToProps = (state, props) => {
-  let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter } } = state
+  let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter } } = state
   let { lookupData: { projectStatus, typology, sector, region } } = state
-  return { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region }
+  return {
+    titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region,
+    favoritesFilter
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -33,6 +36,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     clearSectorFilter: () => {
       dispatch({ type: "LOAD_SECTOR_FILTER", payload: 0 })
+    },
+    toggleFavorites: async payload => {
+      dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
     }
   }
 }
@@ -47,10 +53,23 @@ class ProjectFilters extends React.Component {
 
   renderFilterChips() {
 
-    let { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region } = this.props
+    let {
+      titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region,
+      favoritesFilter
+    } = this.props
     let filterChips = []
 
-    if (titleFilter !== "" || statusFilter !== 0 || typologyFilter !== 0 || sectorFilter !== 0 || regionFilter !== 0) {
+    if (titleFilter !== "" || statusFilter !== 0 || typologyFilter !== 0 || sectorFilter !== 0 || regionFilter !== 0 ||
+      favoritesFilter === true) {
+        
+      if (favoritesFilter === true) {
+        filterChips.push(
+          <div className="chip" key="favsFilterChip" style={{ backgroundColor: DEAGreen }}>
+            {"Favorites"}
+            <i className="close fa fa-times" onClick={() => this.deleteFilterChip("favs")}></i>
+          </div>
+        )
+      }
 
       if (titleFilter !== "") {
         filterChips.push(
@@ -127,6 +146,10 @@ class ProjectFilters extends React.Component {
 
       case "sector":
         this.props.clearSectorFilter()
+        break
+
+      case "favs":
+        this.props.toggleFavorites()
         break
     }
   }

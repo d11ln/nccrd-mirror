@@ -3,6 +3,16 @@ import { apiBaseURL } from "../../../config/serviceURLs.cfg"
 import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreenDark } from '../../../config/colours.cfg'
+import { connect } from 'react-redux'
+
+const mapStateToProps = (state, props) => {
+  let { emissionsData: { emissionsData } } = state
+  return { emissionsData }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
 
 class MitigationEmissionsDataItem extends React.Component {
 
@@ -12,7 +22,7 @@ class MitigationEmissionsDataItem extends React.Component {
 
   render() {
 
-    let { details } = this.props
+    let { details, emissionsData } = this.props
 
     return (
       <>
@@ -256,9 +266,18 @@ class MitigationEmissionsDataItem extends React.Component {
           />
         </div>
 
-        <br />
-        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
-        <br />
+        {
+          (emissionsData && emissionsData.length > 1) &&
+          <div
+            style={{
+              height: "5px",
+              backgroundColor: "#white",
+              margin: "35px -16px 30px -16px",
+              borderStyle: "double none none none",
+              borderColor: "#C8C8C8"
+            }}
+          />
+        }
 
         <ReactTooltip delayShow={700} />
       </>
@@ -266,4 +285,4 @@ class MitigationEmissionsDataItem extends React.Component {
   }
 }
 
-export default MitigationEmissionsDataItem
+export default connect(mapStateToProps, mapDispatchToProps)(MitigationEmissionsDataItem)

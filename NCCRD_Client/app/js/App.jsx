@@ -19,12 +19,14 @@ import ProjectDetails from './components/Projects/Details/ProjectDetails.jsx'
 import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
-import CallbackPage from '../js/components/Authentication/callback.jsx';
+import CallbackPage from '../js/components/Authentication/callback.jsx'
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
 import userManager from './components/Authentication/userManager'
-import DashLayout from './components/Dashboard/DashLayout.jsx';
+import DashLayout from './components/Dashboard/DashLayout.jsx'
+import MapView from './components/Map/MapView.jsx'
+import ChartView from './components/Charts/ChartView.jsx';
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -101,6 +103,8 @@ class App extends React.Component {
                   <Route path="/" component={DashLayout} exact />
                   <Route path="/projects" component={Projects} exact />
                   <Route path="/projects/:id" component={ProjectDetails} exact />
+                  <Route path="/map" component={MapView} exact />
+                  <Route path="/chart" component={ChartView} exact />
                   <Route path="/login" component={Login} exact />
                   <Route path="/logout" component={Logout} exact />
                   <Route path="/callback" component={CallbackPage} />

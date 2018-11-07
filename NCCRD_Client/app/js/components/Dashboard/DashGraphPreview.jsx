@@ -1,6 +1,7 @@
 import React, { Children } from 'react'
-import { Row, Col } from 'mdbreact'
+import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
+import popout from '../../../images/popout.png'
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -18,8 +19,18 @@ class DashGraphPreview extends React.Component {
 
   render() {
     return (
-      <div style={{ backgroundColor: "white", padding: "10px", borderRadius: "10px", border: "1px solid gainsboro" }}>
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "10px",
+          borderRadius: "10px",
+          border: "1px solid gainsboro",
+          cursor: "pointer",
+        }}
+        onClick={() => { location.hash = "/chart" }}
+      >
         {this.props.children}
+        <img src={popout} style={{ width: "25px", position: "absolute", top: "10px", right: "25px" }} />
       </div>
     )
   }

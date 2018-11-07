@@ -8,8 +8,9 @@ import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
+  let { researchData: { researchDetails } } = state
   let { lookupData: { researchType, targetAudience, sector, sectorType, typology } } = state
-  return { researchType, targetAudience, sector, sectorType, typology }
+  return { researchType, targetAudience, sector, sectorType, typology, researchDetails }
 }
 
 class ResearchDetailsItem extends React.Component {
@@ -20,7 +21,7 @@ class ResearchDetailsItem extends React.Component {
 
   render() {
 
-    let { details, researchType, targetAudience, sector, sectorType, typology } = this.props
+    let { details, researchType, targetAudience, sector, sectorType, typology, researchDetails } = this.props
 
     return (
       <>
@@ -109,9 +110,18 @@ class ResearchDetailsItem extends React.Component {
           />
         </div>
 
-        <br />
-        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
-        <br />
+        {
+          (researchDetails && researchDetails.length > 1) &&
+          <div
+            style={{
+              height: "5px",
+              backgroundColor: "#white",
+              margin: "35px -16px 30px -16px",
+              borderStyle: "double none none none",
+              borderColor: "#C8C8C8"
+            }}
+          />
+        }
 
         <ReactTooltip delayShow={700} />
       </>

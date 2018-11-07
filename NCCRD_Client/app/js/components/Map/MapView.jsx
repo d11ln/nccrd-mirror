@@ -1,7 +1,8 @@
 import React from 'react'
 import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
-import popout from '../../../images/popout.png'
+import popin from '../../../images/popin.png'
+import { CordovaPopupWindow } from 'oidc-client';
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -11,7 +12,7 @@ const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
-class DashMapPreview extends React.Component {
+class MapView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -26,16 +27,16 @@ class DashMapPreview extends React.Component {
         </h4>
 
         <img
-          src={popout}
+          src={popin}
           style={{
             width: "25px",
             float: "right",
             margin: "5px 5px 0px 0px",
             cursor: "pointer"
           }}
-          onClick={() => { location.hash = "/map" }}
+          onClick={() => { location.hash = "" }}
         />
-
+        
         <hr />
 
         {/* temp */}
@@ -54,4 +55,4 @@ class DashMapPreview extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashMapPreview)
+export default connect(mapStateToProps, mapDispatchToProps)(MapView)

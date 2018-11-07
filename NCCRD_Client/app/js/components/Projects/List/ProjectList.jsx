@@ -312,28 +312,23 @@ class ProjectList extends React.Component {
 
         <div style={{ float: "right" }}>
 
-          {
-            !location.hash.includes("projects") &&
-            <Button size="sm" color="white"
-              style={{ padding: "5px", boxShadow: "none", marginTop: "0px", display: "inline-block" }}
-              onClick={() => { location.hash = "/projects" }}>
-              <img src={popout} style={{ width: "25px" }} />
-            </Button>
-          }
-
-          {
-            location.hash.includes("projects") &&
-            <Button size="sm" color="white"
-              style={{ padding: "5px", boxShadow: "none", marginTop: "0px", display: "inline-block" }}
-              onClick={() => { location.hash = "" }}>
-              <img src={popin} style={{ width: "25px" }} />
-            </Button>
-          }
+          <img
+            src={location.hash.includes("projects") ? popin : popout}
+            style={{
+              width: "25px",
+              margin: "-4px 5px 0px 0px",
+              cursor: "pointer"
+            }}
+            onClick={() => { 
+              this.props.setScrollPos(0)
+              location.hash = (location.hash.includes("projects") ? "" : "/projects") 
+            }}
+          />
 
           <Popover
             content={
               <div>
-                <p style={{ display: "inline-block", marginRight: "5px" }}>
+                <p style={{ display: "inline-block", margin: "10px 5px 10px 5px" }}>
                   Favorites:
                 </p>
                 <Button
@@ -365,10 +360,16 @@ class ProjectList extends React.Component {
             visible={ellipsisMenu}
             onVisibleChange={(visible) => { this.setState({ ellipsisMenu: visible }) }}
           >
-            <Button size="sm" color="white"
-              style={{ padding: "5px 10px 5px 10px", boxShadow: "none", marginTop: "0px" }} >
-              <Fa icon="ellipsis-v" size="2x" style={{ color: "black", marginTop: "4px" }} />
-            </Button>
+            <Fa
+              icon="ellipsis-v"
+              size="lg"
+              style={{
+                color: "black",
+                margin: "11px 15px 5px 15px",
+                padding: "5px 10px 5px 10px",
+                cursor: "pointer"
+              }}
+            />
           </Popover>
 
         </div>
