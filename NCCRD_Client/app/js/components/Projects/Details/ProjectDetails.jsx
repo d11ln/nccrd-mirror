@@ -721,8 +721,11 @@ class ProjectDetails extends React.Component {
 
                 {(daoid !== 'hidden') &&
                   <Button
-                    style={{ margin: "0px 0px 20px 15px" }}
-                    color={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "red" : "green"}
+                    style={{
+                      margin: "0px 0px 20px 15px",
+                      backgroundColor: (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "grey" : DEAGreen
+                    }}
+                    color=""
                     size="sm"
                     onClick={() => { this.setState({ doaModal: true }) }}
                   >
@@ -884,10 +887,11 @@ class ProjectDetails extends React.Component {
           <Modal fade={false} isOpen={this.state.doaModal} toggle={() => { this.setState({ doaModal: false }) }} size="lg" centered>
             <ModalHeader toggle={() => { this.setState({ doaModal: false }) }}>
               Linked DAO Details
-              {projectDetails.LinkedDAOGoalId === null &&
+              {(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) &&
                 <div
                   style={{
-                    backgroundColor: "red",
+                    color: "white",
+                    backgroundColor: "grey",
                     borderRadius: "5px",
                     padding: "5px 10px 4px 10px",
                     margin: "-33px 0px 0px 220px",
@@ -896,11 +900,11 @@ class ProjectDetails extends React.Component {
                   No DAO Linked
                 </div>
               }
-              {projectDetails.LinkedDAOGoalId !== null &&
+              {(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length !== 0) &&
                 <div
                   style={{
-                    backgroundColor: "green",
                     color: "white",
+                    backgroundColor: DEAGreen,
                     borderRadius: "5px",
                     padding: "5px 10px 4px 10px",
                     margin: "-33px 0px 0px 220px",

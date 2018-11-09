@@ -105,7 +105,7 @@ class CustomNavbar extends React.Component {
           <NavbarNav left>
 
             {
-              (!location.hash.includes("projects/")) &&
+              (!location.hash.includes("projects/") && (user && !user.expired)) &&
               <Button
                 color="warning"
                 size="sm"

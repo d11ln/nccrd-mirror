@@ -52,9 +52,6 @@ class ProjectCard extends React.Component {
     //Save to cookie
     let favs = this.GetFavorites()
 
-    console.log("favs", favs)
-    console.log("pid", pid)
-
     if (newState) {
       //Add if not contains
       if (!favs.includes(pid)) {
@@ -75,8 +72,6 @@ class ProjectCard extends React.Component {
   GetFavorites() {
     let strFavs = _gf.ReadCookie("NCCRD_Project_Favorites")
 
-    console.log("strFavs", strFavs)
-
     if (strFavs !== null && strFavs.length > 0) {
       let favs = strFavs.split(",")
 
@@ -92,10 +87,6 @@ class ProjectCard extends React.Component {
 
     favs = favs.filter(f => !isNaN(f))
 
-    console.log("favs2", favs)
-
-    // _gf.CreateCookie("NCCRD_Project_Favorites", "", 3650)
-
     let strFavs = ""
     if (favs.length > 0) {
       strFavs = favs.map(x => x.toString()).join(",")
@@ -103,8 +94,6 @@ class ProjectCard extends React.Component {
     else if (false.length === 1) {
       strFavs = favs[0].toString()
     }
-
-    console.log("strFavs2", strFavs)
 
     _gf.CreateCookie("NCCRD_Project_Favorites", strFavs, 3650)
   }

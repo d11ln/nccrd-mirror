@@ -38,16 +38,15 @@ class DashMapPreview extends React.Component {
 
         <hr />
 
-        {/* temp */}
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        {/* temp */}
+        <iframe
+          style={{
+            width: "100%",
+            height: "300px",
+            margin: "0px",
+            border: "none"
+          }}
+          src={""}
+        />
 
       </div>
     )

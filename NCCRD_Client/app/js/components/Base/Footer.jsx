@@ -1,10 +1,9 @@
 import React from 'react'
-import { Col, Row, Container, Footer as MDBFooter, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact';
+import { Col, Row, Modal, ModalBody, ModalHeader } from 'mdbreact';
+import { DEAGreen, DEAGreenDark } from '../../config/colours.cfg'
 
-import { footerConfig } from '../../../data/footerConfig.cfg'
-
-//Images
-import nrf_seaon from '../../../images/nrf_saeon.png'
+import { footerContent } from '../../../data/footerConfig.cfg'
+import loader from '../../../images/loader.gif'
 
 class Footer extends React.Component {
 
@@ -23,7 +22,7 @@ class Footer extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     window.addEventListener("resize", this.handleResize);
   }
 
@@ -31,7 +30,7 @@ class Footer extends React.Component {
     window.removeEventListener("resize", this.handleResize)
   }
 
-  handleResize(){
+  handleResize() {
     this.setState({
       isNarrowDisplay: (window.innerWidth < 900)
     })
@@ -45,31 +44,62 @@ class Footer extends React.Component {
     })
   }
 
-  renderLinks() {
+  renderSections(data) {
 
-    let footerLinks = []
+    let sections = []
 
-    if (footerConfig && footerConfig.length > 0) {
-      footerConfig.forEach(x => {
-        footerLinks.push(
-          <div
-            key={x.text}
-            style={{
-              marginLeft: "10px",
-              marginRight: "10px",
-              color: "#4285F4",
-              cursor: "pointer",
-              display: "inline-block"
-            }}
-            onClick={() => this.toggleModal(true, x.text, x.link)}
-          >
-            <u>{x.text}</u>
-          </div>
-        )
-      })
+    for (let i = 0; i < 4; i++) {
+      let section = data.sections[i]
+      sections.push(
+        <Col key={`section_${i + 1}`} md="3">
+          <h4 style={{ marginBottom: "15px" }}><b>{section.text}</b></h4>
+          {this.renderLinks(section)}
+        </Col>
+      )
     }
 
-    return footerLinks
+    return sections
+  }
+
+
+  renderLinks(section) {
+
+    let links = []
+
+    for (let i = 0; i < section.links.length; i++) {
+
+      let link = section.links[i]
+      if (link.text) {
+        links.push(
+          <div
+            key={`link_${i + 1}`}
+            style={{
+              cursor: link.link ? "pointer" : "default",
+              fontWeight: link.link ? "400" : "regular"
+            }}
+            onClick={() => {
+              if (link.link) {
+                this.toggleModal(true, link.text, link.link)
+              }
+            }}>
+            {link.text}
+          </div>
+        )
+      }
+      else if (link.src) {
+        links.push(
+          <img
+            key={`link_${i + 1}`}
+            src={link.src}
+            style={{
+              width: link.width,
+              cursor: link.link ? "pointer" : "default"
+            }} />
+        )
+      }
+    }
+
+    return links
   }
 
   render() {
@@ -77,45 +107,43 @@ class Footer extends React.Component {
     let { showModal, modalHeader, modalSrc, isNarrowDisplay } = this.state
 
     return (
-      <div style={{ padding: "5px 15px 5px 15px", borderTop: "1px solid #E8E8E8" }}>
-        <MDBFooter color="light" style={{ color: "black" }}>
-          <Row className="align-items-center" style={{ marginBottom: "15px", marginTop: "-10px" }}>
-
-            <Col md="8">
-              {this.renderLinks()}
-            </Col>
-
-            <Col md="4">
-              <br className="d-block d-md-none" />
-
-              <div style={{ float: "right" }}>
-                <span style={{ marginLeft: "10px", fontSize: "14px", color: "dimgrey" }}>
-                  Copyright &copy; {(new Date().getFullYear())}
-                </span>
-
-                {
-                  (isNarrowDisplay === true) &&
-                  <div style={{ height: "15px" }} />
-                }
-
-                <img
-                  // onClick={() => this.toggleModal(true, "What SAEON Offers", "http://www.example.com")}
-                  src={nrf_seaon}
-                  style={{
-                    height: "40px",
-                    marginTop: "-8px",
-                    marginBottom: "-10px",
-                    marginLeft: "20px",
-                    // cursor: "pointer",
-                    border: "0px solid grey"
-                  }}
-                  align="right"
-                />
-              </div>
-            </Col>
-
+      <>
+        <div style={{
+          padding: "5px 45px 5px 45px",
+          borderTop: "1px solid gainsboro",
+          borderLeft: "1px solid gainsboro",
+          borderRight: "1px solid gainsboro",
+          backgroundColor: "white",
+          color: "black"
+        }}>
+          <br />
+          <Row>
+            {this.renderSections(footerContent)}
           </Row>
-        </MDBFooter>
+          <br />
+        </div>
+
+        <div style={{
+          padding: "10px 45px 10px 45px",
+          backgroundColor: DEAGreen,
+          color: "white"
+        }}>
+          <Row>
+            <Col md="12">
+              <b>
+                Created by
+                <span> <a style={{ color: "white" }} href="http://www.saeon.ac.za" target="saeon"><strong>SAEON</strong></a> </span>
+                using
+                <span> <a style={{ color: "white" }} href="https://reactjs.org/" target="react"><strong>React</strong></a>, </span>
+                <span> <a style={{ color: "white" }} href="https://mdbootstrap.com/react" target="mdb"><strong> MDBootstrap</strong></a>, </span>
+                <span> <a style={{ color: "white" }} href="https://ant.design/" target="antdesign"><strong> Ant Design </strong></a> </span>
+                and SAEON Open Data Platform APIs.
+              </b>
+              <br />
+              Copyright &copy; {(new Date().getFullYear())}
+            </Col>
+          </Row>
+        </div>
 
         <Modal isOpen={showModal} toggle={() => this.toggleModal(false)} size="fluid" style={{ width: "95%" }} >
           <ModalHeader toggle={() => this.toggleModal(false)}>{modalHeader}</ModalHeader>
@@ -125,13 +153,16 @@ class Footer extends React.Component {
                 width: "100%",
                 height: "500px",
                 margin: "0px",
-                border: "1px solid gainsboro"
+                border: "1px solid gainsboro",
+                backgroundImage: `url(${loader})`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "50% 50%"
               }}
               src={modalSrc}
             />
           </ModalBody>
         </Modal>
-      </div>
+      </>
     )
   }
 }

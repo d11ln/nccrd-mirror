@@ -22,7 +22,7 @@ class DashGraphPreview extends React.Component {
       <div
         style={{
           backgroundColor: "white",
-          padding: "10px",
+          padding: "10px 10px 5px 10px",
           borderRadius: "10px",
           border: "1px solid gainsboro",
           cursor: "pointer",
