@@ -15,9 +15,15 @@ export default function GlobalReducer(state = {}, action) {
         }
 
         case "SET_DAOID": {
-            console.log("SET_DAOID", payload)
             return { ...state, daoid: payload }
         }
+
+        case "TOGGLE_SIDENAV": {
+            return {
+                ...state, showSideNav: payload
+            }
+        }
+
         default: {
             return state
         }

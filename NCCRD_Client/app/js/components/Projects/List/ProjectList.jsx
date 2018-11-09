@@ -333,8 +333,14 @@ class ProjectList extends React.Component {
                 </p>
                 <Button
                   size="sm"
-                  color={favoritesFilter ? "primary" : "grey"}
-                  style={{ padding: "4px 10px 5px 10px", marginTop: "1px", marginRight: "-1px", width: "40px" }}
+                  color=""
+                  style={{ 
+                    padding: "4px 10px 5px 10px", 
+                    marginTop: "1px", 
+                    marginRight: "-1px", 
+                    width: "40px",
+                    backgroundColor: favoritesFilter ? DEAGreen : "grey"
+                  }}
                   onClick={() => {
                     this.props.toggleFavorites(!favoritesFilter)
                     this.setState({ ellipsisMenu: false })
@@ -344,8 +350,14 @@ class ProjectList extends React.Component {
                 </Button>
                 <Button
                   size="sm"
-                  color={!favoritesFilter ? "primary" : "grey"}
-                  style={{ padding: "4px 10px 5px 10px", marginTop: "1px", marginLeft: "-1px", width: "40px" }}
+                  color=""
+                  style={{ 
+                    padding: "4px 10px 5px 10px", 
+                    marginTop: "1px", 
+                    marginLeft: "-1px", 
+                    width: "40px",
+                    backgroundColor: !favoritesFilter ? DEAGreen : "grey"
+                  }}
                   onClick={() => {
                     this.props.toggleFavorites(!favoritesFilter)
                     this.setState({ ellipsisMenu: false })

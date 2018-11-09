@@ -5,21 +5,24 @@ import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLi
 import userManager from '../Authentication/userManager'
 import { ssoBaseURL } from '../../config/serviceURLs.cfg'
 import { DEAGreen } from '../../config/colours.cfg'
+import { data as NavData } from '../../../data/sideNavConfig'
 
 const _gf = require("../../globalFunctions")
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
-  let { navigation: { locationHash } } = state
-  let { globalData: { loading, daoid } } = state
-  return { user, locationHash, loading, daoid }
+  let { globalData: { loading, daoid, showSideNav } } = state
+  return { user, loading, daoid, showSideNav }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+    },
+    toggleSideNav: payload => {
+      dispatch({ type: "TOGGLE_SIDENAV", payload })
     }
   }
 }
@@ -76,7 +79,7 @@ class CustomNavbar extends React.Component {
 
   render() {
 
-    let { locationHash, user, daoid } = this.props
+    let { user, daoid, toggleSideNav, showSideNav } = this.props
 
     // console.log(user)
 
@@ -103,6 +106,14 @@ class CustomNavbar extends React.Component {
 
           {/* LEFT */}
           <NavbarNav left>
+
+            {
+              NavData.enabled &&
+              <Button size="sm" color="grey" onClick={() => { toggleSideNav(!showSideNav) }}
+                style={{ width: "45px", marginLeft: "0px", marginRight: "15px", paddingLeft: "18px" }}>
+                <Fa icon="bars" />
+              </Button>
+            }
 
             {
               (!location.hash.includes("projects/") && (user && !user.expired)) &&

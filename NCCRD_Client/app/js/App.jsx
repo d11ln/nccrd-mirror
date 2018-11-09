@@ -26,16 +26,19 @@ import Footer from './components/Base/Footer.jsx'
 import userManager from './components/Authentication/userManager'
 import DashLayout from './components/Dashboard/DashLayout.jsx'
 import MapView from './components/Map/MapView.jsx'
-import ChartView from './components/Charts/ChartView.jsx';
+import ChartView from './components/Charts/ChartView.jsx'
+import SideNav from './components/Base/SideNav.jsx'
+import { data as NavData } from '../data/sideNavConfig'
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
 const o = require("odata")
+// const NavData = require('../data/sideNavConfig')
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading } } = state
+  let { globalData: { loading, showSideNav } } = state
   let user = state.oidc.user
-  return { loading, user }
+  return { loading, user, showSideNav }
 }
 
 //Enable OIDC Logging
@@ -85,6 +88,7 @@ class App extends React.Component {
     let loaderHeight = 165
 
     let { navbar } = this.state
+    let { showSideNav } = this.props
 
     return (
       <div style={{ margin: "0px 25px 0px 25px", backgroundColor: "white" }}>
@@ -94,7 +98,12 @@ class App extends React.Component {
             {navbar && <Header />}
             {navbar && <CustomNavbar />}
 
-            <div style={{ height: "15px", backgroundColor: "whitesmoke"}} />
+            {
+              NavData.enabled &&
+              <SideNav data={NavData} isOpen={showSideNav} />
+            }
+
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
 
             <div style={{ backgroundColor: "whitesmoke" }}>
               <div style={{ margin: "0px 15px 0px 15px" }}>
@@ -112,7 +121,7 @@ class App extends React.Component {
               </div>
             </div>
 
-            <div style={{ height: "15px", backgroundColor: "whitesmoke"}} />
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
 
             {navbar && <Footer />}
 
