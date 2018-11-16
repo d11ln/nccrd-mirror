@@ -44,7 +44,7 @@ class Projects extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
 
     //Read polygon filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
 
     if (typeof parsedHash.polygon !== 'undefined') {
 
@@ -61,6 +61,14 @@ class Projects extends React.Component {
       left: 0,
       behavior: 'smooth'
     });
+    // var scrollStep = -window.parent.pageYOffset / 15,
+    //   scrollInterval = setInterval(function () {
+    //     if (window.parent.pageYOffset != 0) {
+    //       window.parent.scrollBy(0, scrollStep);
+    //     } else {
+    //       clearInterval(scrollInterval);
+    //     }
+    //   }, 15)
   }
 
   addProject() {
@@ -102,10 +110,15 @@ class Projects extends React.Component {
           <Col md="3">
             <TitleFilter />
           </Col>
-          <StatusFilter />
-          <TypologyFilter />
-          <RegionFilters />
-          <SectorFilters />
+
+            <StatusFilter />
+
+            <TypologyFilter />
+
+            <RegionFilters />
+
+            <SectorFilters />
+
         </Row>
 
         <ProjectFilters />

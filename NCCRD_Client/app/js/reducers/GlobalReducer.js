@@ -19,9 +19,11 @@ export default function GlobalReducer(state = {}, action) {
         }
 
         case "TOGGLE_SIDENAV": {
-            return {
-                ...state, showSideNav: payload
-            }
+            return { ...state, showSideNav: payload}
+        }
+
+        case "SET_PROJECTS_FULLVIEW": {
+            return { ...state, projectsFullView: payload}
         }
 
         default: {

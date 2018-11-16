@@ -38,7 +38,7 @@ class RegionFilters extends React.Component {
     super(props);
 
     //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
     if (typeof parsedHash.region !== 'undefined') {
 
       //Dispatch to store
@@ -91,7 +91,8 @@ class RegionFilters extends React.Component {
             color: "grey"
           }}
           style={{
-            marginTop: "-4px"
+            marginTop: "-4px",
+            marginBottom: "15px"
           }}
           setSelectedValueKey="LOAD_REGION_FILTER"
         />

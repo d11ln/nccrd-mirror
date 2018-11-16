@@ -33,7 +33,7 @@ import { data as NavData } from '../data/sideNavConfig'
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
 const o = require("odata")
-// const NavData = require('../data/sideNavConfig')
+const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let { globalData: { loading, showSideNav } } = state
@@ -53,10 +53,15 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { navbar: true }
-    if (location.toString().includes("navbar=hidden")) {
-      this.state = { navbar: false }
-      //_gf.stripURLParam("navbar=hidden")
+    let navbar = 'show'
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?")))
+
+    if (typeof parsedHash.navbar !== 'undefined') {
+      navbar = parsedHash.navbar
+    }
+
+    this.state = { 
+      navbar 
     }
   }
 
@@ -95,8 +100,8 @@ class App extends React.Component {
         <Router>
           <div>
 
-            {navbar && <Header />}
-            {navbar && <CustomNavbar />}
+            {(navbar === "show" ) && <Header />}
+            {(navbar !== "hidden") && <CustomNavbar />}
 
             {
               NavData.enabled &&
@@ -123,7 +128,7 @@ class App extends React.Component {
 
             <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
 
-            {navbar && <Footer />}
+            {(navbar === "show" ) && <Footer />}
 
             <div className="container-fluid">
               <div className="row">

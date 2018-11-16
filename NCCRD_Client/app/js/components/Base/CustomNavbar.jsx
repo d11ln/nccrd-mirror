@@ -35,7 +35,8 @@ class CustomNavbar extends React.Component {
     this.state = {
       collapse: false,
       isWideEnough: false,
-      dropdownOpen: false
+      dropdownOpen: false,
+      addOnly: false
     }
 
     this.onClick = this.onClick.bind(this)
@@ -43,12 +44,17 @@ class CustomNavbar extends React.Component {
     this.Register = this.Register.bind(this)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
     if (typeof parsedHash.daoid !== 'undefined') {
-      await this.props.setDAOID(parsedHash.daoid)
+      this.props.setDAOID(parsedHash.daoid)
     }
+
+    if (parsedHash.navbar === "addOnly") {
+      this.setState({ addOnly: true })
+    }
+
   }
 
   onClick() {
@@ -80,8 +86,7 @@ class CustomNavbar extends React.Component {
   render() {
 
     let { user, daoid, toggleSideNav, showSideNav } = this.props
-
-    // console.log(user)
+    let { addOnly } = this.state
 
     return (
       <Navbar
@@ -108,7 +113,7 @@ class CustomNavbar extends React.Component {
           <NavbarNav left>
 
             {
-              NavData.enabled &&
+              (NavData.enabled && addOnly === false) &&
               <Button size="sm" color="grey" onClick={() => { toggleSideNav(!showSideNav) }}
                 style={{ width: "45px", marginLeft: "0px", marginRight: "15px", paddingLeft: "18px" }}>
                 <Fa icon="bars" />
@@ -129,59 +134,62 @@ class CustomNavbar extends React.Component {
           </NavbarNav>
 
           {/* RIGHT */}
-          <NavbarNav right>
+          {
+            addOnly === false &&
+            <NavbarNav right>
 
-            {/* Username */}
-            {(user && !user.expired) &&
-
-              <table>
-                <tbody>
-                  <tr style={{ height: "40px" }}>
-                    <td valign="middle">
-                      <div style={{ marginRight: "7px", color: "grey" }} >
-                        <Fa size="2x" icon="user-circle-o" />
-                      </div>
-                    </td>
-                    <td valign="middle">
-                      <div style={{ fontSize: "17px" }} >
-                        <b>{`${user.profile.FirstName} ${user.profile.Surname}`}</b>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            }
-
-            {/* Login / Logout */}
-            <NavItem style={{ marginLeft: "15px" }}>
-              {(!user || user.expired) &&
-                <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/login">
-                  <b style={{ color: "black" }}>
-                    Login
-                  </b>
-                </a>
-              }
+              {/* Username */}
               {(user && !user.expired) &&
-                <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/logout">
-                  <b style={{ color: "black" }}>
-                    Logout
-                  </b>
-                </a>
+
+                <table>
+                  <tbody>
+                    <tr style={{ height: "40px" }}>
+                      <td valign="middle">
+                        <div style={{ marginRight: "7px", color: "grey" }} >
+                          <Fa size="2x" icon="user-circle-o" />
+                        </div>
+                      </td>
+                      <td valign="middle">
+                        <div style={{ fontSize: "17px" }} >
+                          <b>{`${user.profile.FirstName} ${user.profile.Surname}`}</b>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               }
-            </NavItem>
 
-            {/* Register */}
-            {(!user || user.expired) &&
+              {/* Login / Logout */}
               <NavItem style={{ marginLeft: "15px" }}>
-                <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank">
-                  <b style={{ color: "black" }}>
-                    Register
+                {(!user || user.expired) &&
+                  <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/login">
+                    <b style={{ color: "black" }}>
+                      Login
                   </b>
-                </a>
+                  </a>
+                }
+                {(user && !user.expired) &&
+                  <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/logout">
+                    <b style={{ color: "black" }}>
+                      Logout
+                  </b>
+                  </a>
+                }
               </NavItem>
-            }
 
-          </NavbarNav>
+              {/* Register */}
+              {(!user || user.expired) &&
+                <NavItem style={{ marginLeft: "15px" }}>
+                  <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank">
+                    <b style={{ color: "black" }}>
+                      Register
+                  </b>
+                  </a>
+                </NavItem>
+              }
+
+            </NavbarNav>
+          }
 
         </Collapse>
       </Navbar>

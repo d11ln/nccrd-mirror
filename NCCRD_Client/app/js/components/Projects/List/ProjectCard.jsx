@@ -38,7 +38,15 @@ class ProjectCard extends React.Component {
   onClick() {
 
     this.props.setScrollPos(window.pageYOffset)
-    location.hash = "/projects/" + this.props.pid
+    let navTo = ""
+    if(location.hash.includes("projects")){
+      navTo = location.hash.replace("#/projects", "#/projects/" + this.props.pid)
+    }
+    else{
+      navTo = location.hash.replace("#/", "#/projects/" + this.props.pid)
+    }
+
+    location.hash = navTo
   }
 
   togleFavorite() {

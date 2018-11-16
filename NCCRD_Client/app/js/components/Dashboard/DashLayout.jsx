@@ -20,6 +20,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateNav: payload => {
       dispatch({ type: "NAV", payload })
+    },
+    setProjectsFullView: payload => {
+      dispatch({ type: "SET_PROJECTS_FULLVIEW", payload })
     }
   }
 }
@@ -35,6 +38,7 @@ class DashLayout extends React.Component {
 
   componentDidMount() {
     this.props.updateNav(location.hash)
+    this.props.setProjectsFullView(false)
     window.addEventListener("scroll", this.handleScroll);
   }
 
@@ -44,6 +48,22 @@ class DashLayout extends React.Component {
 
   handleScroll() {
     this.setState({ showBackToTop: (window.pageYOffset > 1450) })
+  }
+
+  scrollToTop() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    // var scrollStep = -window.parent.pageYOffset / 15,
+    //   scrollInterval = setInterval(function () {
+    //     if (window.parent.pageYOffset != 0) {
+    //       window.parent.scrollBy(0, scrollStep);
+    //     } else {
+    //       clearInterval(scrollInterval);
+    //     }
+    //   }, 15)
   }
 
   render() {
@@ -62,11 +82,14 @@ class DashLayout extends React.Component {
               floating
               color=""
               onClick={() => {
-                window.scroll({
-                  top: 0,
-                  left: 0,
-                  behavior: 'smooth'
-                })
+                // window.scroll({
+                //   top: 0,
+                //   left: 0,
+                //   behavior: 'smooth'
+                // })    
+
+                let scrollStep = window.pageYOffset / 15
+                this.scrollToTop()
               }}
               style={{ backgroundColor: DEAGreen }}
             >

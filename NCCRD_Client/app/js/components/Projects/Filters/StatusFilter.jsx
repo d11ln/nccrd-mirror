@@ -31,7 +31,7 @@ class StatusFilter extends React.Component {
     super(props);
 
     //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
 
     if (typeof parsedHash.status !== 'undefined') {
 
@@ -80,7 +80,8 @@ class StatusFilter extends React.Component {
         }}
         style={{
           marginTop: "-4px",
-          marginRight: "0px"
+          marginRight: "0px",
+          marginBottom: "15px"
         }}
       />
     )

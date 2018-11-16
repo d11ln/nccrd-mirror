@@ -34,14 +34,14 @@ const mapStateToProps = (state, props) => {
   let { mitigationData: { mitigationDetails } } = state
   let { emissionsData: { emissionsData } } = state
   let { researchData: { researchDetails } } = state
-  let { globalData: { loading, editMode } } = state
+  let { globalData: { loading, editMode, projectsFullView } } = state
   let editListModalType = state.editListModalData.type
   let editListModalShow = state.editListModalData.show
   let user = state.oidc.user
 
   return {
-    projectDetails, projectFunderDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, editMode, loading,
-    editListModalType, editListModalShow, user
+    projectDetails, projectFunderDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails, 
+    editMode, loading, editListModalType, editListModalShow, user, projectsFullView
   }
 }
 
@@ -188,12 +188,13 @@ class ProjectDetails extends React.Component {
     this.toggleTabs = this.toggleTabs.bind(this);
     this.addClick = this.addClick.bind(this)
     this.showMessage = this.showMessage.bind(this)
+    this.navBack = this.navBack.bind(this)
 
     let projectId = this.props.match.params.id
     let daoid = null
     let readonly = false
 
-    const parsedHash = queryString.parse(location.hash.replace(`/projects/${projectId}?`, ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace(`/projects/${projectId}?`, ""))
     if (typeof parsedHash.daoid !== 'undefined') {
       daoid = parsedHash.daoid
     }
@@ -201,6 +202,7 @@ class ProjectDetails extends React.Component {
     if (typeof parsedHash.readonly !== 'undefined' && parsedHash.readonly === 'true') {
       readonly = true
     }
+
 
     this.state = {
       activeItemTabs: '1',
@@ -573,8 +575,15 @@ class ProjectDetails extends React.Component {
   }
 
   navBack() {
+
     this.props.setLoading(true)
-    location.hash = ""
+
+    let navTo = location.hash.replace(
+      "#/projects/" + this.state.projectId,
+      this.props.projectsFullView === true ? "#/projects" : "/#"
+    )
+
+    location.hash = navTo
   }
 
   backToList() {

@@ -28,7 +28,7 @@ class TitleFilter extends React.Component {
     super(props);
 
     //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
 
     if (typeof parsedHash.title !== 'undefined') {
 
@@ -60,7 +60,7 @@ class TitleFilter extends React.Component {
     let uiconf = UILookup("txtTitleFilter", "Title")
 
     return (
-      <div>
+      <div style={{ marginBottom: "-10px" }}>
         <label data-tip={uiconf.tooltip} style={{ color: "grey", fontSize: "14px" }}>
           <b>{uiconf.label}</b>
         </label>
@@ -74,7 +74,8 @@ class TitleFilter extends React.Component {
             height: "24px", 
             border: "1px solid lightgrey", 
             borderRadius: "5px",
-            backgroundColor: "white"
+            backgroundColor: "white",
+            marginBottom: "-10px"
           }}
           onChange={this.onChange.bind(this)} value={titleFilterInternal} 
           hint="Search..."

@@ -14,7 +14,8 @@ const store = createStore(
             loading: false,
             editMode: false,
             daoid: null,
-            showSideNav: false
+            showSideNav: false,
+            projectsFullView: false
         },
 
         navigation: {

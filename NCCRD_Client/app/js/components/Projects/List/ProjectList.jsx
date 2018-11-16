@@ -64,6 +64,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     toggleFavorites: async payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
+    },
+    setProjectsFullView: payload => {
+      dispatch({ type: "SET_PROJECTS_FULLVIEW", payload })
     }
   }
 }
@@ -72,6 +75,8 @@ class ProjectList extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.showMessage = this.showMessage.bind(this)
 
     //Set initial state
     this.state = {
@@ -87,18 +92,24 @@ class ProjectList extends React.Component {
       messageModal: false,
       title: "",
       message: "",
-      ellipsisMenu: false
+      ellipsisMenu: false,
+      allowPopin: true
     }
 
-    this.showMessage = this.showMessage.bind(this)
   }
 
   async componentDidMount() {
 
+    this.props.setProjectsFullView(true)
+
     //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
+    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
     if (typeof parsedHash.daoid !== 'undefined') {
       await this.props.setDAOID(parsedHash.daoid)
+    }
+
+    if (typeof parsedHash.popin === 'hidden') {
+      this.setState({ allowPopin: false })
     }
 
     this.getProjectList()
@@ -292,7 +303,7 @@ class ProjectList extends React.Component {
   render() {
 
     let { user, daoid, favoritesFilter } = this.props
-    let { ellipsisMenu } = this.state
+    let { ellipsisMenu, allowPopin } = this.state
 
     const projComps = this.buildList()
     let projectlist = []
@@ -312,18 +323,21 @@ class ProjectList extends React.Component {
 
         <div style={{ float: "right" }}>
 
-          <img
-            src={location.hash.includes("projects") ? popin : popout}
-            style={{
-              width: "25px",
-              margin: "-4px 5px 0px 0px",
-              cursor: "pointer"
-            }}
-            onClick={() => { 
-              this.props.setScrollPos(0)
-              location.hash = (location.hash.includes("projects") ? "" : "/projects") 
-            }}
-          />
+          {
+            (allowPopin === true) &&
+            <img
+              src={location.hash.includes("projects") ? popin : popout}
+              style={{
+                width: "25px",
+                margin: "-4px 5px 0px 0px",
+                cursor: "pointer"
+              }}
+              onClick={() => {
+                this.props.setScrollPos(0)
+                location.hash = (location.hash.includes("projects") ? "" : "/projects")
+              }}
+            />
+          }
 
           <Popover
             content={
@@ -334,10 +348,10 @@ class ProjectList extends React.Component {
                 <Button
                   size="sm"
                   color=""
-                  style={{ 
-                    padding: "4px 10px 5px 10px", 
-                    marginTop: "1px", 
-                    marginRight: "-1px", 
+                  style={{
+                    padding: "4px 10px 5px 10px",
+                    marginTop: "1px",
+                    marginRight: "-1px",
                     width: "40px",
                     backgroundColor: favoritesFilter ? DEAGreen : "grey"
                   }}
@@ -351,10 +365,10 @@ class ProjectList extends React.Component {
                 <Button
                   size="sm"
                   color=""
-                  style={{ 
-                    padding: "4px 10px 5px 10px", 
-                    marginTop: "1px", 
-                    marginLeft: "-1px", 
+                  style={{
+                    padding: "4px 10px 5px 10px",
+                    marginTop: "1px",
+                    marginLeft: "-1px",
                     width: "40px",
                     backgroundColor: !favoritesFilter ? DEAGreen : "grey"
                   }}
