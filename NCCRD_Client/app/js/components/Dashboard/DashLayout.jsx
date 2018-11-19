@@ -9,7 +9,10 @@ import SectorFilters from '../Projects/Filters/SectorFilters.jsx'
 import ProjectList from "../Projects/List/ProjectList.jsx"
 import ProjectFilters from "../Projects/Filters/ProjectFilters.jsx"
 import DashMapPreview from "./DashMapPreview.jsx"
-import DashGraphPreview from "./DashGraphPreview.jsx"
+import DashGraph1Preview from "./DashGraph1Preview.jsx"
+import DashGraph2Preview from "./DashGraph2Preview.jsx"
+import DashGraph3Preview from "./DashGraph3Preview.jsx"
+import DashGraph4Preview from "./DashGraph4Preview.jsx"
 import { DEAGreen } from '../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
@@ -156,21 +159,11 @@ class DashLayout extends React.Component {
                 <Col md="12">
                   <Row>
                     <Col md="6">
-                      <DashGraphPreview>
-                        <iframe
-                          style={{
-                            width: "100%",
-                            height: "150px",
-                            margin: "0px",
-                            border: "none"
-                          }}
-                          src={""}
-                        />
-                      </DashGraphPreview>
+                      <DashGraph1Preview />
                     </Col>
 
                     <Col md="6">
-                      <DashGraphPreview>
+                      <DashGraph2Preview>
                         <iframe
                           style={{
                             width: "100%",
@@ -180,7 +173,7 @@ class DashLayout extends React.Component {
                           }}
                           src={""}
                         />
-                      </DashGraphPreview>
+                      </DashGraph2Preview>
                     </Col>
 
                   </Row>
@@ -189,7 +182,7 @@ class DashLayout extends React.Component {
 
                   <Row>
                     <Col md="6">
-                      <DashGraphPreview>
+                      <DashGraph3Preview>
                         <iframe
                           style={{
                             width: "100%",
@@ -199,11 +192,11 @@ class DashLayout extends React.Component {
                           }}
                           src={""}
                         />
-                      </DashGraphPreview>
+                      </DashGraph3Preview>
                     </Col>
 
                     <Col md="6">
-                      <DashGraphPreview>
+                      <DashGraph4Preview>
                         <iframe
                           style={{
                             width: "100%",
@@ -213,7 +206,7 @@ class DashLayout extends React.Component {
                           }}
                           src={""}
                         />
-                      </DashGraphPreview>
+                      </DashGraph4Preview>
                     </Col>
 
                   </Row>

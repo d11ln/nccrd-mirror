@@ -26,9 +26,12 @@ import Footer from './components/Base/Footer.jsx'
 import userManager from './components/Authentication/userManager'
 import DashLayout from './components/Dashboard/DashLayout.jsx'
 import MapView from './components/Map/MapView.jsx'
-import ChartView from './components/Charts/ChartView.jsx'
 import SideNav from './components/Base/SideNav.jsx'
 import { data as NavData } from '../data/sideNavConfig'
+import DashGraph1FullView from './components/Dashboard/DashGraph1FullView.jsx'
+import DashGraph2FullView from './components/Dashboard/DashGraph2FullView.jsx'
+import DashGraph3FullView from './components/Dashboard/DashGraph3FullView.jsx'
+import DashGraph4FullView from './components/Dashboard/DashGraph4FullView.jsx'
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -65,8 +68,15 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    userManager.signinSilent()
+  async componentDidMount() {
+    window.onhashchange = this.saveCurrentURL
+
+    try {
+      await userManager.signinSilent()
+    }
+    catch (ex) {
+      console.warn("Sign-in-silent failed!", ex)
+    }
   }
 
   componentDidUpdate() {
@@ -118,10 +128,13 @@ class App extends React.Component {
                   <Route path="/projects" component={Projects} exact />
                   <Route path="/projects/:id" component={ProjectDetails} exact />
                   <Route path="/map" component={MapView} exact />
-                  <Route path="/chart" component={ChartView} exact />
                   <Route path="/login" component={Login} exact />
                   <Route path="/logout" component={Logout} exact />
                   <Route path="/callback" component={CallbackPage} />
+                  <Route path="/chart1" component={DashGraph1FullView} exact />
+                  <Route path="/chart2" component={DashGraph2FullView} exact />
+                  <Route path="/chart3" component={DashGraph3FullView} exact />
+                  <Route path="/chart4" component={DashGraph4FullView} exact />
                 </Switch>
               </div>
             </div>

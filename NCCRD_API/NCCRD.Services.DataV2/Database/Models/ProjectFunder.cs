@@ -17,13 +17,11 @@ namespace NCCRD.Services.DataV2.Database.Models
         //FK - Funder
         [Range(0, int.MaxValue, ErrorMessage = "The Funder field is required.")]
         public int FunderId { get; set; }
-        [IgnoreDataMember]
         public Funder Funder { get; set; }
 
         //FK - Project
         [Range(0, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
-        [IgnoreDataMember]
         public Project Project { get; set; }
     }
 }

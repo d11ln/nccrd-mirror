@@ -1,0 +1,308 @@
+import React, { Children } from 'react'
+import { Row, Col, Button } from 'mdbreact'
+import { connect } from 'react-redux'
+import popout from '../../../images/popout.png'
+import OData from 'react-odata'
+import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.cfg'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+
+const mapStateToProps = (state, props) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setScrollPos: payload => {
+      dispatch({ type: "SET_PROJECT_SCROLL", payload })
+    }
+  }
+}
+
+const chartColours = [
+  "#82CA9D", //pastel green
+  "#8884D8", //pastel purple/blue
+  "#FFCF77", //pastel orange
+  "#A2D0D8", //pastel blue-grey
+  "#FF6868" //pastel red
+]
+
+class DashGraph3Preview extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hazards: []
+    }
+
+    this.renderTooltipContent = this.renderTooltipContent.bind(this)
+    this.getPercent = this.getPercent.bind(this)
+    this.toPercent = this.toPercent.bind(this)
+  }
+
+  async componentDidMount() {
+
+    //Get Hazards list/details
+    try {
+
+      let res = await fetch(vmsBaseURL + "hazards/flat")
+
+      //Get response body
+      let resBody = await res.json()
+
+      if (res.ok) {
+        this.setState({ hazards: resBody.items })
+      }
+      else {
+        throw new Error(resBody.error.message)
+      }
+
+    } catch (ex) {
+      console.error(ex)
+    }
+  }
+
+  transformData(data, hazards) {
+
+    let tData = []
+
+    let minYear = Math.min(...data.map(p => p.Project.StartYear))
+    let maxYear = Math.max(...data.map(p => p.Project.EndYear))
+    let currentYear = new Date().getFullYear()
+
+    if (maxYear > currentYear) {
+      maxYear = currentYear
+    }
+
+    //Get unique hazard IDs
+    let uniqueHazardIDs2 = []
+    data.forEach(h => {
+      if (uniqueHazardIDs2.filter(x => x.HazardId === h.HazardId).length === 0) {
+        uniqueHazardIDs2.push({
+          HazardId: h.HazardId,
+          Count: data.filter(d => d.HazardId === h.HazardId).length
+        })
+      }
+    })
+
+    //Sort by Count
+    uniqueHazardIDs2.sort(function (haz1, haz2) {
+      return haz2.Count - haz1.Count;
+    });
+
+    //Take top 5 only
+    uniqueHazardIDs2 = uniqueHazardIDs2.slice(0, 5)
+
+    for (let i = minYear; i <= maxYear; i++) {
+
+      let tItem = { Year: i }
+
+      uniqueHazardIDs2.forEach(haz => {
+
+        //Get Hazard Name
+        let hazName = "Unknown"
+        let searchHaz = hazards.filter(x => x.id == haz.HazardId)
+        if (searchHaz.length > 0) {
+          hazName = searchHaz[0].value.trim()
+        }
+
+        //Get relevant hazards
+        let filteredHazards = data.filter(d => d.Project.StartYear <= i && d.Project.EndYear >= i && d.HazardId == haz.HazardId)
+        tItem[hazName] = filteredHazards.length
+
+      })
+
+      tData.push(tItem)
+    }
+
+    return tData
+  }
+
+  getPercent (value, total) {
+    const ratio = total > 0 ? value / total : 0;  
+    return this.toPercent(ratio, 1);
+  }
+
+  toPercent(decimal, fixed = 0) {
+    return `${(decimal * 100).toFixed(fixed)}%`
+  }
+
+  renderTooltipContent(params) {
+    const { payload, label, active } = params;
+    const total = payload.reduce((result, entry) => (result + entry.value), 0);
+
+    return (   
+      <div>
+        {
+          active &&
+          <div style={{ backgroundColor: "white", padding: "10px", border: "1px solid gainsboro" }}>
+            <p className="total" style={{ marginBottom: "5px"}}>{`${label} (Total: ${total})`}</p>
+              {
+                payload.map((entry, index) => (
+                  <p key={`item-${index}`} style={{color: entry.color, marginBottom: "0px", fontSize: "14px"}}>
+                    {`${entry.name}: ${entry.value} (${this.getPercent(entry.value, total)})`}
+                  </p>
+                ))
+              }
+          </div>
+        }
+      </div>
+    )
+  }
+
+
+  renderAreas(transformedData, hazards) {
+    
+    let areas = []
+    let index = 0;
+
+    Object.keys(transformedData[0]).filter(k => k !== "Year")
+      .forEach(key => {
+
+        //Get Hazard color
+        let color = "lightgrey"
+        let searchHaz = hazards.filter(h => h.value.trim() === key)
+        if (searchHaz.length > 0) {
+          color = chartColours[index] //searchHaz[0].color
+        }
+
+        areas.push(
+          <Area
+            key={key}
+            type='monotone'
+            dataKey={key}
+            stackId="1"
+            stroke={color}
+            fill={color}
+          />
+        )
+
+        index += 1
+      })
+
+    return areas
+  }
+
+  render() {
+
+    let { hazards } = this.state
+
+    return (
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "10px 10px 0px 10px",
+          borderRadius: "10px",
+          border: "1px solid gainsboro",
+          cursor: "pointer",
+        }}
+      >
+
+        <img src={popout} style={{ width: "25px", position: "absolute", top: "10px", right: "25px" }}
+          onClick={() => {
+            this.props.setScrollPos(window.pageYOffset)
+            location.hash = "/chart3"
+          }} />
+
+        <div
+          style={{
+            width: "100%",
+            textAlign: "center",
+            marginTop: "3px",
+            marginBottom: "10px",
+            paddingRight: "25px",
+            color: "grey",
+            fontSize: "14px",
+            fontWeight: "bolder"
+          }}
+        >
+          HAZARDS
+        </div>
+
+        <OData
+          baseUrl={apiBaseURL + "AdaptationDetails"}
+          query={{
+            select: ["AdaptationDetailId", "HazardId"],
+            filter: {
+              HazardId: { ne: null }
+            },
+            expand: {
+              Project: {
+                select: ["ProjectId", "StartYear", "EndYear"]
+              }
+            }
+          }}
+        >
+          {({ loading, error, data }) => {
+
+            let contents = []
+
+            if (loading) {
+              contents.push(
+                <div key="G1Loading" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
+                  <b>
+                    <i>
+                      LOADING...
+                    </i>
+                  </b>
+                </div>
+              )
+            }
+
+            if (error) {
+              console.error(error)
+              contents.push(
+                <div key="G1Error" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
+                  <b>
+                    <i>
+                      ERROR
+                      <br />
+                      (See log)
+                    </i>
+                  </b>
+                </div>
+              )
+            }
+
+            if (data && data.value && hazards.length > 0) {
+
+              let transformedData = this.transformData(data.value, hazards)
+
+              if (transformedData.length > 0) {
+                contents.push(
+                  <ResponsiveContainer key="G3Graph" width="100%" height="100%">
+                    <AreaChart data={transformedData} stackOffset="expand" >
+                      <XAxis hide dataKey="Year" />
+                      <YAxis hide tickFormatter={this.toPercent} />
+                      <Tooltip content={this.renderTooltipContent} />
+                      {this.renderAreas(transformedData, hazards)}
+                    </AreaChart>
+                  </ResponsiveContainer>
+                )
+              }
+            }
+
+            return (
+
+              <div
+                style={{
+                  width: "100%",
+                  height: "130px",
+                  margin: "0px",
+                  border: "none",
+                  paddingBottom: "10px"
+                }}
+              >
+                {contents}
+              </div>
+            )
+
+          }}
+        </OData>
+      </div>
+    )
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashGraph3Preview)
