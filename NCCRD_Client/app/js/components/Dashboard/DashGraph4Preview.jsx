@@ -5,15 +5,23 @@ import popout from '../../../images/popout.png'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.cfg'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import buildQuery from 'odata-query'
+
+const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
-  return {}
+  let { filterData: { statusFilter, typologyFilter, regionFilter } } = state
+  let { chartData: { chart4 } } = state
+  return { statusFilter, typologyFilter, regionFilter, chart4 }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setScrollPos: payload => {
       dispatch({ type: "SET_PROJECT_SCROLL", payload })
+    },
+    setChartData: payload => {
+      dispatch({ type: "SET_CHART_4", payload })
     }
   }
 }
@@ -32,7 +40,8 @@ class DashGraph4Preview extends React.Component {
     super(props);
 
     this.state = {
-      sectors: []
+      sectors: [],
+      filterIDs: []
     }
 
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
@@ -40,7 +49,57 @@ class DashGraph4Preview extends React.Component {
     this.toPercent = this.toPercent.bind(this)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getChartData()
+    this.getSectors()
+    this.getFilteredProjectIDs()
+  }
+
+  componentDidUpdate() {
+    this.getFilteredProjectIDs()
+  }
+
+  async getChartData() {
+
+    if (this.props.chart4.length === 0) {
+
+      const query = buildQuery({
+        select: ["ProjectId", "StartYear", "EndYear"],
+        expand: {
+          AdaptationDetails: {
+            select: ["AdaptationDetailId", "SectorId"],
+            filter: {
+              SectorId: { ne: null }
+            },
+          },
+          MitigationDetails: {
+            select: ["MitigationDetailId", "SectorId"],
+            filter: {
+              SectorId: { ne: null }
+            },
+          }
+        }
+      })
+
+      try {
+        let res = await fetch(apiBaseURL + `Projects${query}`)
+        let resBody = await res.json()
+
+        if (res.ok && resBody.value) {
+          //Process resBody
+          this.props.setChartData(resBody.value)
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+      }
+      catch (ex) {
+        console.error(ex)
+      }
+    }
+  }
+
+  async getSectors() {
 
     //Get Sectors list/details
     try {
@@ -60,6 +119,59 @@ class DashGraph4Preview extends React.Component {
     } catch (ex) {
       console.error(ex)
     }
+  }
+
+  async getFilteredProjectIDs() {
+
+    let { statusFilter, typologyFilter, regionFilter } = this.props
+    let filters = {}
+
+    //ADD FILTERS//
+    //Status//
+    if (statusFilter !== 0) {
+      filters.status = statusFilter
+    }
+
+    //Typology//
+    if (typologyFilter !== 0) {
+      filters.typology = typologyFilter
+    }
+
+    //Region//
+    if (regionFilter != 0) {
+      filters.region = regionFilter
+    }
+
+    //GET PROJECTS FILTERED//
+    try {
+
+      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(filters)
+        })
+
+      let resBody = await res.json()
+
+      if (res.ok) {
+        //Process resBody
+        let filterIDs = resBody.value.map(p => p.ProjectId)
+        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
+          this.setState({ filterIDs })
+        }
+      }
+      else {
+        throw new Error(resBody.error.message)
+      }
+
+    }
+    catch (ex) {
+      console.error(ex)
+    }
+
   }
 
   transformData(data, sectors) {
@@ -208,7 +320,20 @@ class DashGraph4Preview extends React.Component {
 
   render() {
 
-    let { sectors } = this.state
+    let { sectors, filterIDs } = this.state
+    let { chart4 } = this.props
+
+    //Remove projects with no sectors
+    let tData = []
+    chart4.forEach(d => {
+      if (d.AdaptationDetails.length > 0 || d.MitigationDetails.length > 0) {
+        tData.push(d)
+      }
+    })
+    chart4 = tData
+
+    let filteredData = chart4.filter(p => filterIDs.includes(p.ProjectId))
+    let transformedData = this.transformData(filteredData, sectors)
 
     return (
       <div
@@ -242,101 +367,27 @@ class DashGraph4Preview extends React.Component {
           SECTORS
         </div>
 
-        <OData
-          baseUrl={apiBaseURL + "Projects"}
-          query={{
-            select: ["ProjectId", "StartYear", "EndYear"],
-            expand: {
-              AdaptationDetails: {
-                select: ["AdaptationDetailId", "SectorId"],
-                filter: {
-                  SectorId: { ne: null }
-                },
-              },
-              MitigationDetails: {
-                select: ["MitigationDetailId", "SectorId"],
-                filter: {
-                  SectorId: { ne: null }
-                },
-              }
-            }
+        <div
+          style={{
+            width: "100%",
+            height: "130px",
+            margin: "0px",
+            border: "none",
+            paddingBottom: "10px"
           }}
         >
-          {({ loading, error, data }) => {
-
-            let contents = []
-
-            if (loading) {
-              contents.push(
-                <div key="G1Loading" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
-                  <b>
-                    <i>
-                      LOADING...
-                    </i>
-                  </b>
-                </div>
-              )
-            }
-
-            if (error) {
-              console.error(error)
-              contents.push(
-                <div key="G1Error" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
-                  <b>
-                    <i>
-                      ERROR
-                      <br />
-                      (See log)
-                    </i>
-                  </b>
-                </div>
-              )
-            }
-
-            if (data && data.value && sectors.length > 0) {
-
-              //Remove projects with no sectors
-              let tData = []
-              data.value.forEach(d => {
-                if (d.AdaptationDetails.length > 0 || d.MitigationDetails.length > 0) {
-                  tData.push(d)
-                }
-              })
-              data.value = tData
-
-              let transformedData = this.transformData(data.value, sectors)
-
-              if (transformedData.length > 0) {
-                contents.push(
-                  <ResponsiveContainer key="G4Graph" width="100%" height="100%">
-                    <AreaChart data={transformedData} stackOffset="expand" >
-                      <XAxis hide dataKey="Year" />
-                      <YAxis hide tickFormatter={this.toPercent} />
-                      <Tooltip content={this.renderTooltipContent} />
-                      {this.renderAreas(transformedData, sectors)}
-                    </AreaChart>
-                  </ResponsiveContainer>
-                )
-              }
-            }
-
-            return (
-
-              <div
-                style={{
-                  width: "100%",
-                  height: "130px",
-                  margin: "0px",
-                  border: "none",
-                  paddingBottom: "10px"
-                }}
-              >
-                {contents}
-              </div>
-            )
-
-          }}
-        </OData>
+          {
+            (transformedData.length > 0 && sectors.length > 0) &&
+            <ResponsiveContainer key={"G4Graph"} width="100%" height="100%">
+              <AreaChart data={transformedData} stackOffset="expand" >
+                <XAxis hide dataKey="Year" />
+                <YAxis hide tickFormatter={this.toPercent} />
+                <Tooltip content={this.renderTooltipContent} />
+                {this.renderAreas(transformedData, sectors)}
+              </AreaChart>
+            </ResponsiveContainer>
+          }
+        </div>
       </div>
     )
   }

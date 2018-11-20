@@ -1,19 +1,26 @@
-import React, { Children } from 'react'
-import { Row, Col, Button } from 'mdbreact'
+import React from 'react'
 import { connect } from 'react-redux'
 import popout from '../../../images/popout.png'
 import OData from 'react-odata'
-import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.cfg'
-import { LineChart, Line, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
+import { apiBaseURL } from '../../config/serviceURLs.cfg'
+import { LineChart, Line, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import buildQuery from 'odata-query'
+
+const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
-  return {}
+  let { filterData: { statusFilter, typologyFilter, sectorFilter, regionFilter } } = state
+  let { chartData: { chart1 } } = state
+  return { statusFilter, typologyFilter, sectorFilter, regionFilter, chart1 }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setScrollPos: payload => {
       dispatch({ type: "SET_PROJECT_SCROLL", payload })
+    },
+    setChartData: payload => {
+      dispatch({ type: "SET_CHART_1", payload })
     }
   }
 }
@@ -22,6 +29,118 @@ class DashGraph1Preview extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      filterIDs: []
+    }
+  }
+
+  componentDidMount() {
+    this.getChartData()
+    this.getFilteredProjectIDs()
+  }
+
+  componentDidUpdate() {
+    this.getFilteredProjectIDs()
+  }
+
+  async getFilteredProjectIDs() {
+
+    let { statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
+    let filters = {}
+
+    //ADD FILTERS//
+    //Status//
+    if (statusFilter !== 0) {
+      filters.status = statusFilter
+    }
+
+    //Typology//
+    if (typologyFilter !== 0) {
+      filters.typology = typologyFilter
+    }
+
+    //Region//
+    if (regionFilter != 0) {
+      filters.region = regionFilter
+    }
+
+    //Sector//
+    if (sectorFilter != 0) {
+      filters.sector = sectorFilter
+    }
+
+    //GET PROJECTS FILTERED//
+    try {
+
+      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(filters)
+        })
+
+      let resBody = await res.json()
+
+      if (res.ok) {
+        //Process resBody
+        let filterIDs = resBody.value.map(p => p.ProjectId)
+        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
+          this.setState({ filterIDs })
+        }
+      }
+      else {
+        throw new Error(resBody.error.message)
+      }
+
+    }
+    catch (ex) {
+      console.error(ex)
+    }
+
+  }
+
+  async getChartData() {
+
+    if (this.props.chart1.length === 0) {
+
+      const query = buildQuery({
+        select: "ProjectId, StartYear, EndYear",
+        filter: {
+          ProjectFunders: {
+            any: [
+              { Funder: { ne: null } }
+            ]
+          }
+        },
+        expand: {
+          AdaptationDetails: {
+            select: ["AdaptationDetailId"]
+          },
+          MitigationDetails: {
+            select: ["MitigationDetailId"]
+          }
+        }
+      })
+
+      try {
+        let res = await fetch(apiBaseURL + `Projects${query}`)
+        let resBody = await res.json()
+
+        if (res.ok && resBody.value) {
+          //Process resBody
+          this.props.setChartData(resBody.value)
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+      }
+      catch (ex) {
+        console.error(ex)
+      }
+    }
   }
 
   transformData(data) {
@@ -50,6 +169,11 @@ class DashGraph1Preview extends React.Component {
   }
 
   render() {
+
+    let { chart1 } = this.props
+    let { filterIDs } = this.state
+    let filteredData = chart1.filter(p => filterIDs.includes(p.ProjectId))
+    let transformedData = this.transformData(filteredData)
 
     return (
       <div
@@ -83,90 +207,27 @@ class DashGraph1Preview extends React.Component {
           FUNDED PROJECTS
         </div>
 
-        <OData
-          baseUrl={apiBaseURL + "Projects"}
-          query={{
-            select: "ProjectId, StartYear, EndYear",
-            filter: {
-              ProjectFunders: {
-                any: [
-                  { Funder: { ne: null } }
-                ]
-              }
-            },
-            expand: {
-              AdaptationDetails: {
-                select: ["AdaptationDetailId"]
-              },
-              MitigationDetails: {
-                select: ["MitigationDetailId"]
-              }
-            }
+        <div
+          style={{
+            width: "100%",
+            height: "130px",
+            margin: "0px",
+            border: "none",
+            paddingBottom: "10px"
           }}
         >
-          {({ loading, error, data }) => {
-
-            let contents = []
-
-            if (loading) {
-              contents.push(
-                <div key="G1Loading" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
-                  <b>
-                    <i>
-                      LOADING...
-                    </i>
-                  </b>
-                </div>
-              )
-            }
-
-            if (error) {
-              console.error(error)
-              contents.push(
-                <div key="G1Error" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
-                  <b>
-                    <i>
-                      ERROR
-                      <br />
-                      (See log)
-                    </i>
-                  </b>
-                </div>
-              )
-            }
-
-            if (data && data.value) {
-              let transformedData = this.transformData(data.value)
-              if (transformedData.length > 0) {
-                contents.push(
-                  <ResponsiveContainer key="G1Graph" width="100%" height="100%">
-                    <LineChart data={transformedData} >
-                      <XAxis hide dataKey="Year" />
-                      <Line dot={false} type='monotone' dataKey='Adaptation' stroke='#8884d8' strokeWidth={2} />
-                      <Line dot={false} type="monotone" dataKey="Mitigation" stroke="#82ca9d" strokeWidth={2} />
-                      <Tooltip />
-                    </LineChart>
-                  </ResponsiveContainer>
-                )
-              }
-            }
-
-            return (
-              <div
-                style={{
-                  width: "100%",
-                  height: "130px",
-                  margin: "0px",
-                  border: "none",
-                  paddingBottom: "10px"
-                }}
-              >
-                {contents}
-              </div>
-            )
-
-          }}
-        </OData>
+          {
+            (transformedData.length > 0) &&
+            <ResponsiveContainer key={new Date().valueOf()} width="100%" height="100%">
+              <LineChart data={transformedData} >
+                <XAxis hide dataKey="Year" />
+                <Line dot={false} type='monotone' dataKey='Adaptation' stroke='#8884d8' strokeWidth={2} />
+                <Line dot={false} type="monotone" dataKey="Mitigation" stroke="#82ca9d" strokeWidth={2} />
+                <Tooltip />
+              </LineChart>
+            </ResponsiveContainer>
+          }
+        </div>
       </div>
     )
   }

@@ -5,15 +5,23 @@ import popout from '../../../images/popout.png'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.cfg'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import buildQuery from 'odata-query'
+
+const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
-  return {}
+  let { filterData: { statusFilter, sectorFilter, regionFilter } } = state
+  let { chartData: { chart3 } } = state
+  return { statusFilter, sectorFilter, regionFilter, chart3 }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setScrollPos: payload => {
       dispatch({ type: "SET_PROJECT_SCROLL", payload })
+    },
+    setChartData: payload => {
+      dispatch({ type: "SET_CHART_3", payload })
     }
   }
 }
@@ -32,7 +40,8 @@ class DashGraph3Preview extends React.Component {
     super(props);
 
     this.state = {
-      hazards: []
+      hazards: [],
+      filterIDs: []
     }
 
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
@@ -40,7 +49,51 @@ class DashGraph3Preview extends React.Component {
     this.toPercent = this.toPercent.bind(this)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getChartData()
+    this.getHazards()
+    this.getFilteredProjectIDs()
+  }
+
+  componentDidUpdate() {
+    this.getFilteredProjectIDs()
+  }
+
+  async getChartData() {
+
+    if (this.props.chart3.length === 0) {
+
+      const query = buildQuery({
+        select: ["AdaptationDetailId", "HazardId"],
+        filter: {
+          HazardId: { ne: null }
+        },
+        expand: {
+          Project: {
+            select: ["ProjectId", "StartYear", "EndYear"]
+          }
+        }
+      })
+
+      try {
+        let res = await fetch(apiBaseURL + `AdaptationDetails${query}`)
+        let resBody = await res.json()
+
+        if (res.ok && resBody.value) {
+          //Process resBody
+          this.props.setChartData(resBody.value)
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+      }
+      catch (ex) {
+        console.error(ex)
+      }
+    }
+  }
+
+  async getHazards() {
 
     //Get Hazards list/details
     try {
@@ -60,6 +113,59 @@ class DashGraph3Preview extends React.Component {
     } catch (ex) {
       console.error(ex)
     }
+  }
+
+  async getFilteredProjectIDs() {
+
+    let { statusFilter, regionFilter, sectorFilter } = this.props
+    let filters = {}
+
+    //ADD FILTERS//
+    //Status//
+    if (statusFilter !== 0) {
+      filters.status = statusFilter
+    }
+
+    //Region//
+    if (regionFilter != 0) {
+      filters.region = regionFilter
+    }
+
+    //Sector//
+    if (sectorFilter != 0) {
+      filters.sector = sectorFilter
+    }
+
+    //GET PROJECTS FILTERED//
+    try {
+
+      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(filters)
+        })
+
+      let resBody = await res.json()
+
+      if (res.ok) {
+        //Process resBody
+        let filterIDs = resBody.value.map(p => p.ProjectId)
+        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
+          this.setState({ filterIDs })
+        }
+      }
+      else {
+        throw new Error(resBody.error.message)
+      }
+
+    }
+    catch (ex) {
+      console.error(ex)
+    }
+
   }
 
   transformData(data, hazards) {
@@ -118,8 +224,8 @@ class DashGraph3Preview extends React.Component {
     return tData
   }
 
-  getPercent (value, total) {
-    const ratio = total > 0 ? value / total : 0;  
+  getPercent(value, total) {
+    const ratio = total > 0 ? value / total : 0;
     return this.toPercent(ratio, 1);
   }
 
@@ -131,28 +237,27 @@ class DashGraph3Preview extends React.Component {
     const { payload, label, active } = params;
     const total = payload.reduce((result, entry) => (result + entry.value), 0);
 
-    return (   
+    return (
       <div>
         {
           active &&
           <div style={{ backgroundColor: "white", padding: "10px", border: "1px solid gainsboro" }}>
-            <p className="total" style={{ marginBottom: "5px"}}>{`${label} (Total: ${total})`}</p>
-              {
-                payload.map((entry, index) => (
-                  <p key={`item-${index}`} style={{color: entry.color, marginBottom: "0px", fontSize: "14px"}}>
-                    {`${entry.name}: ${entry.value} (${this.getPercent(entry.value, total)})`}
-                  </p>
-                ))
-              }
+            <p className="total" style={{ marginBottom: "5px" }}>{`${label} (Total: ${total})`}</p>
+            {
+              payload.map((entry, index) => (
+                <p key={`item-${index}`} style={{ color: entry.color, marginBottom: "0px", fontSize: "14px" }}>
+                  {`${entry.name}: ${entry.value} (${this.getPercent(entry.value, total)})`}
+                </p>
+              ))
+            }
           </div>
         }
       </div>
     )
   }
 
-
   renderAreas(transformedData, hazards) {
-    
+
     let areas = []
     let index = 0;
 
@@ -185,7 +290,10 @@ class DashGraph3Preview extends React.Component {
 
   render() {
 
-    let { hazards } = this.state
+    let { hazards, filterIDs } = this.state
+    let { chart3 } = this.props
+    let filteredData = chart3.filter(p => filterIDs.includes(p.Project.ProjectId))
+    let transformedData = this.transformData(filteredData, hazards)
 
     return (
       <div
@@ -219,86 +327,27 @@ class DashGraph3Preview extends React.Component {
           HAZARDS
         </div>
 
-        <OData
-          baseUrl={apiBaseURL + "AdaptationDetails"}
-          query={{
-            select: ["AdaptationDetailId", "HazardId"],
-            filter: {
-              HazardId: { ne: null }
-            },
-            expand: {
-              Project: {
-                select: ["ProjectId", "StartYear", "EndYear"]
-              }
-            }
+        <div
+          style={{
+            width: "100%",
+            height: "130px",
+            margin: "0px",
+            border: "none",
+            paddingBottom: "10px"
           }}
         >
-          {({ loading, error, data }) => {
-
-            let contents = []
-
-            if (loading) {
-              contents.push(
-                <div key="G1Loading" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
-                  <b>
-                    <i>
-                      LOADING...
-                    </i>
-                  </b>
-                </div>
-              )
-            }
-
-            if (error) {
-              console.error(error)
-              contents.push(
-                <div key="G1Error" style={{ textAlign: "center", color: "grey", paddingTop: "35px", fontSize: "14px", }}>
-                  <b>
-                    <i>
-                      ERROR
-                      <br />
-                      (See log)
-                    </i>
-                  </b>
-                </div>
-              )
-            }
-
-            if (data && data.value && hazards.length > 0) {
-
-              let transformedData = this.transformData(data.value, hazards)
-
-              if (transformedData.length > 0) {
-                contents.push(
-                  <ResponsiveContainer key="G3Graph" width="100%" height="100%">
-                    <AreaChart data={transformedData} stackOffset="expand" >
-                      <XAxis hide dataKey="Year" />
-                      <YAxis hide tickFormatter={this.toPercent} />
-                      <Tooltip content={this.renderTooltipContent} />
-                      {this.renderAreas(transformedData, hazards)}
-                    </AreaChart>
-                  </ResponsiveContainer>
-                )
-              }
-            }
-
-            return (
-
-              <div
-                style={{
-                  width: "100%",
-                  height: "130px",
-                  margin: "0px",
-                  border: "none",
-                  paddingBottom: "10px"
-                }}
-              >
-                {contents}
-              </div>
-            )
-
-          }}
-        </OData>
+          {
+            (transformedData.length > 0 && hazards.length > 0) &&
+            <ResponsiveContainer key="G3Graph" width="100%" height="100%">
+              <AreaChart data={transformedData} stackOffset="expand" >
+                <XAxis hide dataKey="Year" />
+                <YAxis hide tickFormatter={this.toPercent} />
+                <Tooltip content={this.renderTooltipContent} />
+                {this.renderAreas(transformedData, hazards)}
+              </AreaChart>
+            </ResponsiveContainer>
+          }
+        </div>
       </div>
     )
   }

@@ -94,6 +94,13 @@ const store = createStore(
             sectorFilter: 0,
             polygonFilter: "",
             favoritesFilter: false
+        },
+
+        chartData:{
+            chart1: [],
+            chart2: [],
+            chart3: [],
+            chart4: []
         }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
