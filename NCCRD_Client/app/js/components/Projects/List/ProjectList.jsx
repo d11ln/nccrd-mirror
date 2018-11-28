@@ -64,9 +64,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     toggleFavorites: async payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
-    },
-    setProjectsFullView: payload => {
-      dispatch({ type: "SET_PROJECTS_FULLVIEW", payload })
     }
   }
 }
@@ -98,9 +95,7 @@ class ProjectList extends React.Component {
 
   }
 
-  async componentDidMount() {
-
-    this.props.setProjectsFullView(true)
+  async componentDidMount() {    
 
     //Read initial filter from URL
     const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))

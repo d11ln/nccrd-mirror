@@ -25,11 +25,11 @@ class Header extends React.Component {
               />
             </Col>
             <Col md="6">
-              <h1 style={{ textAlign: "center", marginTop: "4%", letterSpacing: "2px", color: DEAGreenDark }}>
+              <h1 style={{ textAlign: "center", marginTop: "4%", letterSpacing: "2px", color: "#2e7d32" }}>
                 <b>NCCRD</b>
 
                 {/* BETA tag */}
-                <sub style={{ fontSize: "18px", backgroundColor: DEAGreen, borderRadius: "5px", padding: "2px" }}>
+                <sub style={{ fontSize: "18px", backgroundColor: "#78e26c", borderRadius: "5px", padding: "2px" }}>
                   <i>BETA</i>
                 </sub>
 

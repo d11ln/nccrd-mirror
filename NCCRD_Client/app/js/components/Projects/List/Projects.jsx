@@ -30,6 +30,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateNav: payload => {
       dispatch({ type: "NAV", payload })
+    },
+    setProjectsFullView: payload => {
+      dispatch({ type: "SET_PROJECTS_FULLVIEW", payload })
     }
   }
 }
@@ -76,6 +79,7 @@ class Projects extends React.Component {
   }
 
   componentDidMount() {
+    this.props.setProjectsFullView(true)
     this.props.setLoading(true)
     window.addEventListener("scroll", this.handleScroll);
     this.props.updateNav(location.hash)

@@ -8,12 +8,12 @@ import RegionFilters from '../Projects/Filters/RegionFilters.jsx'
 import SectorFilters from '../Projects/Filters/SectorFilters.jsx'
 import ProjectList from "../Projects/List/ProjectList.jsx"
 import ProjectFilters from "../Projects/Filters/ProjectFilters.jsx"
-import DashMapPreview from "./DashMapPreview.jsx"
 import DashGraph1Preview from "./DashGraph1Preview.jsx"
 import DashGraph2Preview from "./DashGraph2Preview.jsx"
 import DashGraph3Preview from "./DashGraph3Preview.jsx"
 import DashGraph4Preview from "./DashGraph4Preview.jsx"
 import { DEAGreen } from '../../config/colours.cfg'
+import MapViewCore from '../Map/MapViewCore.jsx'
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -50,7 +50,15 @@ class DashLayout extends React.Component {
   }
 
   handleScroll() {
-    this.setState({ showBackToTop: (window.pageYOffset > 1450) })
+    let { showBackToTop } = this.state
+
+    if (window.pageYOffset > 1450 && showBackToTop === false) {
+      this.setState({ showBackToTop: true })
+    }
+    else if (window.pageYOffset <= 1450 && showBackToTop === true) {
+      this.setState({ showBackToTop: false })
+    }
+
   }
 
   scrollToTop() {
@@ -59,14 +67,6 @@ class DashLayout extends React.Component {
       left: 0,
       behavior: 'smooth'
     });
-    // var scrollStep = -window.parent.pageYOffset / 15,
-    //   scrollInterval = setInterval(function () {
-    //     if (window.parent.pageYOffset != 0) {
-    //       window.parent.scrollBy(0, scrollStep);
-    //     } else {
-    //       clearInterval(scrollInterval);
-    //     }
-    //   }, 15)
   }
 
   render() {
@@ -85,13 +85,6 @@ class DashLayout extends React.Component {
               floating
               color=""
               onClick={() => {
-                // window.scroll({
-                //   top: 0,
-                //   left: 0,
-                //   behavior: 'smooth'
-                // })    
-
-                let scrollStep = window.pageYOffset / 15
                 this.scrollToTop()
               }}
               style={{ backgroundColor: DEAGreen }}
@@ -135,7 +128,8 @@ class DashLayout extends React.Component {
             <ProjectList />
           </Col>
 
-          {!showBackToTop &&
+          {
+            !showBackToTop &&
             <Col md="5">
               <Row>
                 <Col md="12">
@@ -148,7 +142,8 @@ class DashLayout extends React.Component {
               <Row>
                 {/* map */}
                 <Col md="12">
-                  <DashMapPreview />
+                  {/* <DashMapPreview /> */}
+                  <MapViewCore />
                 </Col>
               </Row>
 
@@ -216,6 +211,7 @@ class DashLayout extends React.Component {
               </Row>
             </Col>
           }
+
         </Row>
 
       </div>
