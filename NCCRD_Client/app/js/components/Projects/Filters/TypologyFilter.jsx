@@ -29,16 +29,6 @@ class TypologyFilter extends React.Component {
 
   constructor(props) {
     super(props);
-
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
-    if (typeof parsedHash.typology !== 'undefined') {
-
-      //Dispatch to store
-      let { loadTypologyFilter } = this.props
-      loadTypologyFilter({ value: parsedHash.typology })
-      _gf.stripURLParam("typology=" + parsedHash.typology)
-    }
   }
 
   componentDidMount() {

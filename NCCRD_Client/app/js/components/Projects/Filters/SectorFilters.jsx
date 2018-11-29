@@ -36,16 +36,6 @@ class SectorFilters extends React.Component {
 
   constructor(props) {
     super(props);
-
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
-    if (typeof parsedHash.sector !== 'undefined') {
-
-      //Dispatch to store
-      let { loadSectorFilter } = this.props
-      loadSectorFilter(parsedHash.sector)
-      _gf.stripURLParam("sector=" + parsedHash.sector)
-    }
   }
 
   async componentDidMount() {

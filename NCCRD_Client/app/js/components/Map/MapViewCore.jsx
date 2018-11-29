@@ -62,8 +62,6 @@ class MapViewCore extends React.Component {
       }
     }
 
-    console.log("MapConfig", mapConfig)
-
     return encodeURI(JSON.stringify(mapConfig))
   }
 
@@ -97,7 +95,15 @@ class MapViewCore extends React.Component {
           }}
           onClick={() => {
             if(!fullView) this.props.setScrollPos(window.pageYOffset)
-            location.hash = fullView ? "" : "/map"
+
+            let navTo = ""
+            if(fullView){
+              navTo = location.hash.replace("#/map", "")        
+            }
+            else{
+              navTo = location.hash.replace("#/", "#/map")      
+            }
+            location.hash = navTo
           }}
         />
 

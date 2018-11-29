@@ -19,11 +19,11 @@ const mapStateToProps = (state, props) => {
   let { projectData: { projects, start, end, listScrollPos } } = state
   let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter } } = state
   let user = state.oidc.user
-  let { globalData: { loading, daoid } } = state
+  let { globalData: { loading, daoid, showListExpandCollapse, showFavoritesOption } } = state
   let { lookupData: { typology } } = state
   return {
     projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-    listScrollPos, user, loading, typology, daoid, favoritesFilter
+    listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption
   }
 }
 
@@ -59,9 +59,6 @@ const mapDispatchToProps = (dispatch) => {
     resetProjectCounts: () => {
       dispatch({ type: "RESET_PROJECT_COUNTS" })
     },
-    setDAOID: async payload => {
-      dispatch({ type: "SET_DAOID", payload })
-    },
     toggleFavorites: async payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
     }
@@ -90,23 +87,12 @@ class ProjectList extends React.Component {
       title: "",
       message: "",
       ellipsisMenu: false,
-      allowPopin: true
+      daoid: null
     }
 
   }
 
-  async componentDidMount() {    
-
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
-    if (typeof parsedHash.daoid !== 'undefined') {
-      await this.props.setDAOID(parsedHash.daoid)
-    }
-
-    if (typeof parsedHash.popin === 'hidden') {
-      this.setState({ allowPopin: false })
-    }
-
+  async componentDidMount() {
     this.getProjectList()
     window.scrollTo(0, this.props.listScrollPos);
   }
@@ -122,13 +108,25 @@ class ProjectList extends React.Component {
     let pfavoritesFilter = this.props.favoritesFilter
     let pStart = this.props.start
     let pEnd = this.props.end
-    let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end, favoritesFilter } = this.state
+    let pDAOID = this.props.daoid
+    let {
+      titleFilter,
+      statusFilter,
+      typologyFilter,
+      regionFilter,
+      sectorFilter,
+      polygonFilter,
+      start,
+      end,
+      favoritesFilter,
+      daoid
+    } = this.state
 
     //If any filters changed...refetch projects
     let filtersChanged = false
     if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
       pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
-      pfavoritesFilter !== favoritesFilter) {
+      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid) {
 
       filtersChanged = true
     }
@@ -173,7 +171,8 @@ class ProjectList extends React.Component {
       polygonFilter: polygonFilter,
       favoritesFilter: favoritesFilter,
       start: start,
-      end: end
+      end: end,
+      daoid: daoid
     })
 
     setLoading(true)
@@ -187,7 +186,7 @@ class ProjectList extends React.Component {
 
     if (polygonFilter !== "") {
 
-      let fetchURL = apiBaseURL + 'api/Projects/GetByPolygonPost'
+      let fetchURL = apiBaseURL + 'Projects/Extensions.ByPolygon'
 
       //Get project list data
       fetch(fetchURL,
@@ -298,7 +297,7 @@ class ProjectList extends React.Component {
   render() {
 
     let { user, daoid, favoritesFilter } = this.props
-    let { ellipsisMenu, allowPopin } = this.state
+    let { ellipsisMenu } = this.state
 
     const projComps = this.buildList()
     let projectlist = []
@@ -319,7 +318,7 @@ class ProjectList extends React.Component {
         <div style={{ float: "right" }}>
 
           {
-            (allowPopin === true) &&
+            (this.props.showListExpandCollapse === true) &&
             <img
               src={location.hash.includes("projects") ? popin : popout}
               style={{
@@ -329,69 +328,80 @@ class ProjectList extends React.Component {
               }}
               onClick={() => {
                 this.props.setScrollPos(0)
-                location.hash = (location.hash.includes("projects") ? "" : "/projects")
+
+                let navTo = ""
+                  if (location.hash.includes("projects")) {
+                    navTo = location.hash.replace("#/projects", "")
+                  }
+                  else {
+                    navTo = location.hash.replace("#/", "#/projects")
+                  }            
+                  location.hash = navTo
               }}
             />
           }
 
-          <Popover
-            content={
-              <div>
-                <p style={{ display: "inline-block", margin: "10px 5px 10px 5px" }}>
-                  Favorites:
+          {
+            this.props.showFavoritesOption &&
+            <Popover
+              content={
+                <div>
+                  <p style={{ display: "inline-block", margin: "10px 5px 10px 5px" }}>
+                    Favorites:
                 </p>
-                <Button
-                  size="sm"
-                  color=""
-                  style={{
-                    padding: "4px 10px 5px 10px",
-                    marginTop: "1px",
-                    marginRight: "-1px",
-                    width: "40px",
-                    backgroundColor: favoritesFilter ? DEAGreen : "grey"
-                  }}
-                  onClick={() => {
-                    this.props.toggleFavorites(!favoritesFilter)
-                    this.setState({ ellipsisMenu: false })
-                  }}
-                >
-                  On
+                  <Button
+                    size="sm"
+                    color=""
+                    style={{
+                      padding: "4px 10px 5px 10px",
+                      marginTop: "1px",
+                      marginRight: "-1px",
+                      width: "40px",
+                      backgroundColor: favoritesFilter ? DEAGreen : "grey"
+                    }}
+                    onClick={() => {
+                      this.props.toggleFavorites(!favoritesFilter)
+                      this.setState({ ellipsisMenu: false })
+                    }}
+                  >
+                    On
                 </Button>
-                <Button
-                  size="sm"
-                  color=""
-                  style={{
-                    padding: "4px 10px 5px 10px",
-                    marginTop: "1px",
-                    marginLeft: "-1px",
-                    width: "40px",
-                    backgroundColor: !favoritesFilter ? DEAGreen : "grey"
-                  }}
-                  onClick={() => {
-                    this.props.toggleFavorites(!favoritesFilter)
-                    this.setState({ ellipsisMenu: false })
-                  }}
-                >
-                  Off
+                  <Button
+                    size="sm"
+                    color=""
+                    style={{
+                      padding: "4px 10px 5px 10px",
+                      marginTop: "1px",
+                      marginLeft: "-1px",
+                      width: "40px",
+                      backgroundColor: !favoritesFilter ? DEAGreen : "grey"
+                    }}
+                    onClick={() => {
+                      this.props.toggleFavorites(!favoritesFilter)
+                      this.setState({ ellipsisMenu: false })
+                    }}
+                  >
+                    Off
                 </Button>
-              </div>
-            }
-            placement="leftTop"
-            trigger="click"
-            visible={ellipsisMenu}
-            onVisibleChange={(visible) => { this.setState({ ellipsisMenu: visible }) }}
-          >
-            <Fa
-              icon="ellipsis-v"
-              size="lg"
-              style={{
-                color: "black",
-                margin: "11px 15px 5px 15px",
-                padding: "5px 10px 5px 10px",
-                cursor: "pointer"
-              }}
-            />
-          </Popover>
+                </div>
+              }
+              placement="leftTop"
+              trigger="click"
+              visible={ellipsisMenu}
+              onVisibleChange={(visible) => { this.setState({ ellipsisMenu: visible }) }}
+            >
+              <Fa
+                icon="ellipsis-v"
+                size="lg"
+                style={{
+                  color: "black",
+                  margin: "11px 15px 5px 15px",
+                  padding: "5px 10px 5px 10px",
+                  cursor: "pointer"
+                }}
+              />
+            </Popover>
+          }
 
         </div>
 

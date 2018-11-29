@@ -38,9 +38,65 @@ const o = require("odata")
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading, showSideNav } } = state
+  let { globalData: { loading, showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } } = state
   let user = state.oidc.user
-  return { loading, user, showSideNav }
+  return { loading, user, showSideNav, showHeader, showNavbar, showFooter, showSideNavButton }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleHeader: payload => {
+      dispatch({ type: "TOGGLE_HEADER", payload })
+    },
+    toggleNavbar: payload => {
+      dispatch({ type: "TOGGLE_NAVBAR", payload })
+    },
+    toggleFooter: payload => {
+      dispatch({ type: "TOGGLE_FOOTER", payload })
+    },
+    toggleListExpandCollapse: payload => {
+      dispatch({ type: "TOGGLE_LIST_EXPAND_COLLAPSE", payload })
+    },
+    toggleListView: payload => {
+      dispatch({ type: "TOGGLE_LIST_VIEW", payload })
+    },
+    toggleListFavorites: payload => {
+      dispatch({ type: "TOGGLE_LIST_FAVORITES", payload })
+    },
+    toggleReadOnly: payload => {
+      dispatch({ type: "TOGGLE_READONLY", payload })
+    },
+    toggleSideNavButton: payload => {
+      dispatch({ type: "TOGGLE_SIDENAV_BUTTON", payload })
+    },
+    toggleListFilterOptions: payload => {
+      dispatch({ type: "TOGGLE_LIST_FILTER_OPTIONS", payload })
+    },
+    toggleBackToList: payload => {
+      dispatch({ type: "TOGGLE_BACK_TO_LIST", payload })
+    },
+    loadRegionFilter: payload => {
+      dispatch({ type: "LOAD_REGION_FILTER", payload })
+    },
+    loadSectorFilter: payload => {
+      dispatch({ type: "LOAD_SECTOR_FILTER", payload })
+    },
+    loadStatusFilter: payload => {
+      dispatch({ type: "LOAD_STATUS_FILTER", payload })
+    },
+    loadTitleFilter: payload => {
+      dispatch({ type: "LOAD_TITLE_FILTER", payload })
+    },
+    loadTypologyFilter: payload => {
+      dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload })
+    },
+    loadPolygonFilter: payload => {
+      dispatch({ type: "LOAD_POLYGON_FILTER", payload })
+    },
+    setDAOID: async payload => {
+      dispatch({ type: "SET_DAOID", payload })
+    },
+  }
 }
 
 //Enable OIDC Logging
@@ -54,27 +110,160 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-
-    let navbar = 'show'
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?")))
-
-    if (typeof parsedHash.navbar !== 'undefined') {
-      navbar = parsedHash.navbar
-    }
-
-    this.state = { 
-      navbar 
-    }
   }
 
   async componentDidMount() {
     window.onhashchange = this.saveCurrentURL
+    this.processSilentSignIn()
 
+    this.genTestConfig()
+    this.processURLConfig()
+  }
+
+  async processSilentSignIn() {
     try {
       await userManager.signinSilent()
     }
     catch (ex) {
       console.warn("Sign-in-silent failed!", ex)
+    }
+  }
+
+  genTestConfig() {
+    // TEST //
+    let config = {
+      header: true, // true/false  >>>  toggle header on/off
+      navbar: true, // true/false/'addOnly'  >>>  toggle navbar on/off
+      sidenav: true, // true/false  >>>  toggle sidenav on/off
+      footer: true, // true/false  >>>  toggle footer on/off
+      daoid: true, // true/false/[guid]  >>>  toggle DOA functionality on details view, as well as set DAOID for auto-linking
+      readOnly: false, //true/false  >>>  toggle allow editing on details view
+      backToList: true, //true/false  >>>  toggle "Back To List" button in details view on/off
+      filters: {
+        region: 0, //number  >>>  region filter
+        sector: 0, //number  >>>  sector filter
+        status: 0, //number  >>>  status filter
+        title: "", //string  >>>  title filter - partial match logic
+        typology: 0, //number  >>>  typology filter
+        polygon: "" //string  >>>  polygon filter - WKT/POLYGON
+      },
+      listOptions: {
+        expandCollapse: true, //true/false  >>>  allow minimize/maximize project list
+        view: true, //true/false  >>>  toggle view button in project cards
+        favorites: true, //true/false  >>>  toggle favorites functionality in project cards/list
+        filters: true //true/false  >>>  toggle filtering UI functionality
+      }
+    }
+
+    config = encodeURI(JSON.stringify(config))
+    console.log("config", config)
+    // TEST //    
+  }
+
+  processURLConfig() {
+    try {
+      const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?")))
+      if (parsedHash.config) {
+        let config = JSON.parse(parsedHash.config)
+
+        //daoid
+        if (typeof config.daoid !== 'undefined' && config.daoid !== null) {
+          this.props.setDAOID(config.daoid)
+        }
+
+        //header
+        if (typeof config.header === 'boolean') {
+          this.props.toggleHeader(config.header)
+        }
+
+        //sidenav
+        if (typeof config.sidenav === 'boolean') {
+          this.props.toggleSideNavButton(config.sidenav)
+        }
+
+        //navbar
+        if (typeof config.navbar === 'boolean' || typeof config.navbar === 'string') {
+          this.props.toggleNavbar(config.navbar)
+        }
+
+        //footer
+        if (typeof config.footer === 'boolean') {
+          this.props.toggleFooter(config.footer)
+        }
+
+        //readOnly
+        if (typeof config.readOnly === 'boolean') {
+          this.props.toggleReadOnly(config.readOnly)
+        }
+
+        //backToList
+        if (typeof config.backToList === 'boolean') {
+          this.props.toggleBackToList(config.backToList)
+        }
+
+        //filters
+        if (typeof config.filters !== 'undefined') {
+          let filters = config.filters
+
+          //region
+          if (typeof filters.region === 'number' && filters.region > 0) {
+            this.props.loadRegionFilter(filters.region)
+          }
+
+          //sector
+          if (typeof filters.sector === 'number' && filters.sector > 0) {
+            this.props.loadSectorFilter(filters.sector)
+          }
+
+          //status
+          if (typeof filters.status === 'number' && filters.status > 0) {
+            this.props.loadStatusFilter(filters.status)
+          }
+
+          //title
+          if (typeof filters.title === 'string' && filters.title !== "") {
+            this.props.loadTitleFilter(filters.title)
+          }
+
+          //typology
+          if (typeof filters.typology === 'number' && filters.typology > 0) {
+            this.props.loadTypologyFilter(filters.typology)
+          }
+
+          //polygon
+          if (typeof filters.polygon === 'string' && filters.polygon !== "") {
+            this.props.loadPolygonFilter(filters.polygon)
+          }
+        }
+
+        //listOptions
+        if (typeof config.listOptions !== 'undefined') {
+          let listOptions = config.listOptions
+
+          //expandCollapse
+          if (typeof listOptions.expandCollapse === 'boolean') {
+            this.props.toggleListExpandCollapse(listOptions.expandCollapse)
+          }
+
+          //view
+          if (typeof listOptions.view === 'boolean') {
+            this.props.toggleListView(listOptions.view)
+          }
+
+          //favorites
+          if (typeof listOptions.favorites === 'boolean') {
+            this.props.toggleListFavorites(listOptions.favorites)
+          }
+
+          //filters
+          if (typeof listOptions.filters === 'boolean') {
+            this.props.toggleListFilterOptions(listOptions.filters)
+          }
+        }
+      }
+    }
+    catch (ex) {
+      console.warn(ex)
     }
   }
 
@@ -101,28 +290,26 @@ class App extends React.Component {
     let loaderWidth = 300
     let loaderHeight = 165
 
-    let { navbar } = this.state
-    let { showSideNav } = this.props
+    let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } = this.props
 
     return (
-      <div style={{ margin: "0px 25px 0px 25px", backgroundColor: "white" }}>
+      <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
         <Router>
           <div>
 
-            {(navbar === "show" ) && <Header />}
-            {(navbar !== "hidden") && <CustomNavbar />}
+            {(showHeader === true) && <Header />}
+            {(showNavbar !== false) && <CustomNavbar />}
 
             {
-              NavData.enabled &&
+              showSideNavButton === true &&
               <SideNav data={NavData} isOpen={showSideNav} />
             }
 
             <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
 
             <div style={{ backgroundColor: "whitesmoke" }}>
-              <div style={{ margin: "0px 15px 0px 15px" }}>
+              <div style={{ margin: "0px 0px 0px 0px" }}>
                 <Switch >
-                  {/* <Route path="/" component={Home} exact /> */}
                   <Route path="/" component={DashLayout} exact />
                   <Route path="/projects" component={Projects} exact />
                   <Route path="/projects/:id" component={ProjectDetails} exact />
@@ -140,7 +327,7 @@ class App extends React.Component {
 
             <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
 
-            {(navbar === "show" ) && <Footer />}
+            {(showFooter === true) && <Footer />}
 
             <div className="container-fluid">
               <div className="row">
@@ -169,5 +356,5 @@ class App extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 

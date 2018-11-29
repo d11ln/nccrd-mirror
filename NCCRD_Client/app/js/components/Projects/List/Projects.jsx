@@ -15,9 +15,9 @@ const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading } } = state
+  let { globalData: { loading, showListFilterOptions } } = state
   let user = state.oidc.user
-  return { loading, user }
+  return { loading, user, showListFilterOptions }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -46,15 +46,6 @@ class Projects extends React.Component {
     this.addProject = this.addProject.bind(this)
     this.handleScroll = this.handleScroll.bind(this);
 
-    //Read polygon filter from URL
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
-
-    if (typeof parsedHash.polygon !== 'undefined') {
-
-      //Dispatch to store
-      this.props.loadPolygonFilter(parsedHash.polygon)
-    }
-
     this.state = { showBackToTop: false }
   }
 
@@ -64,14 +55,6 @@ class Projects extends React.Component {
       left: 0,
       behavior: 'smooth'
     });
-    // var scrollStep = -window.parent.pageYOffset / 15,
-    //   scrollInterval = setInterval(function () {
-    //     if (window.parent.pageYOffset != 0) {
-    //       window.parent.scrollBy(0, scrollStep);
-    //     } else {
-    //       clearInterval(scrollInterval);
-    //     }
-    //   }, 15)
   }
 
   addProject() {
@@ -110,25 +93,30 @@ class Projects extends React.Component {
 
         </div>
 
-        <Row>
-          <Col md="3">
-            <TitleFilter />
-          </Col>
+        {
+          this.props.showListFilterOptions === true &&
+          <div>
+            <Row>
+              <Col md="3">
+                <TitleFilter />
+              </Col>
 
-            <StatusFilter />
+                <StatusFilter />
 
-            <TypologyFilter />
+                <TypologyFilter />
 
-            <RegionFilters />
+                <RegionFilters />
 
-            <SectorFilters />
+                <SectorFilters />
 
-        </Row>
+            </Row>
 
-        <ProjectFilters />
-        <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+            <ProjectFilters />
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />            
+          </div>
+        }
+
         <ProjectList />
-
         <ReactTooltip delayShow={700} />
       </>
     )

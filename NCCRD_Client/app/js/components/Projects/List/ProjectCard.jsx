@@ -6,7 +6,8 @@ import { DEAGreen } from "../../../config/colours.cfg"
 const _gf = require('../../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
-  return {}
+  let { globalData: { showListViewOption, showFavoritesOption } } = state
+  return { showListViewOption, showFavoritesOption }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -39,10 +40,10 @@ class ProjectCard extends React.Component {
 
     this.props.setScrollPos(window.pageYOffset)
     let navTo = ""
-    if(location.hash.includes("projects")){
+    if (location.hash.includes("projects")) {
       navTo = location.hash.replace("#/projects", "#/projects/" + this.props.pid)
     }
-    else{
+    else {
       navTo = location.hash.replace("#/", "#/projects/" + this.props.pid)
     }
 
@@ -123,67 +124,73 @@ class ProjectCard extends React.Component {
             {this.props.ptitle}
           </CardTitle >
 
-          <CardText style={{ wordWrap: "break-word" }}>
+          <CardText style={{ wordWrap: "break-word", minHeight: 75 }}>
             {pdes}
           </CardText>
 
-          <Button
-            size="sm"
-            color="white"
-            onClick={this.onClick.bind(this)}
-            style={{
-              backgroundColor: "white",
-              marginLeft: "0px",
-              boxShadow: "none",
-              border: "1px solid silver",
-              borderRadius: "5px",
-              padding: "3px 15px 3px 15px"
-            }}
-          >
-            <table>
-              <tbody>
-                <tr>
-                  <td valign="middle">
-                    <Fa icon="eye" size="lg" style={{ color: DEAGreen, marginRight: "5px" }} />
-                  </td>
-                  <td valign="middle">
-                    <div style={{ fontSize: "14px", marginTop: "2px" }} >
-                      View
+          {
+            this.props.showListViewOption &&
+            <Button
+              size="sm"
+              color="white"
+              onClick={this.onClick.bind(this)}
+              style={{
+                backgroundColor: "white",
+                marginLeft: "0px",
+                boxShadow: "none",
+                border: "1px solid silver",
+                borderRadius: "5px",
+                padding: "3px 15px 3px 15px"
+              }}
+            >
+              <table>
+                <tbody>
+                  <tr>
+                    <td valign="middle">
+                      <Fa icon="eye" size="lg" style={{ color: DEAGreen, marginRight: "5px" }} />
+                    </td>
+                    <td valign="middle">
+                      <div style={{ fontSize: "14px", marginTop: "2px" }} >
+                        View
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </Button>
+          }
 
-          <Button
-            size="sm"
-            color="white"
-            onClick={this.togleFavorite}
-            style={{
-              backgroundColor: "white",
-              marginLeft: "0px",
-              boxShadow: "none",
-              border: "1px solid silver",
-              borderRadius: "5px",
-              padding: "3px 15px 3px 15px"
-            }}
-          >
-            <table>
-              <tbody>
-                <tr>
-                  <td valign="middle">
-                    <Fa icon="star" size="lg" style={{ color: favorite ? "#fdd835" : "#D8D8D8", marginRight: "5px" }} />
-                  </td>
-                  <td valign="middle">
-                    <div style={{ fontSize: "14px", marginTop: "2px" }} >
-                      Favorite
+          {
+            this.props.showFavoritesOption &&
+            <Button
+              size="sm"
+              color="white"
+              onClick={this.togleFavorite}
+              style={{
+                backgroundColor: "white",
+                marginLeft: "0px",
+                boxShadow: "none",
+                border: "1px solid silver",
+                borderRadius: "5px",
+                padding: "3px 15px 3px 15px"
+              }}
+            >
+              <table>
+                <tbody>
+                  <tr>
+                    <td valign="middle">
+                      <Fa icon="star" size="lg" style={{ color: favorite ? "#fdd835" : "#D8D8D8", marginRight: "5px" }} />
+                    </td>
+                    <td valign="middle">
+                      <div style={{ fontSize: "14px", marginTop: "2px" }} >
+                        Favorite
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </Button>
+          }
 
         </CardBody>
         <hr style={{ margin: "0px 0px 15px 0px" }} />

@@ -13,8 +13,18 @@ const store = createStore(
         globalData: {
             loading: false,
             editMode: false,
-            daoid: null,
+            readOnly: false,
+            daoid: true,
+            showSideNavButton: false,
             showSideNav: false,
+            showHeader: true,
+            showNavbar: true,
+            showFooter: true,
+            showListExpandCollapse: true,
+            showListViewOption: true,
+            showFavoritesOption: true,
+            showListFilterOptions: true,
+            showBackToList: true,
             projectsFullView: false
         },
 

@@ -12,8 +12,8 @@ const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
-  let { globalData: { loading, daoid, showSideNav } } = state
-  return { user, loading, daoid, showSideNav }
+  let { globalData: { loading, daoid, showSideNav, showSideNavButton, showNavbar } } = state
+  return { user, loading, daoid, showSideNav, showSideNavButton, showNavbar }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -35,26 +35,12 @@ class CustomNavbar extends React.Component {
     this.state = {
       collapse: false,
       isWideEnough: false,
-      dropdownOpen: false,
-      addOnly: false
+      dropdownOpen: false
     }
 
     this.onClick = this.onClick.bind(this)
     this.toggle = this.toggle.bind(this)
     this.Register = this.Register.bind(this)
-  }
-
-  componentDidMount() {
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
-    if (typeof parsedHash.daoid !== 'undefined') {
-      this.props.setDAOID(parsedHash.daoid)
-    }
-
-    if (parsedHash.navbar === "addOnly") {
-      this.setState({ addOnly: true })
-    }
-
   }
 
   onClick() {
@@ -85,8 +71,7 @@ class CustomNavbar extends React.Component {
 
   render() {
 
-    let { user, daoid, toggleSideNav, showSideNav } = this.props
-    let { addOnly } = this.state
+    let { user, toggleSideNav, showSideNav, showSideNavButton, showNavbar } = this.props
 
     return (
       <Navbar
@@ -113,7 +98,7 @@ class CustomNavbar extends React.Component {
           <NavbarNav left>
 
             {
-              (NavData.enabled && addOnly === false) &&
+              (showSideNavButton === true && showNavbar !== "addOnly") &&
               <Button size="sm" color="grey" onClick={() => { toggleSideNav(!showSideNav) }}
                 style={{ width: "45px", marginLeft: "0px", marginRight: "15px", paddingLeft: "18px" }}>
                 <Fa icon="bars" />
@@ -126,7 +111,16 @@ class CustomNavbar extends React.Component {
                 color="warning"
                 size="sm"
                 style={{ marginLeft: "0px" }}
-                onClick={() => { location.hash = "projects/add" + (_gf.IsValidGuid(daoid) ? `?daoid=${daoid}` : "") }} >
+                onClick={() => { 
+                  let navTo = ""
+                  if (location.hash.includes("projects")) {
+                    navTo = location.hash.replace("#/projects", "#/projects/add")
+                  }
+                  else {
+                    navTo = location.hash.replace("#/", "#/projects/add")
+                  }            
+                  location.hash = navTo
+                }} >
                 Add New Project
               </Button>
             }
@@ -135,7 +129,7 @@ class CustomNavbar extends React.Component {
 
           {/* RIGHT */}
           {
-            addOnly === false &&
+            showNavbar !== "addOnly" &&
             <NavbarNav right>
 
               {/* Username */}

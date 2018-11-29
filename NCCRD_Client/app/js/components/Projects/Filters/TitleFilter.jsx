@@ -26,16 +26,6 @@ class TitleFilter extends React.Component {
 
   constructor(props) {
     super(props);
-
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?"))) //queryString.parse(location.hash.replace("/projects?", ""))
-
-    if (typeof parsedHash.title !== 'undefined') {
-
-      //Update internal state
-      //this.onClick(parsedHash.title)
-      _gf.stripURLParam("title=" + parsedHash.title)
-    }
   }
 
   onChange(event) {

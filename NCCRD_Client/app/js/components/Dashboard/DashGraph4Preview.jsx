@@ -349,7 +349,7 @@ class DashGraph4Preview extends React.Component {
         <img src={popout} style={{ width: "25px", position: "absolute", top: "10px", right: "25px" }}
           onClick={() => {
             this.props.setScrollPos(window.pageYOffset)
-            location.hash = "/chart4"
+            location.hash = location.hash.replace("#/", "#/chart4")
           }} />
 
         <div

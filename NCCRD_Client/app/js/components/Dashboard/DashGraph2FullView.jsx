@@ -204,7 +204,9 @@ class DashGraph2FullView extends React.Component {
             float: "right",
             display: "inline"
           }}
-          onClick={() => { location.hash = "" }}
+          onClick={() => {
+            location.hash = location.hash.replace("#/chart2", "")
+          }}
         />
 
         <br />
