@@ -75,6 +75,9 @@ const mapDispatchToProps = (dispatch) => {
     toggleBackToList: payload => {
       dispatch({ type: "TOGGLE_BACK_TO_LIST", payload })
     },
+    toggleDetailsInParent: payload => {
+      dispatch({ type: "TOGGLE_SHOW_DETAILS_IN_PARENT", payload })
+    },
     loadRegionFilter: payload => {
       dispatch({ type: "LOAD_REGION_FILTER", payload })
     },
@@ -116,7 +119,7 @@ class App extends React.Component {
     window.onhashchange = this.saveCurrentURL
     this.processSilentSignIn()
 
-    this.genTestConfig()
+    //this.genTestConfig()
     this.processURLConfig()
   }
 
@@ -151,7 +154,8 @@ class App extends React.Component {
         expandCollapse: true, //true/false  >>>  allow minimize/maximize project list
         view: true, //true/false  >>>  toggle view button in project cards
         favorites: true, //true/false  >>>  toggle favorites functionality in project cards/list
-        filters: true //true/false  >>>  toggle filtering UI functionality
+        filters: true, //true/false  >>>  toggle filtering UI functionality
+        detailsInParent: false //true/false  >>>  togle to show details in parent/child
       }
     }
 
@@ -164,6 +168,7 @@ class App extends React.Component {
     try {
       const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?")))
       if (parsedHash.config) {
+
         let config = JSON.parse(parsedHash.config)
 
         //daoid
@@ -259,6 +264,12 @@ class App extends React.Component {
           if (typeof listOptions.filters === 'boolean') {
             this.props.toggleListFilterOptions(listOptions.filters)
           }
+
+          //detailsInParent
+          if (typeof listOptions.detailsInParent === 'boolean') {
+            console.log("here")
+            this.props.toggleDetailsInParent(listOptions.detailsInParent)
+          }
         }
       }
     }
@@ -305,7 +316,10 @@ class App extends React.Component {
               <SideNav data={NavData} isOpen={showSideNav} />
             }
 
-            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+            {
+              (showHeader === true || showNavbar !== false) &&
+              <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+            }          
 
             <div style={{ backgroundColor: "whitesmoke" }}>
               <div style={{ margin: "0px 0px 0px 0px" }}>
@@ -324,10 +338,15 @@ class App extends React.Component {
                 </Switch>
               </div>
             </div>
+        
+            {
+              (showFooter === true) && 
+              <div>
+                <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+                <Footer />
+              </div>
 
-            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
-
-            {(showFooter === true) && <Footer />}
+            }
 
             <div className="container-fluid">
               <div className="row">

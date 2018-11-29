@@ -25,6 +25,7 @@ const store = createStore(
             showFavoritesOption: true,
             showListFilterOptions: true,
             showBackToList: true,
+            showDetailsInParent: false,
             projectsFullView: false
         },
 

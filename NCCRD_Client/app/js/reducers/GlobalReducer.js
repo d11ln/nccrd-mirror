@@ -60,7 +60,12 @@ export default function GlobalReducer(state = {}, action) {
 
         case "TOGGLE_LIST_VIEW": {
             return { ...state, showListViewOption: payload}
-        }        
+        }  
+        
+        case "TOGGLE_SHOW_DETAILS_IN_PARENT": {
+            console.log("set showDetailsInParent", payload)
+            return { ...state, showDetailsInParent: payload}
+        }
 
         case "SET_PROJECTS_FULLVIEW": {
             return { ...state, projectsFullView: payload}

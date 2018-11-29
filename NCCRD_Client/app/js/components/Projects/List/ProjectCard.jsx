@@ -6,8 +6,8 @@ import { DEAGreen } from "../../../config/colours.cfg"
 const _gf = require('../../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { showListViewOption, showFavoritesOption } } = state
-  return { showListViewOption, showFavoritesOption }
+  let { globalData: { showListViewOption, showFavoritesOption, showDetailsInParent } } = state
+  return { showListViewOption, showFavoritesOption, showDetailsInParent }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -24,6 +24,7 @@ class ProjectCard extends React.Component {
     super(props);
 
     this.togleFavorite = this.togleFavorite.bind(this)
+    this.onClick = this.onClick.bind(this)
 
     this.state = {
       favorite: false
@@ -38,16 +39,24 @@ class ProjectCard extends React.Component {
 
   onClick() {
 
-    this.props.setScrollPos(window.pageYOffset)
-    let navTo = ""
-    if (location.hash.includes("projects")) {
-      navTo = location.hash.replace("#/projects", "#/projects/" + this.props.pid)
+    if (this.props.showDetailsInParent) {
+      let payload = {}
+      payload.action = "showDetails"
+      payload.value = this.props.pid
+      window.parent.postMessage(payload, "*")
     }
     else {
-      navTo = location.hash.replace("#/", "#/projects/" + this.props.pid)
-    }
+      this.props.setScrollPos(window.pageYOffset)
+      let navTo = ""
+      if (location.hash.includes("projects")) {
+        navTo = location.hash.replace("#/projects", "#/projects/" + this.props.pid)
+      }
+      else {
+        navTo = location.hash.replace("#/", "#/projects/" + this.props.pid)
+      }
 
-    location.hash = navTo
+      location.hash = navTo
+    }
   }
 
   togleFavorite() {
