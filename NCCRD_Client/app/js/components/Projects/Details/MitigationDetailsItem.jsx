@@ -8,11 +8,13 @@ import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
+  let { mitigationData: { mitigationDetails } } = state
   let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
     voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } } = state
   return {
     carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
-    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology
+    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology,
+    mitigationDetails
   }
 }
 
@@ -25,7 +27,7 @@ class MitigationDetailsItem extends React.Component {
   render() {
 
     let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
-      voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } = this.props
+      voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, mitigationDetails } = this.props
 
     return (
       <>
@@ -206,9 +208,18 @@ class MitigationDetailsItem extends React.Component {
           />
         </div>
 
-        <br />
-        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
-        <br />
+        {
+          (mitigationDetails && mitigationDetails.length > 1) &&
+          <div
+            style={{
+              height: "5px",
+              backgroundColor: "#white",
+              margin: "35px -16px 30px -16px",
+              borderStyle: "double none none none",
+              borderColor: "#C8C8C8"
+            }}
+          />
+        }
 
         <ReactTooltip delayShow={700} />
       </>

@@ -13,7 +13,8 @@ const _gf = require('../../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { users, fundingStatus } } = state
-  return { users, fundingStatus }
+  let { projectFundersData: { projectFunderDetails } } = state
+  return { users, fundingStatus, projectFunderDetails }
 }
 
 class ProjectFundersItem extends React.Component {
@@ -28,7 +29,7 @@ class ProjectFundersItem extends React.Component {
 
   render() {
 
-    let { details, users, fundingStatus } = this.props
+    let { details, users, fundingStatus, projectFunderDetails } = this.props
 
     return (
       <>
@@ -131,9 +132,18 @@ class ProjectFundersItem extends React.Component {
 
         </Row>
 
-        <br />
-        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
-        <br />
+        {
+          (projectFunderDetails && projectFunderDetails.length > 1) &&
+          <div
+            style={{
+              height: "5px",
+              backgroundColor: "#white",
+              margin: "35px -16px 30px -16px",
+              borderStyle: "double none none none",
+              borderColor: "#C8C8C8"
+            }}
+          />
+        }
 
         <ReactTooltip delayShow={700} />
       </>

@@ -11,6 +11,7 @@ import FilterReducer from './FilterReducer'
 import EditListModalReducer from './EditListModalReducer'
 import NavigationReducer from './NavigationReducer'
 import ProjectFundersReducer from './ProjectFundersReducer'
+import ChartDataReducer from './ChartDataReducer'
 
 export default {
     globalData: GlobalReducer,
@@ -23,5 +24,6 @@ export default {
     lookupData: LookupsReducer,
     filterData: FilterReducer,
     editListModalData: EditListModalReducer,
-    navigation: NavigationReducer
+    navigation: NavigationReducer,
+    chartData: ChartDataReducer
 }

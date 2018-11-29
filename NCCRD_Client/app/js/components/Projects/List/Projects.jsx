@@ -1,8 +1,13 @@
 import React from 'react'
 import ProjectList from './ProjectList.jsx'
 import ProjectFilters from '../Filters/ProjectFilters.jsx'
+import TitleFilter from '../Filters/TitleFilter.jsx'
+import StatusFilter from '../Filters/StatusFilter.jsx'
+import TypologyFilter from '../Filters/TypologyFilter.jsx'
+import RegionFilters from '../Filters/RegionFilters.jsx'
+import SectorFilters from '../Filters/SectorFilters.jsx'
 import { connect } from 'react-redux'
-import { Fa, Button, ButtonFixed, Footer, Container, Select, SelectInput, SelectOptions, SelectOption } from 'mdbreact'
+import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreen } from '../../../config/colours.cfg'
 
@@ -10,9 +15,9 @@ const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading } } = state
+  let { globalData: { loading, showListFilterOptions } } = state
   let user = state.oidc.user
-  return { loading, user }
+  return { loading, user, showListFilterOptions }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -25,6 +30,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateNav: payload => {
       dispatch({ type: "NAV", payload })
+    },
+    setProjectsFullView: payload => {
+      dispatch({ type: "SET_PROJECTS_FULLVIEW", payload })
     }
   }
 }
@@ -37,15 +45,6 @@ class Projects extends React.Component {
     this.backToTop = this.backToTop.bind(this)
     this.addProject = this.addProject.bind(this)
     this.handleScroll = this.handleScroll.bind(this);
-
-    //Read polygon filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
-
-    if (typeof parsedHash.polygon !== 'undefined') {
-
-      //Dispatch to store
-      this.props.loadPolygonFilter(parsedHash.polygon)
-    }
 
     this.state = { showBackToTop: false }
   }
@@ -63,6 +62,7 @@ class Projects extends React.Component {
   }
 
   componentDidMount() {
+    this.props.setProjectsFullView(true)
     this.props.setLoading(true)
     window.addEventListener("scroll", this.handleScroll);
     this.props.updateNav(location.hash)
@@ -93,9 +93,30 @@ class Projects extends React.Component {
 
         </div>
 
-        <ProjectFilters />
-        <ProjectList />
+        {
+          this.props.showListFilterOptions === true &&
+          <div>
+            <Row>
+              <Col md="3">
+                <TitleFilter />
+              </Col>
 
+                <StatusFilter />
+
+                <TypologyFilter />
+
+                <RegionFilters />
+
+                <SectorFilters />
+
+            </Row>
+
+            <ProjectFilters />
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />            
+          </div>
+        }
+
+        <ProjectList />
         <ReactTooltip delayShow={700} />
       </>
     )

@@ -4,6 +4,7 @@ import { vmsBaseURL } from "../../../config/serviceURLs.cfg"
 import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'
+import TreeSelectComponent from "../../Shared/TreeSelectComponent.jsx"
 
 //AntD Tree
 import Tree from 'antd/lib/tree'
@@ -35,24 +36,6 @@ class SectorFilters extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.expandAllNodes = this.expandAllNodes.bind(this)
-    this.collapseAllNodes = this.collapseAllNodes.bind(this)
-    this.onSelect = this.onSelect.bind(this)
-    this.onExpand = this.onExpand.bind(this)
-
-    //Set initial local
-    this.state = { expandedKeys: [] }
-
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
-    if (typeof parsedHash.sector !== 'undefined') {
-
-      //Dispatch to store
-      let { loadSectorFilter } = this.props
-      loadSectorFilter(parsedHash.sector)
-      _gf.stripURLParam("sector=" + parsedHash.sector)
-    }
   }
 
   async componentDidMount() {
@@ -77,143 +60,30 @@ class SectorFilters extends React.Component {
     }
   }
 
-  expandAllNodes() {
-    let expandedKeys = []
-    let { sector } = this.props
-
-    sector.map(x => expandedKeys.push(x.SectorId.toString()))
-
-    this.setState({ expandedKeys: expandedKeys })
-  }
-
-  collapseAllNodes() {
-    this.setState({ expandedKeys: [] })
-  }
-
-  transformDataToTree(effectiveData, globalData, level = 0) {
-
-    let treeNodes = []
-    let parentIdKey = "ParentId"
-
-    if (typeof globalData === 'undefined') {
-      globalData = effectiveData
-    }
-
-    if (level === 0) {
-      effectiveData = effectiveData.filter(x => x[parentIdKey] === null)
-    }
-
-    effectiveData.map(item => {
-
-      let newTreeNode = {
-        id: item.Id,
-        text: item.Text
-      }
-
-      let children = globalData.filter(x => x[parentIdKey] == newTreeNode.id)
-      if (children.length > 0) {
-        newTreeNode.children = this.transformDataToTree(children, globalData, (level + 1))
-      }
-
-      treeNodes.push(newTreeNode)
-    })
-
-    return treeNodes
-  }
-
-  renderTreeNodes(data) {
-
-    return data.map((item) => {
-      if (item.children) {
-        return (
-          <TreeNode title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
-          </TreeNode>
-        )
-      }
-      return <TreeNode title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} />
-    })
-  }
-
-  onSelect(selectedKeys, info) {
-
-    let { loadSectorFilter } = this.props
-    let id = selectedKeys[0]
-
-    if (typeof id === 'undefined') {
-      id = 0
-    }
-
-    loadSectorFilter(id)
-  }
-
-  getParentKeys(id, data) {
-
-    let parentKeys = []
-
-    if (data.length > 0 && id > 0) {
-
-      let idKey = Object.keys(data[0])[0].toString()
-      let parentIdKey = "Parent" + idKey
-
-      let selectedItem = data.filter(x => x[idKey] == id)[0]
-
-      if (selectedItem[parentIdKey] !== null) {
-        let parentId = selectedItem[parentIdKey].toString()
-        parentKeys.push(parentId)
-        parentKeys.push(...this.getParentKeys(parentId, data))
-      }
-    }
-
-    return parentKeys
-  }
-
-  onExpand(expandedKeys) {
-    this.setState({ expandedKeys: expandedKeys })
-  }
-
   render() {
 
     let { sector, sectorFilter } = this.props
-    let { expandedKeys } = this.state
-    let selectedValue = "All"
-
-    if (sectorFilter > 0 && sector.length > 0) {
-      selectedValue = sector.filter(x => x.Id === sectorFilter)[0].Text
-    }
-
-    let uiconf = UILookup("treeSectorFilter", "Sector filter:")
 
     return (
       <>
-        <div className="row">
-          <div className="col-md-12">
-            <label data-tip={uiconf.tooltip} style={{ fontSize: "large" }}>{uiconf.label}&nbsp;&nbsp;</label>
-            <label data-tip={uiconf.tooltip2} style={{ fontSize: "large", fontWeight: "bold" }}>{selectedValue}</label>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12">
-            <Button color="secondary" size="sm" id="btnRegionTreeExpandAll" style={{ marginLeft: "0px" }} onClick={this.expandAllNodes} >
-              <i className="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Expand all
-                        </Button>
-            <Button color="secondary" size="sm" id="btnRegionTreeCollapseAll" onClick={this.collapseAllNodes}>
-              <i className="fa fa-minus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Collapse all
-                        </Button>
-          </div>
-        </div>
-
-        <Tree key={_gf.GetUID()}
-          autoExpandParent
-          onSelect={this.onSelect}
-          defaultSelectedKeys={[sectorFilter.toString()]}
-          defaultExpandedKeys={[...expandedKeys, ...this.getParentKeys(sectorFilter, sector), sectorFilter.toString()]}
-          onExpand={this.onExpand}
-        >
-          {this.renderTreeNodes(this.transformDataToTree(sector))}
-        </Tree>
-
+        <TreeSelectComponent
+          col="col-md-2"
+          id="treeSectorFilter"
+          label="Sector"
+          selectedValue={sectorFilter}
+          data={sector}
+          editModeOverride={true}
+          labelStyle={{
+            fontSize: "14px",
+            fontWeight: "400",
+            color: "grey"
+          }}
+          style={{
+            marginTop: "-4px",
+            marginBottom: "15px"
+          }}
+          setSelectedValueKey="LOAD_SECTOR_FILTER"
+        />
       </>
     )
   }

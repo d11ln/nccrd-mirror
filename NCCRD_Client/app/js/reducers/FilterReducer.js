@@ -2,7 +2,26 @@
 
 export default function FilterReducer(state = {}, action) {
 
-    const { type, payload } = action
+    let { type, payload } = action
+
+    let id = 0
+    let modState = "original"
+
+    //Check if additional data embedded in payload
+    if (typeof payload !== 'undefined') {
+        if (typeof payload.id !== 'undefined') {
+            id = parseInt(payload.id)
+        }
+        if (typeof payload.action !== 'undefined') {
+            action = payload.action
+        }
+        if (typeof payload.state !== 'undefined') {
+            modState = payload.state
+        }
+        if (typeof payload.value !== 'undefined') {
+            payload = payload.value
+        }
+    }
 
     switch (type) {
 
@@ -15,15 +34,15 @@ export default function FilterReducer(state = {}, action) {
         }
 
         case "LOAD_STATUS_FILTER": {
-            return { ...state, statusFilter: payload.value }
+            return { ...state, statusFilter: payload }
         }
 
         case "LOAD_TYPOLOGY_FILTER": {
-            return { ...state, typologyFilter: payload.value }
+            return { ...state, typologyFilter: payload }
         }
 
         case "LOAD_REGION_FILTER": {
-            return { ...state, regionFilter: payload}
+            return { ...state, regionFilter: payload }
         }
 
         case "LOAD_SECTOR_FILTER": {
@@ -33,6 +52,11 @@ export default function FilterReducer(state = {}, action) {
         case "LOAD_POLYGON_FILTER": {
             return { ...state, polygonFilter: payload }
         }
+
+        case "TOGGLE_FAVS_FILTER": {
+            return { ...state, favoritesFilter: payload }
+        }
+
 
         case "CLEAR_FILTERS": {
             return {

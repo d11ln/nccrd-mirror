@@ -72,11 +72,26 @@ namespace NCCRD.Services.DataV2.Controllers
         public IQueryable<Project> Filter([FromBody] Filters filters)
         {
             string titleFilter = filters.title;
+            string favsFilter = filters.favorites;
             int statusFilter = filters.status;
             int typologyFilter = filters.typology;
             int regionFilter = filters.region;
             int sectorFilter = filters.sector;
             Guid daoidFilter = filters.daoid != null ? new Guid(filters.daoid) : Guid.Empty;
+
+            //FAVORITES - OVERRIDES ALL OTHER FILTERS//
+            if (!string.IsNullOrEmpty(favsFilter))
+            {
+                try
+                {
+                    var favs = favsFilter.Split(",").Select(f => int.Parse(f)).ToList();
+                    return _context.Project.Where(p => favs.Contains(p.ProjectId));
+                }
+                catch
+                {
+                    return new List<Project>().AsQueryable();
+                }              
+            }
 
             //REGION//
             var regionProjectIds = new List<int>();

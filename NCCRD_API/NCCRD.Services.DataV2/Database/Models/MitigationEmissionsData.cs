@@ -71,7 +71,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         //FK - Project
         [Range(0, int.MaxValue, ErrorMessage = "The Project field is required.")]
         public int ProjectId { get; set; }
-        [IgnoreDataMember]
         public Project Project { get; set; }
     }
 }

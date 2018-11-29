@@ -26,16 +26,6 @@ class TitleFilter extends React.Component {
 
   constructor(props) {
     super(props);
-
-    //Read initial filter from URL
-    const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
-
-    if (typeof parsedHash.title !== 'undefined') {
-
-      //Update internal state
-      //this.onClick(parsedHash.title)
-      _gf.stripURLParam("title=" + parsedHash.title)
-    }
   }
 
   onChange(event) {
@@ -44,15 +34,7 @@ class TitleFilter extends React.Component {
     this.props.loadTitleFilterInternal(event.target.value)
   }
 
-  // onClick(filterValue, e) {
-
-  //   //Update global state
-  //   let { loadTitleFilter, titleFilterInternal } = this.props
-
-  //   loadTitleFilter(filterValue)
-  // }
-
-  test(e) {
+  handleKeyDown(e) {
     if (e.keyCode == 13) {
 
       //Update global state
@@ -65,16 +47,29 @@ class TitleFilter extends React.Component {
 
     let { titleFilterInternal } = this.props
 
-    let uiconf = UILookup("txtTitleFilter", "Title:")
+    let uiconf = UILookup("txtTitleFilter", "Title")
 
     return (
-      <div className="col-md-4" style={{ paddingRight: "55px"}}>
-        <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold" }}>{uiconf.label}</label>
+      <div style={{ marginBottom: "-10px" }}>
+        <label data-tip={uiconf.tooltip} style={{ color: "grey", fontSize: "14px" }}>
+          <b>{uiconf.label}</b>
+        </label>
+
         <Input size="sm"
           className="form-control"
-          style={{ padding: "5px", marginTop: "-24px", width: "100%", height: "24px", border: "1px solid lightgrey", borderRadius: "5px" }}
-          onChange={this.onChange.bind(this)} value={titleFilterInternal} icon="search" hint="Search..."
-          onKeyDown={this.test.bind(this)}
+          style={{ 
+            padding: "5px", 
+            marginTop: "-28px", 
+            width: "98%", 
+            height: "24px", 
+            border: "1px solid lightgrey", 
+            borderRadius: "5px",
+            backgroundColor: "white",
+            marginBottom: "-10px"
+          }}
+          onChange={this.onChange.bind(this)} value={titleFilterInternal} 
+          hint="Search..."
+          onKeyDown={this.handleKeyDown.bind(this)}
         />
       </div>
     )

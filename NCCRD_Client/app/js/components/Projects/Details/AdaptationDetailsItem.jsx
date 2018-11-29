@@ -8,8 +8,9 @@ import ReactTooltip from 'react-tooltip'
 import { DEAGreenDark } from '../../../config/colours.cfg'
 
 const mapStateToProps = (state, props) => {
+  let { adaptationData: { adaptationDetails } } = state
   let { lookupData: { adaptationPurpose, sector, sectorType, typology, hazards, projectStatus } } = state
-  return { adaptationPurpose, sector, sectorType, typology, hazards, projectStatus }
+  return { adaptationPurpose, sector, sectorType, typology, hazards, projectStatus, adaptationDetails }
 }
 
 class AdaptationDetailsItem extends React.Component {
@@ -23,7 +24,7 @@ class AdaptationDetailsItem extends React.Component {
 
   render() {
 
-    let { details, adaptationPurpose, sector, sectorType, typology, hazards, projectStatus } = this.props
+    let { details, adaptationPurpose, sector, sectorType, typology, hazards, projectStatus, adaptationDetails } = this.props
 
     return (
       <>
@@ -126,9 +127,18 @@ class AdaptationDetailsItem extends React.Component {
           />
         </div>
 
-        <br />
-        <hr style={{ borderWidth: "2px", borderStyle: "solid", borderColor: DEAGreenDark }} />
-        <br />
+        {
+          (adaptationDetails && adaptationDetails.length > 1) &&
+          <div
+            style={{
+              height: "5px",
+              backgroundColor: "#white",
+              margin: "35px -16px 30px -16px",
+              borderStyle: "double none none none",
+              borderColor: "#C8C8C8"
+            }}
+          />
+        }
 
         <ReactTooltip delayShow={700} />
       </>

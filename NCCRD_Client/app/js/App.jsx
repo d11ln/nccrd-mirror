@@ -13,26 +13,90 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Spinner, Container } from 'mdbreact/'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
-import Home from './components/Base/Home.jsx'
 import Projects from './components/Projects/List/Projects.jsx'
 import ProjectDetails from './components/Projects/Details/ProjectDetails.jsx'
 import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
-import CallbackPage from '../js/components/Authentication/callback.jsx';
+import CallbackPage from '../js/components/Authentication/callback.jsx'
 import ReactTooltip from 'react-tooltip'
 import Header from './components/Base/Header.jsx'
 import Footer from './components/Base/Footer.jsx'
 import userManager from './components/Authentication/userManager'
+import DashLayout from './components/Dashboard/DashLayout.jsx'
+import MapView from './components/Map/MapView.jsx'
+import SideNav from './components/Base/SideNav.jsx'
+import { data as NavData } from '../data/sideNavConfig'
+import DashGraph1FullView from './components/Dashboard/DashGraph1FullView.jsx'
+import DashGraph2FullView from './components/Dashboard/DashGraph2FullView.jsx'
+import DashGraph3FullView from './components/Dashboard/DashGraph3FullView.jsx'
+import DashGraph4FullView from './components/Dashboard/DashGraph4FullView.jsx'
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
 const o = require("odata")
+const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading } } = state
+  let { globalData: { loading, showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } } = state
   let user = state.oidc.user
-  return { loading, user }
+  return { loading, user, showSideNav, showHeader, showNavbar, showFooter, showSideNavButton }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleHeader: payload => {
+      dispatch({ type: "TOGGLE_HEADER", payload })
+    },
+    toggleNavbar: payload => {
+      dispatch({ type: "TOGGLE_NAVBAR", payload })
+    },
+    toggleFooter: payload => {
+      dispatch({ type: "TOGGLE_FOOTER", payload })
+    },
+    toggleListExpandCollapse: payload => {
+      dispatch({ type: "TOGGLE_LIST_EXPAND_COLLAPSE", payload })
+    },
+    toggleListView: payload => {
+      dispatch({ type: "TOGGLE_LIST_VIEW", payload })
+    },
+    toggleListFavorites: payload => {
+      dispatch({ type: "TOGGLE_LIST_FAVORITES", payload })
+    },
+    toggleReadOnly: payload => {
+      dispatch({ type: "TOGGLE_READONLY", payload })
+    },
+    toggleSideNavButton: payload => {
+      dispatch({ type: "TOGGLE_SIDENAV_BUTTON", payload })
+    },
+    toggleListFilterOptions: payload => {
+      dispatch({ type: "TOGGLE_LIST_FILTER_OPTIONS", payload })
+    },
+    toggleBackToList: payload => {
+      dispatch({ type: "TOGGLE_BACK_TO_LIST", payload })
+    },
+    loadRegionFilter: payload => {
+      dispatch({ type: "LOAD_REGION_FILTER", payload })
+    },
+    loadSectorFilter: payload => {
+      dispatch({ type: "LOAD_SECTOR_FILTER", payload })
+    },
+    loadStatusFilter: payload => {
+      dispatch({ type: "LOAD_STATUS_FILTER", payload })
+    },
+    loadTitleFilter: payload => {
+      dispatch({ type: "LOAD_TITLE_FILTER", payload })
+    },
+    loadTypologyFilter: payload => {
+      dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload })
+    },
+    loadPolygonFilter: payload => {
+      dispatch({ type: "LOAD_POLYGON_FILTER", payload })
+    },
+    setDAOID: async payload => {
+      dispatch({ type: "SET_DAOID", payload })
+    },
+  }
 }
 
 //Enable OIDC Logging
@@ -46,16 +110,161 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+  }
 
-    this.state = { navbar: true }
-    if (location.toString().includes("navbar=hidden")) {
-      this.state = { navbar: false }
-      //_gf.stripURLParam("navbar=hidden")
+  async componentDidMount() {
+    window.onhashchange = this.saveCurrentURL
+    this.processSilentSignIn()
+
+    this.genTestConfig()
+    this.processURLConfig()
+  }
+
+  async processSilentSignIn() {
+    try {
+      await userManager.signinSilent()
+    }
+    catch (ex) {
+      console.warn("Sign-in-silent failed!", ex)
     }
   }
 
-  componentDidMount(){
-    userManager.signinSilent()
+  genTestConfig() {
+    // TEST //
+    let config = {
+      header: true, // true/false  >>>  toggle header on/off
+      navbar: true, // true/false/'addOnly'  >>>  toggle navbar on/off
+      sidenav: true, // true/false  >>>  toggle sidenav on/off
+      footer: true, // true/false  >>>  toggle footer on/off
+      daoid: true, // true/false/[guid]  >>>  toggle DOA functionality on details view, as well as set DAOID for auto-linking
+      readOnly: false, //true/false  >>>  toggle allow editing on details view
+      backToList: true, //true/false  >>>  toggle "Back To List" button in details view on/off
+      filters: {
+        region: 0, //number  >>>  region filter
+        sector: 0, //number  >>>  sector filter
+        status: 0, //number  >>>  status filter
+        title: "", //string  >>>  title filter - partial match logic
+        typology: 0, //number  >>>  typology filter
+        polygon: "" //string  >>>  polygon filter - WKT/POLYGON
+      },
+      listOptions: {
+        expandCollapse: true, //true/false  >>>  allow minimize/maximize project list
+        view: true, //true/false  >>>  toggle view button in project cards
+        favorites: true, //true/false  >>>  toggle favorites functionality in project cards/list
+        filters: true //true/false  >>>  toggle filtering UI functionality
+      }
+    }
+
+    config = encodeURI(JSON.stringify(config))
+    console.log("config", config)
+    // TEST //    
+  }
+
+  processURLConfig() {
+    try {
+      const parsedHash = queryString.parse(location.hash.substring(location.hash.indexOf("?")))
+      if (parsedHash.config) {
+        let config = JSON.parse(parsedHash.config)
+
+        //daoid
+        if (typeof config.daoid !== 'undefined' && config.daoid !== null) {
+          this.props.setDAOID(config.daoid)
+        }
+
+        //header
+        if (typeof config.header === 'boolean') {
+          this.props.toggleHeader(config.header)
+        }
+
+        //sidenav
+        if (typeof config.sidenav === 'boolean') {
+          this.props.toggleSideNavButton(config.sidenav)
+        }
+
+        //navbar
+        if (typeof config.navbar === 'boolean' || typeof config.navbar === 'string') {
+          this.props.toggleNavbar(config.navbar)
+        }
+
+        //footer
+        if (typeof config.footer === 'boolean') {
+          this.props.toggleFooter(config.footer)
+        }
+
+        //readOnly
+        if (typeof config.readOnly === 'boolean') {
+          this.props.toggleReadOnly(config.readOnly)
+        }
+
+        //backToList
+        if (typeof config.backToList === 'boolean') {
+          this.props.toggleBackToList(config.backToList)
+        }
+
+        //filters
+        if (typeof config.filters !== 'undefined') {
+          let filters = config.filters
+
+          //region
+          if (typeof filters.region === 'number' && filters.region > 0) {
+            this.props.loadRegionFilter(filters.region)
+          }
+
+          //sector
+          if (typeof filters.sector === 'number' && filters.sector > 0) {
+            this.props.loadSectorFilter(filters.sector)
+          }
+
+          //status
+          if (typeof filters.status === 'number' && filters.status > 0) {
+            this.props.loadStatusFilter(filters.status)
+          }
+
+          //title
+          if (typeof filters.title === 'string' && filters.title !== "") {
+            this.props.loadTitleFilter(filters.title)
+          }
+
+          //typology
+          if (typeof filters.typology === 'number' && filters.typology > 0) {
+            this.props.loadTypologyFilter(filters.typology)
+          }
+
+          //polygon
+          if (typeof filters.polygon === 'string' && filters.polygon !== "") {
+            this.props.loadPolygonFilter(filters.polygon)
+          }
+        }
+
+        //listOptions
+        if (typeof config.listOptions !== 'undefined') {
+          let listOptions = config.listOptions
+
+          //expandCollapse
+          if (typeof listOptions.expandCollapse === 'boolean') {
+            this.props.toggleListExpandCollapse(listOptions.expandCollapse)
+          }
+
+          //view
+          if (typeof listOptions.view === 'boolean') {
+            this.props.toggleListView(listOptions.view)
+          }
+
+          //favorites
+          if (typeof listOptions.favorites === 'boolean') {
+            this.props.toggleListFavorites(listOptions.favorites)
+          }
+
+          //filters
+          if (typeof listOptions.filters === 'boolean') {
+            this.props.toggleListFilterOptions(listOptions.filters)
+          }
+        }
+      }
+    }
+    catch (ex) {
+      console.warn(ex)
+    }
   }
 
   componentDidUpdate() {
@@ -81,26 +290,44 @@ class App extends React.Component {
     let loaderWidth = 300
     let loaderHeight = 165
 
-    let { navbar } = this.state
+    let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } = this.props
 
     return (
-      <div style={{ padding: "0px 25px 0px 25px", margin: "auto" }}>
+      <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
         <Router>
           <div>
 
-            {navbar && <Header />}
-            {navbar && <CustomNavbar />}
+            {(showHeader === true) && <Header />}
+            {(showNavbar !== false) && <CustomNavbar />}
 
-            <Switch>
-              <Route path="/" component={Home} exact />
-              <Route path="/projects" component={Projects} exact />
-              <Route path="/projects/:id" component={ProjectDetails} exact />
-              <Route path="/login" component={Login} exact />
-              <Route path="/logout" component={Logout} exact />
-              <Route path="/callback" component={CallbackPage} />
-            </Switch>
+            {
+              showSideNavButton === true &&
+              <SideNav data={NavData} isOpen={showSideNav} />
+            }
 
-            {navbar && <Footer />}
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+
+            <div style={{ backgroundColor: "whitesmoke" }}>
+              <div style={{ margin: "0px 0px 0px 0px" }}>
+                <Switch >
+                  <Route path="/" component={DashLayout} exact />
+                  <Route path="/projects" component={Projects} exact />
+                  <Route path="/projects/:id" component={ProjectDetails} exact />
+                  <Route path="/map" component={MapView} exact />
+                  <Route path="/login" component={Login} exact />
+                  <Route path="/logout" component={Logout} exact />
+                  <Route path="/callback" component={CallbackPage} />
+                  <Route path="/chart1" component={DashGraph1FullView} exact />
+                  <Route path="/chart2" component={DashGraph2FullView} exact />
+                  <Route path="/chart3" component={DashGraph3FullView} exact />
+                  <Route path="/chart4" component={DashGraph4FullView} exact />
+                </Switch>
+              </div>
+            </div>
+
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+
+            {(showFooter === true) && <Footer />}
 
             <div className="container-fluid">
               <div className="row">
@@ -123,12 +350,11 @@ class App extends React.Component {
             <ReactTooltip delayShow={700} />
 
           </div>
-
         </Router>
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
