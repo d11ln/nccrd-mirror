@@ -267,7 +267,6 @@ class App extends React.Component {
 
           //detailsInParent
           if (typeof listOptions.detailsInParent === 'boolean') {
-            console.log("here")
             this.props.toggleDetailsInParent(listOptions.detailsInParent)
           }
         }
@@ -322,7 +321,7 @@ class App extends React.Component {
             }          
 
             <div style={{ backgroundColor: "whitesmoke" }}>
-              <div style={{ margin: "0px 0px 0px 0px" }}>
+              <div style={{ margin: "0px" }}>
                 <Switch >
                   <Route path="/" component={DashLayout} exact />
                   <Route path="/projects" component={Projects} exact />
