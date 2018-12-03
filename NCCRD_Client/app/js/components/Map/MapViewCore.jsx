@@ -25,41 +25,113 @@ class MapViewCore extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      activeFilters: {
+        region: 0,
+        status: 0,
+        typology: 0,
+        sector: 0,
+        title: ""
+      }
+    }
+  }
+
+  componentDidUpdate() {
+
+    let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
+    let { activeFilters } = this.state
+
+    if (regionFilter !== activeFilters.region || statusFilter !== activeFilters.status ||
+      typologyFilter !== activeFilters.typology || sectorFilter !== activeFilters.sector ||
+      titleFilter !== activeFilters.title) {
+      this.setState({
+        activeFilters: {
+          region: regionFilter,
+          status: statusFilter,
+          typology: typologyFilter,
+          sector: sectorFilter,
+          title: titleFilter
+        }
+      }, () => { this.forceUpdate() })
+    }
+
   }
 
   buildMapConfig() {
 
-    let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, favoritesFilter } = this.props
+    let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
     let mapConfig = MapConfig
 
     //Add filters
-    if (regionFilter > 0 || statusFilter > 0 || typologyFilter > 0 || sectorFilter > 0) {
+    if (parseInt(regionFilter) > 0 || parseInt(statusFilter) > 0 || parseInt(typologyFilter) > 0 ||
+      parseInt(sectorFilter) > 0 || titleFilter !== "") {
 
-      mapConfig.filters = {}
+      let filters = []
 
       if (parseInt(regionFilter) > 0) {
-        mapConfig.filters.region = {
-          uid: parseInt(regionFilter)
-        }
+        filters.push(
+          {
+            field: "properties.regions",
+            value: parseInt(regionFilter)
+          }
+        )
       }
 
       if (parseInt(statusFilter) > 0) {
-        mapConfig.filters.status = {
-          uid: parseInt(statusFilter)
-        }
+        filters.push(
+          {
+            field: "properties.status",
+            value: parseInt(statusFilter)
+          }
+        )
       }
 
       if (parseInt(typologyFilter) > 0) {
-        mapConfig.filters.typology = {
-          uid: parseInt(typologyFilter)
-        }
+        filters.push(
+          {
+            field: "properties.typology",
+            value: parseInt(typologyFilter)
+          }
+        )
       }
 
       if (parseInt(sectorFilter) > 0) {
-        mapConfig.filters.sector = {
-          uid: parseInt(sectorFilter)
-        }
+        filters.push(
+          {
+            field: "properties.sectors",
+            value: parseInt(sectorFilter)
+          }
+        )
       }
+
+      if (titleFilter !== "") {
+        filters.push(
+          {
+            field: "properties.name",
+            value: titleFilter
+          }
+        )
+      }
+
+      mapConfig.filters = filters
+    }
+    else{
+      delete mapConfig.filters
+    }
+
+    //Set viewport
+    if (parseInt(regionFilter) > 0) {
+      mapConfig.viewport = {
+        service: {
+          url: `http://app01.saeon.ac.za/VMS/api/regions/${regionFilter}`,
+          field: "wkt",
+          display: true
+        }
+      }      
+    }
+    else{
+      delete mapConfig.viewport
     }
 
     return encodeURI(JSON.stringify(mapConfig))
@@ -69,12 +141,13 @@ class MapViewCore extends React.Component {
 
     let { height, width, fullView } = this.props
     let mapConfig = this.buildMapConfig()
+    let mapSrc = `http://app01.saeon.ac.za/components/map?conf=${mapConfig}`
 
-    if(!height){
+    if (!height) {
       height = "300px"
     }
 
-    if(!width){
+    if (!width) {
       width = "100%"
     }
 
@@ -86,7 +159,7 @@ class MapViewCore extends React.Component {
         </h4>
 
         <img
-          src={ fullView ? popin : popout}
+          src={fullView ? popin : popout}
           style={{
             width: "25px",
             float: "right",
@@ -94,14 +167,14 @@ class MapViewCore extends React.Component {
             cursor: "pointer"
           }}
           onClick={() => {
-            if(!fullView) this.props.setScrollPos(window.pageYOffset)
+            if (!fullView) this.props.setScrollPos(window.pageYOffset)
 
             let navTo = ""
-            if(fullView){
-              navTo = location.hash.replace("#/map", "")        
+            if (fullView) {
+              navTo = location.hash.replace("#/map", "")
             }
-            else{
-              navTo = location.hash.replace("#/", "#/map")      
+            else {
+              navTo = location.hash.replace("#/", "#/map")
             }
             location.hash = navTo
           }}
@@ -119,7 +192,7 @@ class MapViewCore extends React.Component {
             backgroundRepeat: "no-repeat",
             backgroundPosition: "50% 50%"
           }}
-          src={`http://app01.saeon.ac.za/components/map?conf=${mapConfig}`}
+          src={mapSrc}
         />
 
       </div>
