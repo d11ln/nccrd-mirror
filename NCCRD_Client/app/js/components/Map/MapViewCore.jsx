@@ -5,6 +5,7 @@ import popout from '../../../images/popout.png'
 import popin from '../../../images/popin.png'
 import { MapConfig } from '../../../data/mapConfig'
 import loader from '../../../images/loader.gif'
+import { vmsBaseURL, mapServerBaseURL } from '../../config/serviceURLs.cfg'
 
 const mapStateToProps = (state, props) => {
   let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, favoritesFilter } } = state
@@ -37,6 +38,14 @@ class MapViewCore extends React.Component {
     }
   }
 
+  componentDidMount() {
+    window.addEventListener("message", this.onMessage.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("message", this.onMessage)
+  }
+
   componentDidUpdate() {
 
     let { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
@@ -56,6 +65,28 @@ class MapViewCore extends React.Component {
       }, () => { this.forceUpdate() })
     }
 
+  }
+
+  onMessage(event) {
+
+    if (event.origin === mapServerBaseURL) {
+      try {
+        var message = JSON.parse(event.data)
+        if (message.cmd == 'featureClick' && !location.hash.includes("projects")) {
+          let navTo = ""
+          if (location.hash.includes("map")) {
+            navTo = location.hash.replace("#/map", "#/projects/" + message.id)
+          }
+          else {
+            navTo = location.hash.replace("#/", "#/projects/" + message.id)
+          }
+          location.hash = navTo
+        }
+      }
+      catch (ex) {
+        console.error(ex)
+      }
+    }
   }
 
   buildMapConfig() {
@@ -116,7 +147,7 @@ class MapViewCore extends React.Component {
 
       mapConfig.filters = filters
     }
-    else{
+    else {
       delete mapConfig.filters
     }
 
@@ -124,13 +155,13 @@ class MapViewCore extends React.Component {
     if (parseInt(regionFilter) > 0) {
       mapConfig.viewport = {
         service: {
-          url: `http://app01.saeon.ac.za/VMS/api/regions/${regionFilter}`,
+          url: `${vmsBaseURL}regions/${regionFilter}`,
           field: "wkt",
           display: true
         }
-      }      
+      }
     }
-    else{
+    else {
       delete mapConfig.viewport
     }
 

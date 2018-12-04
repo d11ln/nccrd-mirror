@@ -185,8 +185,8 @@ namespace NCCRD.Services.DataV2.Controllers
                                 {
                                     type = "Point",
                                     coordinates = new double[] {
-                                        (double)pl.Location.LatCalculated,
-                                        (double)pl.Location.LonCalculated
+                                        (double)pl.Location.LonCalculated,
+                                        (double)pl.Location.LatCalculated
                                     }
                                 },
                                 properties = new
