@@ -353,7 +353,11 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             foreach(var prLoc in projectLocations)
             {
-                var loc = prLoc.Location;
+                var _prLoc = prLoc;
+
+                HelperExtensions.ClearIdentityValue(ref _prLoc);
+                HelperExtensions.ClearNullableInts(ref _prLoc);
+                var loc = _prLoc.Location;
 
                 //Check if location exists
                 var exiting = _context.Location.FirstOrDefault(l => l.LocationId == loc.LocationId);
@@ -366,7 +370,7 @@ namespace NCCRD.Services.DataV2.Controllers
                     _context.Location.Add(loc);
 
                     //Have to save to get actual/valid ID
-                    _context.SaveChanges(); 
+                    _context.SaveChanges();
 
                     //Update references
                     prLoc.Location = loc;

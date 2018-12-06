@@ -141,8 +141,8 @@ class DashGraph2FullView extends React.Component {
 
     let tData = []
 
-    let minYear = Math.min(...data.map(p => p.Year))
-    let maxYear = Math.max(...data.map(p => p.Year))
+    let minYear = Math.min(...data.filter(p => p.Year > 0).map(p => p.Year))
+    let maxYear = Math.max(...data.filter(p => p.Year > 0).map(p => p.Year))
     let currentYear = new Date().getFullYear()
 
     if (maxYear > currentYear) {

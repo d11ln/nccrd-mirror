@@ -565,10 +565,19 @@ class ProjectDetails extends React.Component {
 
     this.props.setLoading(true)
 
-    let navTo = location.hash.replace(
-      "#/projects/" + this.state.projectId,
-      this.props.projectsFullView === true ? "#/projects" : ""
-    )
+    let navTo = location.hash
+    if (location.hash.includes("projects/add")) {
+      navTo = location.hash.replace(
+        "#/projects/add",
+        this.props.projectsFullView === true ? "#/projects" : ""
+      )
+    }
+    else {
+      navTo = location.hash.replace(
+        "#/projects/" + this.state.projectId,
+        this.props.projectsFullView === true ? "#/projects" : ""
+      )
+    }
 
     location.hash = navTo
   }
@@ -659,7 +668,7 @@ class ProjectDetails extends React.Component {
     let { projectId } = this.state
     let activeTabId = this.state.activeItemTabs
 
-    let tabTo = location.hash.replace(`#/projects/${projectId}`, "")
+    let tabTo = location.hash.replace(`#/projects/${projectId}`, "").replace('#/projects/add', "")
     if (tabTo === "") tabTo = "#"
 
     return (

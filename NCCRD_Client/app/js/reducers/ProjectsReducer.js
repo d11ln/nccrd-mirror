@@ -198,6 +198,8 @@ export default function ProjectsReducer(state = {}, action) {
 
       if (id === 0) {
 
+        if(!projectDetails.ProjectLocations) projectDetails.ProjectLocations = []
+
         //Get next id
         let nextId = 1000
         if(projectDetails.ProjectLocations.length > 0){

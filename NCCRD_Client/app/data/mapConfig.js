@@ -13,6 +13,10 @@ export const MapConfig = {
         {
             field: "data.endYear",
             alias: "End Year"
+        },
+        {
+            field: "properties.id",
+            alias: "Project ID"
         }
     ],
     styleField: "properties.typology",

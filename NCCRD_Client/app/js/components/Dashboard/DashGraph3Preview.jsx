@@ -172,8 +172,8 @@ class DashGraph3Preview extends React.Component {
 
     let tData = []
 
-    let minYear = Math.min(...data.map(p => p.Project.StartYear))
-    let maxYear = Math.max(...data.map(p => p.Project.EndYear))
+    let minYear = Math.min(...data.filter(p => p.Project.StartYear > 0).map(p => p.Project.StartYear))
+    let maxYear = Math.max(...data.filter(p => p.Project.EndYear > 0).map(p => p.Project.EndYear))
     let currentYear = new Date().getFullYear()
 
     if (maxYear > currentYear) {

@@ -42,6 +42,7 @@ class ProjectCard extends React.Component {
     if (this.props.showDetailsInParent) {
       let payload = {}
       payload.action = "showDetails"
+      payload.context = "NCCRD"
       payload.value = this.props.pid
       window.parent.postMessage(payload, "*")
     }

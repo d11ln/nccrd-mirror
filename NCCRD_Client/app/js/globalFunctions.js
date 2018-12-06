@@ -110,6 +110,8 @@ export function arraysEqual(a, b) {
   return true;
 }
 
+export const wait = ms => new Promise((r, j) => setTimeout(r, ms))
+
 
 //-------------------------//
 // Create and Read Cookies //

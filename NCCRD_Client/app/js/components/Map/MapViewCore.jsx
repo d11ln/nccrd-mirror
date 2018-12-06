@@ -73,6 +73,9 @@ class MapViewCore extends React.Component {
       try {
         var message = JSON.parse(event.data)
         if (message.cmd == 'featureClick' && !location.hash.includes("projects")) {
+          
+          //console.log("Message", message)
+          
           let navTo = ""
           if (location.hash.includes("map")) {
             navTo = location.hash.replace("#/map", "#/projects/" + message.id)
@@ -136,14 +139,14 @@ class MapViewCore extends React.Component {
         )
       }
 
-      if (titleFilter !== "") {
-        filters.push(
-          {
-            field: "properties.name",
-            value: titleFilter
-          }
-        )
-      }
+      // if (titleFilter !== "") {
+      //   filters.push(
+      //     {
+      //       field: "properties.name",
+      //       value: titleFilter
+      //     }
+      //   )
+      // }
 
       mapConfig.filters = filters
     }
@@ -165,7 +168,7 @@ class MapViewCore extends React.Component {
       delete mapConfig.viewport
     }
 
-    return encodeURI(JSON.stringify(mapConfig))
+    return encodeURIComponent(JSON.stringify(mapConfig))
   }
 
   render() {
@@ -219,9 +222,9 @@ class MapViewCore extends React.Component {
             height,
             margin: "0px",
             border: "none",
-            backgroundImage: `url(${loader})`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "50% 50%"
+            // backgroundImage: `url(${loader})`,
+            // backgroundRepeat: "no-repeat",
+            // backgroundPosition: "50% 50%"
           }}
           src={mapSrc}
         />
