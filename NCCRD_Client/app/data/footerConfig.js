@@ -21,16 +21,15 @@ export const footerContent = {
       text: "SAEON ODP",
       links: [
         { text: "Open Data Platform", link: "https://docs.google.com/document/d/e/2PACX-1vQ7DWVfot6ZEuX22aciju9MW5PAZJoi6v_lFUFCiwVajRzG91YxjPaCj2NCsUV5WI8hlTdOfBrCxxc1/pub" },
-        { text: "For Stakeholders", link: "http://www.example.com" },
-        { text: "For Developers", link: "http://www.example.com" },
+        { text: "Contribute", link: "http://app01.saeon.ac.za/dev/UI_footside/page_contribute.html" },
         { text: "Contact Us", link: "http://app01.saeon.ac.za/dev/UI_footside/page_contact.html" }
       ]
     },
     {
       text: "Funding",
       links: [
-        { src: DEA_Logo, width: "100%", link: "http://www.example.com" }
+        { src: DEA_Logo, width: "100%"/*, link: "http://www.example.com"*/ }
       ]
     }
   ]
- }
+}

@@ -15,7 +15,7 @@ const store = createStore(
             editMode: false,
             readOnly: false,
             daoid: true,
-            showSideNavButton: false,
+            showSideNavButton: true,
             showSideNav: false,
             showHeader: true,
             showNavbar: true,
