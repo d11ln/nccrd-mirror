@@ -115,12 +115,14 @@ class App extends React.Component {
     super(props);
   }
 
-  async componentDidMount() {
-    window.onhashchange = this.saveCurrentURL
-    this.processSilentSignIn()
-
+  componentWillMount(){
     //this.genTestConfig()
     this.processURLConfig()
+  }
+
+  componentDidMount() {
+    window.onhashchange = this.saveCurrentURL
+    this.processSilentSignIn()
   }
 
   async processSilentSignIn() {
