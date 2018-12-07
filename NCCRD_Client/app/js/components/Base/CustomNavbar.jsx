@@ -1,17 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Input } from 'mdbreact'
+import { Button, Input, Fa } from 'mdbreact'
 import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
 import userManager from '../Authentication/userManager'
 import { ssoBaseURL } from '../../config/serviceURLs.cfg'
-import {DEAGreen} from '../../config/colours.cfg'
+import { DEAGreen } from '../../config/colours.cfg'
+import { data as NavData } from '../../../data/sideNavConfig'
 
 const _gf = require("../../globalFunctions")
+const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
-  let { navigation: { locationHash } } = state
-  return { user, locationHash }
+  let { globalData: { loading, daoid, showSideNav, showSideNavButton, showNavbar } } = state
+  return { user, loading, daoid, showSideNav, showSideNavButton, showNavbar }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setDAOID: async payload => {
+      dispatch({ type: "SET_DAOID", payload })
+    },
+    toggleSideNav: payload => {
+      dispatch({ type: "TOGGLE_SIDENAV", payload })
+    }
+  }
 }
 
 class CustomNavbar extends React.Component {
@@ -58,69 +71,119 @@ class CustomNavbar extends React.Component {
 
   render() {
 
-    let { locationHash, user } = this.props
+    let { user, toggleSideNav, showSideNav, showSideNavButton, showNavbar } = this.props
 
     return (
-      <Navbar size="sm" color="white" light expand="md" style={{ boxShadow: "none", borderTop: "1px solid gainsboro" }} >
-        {!this.state.isWideEnough && <NavbarToggler style={{ backgroundColor: "#2BBBAD" }} onClick={this.onClick} />}
+      <Navbar
+        size="sm"
+        color="white"
+        light
+        expand="md"
+        style={{
+          boxShadow: "0px 15px 10px -15px gainsboro",
+          borderTop: "1px solid #E8E8E8",
+        }}
+      >
+        {
+          !this.state.isWideEnough &&
+          <NavbarToggler
+            style={{ backgroundColor: "#2BBBAD" }}
+            onClick={this.onClick}
+          />
+        }
+
         <Collapse isOpen={this.state.collapse} navbar>
 
           {/* LEFT */}
           <NavbarNav left>
-            <NavItem style={{ borderBottom: (locationHash === "#/" ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
-              <NavLink to="/"><b>Home</b></NavLink>
-            </NavItem>
 
-            <NavItem style={{ borderBottom: (locationHash === "#/projects" ? "4px solid dimgrey" : "0px solid white"), marginRight: "15px" }}>
-              <NavLink to="/projects"><b>Project List</b></NavLink>
-            </NavItem>
+            {
+              (showSideNavButton === true && showNavbar !== "addOnly") &&
+              <Button size="sm" color="grey" onClick={() => { toggleSideNav(!showSideNav) }}
+                style={{ width: "45px", marginLeft: "0px", marginRight: "15px", paddingLeft: "18px" }}>
+                <Fa icon="bars" />
+              </Button>
+            }
+
+            {
+              (!location.hash.includes("projects/") && (user && !user.expired)) &&
+              <Button
+                color="warning"
+                size="sm"
+                style={{ marginLeft: "0px" }}
+                onClick={() => { 
+                  let navTo = ""
+                  if (location.hash.includes("projects")) {
+                    navTo = location.hash.replace("#/projects", "#/projects/add")
+                  }
+                  else {
+                    navTo = location.hash.replace("#/", "#/projects/add")
+                  }            
+                  location.hash = navTo
+                }} >
+                Add New Project
+              </Button>
+            }
 
           </NavbarNav>
 
           {/* RIGHT */}
-          <NavbarNav right>
+          {
+            showNavbar !== "addOnly" &&
+            <NavbarNav right>
 
-            {/* Username */}
-            {(user && !user.expired) &&
-              <NavItem style={{ marginLeft: "15px" }}>
-                <span className="nav-link">
-                  <b style={{ color: DEAGreen }}>
-                    {"Hello, " + user.profile.email}
-                  </b>
-                </span>
-              </NavItem>
-            }
-
-            {/* Login / Logout */}
-            <NavItem style={{ marginLeft: "15px" }}>
-              {(!user || user.expired) &&
-                <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/login">
-                  <b style={{ color: "black" }}>
-                    Login
-                  </b>
-                </a>
-              }
+              {/* Username */}
               {(user && !user.expired) &&
-                <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/logout">
-                  <b style={{ color: "black" }}>
-                    Logout
-                  </b>
-                </a>
+
+                <table>
+                  <tbody>
+                    <tr style={{ height: "40px" }}>
+                      <td valign="middle">
+                        <div style={{ marginRight: "7px", color: "grey" }} >
+                          <Fa size="2x" icon="user-circle-o" />
+                        </div>
+                      </td>
+                      <td valign="middle">
+                        <div style={{ fontSize: "17px" }} >
+                          <b>{`${user.profile.FirstName} ${user.profile.Surname}`}</b>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               }
-            </NavItem>
 
-            {/* Register */}
-            {(!user || user.expired) &&
+              {/* Login / Logout */}
               <NavItem style={{ marginLeft: "15px" }}>
-                <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank">
-                  <b style={{ color: "black" }}>
-                    Register
+                {(!user || user.expired) &&
+                  <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/login">
+                    <b style={{ color: "black" }}>
+                      Login
                   </b>
-                </a>
+                  </a>
+                }
+                {(user && !user.expired) &&
+                  <a className="nav-link" onClick={this.LoginLogoutClicked} href="#/logout">
+                    <b style={{ color: "black" }}>
+                      Logout
+                  </b>
+                  </a>
+                }
               </NavItem>
-            }
 
-          </NavbarNav>
+              {/* Register */}
+              {(!user || user.expired) &&
+                <NavItem style={{ marginLeft: "15px" }}>
+                  <a key="lnkRegister" className="nav-link" href={ssoBaseURL + "Account/Register"} target="_blank">
+                    <b style={{ color: "black" }}>
+                      Register
+                  </b>
+                  </a>
+                </NavItem>
+              }
+
+            </NavbarNav>
+          }
 
         </Collapse>
       </Navbar>
@@ -128,4 +191,4 @@ class CustomNavbar extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(CustomNavbar)
+export default connect(mapStateToProps, mapDispatchToProps)(CustomNavbar)

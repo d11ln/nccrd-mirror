@@ -203,7 +203,7 @@ class SelectComponent extends React.Component {
 
   render() {
 
-    let { col, label, id, selectedValue, data } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle } = this.props
     let uiconf = UILookup(id, label)
     let displayValue = "Select..."
 
@@ -214,11 +214,28 @@ class SelectComponent extends React.Component {
       }
     }
 
+    if (!style) {
+      style = {}
+    }
+
+    if (!labelStyle) {
+      labelStyle = {}
+    }
+
     return (
       <div className={col}>
-        <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
+        <label
+          data-tip={uiconf.tooltip}
+          style={{
+            fontWeight: "bold",
+            color: this.getLabelFontColour(uiconf),
+            ...labelStyle
+          }} >
+          {uiconf.label}
+        </label>
+
         <Select
-          style={{ width: "100%" }}
+          style={{ width: "100%", ...style }}
           onChange={this.onSelect}
           value={displayValue}
           disabled={this.getDisabledState()}

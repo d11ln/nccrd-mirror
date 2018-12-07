@@ -56,6 +56,7 @@ export default function LookupsReducer(state = {}, action) {
       payload.forEach(x => {
         x.Value = (x.FirstName + " " + x.Surname + " (" + x.EmailAddress + ")")
       })
+      payload.sort((a,b) => (a.Value > b.Value) ? 1 : ((b.Value > a.Value) ? -1 : 0)); 
       return { ...state, users: payload }
     }
 

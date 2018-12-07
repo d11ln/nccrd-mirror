@@ -8,11 +8,18 @@ import userManager from './components/Authentication/userManager';
 import { OidcProvider } from 'redux-oidc'
 import App from './App.jsx'
 
+//Favicon
+import Favicon from 'react-favicon'
+import favicon_image from '../images/favicon.png'
+
 const render = Component => {
   ReactDOM.render(
     <Provider store={store}>
       <OidcProvider store={store} userManager={userManager}>
-        <Component />
+        <div>
+          <Favicon url={favicon_image} />
+          <Component />
+        </div>
       </OidcProvider>
     </Provider>,
     document.getElementById('app')
@@ -21,6 +28,6 @@ const render = Component => {
 
 render(App)
 
-if (module.hot) { 
+if (module.hot) {
   module.hot.accept('./App.jsx', () => { render(App) })
 }

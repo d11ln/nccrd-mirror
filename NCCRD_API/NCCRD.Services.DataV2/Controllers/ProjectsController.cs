@@ -72,11 +72,26 @@ namespace NCCRD.Services.DataV2.Controllers
         public IQueryable<Project> Filter([FromBody] Filters filters)
         {
             string titleFilter = filters.title;
+            string favsFilter = filters.favorites;
             int statusFilter = filters.status;
             int typologyFilter = filters.typology;
             int regionFilter = filters.region;
             int sectorFilter = filters.sector;
             Guid daoidFilter = filters.daoid != null ? new Guid(filters.daoid) : Guid.Empty;
+
+            //FAVORITES - OVERRIDES ALL OTHER FILTERS//
+            if (!string.IsNullOrEmpty(favsFilter))
+            {
+                try
+                {
+                    var favs = favsFilter.Split(",").Select(f => int.Parse(f)).ToList();
+                    return _context.Project.Where(p => favs.Contains(p.ProjectId));
+                }
+                catch
+                {
+                    return new List<Project>().AsQueryable();
+                }              
+            }
 
             //REGION//
             var regionProjectIds = new List<int>();
@@ -152,7 +167,11 @@ namespace NCCRD.Services.DataV2.Controllers
         [EnableQuery]
         public JsonResult GeoJson()
         {
+
             var typologyData = _context.Typology.ToList();
+            var vmsRegionData = GetVMSData("regions/flat").Result;
+            var vmsSectorData = GetVMSData("sectors/flat").Result;
+
             var geoJSON = _context.ProjectLocation
                             .Include(pl => pl.Project)
                             .Include(pl => pl.Project.AdaptationDetails)
@@ -166,16 +185,16 @@ namespace NCCRD.Services.DataV2.Controllers
                                 {
                                     type = "Point",
                                     coordinates = new double[] {
-                                        (double)pl.Location.LatCalculated,
-                                        (double)pl.Location.LonCalculated
+                                        (double)pl.Location.LonCalculated,
+                                        (double)pl.Location.LatCalculated
                                     }
                                 },
                                 properties = new
                                 {
                                     id = pl.ProjectId,
                                     name = pl.Project.ProjectTitle,
-                                    regions = pl.Project.ProjectRegions.Select(pr => pr.RegionId).ToArray(),
-                                    sectors = GetProjectSectors(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails),
+                                    regions = GetGeoProps(pl.Project.ProjectRegions.Select(pr => pr.RegionId).ToArray(), vmsRegionData),
+                                    sectors = GetGeoProps(GetProjectSectors(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails), vmsSectorData),
                                     typology = GetProjectTypology(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails, typologyData),
                                     status = pl.Project.ProjectStatusId
                                 },
@@ -320,18 +339,54 @@ namespace NCCRD.Services.DataV2.Controllers
             return children;
         }
 
-        //private List<Sector> GetChildSectors(int sectorId, List<Sector> sectorList)
-        //{
-        //    var sectors = sectorList.Where(x => x.ParentSectorId == sectorId).ToList();
+        private List<int> GetParents(int filterID, List<StandardVocabItem> data)
+        {
+            var parentId = "";
 
-        //    var childSectors = new List<Sector>();
-        //    foreach (var sector in sectors)
-        //    {
-        //        childSectors.AddRange(GetChildSectors(sector.SectorId, sectorList));
-        //    }
-        //    sectors.AddRange(childSectors);
+            //Get ParentId
+            var vmsItem = data.FirstOrDefault(x => x.Id == filterID.ToString());
+            if(vmsItem != null)
+            {
+                var addItem = vmsItem.AdditionalData.FirstOrDefault(x => x.Key == "ParentId");
+                if(!string.IsNullOrEmpty(addItem.Value))
+                {
+                    parentId = addItem.Value;
+                }
+            }
 
-        //    return sectors;
-        //}
+            var parents = data
+                .Where(x =>
+                    x.Id == parentId
+                )
+                .Select(x => int.Parse(x.Id))
+                .ToList();
+
+            var addParents = new List<int>();
+            foreach (var p in parents)
+            {
+                //Add to temp list so as to not modify 'parents' during iteration
+                addParents.AddRange(GetParents(p, data));
+            }
+            //Transfer to actual list
+            parents.AddRange(addParents);
+
+            return parents;
+        }
+
+        private List<List<int>> GetGeoProps( int[] items, List<StandardVocabItem> vmsItems)
+        {
+            var geoItems = new List<List<int>>();
+
+            foreach(var r in items)
+            {
+                var itemGroup = new List<int>();
+                itemGroup.Add(r);
+                itemGroup.AddRange(GetParents(r, vmsItems));
+
+                geoItems.Add(itemGroup);
+            }
+
+            return geoItems;
+        }
     }
 }

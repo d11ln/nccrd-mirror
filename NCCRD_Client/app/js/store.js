@@ -13,7 +13,20 @@ const store = createStore(
         globalData: {
             loading: false,
             editMode: false,
-            daoid: null
+            readOnly: false,
+            daoid: true,
+            showSideNavButton: true,
+            showSideNav: false,
+            showHeader: true,
+            showNavbar: true,
+            showFooter: true,
+            showListExpandCollapse: true,
+            showListViewOption: true,
+            showFavoritesOption: true,
+            showListFilterOptions: true,
+            showBackToList: true,
+            showDetailsInParent: false,
+            projectsFullView: false
         },
 
         navigation: {
@@ -90,7 +103,15 @@ const store = createStore(
             typologyFilter: 0,
             regionFilter: 0,
             sectorFilter: 0,
-            polygonFilter: ""
+            polygonFilter: "",
+            favoritesFilter: false
+        },
+
+        chartData:{
+            chart1: [],
+            chart2: [],
+            chart3: [],
+            chart4: []
         }
 
     }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

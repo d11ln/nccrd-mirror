@@ -9,73 +9,73 @@ const queryString = require('query-string')
 const o = require("odata")
 
 const mapStateToProps = (state, props) => {
-    let { lookupData: { typology } } = state
-    let { filterData: { typologyFilter } } = state
-    return { typology, typologyFilter }
+  let { lookupData: { typology } } = state
+  let { filterData: { typologyFilter } } = state
+  return { typology, typologyFilter }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        loadData: payload => {
-            dispatch({ type: "LOAD_TYPOLOGY", payload })
-        },
-        loadTypologyFilter: payload => {
-            dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload })
-        }
+  return {
+    loadData: payload => {
+      dispatch({ type: "LOAD_TYPOLOGY", payload })
+    },
+    loadTypologyFilter: payload => {
+      dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload })
     }
+  }
 }
 
 class TypologyFilter extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+  }
 
-        //Read initial filter from URL
-        const parsedHash = queryString.parse(location.hash.replace("/projects?", ""))
-        if (typeof parsedHash.typology !== 'undefined') {
+  componentDidMount() {
 
-            //Dispatch to store
-            let { loadTypologyFilter } = this.props
-            loadTypologyFilter({ value: parsedHash.typology })
-            _gf.stripURLParam("typology=" + parsedHash.typology)
-        }
-    }
+    //Load data
+    let { loadData } = this.props
 
-    componentDidMount() {
+    //Get data
+    var oHandler = o(apiBaseURL + "Typology")
+      .select("TypologyId,Value")
+      .orderBy("Value")
 
-        //Load data
-        let { loadData } = this.props
+    oHandler.get(function (data) {
+      loadData(data)
+    }, function (error) {
+      console.error(error)
+    })
+  }
 
-        //Get data
-        var oHandler = o(apiBaseURL + "Typology")
-        .select("TypologyId,Value")
-        .orderBy("Value")
+  render() {
 
-        oHandler.get(function(data){
-            loadData(data)
-        }, function(error){
-            console.error(error)
-        })
-    }
+    let { typologyFilter } = this.props
 
-    render() {
-
-        let { typologyFilter } = this.props
-
-        return (
-            <SelectComponent
-                id="selTypologyFilter"
-                col="col-md-4"
-                label="Typology:"
-                selectedValue={typologyFilter}
-                data={this.props.typology}
-                selectCallback={this.selectCallbackHandler}
-                setSelectedValueKey={"LOAD_TYPOLOGY_FILTER"}
-                editModeOverride={true}
-                allowEdit={false}
-            />
-        )
-    }
+    return (
+      <SelectComponent
+        id="selTypologyFilter"
+        col="col-md-2"
+        label="Typology:"
+        selectedValue={typologyFilter}
+        data={this.props.typology}
+        selectCallback={this.selectCallbackHandler}
+        setSelectedValueKey={"LOAD_TYPOLOGY_FILTER"}
+        editModeOverride={true}
+        allowEdit={false}
+        labelStyle={{
+          fontSize: "14px",
+          color: "grey",
+          fontWeight: "400"
+        }}
+        style={{
+          marginTop: "-4px",
+          marginRight: "0px",
+          marginBottom: "15px"
+        }}
+      />
+    )
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TypologyFilter)

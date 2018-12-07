@@ -13,5 +13,6 @@ namespace NCCRD.Services.DataV2.ViewModels
         public int region { get; set; }
         public int sector { get; set; }
         public string daoid { get; set; }
+        public string favorites { get; set; }
     }
 }
