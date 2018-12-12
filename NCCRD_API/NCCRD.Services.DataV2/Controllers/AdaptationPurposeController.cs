@@ -23,6 +23,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of AdaptationPurpose
+        /// </summary>
+        /// <returns>List of AdaptationPurpose</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<AdaptationPurpose> Get()

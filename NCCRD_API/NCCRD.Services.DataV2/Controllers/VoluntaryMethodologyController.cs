@@ -23,6 +23,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of VoluntaryMethodology
+        /// </summary>
+        /// <returns>List of VoluntaryMethodology</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<VoluntaryMethodology> Get()

@@ -23,6 +23,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of CDMStatus
+        /// </summary>
+        /// <returns>List of CDMStatus</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<CDMStatus> Get()

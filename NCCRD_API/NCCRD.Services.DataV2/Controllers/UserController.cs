@@ -23,6 +23,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of Person (previously named User)
+        /// </summary>
+        /// <returns>List of Person (previously named User)</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<Person> Get()

@@ -30,6 +30,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get ProjectDetails for a specific ProjectId
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <returns>ProjectDetails for specified ProjectId</returns>
         [HttpGet]
         [EnableQuery(MaxExpansionDepth = 0)]
         [ODataRoute("({id})")]
@@ -75,6 +80,11 @@ namespace NCCRD.Services.DataV2.Controllers
         }
 
         //Add/Update
+        /// <summary>
+        /// Add/Update ProjectDetails
+        /// </summary>
+        /// <param name="data">A composite object containg all the project's details and associated data</param>
+        /// <returns>ProjectId on success; Error/Code on fail</returns>
         [HttpPost]
         [Authorize(Roles = "Contributor,Custodian,Configurator,SysAdmin")]
         [EnableQuery]

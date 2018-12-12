@@ -23,6 +23,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of ProjectSubType
+        /// </summary>
+        /// <returns>List of ProjectSubType</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<ProjectSubType> Get()

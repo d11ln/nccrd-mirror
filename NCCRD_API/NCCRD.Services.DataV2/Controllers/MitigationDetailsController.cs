@@ -24,6 +24,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of MitigationDetail
+        /// </summary>
+        /// <returns>List of MitigationDetail</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<MitigationDetail> Get()

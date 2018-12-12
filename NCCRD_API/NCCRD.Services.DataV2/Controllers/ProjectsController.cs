@@ -82,6 +82,11 @@ namespace NCCRD.Services.DataV2.Controllers
                 .AsQueryable();
         }
 
+        /// <summary>
+        /// Get a filtered list of projects
+        /// </summary>
+        /// <param name="filters">Composite object containing filters</param>
+        /// <returns>Filtered list of projects</returns>
         [HttpPost]
         [EnableQuery]
         [ODataRoute("Filter")]
@@ -179,6 +184,10 @@ namespace NCCRD.Services.DataV2.Controllers
                         );
         }
 
+        /// <summary>
+        /// Get a list of projects in GeoJSON format
+        /// </summary>
+        /// <returns>List of projects in GeoJSON format</returns>
         [HttpGet]
         [EnableQuery]
         [ODataRoute("GeoJson")]

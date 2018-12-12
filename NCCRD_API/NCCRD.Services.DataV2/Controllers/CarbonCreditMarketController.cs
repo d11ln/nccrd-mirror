@@ -23,6 +23,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of CarbonCreditMarket
+        /// </summary>
+        /// <returns>List of CarbonCreditMarket</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<CarbonCreditMarket> Get()

@@ -24,6 +24,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of ProjectStatus
+        /// </summary>
+        /// <returns>List of ProjectStatus</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<ProjectStatus> Get()

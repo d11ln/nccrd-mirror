@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using NCCRD.Services.DataV2.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace NCCRD.Services.DataV2.Database.Contexts
@@ -23,11 +25,12 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         {
             Assembly assembly = typeof(ODataController).Assembly;
             var thisAssemblyTypes = Assembly.GetExecutingAssembly().GetTypes().ToList();
+            var projectTypeNames = GetProjectTypes();
 
-            var allowedControllers = new string[] {
-                "ProjectsController"
-            };
-            var odatacontrollers = thisAssemblyTypes.Where(t => t.BaseType == typeof(ODataController) && allowedControllers.Contains(t.Name))
+            //var allowedControllers = new string[] {
+            //    "ProjectDetailsController"
+            //};
+            var odatacontrollers = thisAssemblyTypes.Where(t => t.BaseType == typeof(ODataController) /*&& allowedControllers.Contains(t.Name)*/)
                 .ToList();
 
             var xmlComments = LoadCommentsXML();
@@ -53,23 +56,33 @@ namespace NCCRD.Services.DataV2.Database.Contexts
 
                     StringBuilder sb = new StringBuilder();
 
-                    if (method.Name.ToLower() != "get") sb.Append("/" + method.Name);
+                    //Add method name - ignore implicit names
+                    var implicitNames = new string[] { "get", "post", "put", "patch", "delete" };
+                    if (!implicitNames.Contains(method.Name.ToLower()))
+                    {
+                        sb.Append("/" + method.Name);
+                    }
 
+                    //Get parameters
                     List<string> listParams = new List<string>();
                     var parameterInfo = method.GetParameters().Where(pi => !pi.CustomAttributes.Any(x => x.AttributeType == typeof(FromBodyAttribute)));
-                    if (parameterInfo.Count() > 0) sb.Append("(");
-                    foreach (ParameterInfo pi in parameterInfo)
+
+                    //Process any parameters
+                    if (parameterInfo.Count() > 0)
                     {
-                        listParams.Add("{" + pi.Name + "}");
-                    }
-                    sb.Append(string.Join(", ", listParams.ToArray()));
+                        sb.Append("(");
 
-                    if (parameterInfo.Count() > 0) sb.Append(")");
+                        foreach (ParameterInfo pi in parameterInfo)
+                        {
+                            listParams.Add("{" + pi.Name + "}");
+                        }
+                        sb.Append(string.Join(", ", listParams.ToArray()));
 
-                    var path = "/" + "odata" + "/" + odataContoller.Name.Replace("Controller", "") + sb.ToString();
-                    var odataPathItem = new PathItem();
+                        sb.Append(")");
+                    };
+
+                    //Construct Operation
                     var op = new Operation();
-
                     var _params = new List<IParameter>();
                     parameterInfo = method.GetParameters();
                     foreach (var pi in parameterInfo)
@@ -103,22 +116,42 @@ namespace NCCRD.Services.DataV2.Database.Contexts
 
                     // The odata methods will be listed under a heading with the Controller name in swagger doc
                     op.Tags = new List<string> { odataContoller.Name.Replace("Controller", "") };
-                    op.OperationId = path;
+                    op.OperationId = method.ToString().ToBase64(); //path;
 
                     op.Summary = GetComment(methodComments, "summary");
                     op.Description = "Returns: " + GetComment(methodComments, "returns");
-                    op.Consumes = new List<string> { "application/json" };
+                    op.Consumes = new List<string> { "application/json" }; //Other options: "application/atom+xml", "application/json", "text/json", "application/xml", "text/xml"
                     op.Produces = new List<string> { "application/json" }; //Other options: "application/atom+xml", "application/json", "text/json", "application/xml", "text/xml"
                     op.Deprecated = false;
 
-                    var response = new Response() { Description = "OK" };
-                    response.Schema = context.SchemaRegistry.GetOrRegister(method.ReturnType);
-                    op.Responses = new Dictionary<string, Response> { { "200", response } };
+                    //Process responses
+                    var successResponse = new Response() { Description = "OK" };
 
-                    var security = GetSecurityForOperation(odataContoller);
+                    if (projectTypeNames.Any(x => method.ReturnType.FullName.Contains(x)))
+                    {
+                        successResponse.Schema = context.SchemaRegistry.GetOrRegister(method.ReturnType);
+                    }
+
+                    var failResponse = new Response() { Description = "Bad Request" };
+
+                    op.Responses = new Dictionary<string, Response> {
+                        { "200", successResponse },
+                        { "400", failResponse },
+                    };
+
+                    //Process security
+                    var security = GetSecurityForOperation(method);
                     if (security != null)
                     {
                         op.Security = new List<IDictionary<string, IEnumerable<string>>> { security };
+                    }
+
+                    //Find existing pathItem (if any)
+                    var path = "/" + "odata" + "/" + odataContoller.Name.Replace("Controller", "") + sb.ToString();
+                    var odataPathItem = new PathItem();
+                    if (swaggerDoc.Paths.ContainsKey(path))
+                    {
+                        odataPathItem = swaggerDoc.Paths[path];
                     }
 
                     //Requires endpoint methods to be decorated with [HttpGet], [HttpPost], etc...
@@ -144,13 +177,35 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                     }
 
                     //Add to SwaggerDoc
-                    try
+                    if (!swaggerDoc.Paths.ContainsKey(path))
                     {
-                        swaggerDoc.Paths.Add(path, odataPathItem);
+                        try
+                        {
+                            swaggerDoc.Paths.Add(path, odataPathItem);
+                        }
+                        catch { }
                     }
-                    catch { }
+
                 }
             }
+
+            //Remove model definitions that I did not create (i.e. not defined in this project)            
+            var removeDefs = swaggerDoc.Definitions.Where(d => !projectTypeNames.Contains(d.Key)).Select(d => d.Key).ToList();
+            foreach (var def in removeDefs)
+            {
+                swaggerDoc.Definitions.Remove(def);
+            }
+        }
+
+        private List<string> GetProjectTypes()
+        {
+            var projectName = Assembly.GetExecutingAssembly().GetName().Name;
+            var theList = Assembly.GetExecutingAssembly().GetTypes()
+                                   .Where(t => t.Namespace != null && t.Namespace.StartsWith(projectName))
+                                   .Select(t => t.Name)
+                                   .ToList();
+
+            return theList;
         }
 
         private XmlDocument LoadCommentsXML()
@@ -203,7 +258,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
                 {
                     if (childNode.Name == commentName.ToLower())
                     {
-                        comment = childNode.InnerText.Replace(Environment.NewLine, "").Trim();
+                        comment = childNode.InnerXml.Replace(Environment.NewLine, "").Trim();
                     }
                 }
             }
@@ -219,7 +274,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
             {
                 //Construct search path/name
                 XmlNode xmlDocuOfMethod = methodComments.SelectSingleNode(
-                    "//param[@name='" + paramName + "']");
+                    "param[@name='" + paramName + "']");
 
                 comment = xmlDocuOfMethod.InnerText.Replace(Environment.NewLine, "").Trim();
             }
@@ -232,9 +287,10 @@ namespace NCCRD.Services.DataV2.Database.Contexts
             Dictionary<string, IEnumerable<string>> securityEntries = null;
             if (odataContoller.GetCustomAttribute(typeof(Microsoft.AspNetCore.Authorization.AuthorizeAttribute)) != null)
             {
-                securityEntries = new Dictionary<string, IEnumerable<string>> { { "oauth2", new[] { "actioncenter" } } };
+                securityEntries = new Dictionary<string, IEnumerable<string>> { { "oauth2", new[] { "scopes" } } };
             }
             return securityEntries;
         }
+
     }
 }

@@ -24,6 +24,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of Typology
+        /// </summary>
+        /// <returns>List of Typology</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<Typology> Get()
