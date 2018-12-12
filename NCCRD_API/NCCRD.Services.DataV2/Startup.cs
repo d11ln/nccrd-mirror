@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NCCRD.Services.DataV2.Database.Contexts;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace NCCRD.Services.DataV2
 {
@@ -50,8 +52,16 @@ namespace NCCRD.Services.DataV2
 
             services.AddTransient<ODataModelBuilder>();
 
-            services.AddMvc();
+            // SetCompatibilityVersion is only needed for the UseSwagger() methods on ASP.NET Core >= 2.1
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddOData();
+
+            // Add OpenAPI/Swagger document
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Info { Title = "NCCRD API", Version = "v1.0-beta" });
+                options.DocumentFilter<CustomDocumentFilter>();
+            });
 
             services
                 .AddAuthentication(GetAuthenticationOptions)
@@ -80,6 +90,13 @@ namespace NCCRD.Services.DataV2
             }
 
             app.UseCors("CORSPolicy");
+
+            // Add OpenAPI/Swagger middlewares
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1.0-beta");
+            });
 
             app
                 .UseAuthentication()

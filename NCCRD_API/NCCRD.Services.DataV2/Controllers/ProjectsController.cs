@@ -38,6 +38,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _config = config;
         }
 
+        /// <summary>
+        /// Get a list of projects
+        /// </summary>
+        /// <returns>List of projects</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<Project> Get()
@@ -45,6 +49,11 @@ namespace NCCRD.Services.DataV2.Controllers
             return _context.Project.AsQueryable();
         }
 
+        /// <summary>
+        /// Get project by id
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <returns>Single project</returns>
         [HttpGet]
         [EnableQuery]
         [ODataRoute("({id})")]
@@ -57,8 +66,14 @@ namespace NCCRD.Services.DataV2.Controllers
         Filter query: http://localhost:62553/odata/Projects/Extensions.ByPolygon?$expand=ProjectLocations($expand=Location($select=LatCalculated,LonCalculated))&$select=ProjectId,ProjectTitle,ProjectDescription
         Get polygons here: http://196.21.191.55:8091/geoserver/SARVA/wms?service=WMS&version=1.1.0&request=GetMap&layers=SARVA:local_mn&styles=&bbox=16.3694229125977,-34.8977165222168,33.0274543762207,-22.0614833831787&width=768&height=591&srs=EPSG:4326&format=application/openlayers
         */
+        /// <summary>
+        /// Get projects by polygon
+        /// </summary>
+        /// <param name="polyObj">Polygon by which to search projects</param>
+        /// <returns>Filtered list of projects</returns>
         [HttpPost]
         [EnableQuery]
+        [ODataRoute("ByPolygon")]
         public IQueryable<Project> ByPolygon([FromBody] Polygon polyObj)
         {
             var projectIDs = GetByPolygon(polyObj.polygon);
@@ -69,6 +84,7 @@ namespace NCCRD.Services.DataV2.Controllers
 
         [HttpPost]
         [EnableQuery]
+        [ODataRoute("Filter")]
         public IQueryable<Project> Filter([FromBody] Filters filters)
         {
             string titleFilter = filters.title;
@@ -90,7 +106,7 @@ namespace NCCRD.Services.DataV2.Controllers
                 catch
                 {
                     return new List<Project>().AsQueryable();
-                }              
+                }
             }
 
             //REGION//
@@ -165,6 +181,7 @@ namespace NCCRD.Services.DataV2.Controllers
 
         [HttpGet]
         [EnableQuery]
+        [ODataRoute("GeoJson")]
         public JsonResult GeoJson()
         {
 
@@ -345,10 +362,10 @@ namespace NCCRD.Services.DataV2.Controllers
 
             //Get ParentId
             var vmsItem = data.FirstOrDefault(x => x.Id == filterID.ToString());
-            if(vmsItem != null)
+            if (vmsItem != null)
             {
                 var addItem = vmsItem.AdditionalData.FirstOrDefault(x => x.Key == "ParentId");
-                if(!string.IsNullOrEmpty(addItem.Value))
+                if (!string.IsNullOrEmpty(addItem.Value))
                 {
                     parentId = addItem.Value;
                 }
@@ -373,11 +390,11 @@ namespace NCCRD.Services.DataV2.Controllers
             return parents;
         }
 
-        private List<List<int>> GetGeoProps( int[] items, List<StandardVocabItem> vmsItems)
+        private List<List<int>> GetGeoProps(int[] items, List<StandardVocabItem> vmsItems)
         {
             var geoItems = new List<List<int>>();
 
-            foreach(var r in items)
+            foreach (var r in items)
             {
                 var itemGroup = new List<int>();
                 itemGroup.Add(r);

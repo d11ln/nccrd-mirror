@@ -14,7 +14,7 @@ using NCCRD.Services.DataV2.Extensions;
 namespace NCCRD.Services.DataV2.Controllers
 {
     [Produces("application/json")]
-    [ODataRoutePrefix("MitigationEmissions")]
+    [ODataRoutePrefix("MitigationEmissionsData")]
     [EnableCors("CORSPolicy")]
     public class MitigationEmissionsDataController : ODataController
     {
@@ -24,6 +24,7 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        [HttpGet]
         [EnableQuery]
         public IQueryable<MitigationEmissionsData> Get()
         {

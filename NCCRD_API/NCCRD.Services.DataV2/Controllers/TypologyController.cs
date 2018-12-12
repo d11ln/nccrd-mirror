@@ -24,6 +24,7 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        [HttpGet]
         [EnableQuery]
         public IQueryable<Typology> Get()
         {

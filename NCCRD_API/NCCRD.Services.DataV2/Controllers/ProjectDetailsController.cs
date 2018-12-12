@@ -30,6 +30,7 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        [HttpGet]
         [EnableQuery(MaxExpansionDepth = 0)]
         [ODataRoute("({id})")]
         public ProjectDetails Get(int id)
@@ -58,7 +59,7 @@ namespace NCCRD.Services.DataV2.Controllers
 
             var lookups = new LookupsController(_context).GetLookups();
 
-            var res =  new ProjectDetails()
+            var res = new ProjectDetails()
             {
                 Id = id == 0 ? int.Parse(DateTime.Now.ToString("HHmmssfff")) : id,
                 Project = project,
@@ -74,6 +75,7 @@ namespace NCCRD.Services.DataV2.Controllers
         }
 
         //Add/Update
+        [HttpPost]
         [Authorize(Roles = "Contributor,Custodian,Configurator,SysAdmin")]
         [EnableQuery]
         public async Task<IActionResult> Post([FromBody]ProjectDetails data)
@@ -86,10 +88,10 @@ namespace NCCRD.Services.DataV2.Controllers
             }
 
             //Save Project
-            if(data.Project != null)
+            if (data.Project != null)
             {
                 var result = SaveProjectAsync(data.Project);
-                if(!(result is CreatedODataResult<Project> || result is UpdatedODataResult<Project>))
+                if (!(result is CreatedODataResult<Project> || result is UpdatedODataResult<Project>))
                 {
                     return result;
                 }
@@ -104,9 +106,9 @@ namespace NCCRD.Services.DataV2.Controllers
                     await _context.SaveChangesAsync();
                     data.Id = data.Project.ProjectId;
 
-                    if(data.AdaptationDetails != null)
+                    if (data.AdaptationDetails != null)
                     {
-                        foreach(var item in data.AdaptationDetails)
+                        foreach (var item in data.AdaptationDetails)
                         {
                             item.ProjectId = data.Id;
                         }
@@ -158,7 +160,7 @@ namespace NCCRD.Services.DataV2.Controllers
             //Save Adaptations
             if (data.AdaptationDetails != null)
             {
-                foreach(var adaptation in data.AdaptationDetails)
+                foreach (var adaptation in data.AdaptationDetails)
                 {
                     var result = SaveAdaptationAsync(adaptation);
                     if (!(result is CreatedODataResult<AdaptationDetail> || result is UpdatedODataResult<AdaptationDetail>))
@@ -259,16 +261,16 @@ namespace NCCRD.Services.DataV2.Controllers
         private void SaveProjectRegions(Project project)
         {
             //Add new mappings
-            if(project.ProjectRegions == null)
+            if (project.ProjectRegions == null)
             {
                 project.ProjectRegions = new List<ProjectRegion>();
             }
 
-            for(var i = 0; i < project.ProjectRegions.Count; i++)
+            for (var i = 0; i < project.ProjectRegions.Count; i++)
             {
                 var pr = project.ProjectRegions.ToArray()[i];
 
-                if(!_context.ProjectRegion.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId ))
+                if (!_context.ProjectRegion.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
                 {
                     HelperExtensions.ClearIdentityValue(ref pr);
                     HelperExtensions.ClearNullableInts(ref pr);
@@ -277,9 +279,9 @@ namespace NCCRD.Services.DataV2.Controllers
             }
 
             //Remove deleted mappings
-            foreach(var pr in _context.ProjectRegion.Where(x => x.ProjectId == project.ProjectId))
+            foreach (var pr in _context.ProjectRegion.Where(x => x.ProjectId == project.ProjectId))
             {
-                if(!project.ProjectRegions.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
+                if (!project.ProjectRegions.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
                 {
                     _context.Remove(pr);
                 }
@@ -351,7 +353,7 @@ namespace NCCRD.Services.DataV2.Controllers
 
         private void SaveLocations(List<ProjectLocation> projectLocations)
         {
-            foreach(var prLoc in projectLocations)
+            foreach (var prLoc in projectLocations)
             {
                 var _prLoc = prLoc;
 
@@ -361,8 +363,8 @@ namespace NCCRD.Services.DataV2.Controllers
 
                 //Check if location exists
                 var exiting = _context.Location.FirstOrDefault(l => l.LocationId == loc.LocationId);
-                               
-                if(exiting == null)
+
+                if (exiting == null)
                 {
                     //ADD
                     HelperExtensions.ClearIdentityValue(ref loc);
@@ -375,14 +377,14 @@ namespace NCCRD.Services.DataV2.Controllers
                     //Update references
                     prLoc.Location = loc;
                     prLoc.LocationId = loc.LocationId;
-                    
+
                 }
                 else
                 {
                     //UPDATE
                     _context.Entry(exiting).CurrentValues.SetValues(loc);
-                }             
-            }         
+                }
+            }
         }
 
         private void RemovedUnusedLocations()

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NCCRD.Services.DataV2</name>
+    </assembly>
+    <members>
+        <member name="M:NCCRD.Services.DataV2.Controllers.ProjectsController.Get">
+            <summary>
+            Get a list of projects
+            </summary>
+            <returns>List of projects</returns>
+        </member>
+        <member name="M:NCCRD.Services.DataV2.Controllers.ProjectsController.Get(System.Int32)">
+            <summary>
+            Get project by id
+            </summary>
+            <param name="id">ProjectId</param>
+            <returns>Single project</returns>
+        </member>
+        <member name="M:NCCRD.Services.DataV2.Controllers.ProjectsController.ByPolygon(NCCRD.Services.DataV2.ViewModels.Polygon)">
+            <summary>
+            Get projects by polygon
+            </summary>
+            <param name="polyObj">Polygon by which to search projects</param>
+            <returns>Filtered list of projects</returns>
+        </member>
+    </members>
+</doc>
