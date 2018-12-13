@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NCCRD.Services.DataV2.Database.Contexts;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace NCCRD.Services.DataV2
 {
@@ -50,8 +53,25 @@ namespace NCCRD.Services.DataV2
 
             services.AddTransient<ODataModelBuilder>();
 
-            services.AddMvc();
+            // SetCompatibilityVersion is only needed for the UseSwagger() methods on ASP.NET Core >= 2.1
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddOData();
+
+            // Add OpenAPI/Swagger document
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Info
+                {
+                    Title = "NCCRD API",
+                    Version = "v1.0-beta",
+                    Description = "This API gives you access to all <b>NCCRD <i>(National Climate Change Response Database)</i></b> data. <br/>" +
+                    "Read access is unauthenticated, but some write actions require authentication <i>(look out for the lock icon)</i>",
+                    Contact = new Contact() { Name = "Contact Us", Url = "http://app01.saeon.ac.za/dev/UI_footside/page_contact.html" },
+                    License = new License() { Name = "Data Licences", Url = "https://docs.google.com/document/d/e/2PACX-1vT8ajcogJEEo0ZC9BGIej_jOH2EV8lMFrwOu8LB4K9pDq7Tki94mUoVxU8hGM-J5EL8V3w5o83_TuEl/pub" },
+                    TermsOfService = "http://noframe.media.dirisa.org/wiki-1/conditions-of-use?searchterm=conditions"
+                });
+                options.DocumentFilter<CustomDocumentFilter>();
+            });
 
             services
                 .AddAuthentication(GetAuthenticationOptions)
@@ -80,6 +100,13 @@ namespace NCCRD.Services.DataV2
             }
 
             app.UseCors("CORSPolicy");
+
+            // Add OpenAPI/Swagger middlewares
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1.0-beta");
+            });
 
             app
                 .UseAuthentication()

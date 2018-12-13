@@ -23,6 +23,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of VoluntaryGoldStandard
+        /// </summary>
+        /// <returns>List of VoluntaryGoldStandard</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<VoluntaryGoldStandard> Get()
         {

@@ -23,6 +23,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of ValidationStatus
+        /// </summary>
+        /// <returns>List of ValidationStatus</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<ValidationStatus> Get()
         {

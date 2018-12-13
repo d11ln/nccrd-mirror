@@ -28,6 +28,10 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of Funder
+        /// </summary>
+        /// <returns>List of Funder</returns>
         [HttpGet]
         [EnableQuery]
         public IQueryable<Funder> Get()

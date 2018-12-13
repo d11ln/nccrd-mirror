@@ -25,6 +25,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of AdaptationDetail
+        /// </summary>
+        /// <returns>List of AdaptationDetail</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<AdaptationDetail> Get()
         {
