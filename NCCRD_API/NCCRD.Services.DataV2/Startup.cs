@@ -53,8 +53,7 @@ namespace NCCRD.Services.DataV2
 
             services.AddTransient<ODataModelBuilder>();
 
-            // SetCompatibilityVersion is only needed for the UseSwagger() methods on ASP.NET Core >= 2.1
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc();
             services.AddOData();
 
             // Add OpenAPI/Swagger document
