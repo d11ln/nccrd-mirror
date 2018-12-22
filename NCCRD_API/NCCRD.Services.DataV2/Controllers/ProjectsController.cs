@@ -236,14 +236,16 @@ namespace NCCRD.Services.DataV2.Controllers
                                     .Select(a => new
                                     {
                                         hazard = a.HazardId
-                                    }),
+                                    })
+                                    .ToList(),
                                 mitigation = pl.Project
                                     .MitigationEmissionsData
                                     .Select(e => new
                                     {
                                         year = e.Year,
-                                        CO2 = (double)e.CO2
+                                        CO2 = e.CO2 == null ? 0 : e.CO2
                                     })
+                                    .ToList()
                             })
                             .Distinct()
                             .ToList();
