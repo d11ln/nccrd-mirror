@@ -23,6 +23,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of ResearchType
+        /// </summary>
+        /// <returns>List of ResearchType</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<ResearchType> Get()
         {

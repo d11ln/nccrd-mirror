@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -51,8 +52,6 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public decimal? BudgetUpper { get; set; }
 
-        //public Guid? LinkedDAOGoalId { get; set; }
-
         //FK - ProjectStatus
         public int? ProjectStatusId { get; set; }
         [IgnoreDataMember]
@@ -81,8 +80,8 @@ namespace NCCRD.Services.DataV2.Database.Models
         [IgnoreDataMember]
         public ValidationStatus ValidationStatus { get; set; } //Optional
 
-        public virtual ICollection<ProjectRegion> ProjectRegions { get; set; }
-        public virtual ICollection<ProjectLocation> ProjectLocations { get; set; }
+        public ICollection<ProjectRegion> ProjectRegions { get; set; }
+        public ICollection<ProjectLocation> ProjectLocations { get; set; }
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
         public virtual ICollection<MitigationEmissionsData> MitigationEmissionsData { get; set; }

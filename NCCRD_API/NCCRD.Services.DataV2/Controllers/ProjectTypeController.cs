@@ -23,6 +23,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of ProjectType
+        /// </summary>
+        /// <returns>List of ProjectType</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<ProjectType> Get()
         {

@@ -17,7 +17,7 @@ export default function ProjectsReducer(state = {}, action) {
   let { type, payload } = action
   let id = 0
   let modState = "original"
-
+  
   //Check if additional data embedded in payload
   if (typeof payload !== 'undefined') {
     if (typeof payload.id !== 'undefined') {
@@ -33,7 +33,6 @@ export default function ProjectsReducer(state = {}, action) {
       payload = payload.value
     }
   }
-
 
   switch (type) {
 
@@ -75,11 +74,13 @@ export default function ProjectsReducer(state = {}, action) {
 
     case "SET_PROJECT_DETAILS_BUDGET_FROM": {
       let { projectDetails } = state
+      if(payload) payload = parseInt(payload)
       return { ...state, projectDetails: { ...projectDetails, BudgetLower: payload, state: modState } }
     }
 
     case "SET_PROJECT_DETAILS_BUDGET_TO": {
       let { projectDetails } = state
+      if(payload) payload = parseInt(payload)
       return { ...state, projectDetails: { ...projectDetails, BudgetUpper: payload, state: modState } }
     }
 
@@ -190,8 +191,6 @@ export default function ProjectsReducer(state = {}, action) {
     }
 
     case "SET_PROJECT_LOCATION": {
-
-      console.log("modState", modState)
 
       let { projectDetails } = state
       let plFiltered = []

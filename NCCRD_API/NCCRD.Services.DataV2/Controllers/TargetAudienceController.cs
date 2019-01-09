@@ -23,6 +23,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of TargetAudience
+        /// </summary>
+        /// <returns>List of TargetAudience</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<TargetAudience> Get()
         {

@@ -28,6 +28,15 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a lookup-object containing lookup-data.
+        /// </summary>
+        /// <returns>
+        ///     Lookup-object containing lookup-data. 
+        ///     <br/>
+        ///     <b>Note: Look-up data (i.e. children) are not expanded by default.</b>
+        /// </returns>
+        [HttpGet]
         [EnableQuery]
         public Lookups Get()
         {
@@ -35,6 +44,12 @@ namespace NCCRD.Services.DataV2.Controllers
         }
 
         //Add/Update
+        /// <summary>
+        /// Add/Update lookup-data
+        /// </summary>
+        /// <param name="data">A container for lookup-data</param>
+        /// <returns>Success/Fail status</returns>
+        [HttpPost]
         [EnableQuery]
         [Authorize(Roles = "Contributor,Custodian,Configurator,SysAdmin")]
         public async Task<IActionResult> Post([FromBody]Lookups data)

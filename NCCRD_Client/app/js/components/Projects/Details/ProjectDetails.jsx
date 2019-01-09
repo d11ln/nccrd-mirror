@@ -407,6 +407,7 @@ class ProjectDetails extends React.Component {
       resetMitigationState, resetEmissionState, resetResearchState } = this.props
 
     let { projectId } = this.state
+    
 
     //Close modal
     this.setState({ saveModal: false })
@@ -415,12 +416,12 @@ class ProjectDetails extends React.Component {
     setLoading(true)
 
     let modified = false
-    let dataObj = { Id: (projectId === 'add' ? 0 : projectId) }
+    let dataObj = { Id: projectId === 'add' ? 0 : parseInt(projectId) }
 
     //Add Project
     if (projectDetails.state === 'modified') {
       let projectData = _.clone(projectDetails)
-      projectData.ProjectId = projectId === 'add' ? 0 : projectId
+      projectData.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
       delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
       dataObj.Project = projectData
       modified = true
@@ -431,7 +432,7 @@ class ProjectDetails extends React.Component {
       let adaptationData = []
       adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
         adaptationData.push(item)
       })
       dataObj.AdaptationDetails = adaptationData
@@ -443,7 +444,7 @@ class ProjectDetails extends React.Component {
       let mitigationData = []
       mitigationDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
         mitigationData.push(item)
       })
       dataObj.MitigationDetails = mitigationData
@@ -455,7 +456,7 @@ class ProjectDetails extends React.Component {
       let mitigationEmissionsData = []
       emissionsData.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
         mitigationEmissionsData.push(item)
       })
       dataObj.MitigationEmissionsData = mitigationEmissionsData
@@ -467,7 +468,7 @@ class ProjectDetails extends React.Component {
       let researchData = []
       researchDetails.filter(x => x.state === 'modified').forEach(item => {
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId === 'add' ? 0 : projectId  //Asociate with current project  
+        item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
         researchData.push(item)
       })
       dataObj.ResearchDetails = researchData
@@ -478,7 +479,8 @@ class ProjectDetails extends React.Component {
     if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
       let funderData = []
       projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
-        item.ProjectId = projectId === 'add' ? 0 : projectId
+        // item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
+        delete item.ProjectId //OData can only bind to the original object spec which does not contain 'ProjectId'
         delete item.state //OData can only bind to the original object spec which does not contain 'state'
         delete item.key //OData can only bind to the original object spec which does not contain 'key'
         funderData.push(item)
@@ -487,7 +489,11 @@ class ProjectDetails extends React.Component {
       modified = true
     }
 
+    console.log("dataObj", dataObj)
+
     const successCallback = (data) => {
+
+      console.log("data", data)
 
       this.showMessage("Success", "Changes saved successfully.")
       setEditMode(false)
@@ -528,6 +534,7 @@ class ProjectDetails extends React.Component {
         .save(
           (data) => {
             //Success
+            console.log("222")
             successCallback(data)
           },
           (status) => {
@@ -537,6 +544,7 @@ class ProjectDetails extends React.Component {
         )
     }
     else {
+      console.log("111")
       successCallback()
     }
   }

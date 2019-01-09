@@ -49,7 +49,7 @@ class ProjectDetailsTab extends React.Component {
           projectRegions.push({
             ProjectRegionId: 0,
             ProjectId: projectDetails.ProjectId,
-            RegionId: searchRegion[0].Id
+            RegionId: parseInt(searchRegion[0].Id)
           })
         }
       })
@@ -331,7 +331,8 @@ class ProjectDetailsTab extends React.Component {
                 onClick={() => {
                   this.props.setProjectLocation({
                     id: 0,
-                    value: "-30.5595, 22.9375"
+                    value: "-30.5595, 22.9375", 
+                    state: "modified"
                   })
                 }} >
                 <Fa icon="plus" />

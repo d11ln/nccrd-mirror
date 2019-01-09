@@ -23,6 +23,11 @@ namespace NCCRD.Services.DataV2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get a list of CDMMethodology
+        /// </summary>
+        /// <returns>List of CDMMethodology</returns>
+        [HttpGet]
         [EnableQuery]
         public IQueryable<CDMMethodology> Get()
         {
