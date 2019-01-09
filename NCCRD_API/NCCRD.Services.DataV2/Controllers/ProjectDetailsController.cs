@@ -167,11 +167,35 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
+            //Save Research
+            //if (data.ResearchDetails != null)
+            //{
+            //    foreach (var research in data.ResearchDetails)
+            //    {
+            //        var result = SaveResearchAsync(research);
+            //        if (!(result is CreatedODataResult<ResearchDetail> || result is UpdatedODataResult<ResearchDetail>))
+            //        {
+            //            return result;
+            //        }
+            //    }
+            //}
+
             //Save Adaptations
             if (data.AdaptationDetails != null)
             {
                 foreach (var adaptation in data.AdaptationDetails)
                 {
+                    //Save Research
+                    if (adaptation.ResearchDetail != null)
+                    {
+                        var result2 = SaveResearchAsync(adaptation.ResearchDetail);
+                        if (!(result2 is CreatedODataResult<ResearchDetail> || result2 is UpdatedODataResult<ResearchDetail>))
+                        {
+                            return result2;
+                        }
+                    }
+
+                    //Save Adaptation
                     var result = SaveAdaptationAsync(adaptation);
                     if (!(result is CreatedODataResult<AdaptationDetail> || result is UpdatedODataResult<AdaptationDetail>))
                     {
@@ -185,6 +209,16 @@ namespace NCCRD.Services.DataV2.Controllers
             {
                 foreach (var mitigation in data.MitigationDetails)
                 {
+                    //Save Research
+                    if (mitigation.ResearchDetail != null)
+                    {
+                        var result2 = SaveResearchAsync(mitigation.ResearchDetail);
+                        if (!(result2 is CreatedODataResult<ResearchDetail> || result2 is UpdatedODataResult<ResearchDetail>))
+                        {
+                            return result2;
+                        }
+                    }
+
                     var result = SaveMitigationAsync(mitigation);
                     if (!(result is CreatedODataResult<MitigationDetail> || result is UpdatedODataResult<MitigationDetail>))
                     {
@@ -206,23 +240,11 @@ namespace NCCRD.Services.DataV2.Controllers
                 }
             }
 
-            //Save Research
-            if (data.ResearchDetails != null)
-            {
-                foreach (var research in data.ResearchDetails)
-                {
-                    var result = SaveResearchAsync(research);
-                    if (!(result is CreatedODataResult<ResearchDetail> || result is UpdatedODataResult<ResearchDetail>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
             try
             {
                 await _context.SaveChangesAsync();
-                RemovedUnusedLocations();
+                RemoveUnusedLocations();
+                //RemoveUnusedResearchDetails();
             }
             catch (Exception ex)
             {
@@ -397,7 +419,7 @@ namespace NCCRD.Services.DataV2.Controllers
             }
         }
 
-        private void RemovedUnusedLocations()
+        private void RemoveUnusedLocations()
         {
             var usedLocationIDs = _context.ProjectLocation.Select(pl => pl.LocationId).Distinct().ToList();
             var unusedLocations = _context.Location.Where(l => !usedLocationIDs.Contains(l.LocationId)).ToArray();
@@ -405,6 +427,18 @@ namespace NCCRD.Services.DataV2.Controllers
             _context.Location.RemoveRange(unusedLocations);
             _context.SaveChangesAsync();
         }
+
+        //private void RemoveUnusedResearchDetails()
+        //{
+        //    var usedResearchDetailIDs = new List<int>();
+        //    usedResearchDetailIDs.AddRange(_context.AdaptationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
+        //    usedResearchDetailIDs.AddRange(_context.MitigationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
+
+        //    var unusedResearchDetails = _context.ResearchDetails.Where(rd => !usedResearchDetailIDs.Contains(rd.ResearchDetailId)).ToArray();
+
+        //    _context.ResearchDetails.RemoveRange(unusedResearchDetails);
+        //    _context.SaveChangesAsync();
+        //}
 
         private IActionResult SaveFundersAsync(Funder funder, int projectId)
         {
@@ -433,7 +467,10 @@ namespace NCCRD.Services.DataV2.Controllers
 
         private IActionResult SaveAdaptationAsync(AdaptationDetail adaptation)
         {
-            var exiting = _context.AdaptationDetails.FirstOrDefault(x => x.AdaptationDetailId == adaptation.AdaptationDetailId);
+            var exiting = _context.AdaptationDetails
+                .Include(x => x.ResearchDetail)
+                .FirstOrDefault(x => x.AdaptationDetailId == adaptation.AdaptationDetailId);
+
             if (exiting == null)
             {
                 //ADD
@@ -447,6 +484,20 @@ namespace NCCRD.Services.DataV2.Controllers
             {
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(adaptation);
+
+                if (adaptation.ResearchDetail == null)
+                {
+                    exiting.ResearchDetail = null;
+                }
+                else if (exiting.ResearchDetail == null && adaptation.ResearchDetail != null)
+                {
+                    exiting.ResearchDetail = adaptation.ResearchDetail;
+                }
+                else
+                {
+                    _context.Entry(exiting.ResearchDetail).CurrentValues.SetValues(adaptation.ResearchDetail);
+                }
+
                 //await _context.SaveChangesAsync();
                 return Updated(exiting);
             }
@@ -454,7 +505,10 @@ namespace NCCRD.Services.DataV2.Controllers
 
         private IActionResult SaveMitigationAsync(MitigationDetail mitigation)
         {
-            var exiting = _context.MitigationDetails.FirstOrDefault(x => x.MitigationDetailId == mitigation.MitigationDetailId);
+            var exiting = _context.MitigationDetails
+                .Include(x => x.ResearchDetail)
+                .FirstOrDefault(x => x.MitigationDetailId == mitigation.MitigationDetailId);
+
             if (exiting == null)
             {
                 //ADD
@@ -468,6 +522,19 @@ namespace NCCRD.Services.DataV2.Controllers
             {
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(mitigation);
+
+                if(mitigation.ResearchDetail == null)
+                {
+                    exiting.ResearchDetail = null;
+                }
+                else if(exiting.ResearchDetail == null && mitigation.ResearchDetail != null)
+                {
+                    exiting.ResearchDetail = mitigation.ResearchDetail;
+                }
+                else{
+                    _context.Entry(exiting.ResearchDetail).CurrentValues.SetValues(mitigation.ResearchDetail);
+                }
+
                 //await _context.SaveChangesAsync();
                 return Updated(exiting);
             }
@@ -503,14 +570,14 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref research);
                 HelperExtensions.ClearNullableInts(ref research);
                 _context.ResearchDetails.Add(research);
-                //await _context.SaveChangesAsync();
+                _context.SaveChanges(); //Save changes to get DB ID
                 return Created(research);
             }
             else
             {
                 //UPDATE
                 _context.Entry(exiting).CurrentValues.SetValues(research);
-                //await _context.SaveChangesAsync();
+                //_context.SaveChanges();//Save changes to DB
                 return Updated(exiting);
             }
         }

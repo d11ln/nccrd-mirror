@@ -29,9 +29,13 @@ namespace NCCRD.Services.DataV2.Extensions
 
             foreach (var prop in nullableIntProps)
             {
-                if (int.TryParse(prop.GetValue(model).ToString(), out int test) && test == 0)
+                var propVal = prop.GetValue(model);
+                if (propVal != null)
                 {
-                    prop.SetValue(model, null);
+                    if (int.TryParse(propVal.ToString(), out int test) && test == 0)
+                    {
+                        prop.SetValue(model, null);
+                    }
                 }
             }
         }

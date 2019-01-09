@@ -16,6 +16,8 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public string Description { get; set; } //Optional
 
+        public bool IsResearch { get; set; }
+
         //FK - AdaptationPurpose
         [Range(0, int.MaxValue, ErrorMessage = "The AdaptationPurpose field is required.")]
         public int AdaptationPurposeId { get; set; }
@@ -36,5 +38,9 @@ namespace NCCRD.Services.DataV2.Database.Models
         [Range(0, int.MaxValue, ErrorMessage = "The ProjectStatus field is required.")]
         public int ProjectStatusId { get; set; }
         public ProjectStatus ProjectStatus { get; set; }
+
+        //FK - ResearchDetail
+        //public int? ResearchDetailId { get; set; }
+        public ResearchDetail ResearchDetail { get; set; }
     }
 }

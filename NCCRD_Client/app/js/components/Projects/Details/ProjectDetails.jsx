@@ -134,6 +134,9 @@ const mapDispatchToProps = (dispatch) => {
     loadHazards: payload => {
       dispatch({ type: "LOAD_HAZARDS", payload })
     },
+    loadFeasibility: payload => {
+      dispatch({ type: "LOAD_FEASIBILITY", payload })
+    },
     resetProjectState: payload => {
       dispatch({ type: "RESET_PROJECT_STATE", payload })
     },
@@ -219,7 +222,7 @@ class ProjectDetails extends React.Component {
       loadProjectDetails, loadProjectFunderDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
       loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards } = this.props
+      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards, loadFeasibility } = this.props
 
     let { projectId } = this.state
 
@@ -235,12 +238,12 @@ class ProjectDetails extends React.Component {
     //Get Project details & lookups
     let oHandler = o(apiBaseURL + "ProjectDetails")
       .find(projectId === 'add' ? 0 : projectId)
-      .expand("Project($expand=ProjectRegions,ProjectDAOs,ProjectLocations($expand=Location)),Funders,AdaptationDetails,MitigationDetails,MitigationEmissionsData,ResearchDetails")
+      .expand("Project($expand=ProjectRegions,ProjectDAOs,ProjectLocations($expand=Location)),Funders,AdaptationDetails($expand=ResearchDetail),MitigationDetails($expand=ResearchDetail),MitigationEmissionsData,ResearchDetails")
 
     if (!detailsOnly) {
       oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
         "ProjectStatus,ProjectType,ProjectSubType,ResearchType,TargetAudience,Typology,Person," +
-        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus)")
+        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus,Feasibility)")
     }
 
     oHandler.get()
@@ -315,6 +318,7 @@ class ProjectDetails extends React.Component {
             loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
             loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
             loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
+            loadFeasibility(oHandler.data.Lookups.Feasibility)
           }
 
           loadProjectDetails(oHandler.data.Project)
@@ -407,7 +411,7 @@ class ProjectDetails extends React.Component {
       resetMitigationState, resetEmissionState, resetResearchState } = this.props
 
     let { projectId } = this.state
-    
+
 
     //Close modal
     this.setState({ saveModal: false })
@@ -464,16 +468,16 @@ class ProjectDetails extends React.Component {
     }
 
     //Add ResearchDetails
-    if (researchDetails.filter(x => x.state === 'modified').length > 0) {
-      let researchData = []
-      researchDetails.filter(x => x.state === 'modified').forEach(item => {
-        delete item.state //OData can only bind to the original object spec which does not contain 'state'
-        item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
-        researchData.push(item)
-      })
-      dataObj.ResearchDetails = researchData
-      modified = true
-    }
+    // if (researchDetails.filter(x => x.state === 'modified').length > 0) {
+    //   let researchData = []
+    //   researchDetails.filter(x => x.state === 'modified').forEach(item => {
+    //     delete item.state //OData can only bind to the original object spec which does not contain 'state'
+    //     item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
+    //     researchData.push(item)
+    //   })
+    //   dataObj.ResearchDetails = researchData
+    //   modified = true
+    // }
 
     //Add Funding
     if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
@@ -489,20 +493,21 @@ class ProjectDetails extends React.Component {
       modified = true
     }
 
-    console.log("dataObj", dataObj)
-
     const successCallback = (data) => {
-
-      console.log("data", data)
 
       this.showMessage("Success", "Changes saved successfully.")
       setEditMode(false)
       o().config({ error: null }) //Reset error config
 
-      this.setState({ projectId: data.Id }, () => {
-        //Refresh data to get ID's from DB
-        this.loadData(true)
-      })
+      if (typeof data !== 'undefined') {
+        this.setState({ projectId: data.Id }, () => {
+          //Refresh data to get ID's from DB
+          this.loadData(true)
+        })
+      }
+      else{
+        this.props.setLoading(false)
+      }
     }
 
     const errorCallback = (status) => {
@@ -534,7 +539,6 @@ class ProjectDetails extends React.Component {
         .save(
           (data) => {
             //Success
-            console.log("222")
             successCallback(data)
           },
           (status) => {
@@ -544,7 +548,6 @@ class ProjectDetails extends React.Component {
         )
     }
     else {
-      console.log("111")
       successCallback()
     }
   }
@@ -717,11 +720,11 @@ class ProjectDetails extends React.Component {
                   Emissions
                   </NavLink>
               </NavItem>
-              <NavItem>
+              {/* <NavItem>
                 <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
                   Research
                   </NavLink>
-              </NavItem>
+              </NavItem> */}
             </Nav>
 
             <TabContent activeItem={activeTabId}>
@@ -820,7 +823,7 @@ class ProjectDetails extends React.Component {
                 <br />
                 <br />
               </TabPane>
-              <TabPane tabId="5">
+              {/* <TabPane tabId="5">
                 {
                   showBackToList === true &&
                   <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
@@ -834,7 +837,7 @@ class ProjectDetails extends React.Component {
                 <br />
                 <br />
                 <br />
-              </TabPane>
+              </TabPane> */}
             </TabContent>
           </Col>
         </Row>

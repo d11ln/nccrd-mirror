@@ -42,5 +42,9 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         //FK - Sector
         public int? SectorId { get; set; }
+
+        //FK - Feasibility
+        public int? FeasibilityId { get; set; }
+        public Feasibility Feasibility { get; set; }
     }
 }
