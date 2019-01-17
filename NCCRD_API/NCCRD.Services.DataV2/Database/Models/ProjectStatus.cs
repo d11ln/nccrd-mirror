@@ -19,6 +19,8 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public string Description { get; set; }
 
+        public string NextStates { get; set; }
+
         public virtual ICollection<AdaptationDetail> AdaptationDetails { get; set; }
         public virtual ICollection<MitigationDetail> MitigationDetails { get; set; }
     }
