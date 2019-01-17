@@ -34,6 +34,7 @@ namespace NCCRD.Services.DataV2.Database.Contexts
         public DbSet<VersionHistory> VersionHistory { get; set; }
         public DbSet<VoluntaryGoldStandard> VoluntaryGoldStandard { get; set; }
         public DbSet<VoluntaryMethodology> VoluntaryMethodology { get; set; }
+        public DbSet<Feasibility> Feasibility { get; set; }
 
         public SQLDBContext() : base() { }
 

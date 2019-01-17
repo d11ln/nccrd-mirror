@@ -66,5 +66,9 @@ namespace NCCRD.Services.DataV2.Database.Models
         public int ProjectStatusId { get; set; }
         [IgnoreDataMember]
         public ProjectStatus ProjectStatus { get; set; }
+
+        //FK - ResearchDetail
+        //public int? ResearchDetailId { get; set; }
+        public ResearchDetail ResearchDetail { get; set; }
     }
 }

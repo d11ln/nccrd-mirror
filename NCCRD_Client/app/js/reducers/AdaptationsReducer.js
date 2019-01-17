@@ -125,6 +125,93 @@ export default function AdaptationsReducer(state = {}, action) {
             //return updated state
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ProjectStatusId: payload, state: modState }] }
         }
+
+        case "SET_ADAPTATION_DETAILS_RESEARCH_DETAILS": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: payload, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_RESEARCH_AUTHOR": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.Author = payload
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_RESEARCH_PAPER_LINK": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.PaperLink = payload
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_RESEARCH_RESEARCH_TYPE": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.ResearchTypeId = payload
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_RESEARCH_TARGET_AUDIENCE": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.TargetAudienceId = payload
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_RESEARCH_FEASIBILITY": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.FeasibilityId = payload
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
         
         default: {
             return state
