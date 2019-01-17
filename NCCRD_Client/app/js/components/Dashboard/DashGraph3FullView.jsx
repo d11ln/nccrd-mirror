@@ -10,9 +10,9 @@ import buildQuery from 'odata-query'
 const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
-  let { filterData: { statusFilter, sectorFilter, regionFilter } } = state
+  let { filterData: { statusFilter, sectorFilter, regionFilter, typologyFilter } } = state
   let { chartData: { chart3 } } = state
-  return { statusFilter, sectorFilter, regionFilter, chart3 }
+  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3 }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -122,7 +122,7 @@ class DashGraph3FullView extends React.Component {
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, regionFilter, sectorFilter } = this.props
+    let { statusFilter, regionFilter, sectorFilter, typologyFilter } = this.props
     let filters = {}
 
     //ADD FILTERS//
@@ -139,6 +139,11 @@ class DashGraph3FullView extends React.Component {
     //Sector//
     if (sectorFilter != 0) {
       filters.sector = sectorFilter
+    }
+
+    //Typology//
+    if (typologyFilter !== 0) {
+      filters.typology = typologyFilter
     }
 
     //GET PROJECTS FILTERED//
