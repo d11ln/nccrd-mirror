@@ -135,7 +135,6 @@ namespace NCCRD.Services.DataV2.Controllers
 
                 sectorProjectIds.AddRange(_context.MitigationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
                 sectorProjectIds.AddRange(_context.AdaptationDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
-                sectorProjectIds.AddRange(_context.ResearchDetails.Where(x => sectorFilter == 0 || allSectorIDs.Contains((int)x.SectorId)).Select(x => x.ProjectId).ToList());
 
                 //Remove duplicates
                 sectorProjectIds = sectorProjectIds.Distinct().ToList();
@@ -259,7 +258,6 @@ namespace NCCRD.Services.DataV2.Controllers
 
             sectors.AddRange(adaptations.Where(a => a.SectorId != null).Select(a => (int)a.SectorId));
             sectors.AddRange(mitigations.Where(m => m.SectorId != null).Select(a => (int)a.SectorId));
-            sectors.AddRange(research.Where(r => r.SectorId != null).Select(a => (int)a.SectorId));
 
             return sectors.ToArray();
         }

@@ -40,9 +40,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         [IgnoreDataMember]
         public Project Project { get; set; }
 
-        //FK - Sector
-        public int? SectorId { get; set; }
-
         //FK - Feasibility
         public int? FeasibilityId { get; set; }
         public Feasibility Feasibility { get; set; }

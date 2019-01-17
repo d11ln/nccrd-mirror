@@ -244,7 +244,7 @@ namespace NCCRD.Services.DataV2.Controllers
             {
                 await _context.SaveChangesAsync();
                 RemoveUnusedLocations();
-                //RemoveUnusedResearchDetails();
+                RemoveUnusedResearchDetails();
             }
             catch (Exception ex)
             {
@@ -428,17 +428,17 @@ namespace NCCRD.Services.DataV2.Controllers
             _context.SaveChangesAsync();
         }
 
-        //private void RemoveUnusedResearchDetails()
-        //{
-        //    var usedResearchDetailIDs = new List<int>();
-        //    usedResearchDetailIDs.AddRange(_context.AdaptationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
-        //    usedResearchDetailIDs.AddRange(_context.MitigationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
+        private void RemoveUnusedResearchDetails()
+        {
+            var usedResearchDetailIDs = new List<int>();
+            usedResearchDetailIDs.AddRange(_context.AdaptationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
+            usedResearchDetailIDs.AddRange(_context.MitigationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
 
-        //    var unusedResearchDetails = _context.ResearchDetails.Where(rd => !usedResearchDetailIDs.Contains(rd.ResearchDetailId)).ToArray();
+            var unusedResearchDetails = _context.ResearchDetails.Where(rd => !usedResearchDetailIDs.Contains(rd.ResearchDetailId)).ToArray();
 
-        //    _context.ResearchDetails.RemoveRange(unusedResearchDetails);
-        //    _context.SaveChangesAsync();
-        //}
+            _context.ResearchDetails.RemoveRange(unusedResearchDetails);
+            _context.SaveChangesAsync();
+        }
 
         private IActionResult SaveFundersAsync(Funder funder, int projectId)
         {
