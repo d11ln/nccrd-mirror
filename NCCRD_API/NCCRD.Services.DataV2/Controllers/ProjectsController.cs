@@ -165,10 +165,11 @@ namespace NCCRD.Services.DataV2.Controllers
             var statusProjectIds = new List<int>();
             if (statusFilter > 0)
             {
+                statusProjectIds.AddRange(_context.Project.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
                 statusProjectIds.AddRange(_context.AdaptationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
                 statusProjectIds.AddRange(_context.MitigationDetails.Where(x => x.ProjectStatusId == statusFilter).Select(x => x.ProjectId).ToList());
+                statusProjectIds = statusProjectIds.Distinct().ToList();
             }
-
 
             //GET PORJECTS FILTERED//
             //Retrieve project details and filter on query params
@@ -221,7 +222,7 @@ namespace NCCRD.Services.DataV2.Controllers
                                     regions = GetGeoProps(pl.Project.ProjectRegions.Select(pr => pr.RegionId).ToArray(), vmsRegionData),
                                     sectors = GetGeoProps(GetProjectSectors(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails), vmsSectorData),
                                     typology = GetProjectTypology(pl.Project.AdaptationDetails, pl.Project.MitigationDetails, pl.Project.ResearchDetails, typologyData),
-                                    status = pl.Project.ProjectStatusId
+                                    status = GetProjectStatuses(pl.Project, pl.Project.AdaptationDetails, pl.Project.MitigationDetails)
                                 },
                                 data = new
                                 {
@@ -250,6 +251,21 @@ namespace NCCRD.Services.DataV2.Controllers
                             .ToList();
 
             return new JsonResult(geoJSON);
+        }
+
+        private int[] GetProjectStatuses(Project project, IEnumerable<AdaptationDetail> adaptations, IEnumerable<MitigationDetail> mitigations)
+        {
+            var projectStatusIDs = new List<int>();
+
+            if(project.ProjectStatusId != null)
+            {
+                projectStatusIDs.Add((int)project.ProjectStatusId);
+            }
+
+            projectStatusIDs.AddRange(adaptations.Select(a => a.ProjectStatusId).ToList());
+            projectStatusIDs.AddRange(mitigations.Select(m => m.ProjectStatusId).ToList());
+
+            return projectStatusIDs.Distinct().ToArray();
         }
 
         private int[] GetProjectSectors(IEnumerable<AdaptationDetail> adaptations, IEnumerable<MitigationDetail> mitigations, IEnumerable<ResearchDetail> research)

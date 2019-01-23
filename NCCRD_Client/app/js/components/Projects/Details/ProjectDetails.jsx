@@ -522,15 +522,36 @@ class ProjectDetails extends React.Component {
       //to get error message back and not just code
       o().config({
         error: (code, error) => {
-          //Try to get & parse error message
-          let errorJS = JSON.parse(error)
-          let message = errorJS.value
-          if (typeof message === 'undefined') message = errorJS.error.message
-          if (typeof message === 'undefined') message = "(See log for error details)"
 
-          //Log error message & details
-          this.showMessage("Unable to save changes", message)
-          console.error("Unable to save changes", code, errorJS)
+          if (code === 403) {
+            //Log error message & details
+            this.showMessage("Unable to save changes", "Your account does not have the required privileges to save changes. " +
+              "Please contact the site administrator for help?")
+            console.error("Unable to save changes", code, error)
+
+            setEditMode(false)
+
+            //Refresh data to undo any changes
+            this.loadData(true)
+          }
+          else {
+            try {
+              //Try to get & parse error message
+              let errorJS = JSON.parse(error)
+              let message = errorJS.value
+              if (typeof message === 'undefined') message = errorJS.error.message
+              if (typeof message === 'undefined') message = "(See log for error details)"
+
+              //Log error message & details
+              this.showMessage("Unable to save changes", message)
+              console.error("Unable to save changes", code, errorJS)
+            }
+            catch (error) {
+              //Log error message & details
+              this.showMessage("Unable to save changes", "(See log for error details)")
+              console.error("Unable to save changes", code, error)
+            }
+          }
         }
       })
 
@@ -851,7 +872,7 @@ class ProjectDetails extends React.Component {
 
                   {!editMode &&
                     <div>
-                      <Button data-tip="Edit" size="sm" floating color="" onClick={this.editClick} style={{ backgroundColor: DEAGreen }}>
+                      <Button /*data-tip="Edit"*/ size="sm" floating color="" onClick={this.editClick} style={{ backgroundColor: DEAGreen }}>
                         <Fa icon="pencil" />
                       </Button>
                       <br />
