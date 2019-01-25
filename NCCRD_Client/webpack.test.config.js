@@ -2,19 +2,23 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cwd = process.cwd()
-const mode = 'development'
+
+const mode = 'production'
+
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
+const config = {
+  plugins: [
+    new CopyWebpackPlugin([{ from: 'source', to: 'dest' }])
+  ]
+}
 
 /**
  * Config
  */
 module.exports = {
   context: path.join(cwd, 'app'),
-  devtool: 'inline-source-map',
   mode,
-  devServer: {
-    historyApiFallback: true,
-    port: 8085
-  },
   entry: {
     app: ["babel-polyfill", './js/index.jsx'],
     silentRenew: ["./silent_renew/silent_renew.js"],
@@ -31,8 +35,8 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve('dev-dist'),
-    filename: 'bundle_dev_[name].js'
+    path: path.resolve('dist'),
+    filename: 'bundle_[name].js'
   },
 
   module: {
@@ -81,14 +85,13 @@ module.exports = {
       use: [
         'file-loader'
       ]
-    }]
+    },
+    ]
   },
 
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.ejs',
-      chunks: ["app"],
-      filename: "index.html"
     }),
     new HtmlWebpackPlugin({
       template: "./silent_renew/silent_renew.html",
@@ -98,10 +101,17 @@ module.exports = {
     new webpack.DefinePlugin({
       CONSTANTS: {
         PROD: false,
-        TEST: false,
-        DEV: true
+        TEST: true,
+        DEV: false
       }
     }),
-    new webpack.IgnorePlugin(/^(fs|ipc)$/)
+    new webpack.IgnorePlugin(/^(fs|ipc|cfg)$/),
+    new CopyWebpackPlugin([
+      {
+        from: 'js/config/*.cfg',
+        to: '[name].[ext]',
+        toType: 'template'
+      }
+    ])
   ]
 }

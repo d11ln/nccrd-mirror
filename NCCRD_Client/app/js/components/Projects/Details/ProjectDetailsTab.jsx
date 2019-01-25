@@ -6,9 +6,9 @@ import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
 import TreeSelectMultiple from '../../Shared/TreeSelectMultiple.jsx'
-import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.js"
 import LocationInput from '../../Shared/LocationInput.jsx'
-import { DEAGreen, DEAGreenDark } from '../../../config/colours.cfg'
+import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state

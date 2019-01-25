@@ -1,4 +1,4 @@
-import { siteBaseURL } from '../js/config/serviceURLs.cfg'
+import { siteBaseURL } from '../js/config/serviceURLs.js'
 
 export const MapConfig = {
     service: "http://app01.saeon.ac.za/nccrdapi/odata/projects/extensions.geojson",

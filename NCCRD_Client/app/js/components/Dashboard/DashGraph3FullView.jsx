@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
 import popin from '../../../images/popin.png'
 import OData from 'react-odata'
-import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.cfg'
+import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import buildQuery from 'odata-query'
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
-import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.js"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, InputSwitch } from "mdbreact"
-import { DEAGreen } from '../../../config/colours.cfg'
+import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
 

@@ -6,7 +6,7 @@ import {
 import { connect } from 'react-redux'
 import EditListModal from './ListEditing/EditListModal.jsx'
 import EditTreeModal from './ListEditing/EditTreeModal.jsx'
-import { apiBaseURL, vmsBaseURL } from "../../../config/serviceURLs.cfg"
+import { apiBaseURL, vmsBaseURL } from "../../../config/serviceURLs.js"
 import ProjectDetailsTab from './ProjectDetailsTab.jsx'
 import ProjectFundersTab from './ProjectFundersTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
@@ -18,7 +18,7 @@ import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'
 import classnames from 'classnames';
-import { DEAGreen, DEAGreenDark } from '../../../config/colours.cfg'
+import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 import LinkedDAO from './LinkedDAO.jsx'
 
 const _gf = require("../../../globalFunctions")

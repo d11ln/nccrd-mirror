@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'mdbreact'
-import { vmsBaseURL } from "../../../config/serviceURLs.cfg"
+import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 import { UILookup } from '../../../config/ui_config.js'

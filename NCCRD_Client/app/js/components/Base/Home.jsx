@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
-import { DEAGreen } from '../../config/colours.cfg'
+import { DEAGreen } from '../../config/colours.js'
 
 import backdrop from '../../../images/backdrop.jpg'
 

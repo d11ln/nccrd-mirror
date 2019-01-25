@@ -1,8 +1,8 @@
 import React from 'react'
-import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.js"
 import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
-import { DEAGreenDark } from '../../../config/colours.cfg'
+import { DEAGreenDark } from '../../../config/colours.js'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, props) => {

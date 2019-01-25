@@ -12,7 +12,7 @@ import DashGraph1Preview from "./DashGraph1Preview.jsx"
 import DashGraph2Preview from "./DashGraph2Preview.jsx"
 import DashGraph3Preview from "./DashGraph3Preview.jsx"
 import DashGraph4Preview from "./DashGraph4Preview.jsx"
-import { DEAGreen } from '../../config/colours.cfg'
+import { DEAGreen } from '../../config/colours.js'
 import MapViewCore from '../Map/MapViewCore.jsx'
 
 const mapStateToProps = (state, props) => {

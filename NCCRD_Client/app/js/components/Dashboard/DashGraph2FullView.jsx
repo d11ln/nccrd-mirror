@@ -2,7 +2,7 @@ import React, { Children } from 'react'
 import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
 import OData from 'react-odata'
-import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.cfg'
+import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
 import { BarChart, Bar, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
 import buildQuery from 'odata-query'
 

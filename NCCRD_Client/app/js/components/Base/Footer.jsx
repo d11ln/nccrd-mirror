@@ -1,6 +1,6 @@
 import React from 'react'
 import { Col, Row, Modal, ModalBody, ModalHeader } from 'mdbreact';
-import { DEAGreen, DEAGreenDark } from '../../config/colours.cfg'
+import { DEAGreen, DEAGreenDark } from '../../config/colours.js'
 
 import { footerContent } from '../../../data/footerConfig'
 import loader from '../../../images/loader.gif'
