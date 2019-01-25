@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Button, Input, Fa, Modal, ModalBody, ModalHeader, ModalFooter } from 'mdbreact'
 import { connect } from 'react-redux'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
-import { DEAGreen, DEAGreenDark } from '../../config/colours.cfg'
+import { DEAGreen, DEAGreenDark } from '../../config/colours.js'
 
 //Import Leaflet CSS an fix icon issues
 import 'leaflet/dist/leaflet.css'

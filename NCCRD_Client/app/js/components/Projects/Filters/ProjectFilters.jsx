@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Collapse, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
-import { DEAGreen } from '../../../config/colours.cfg'
+import { DEAGreen } from '../../../config/colours.js'
 
 //Filters
 import GeneralFilters from './GeneralFilters.jsx';

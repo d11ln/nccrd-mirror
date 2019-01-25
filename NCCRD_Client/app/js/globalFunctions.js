@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import { DEAGreen, DEAGreenDark } from './config/colours.cfg'
+import { DEAGreen, DEAGreenDark } from './config/colours.js'
 
 export function fixEmptyValue(value, defaultValue) {
 

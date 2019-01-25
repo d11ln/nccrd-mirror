@@ -5,7 +5,7 @@ import popout from '../../../images/popout.png'
 import popin from '../../../images/popin.png'
 import { MapConfig } from '../../../data/mapConfig'
 import loader from '../../../images/loader.gif'
-import { vmsBaseURL, mapServerBaseURL } from '../../config/serviceURLs.cfg'
+import { vmsBaseURL, mapServerBaseURL } from '../../config/serviceURLs.js'
 
 const mapStateToProps = (state, props) => {
   let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, favoritesFilter } } = state

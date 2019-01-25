@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Button, Input, Fa } from 'mdbreact'
 import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
 import userManager from '../Authentication/userManager'
-import { ssoBaseURL } from '../../config/serviceURLs.cfg'
-import { DEAGreen } from '../../config/colours.cfg'
+import { ssoBaseURL } from '../../config/serviceURLs.js'
+import { DEAGreen } from '../../config/colours.js'
 import { data as NavData } from '../../../data/sideNavConfig'
 
 const _gf = require("../../globalFunctions")

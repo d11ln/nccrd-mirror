@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Fa } from 'mdbreact'
-import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
 import ResearchDetailsItem from './ResearchDetailsItem.jsx'
 

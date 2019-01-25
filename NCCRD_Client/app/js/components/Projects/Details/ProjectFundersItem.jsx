@@ -1,5 +1,5 @@
 import React from 'react'
-import { apiBaseURL } from "../../../config/serviceURLs.cfg"
+import { apiBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx';
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
@@ -7,7 +7,7 @@ import SelectComponent from '../../Shared/SelectComponent.jsx'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 import ReactTooltip from 'react-tooltip'
 import { Row, Col } from 'mdbreact'
-import { DEAGreenDark } from '../../../config/colours.cfg'
+import { DEAGreenDark } from '../../../config/colours.js'
 
 const _gf = require('../../../globalFunctions')
 

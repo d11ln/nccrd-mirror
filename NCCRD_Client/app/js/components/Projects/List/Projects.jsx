@@ -9,7 +9,7 @@ import SectorFilters from '../Filters/SectorFilters.jsx'
 import { connect } from 'react-redux'
 import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
-import { DEAGreen } from '../../../config/colours.cfg'
+import { DEAGreen } from '../../../config/colours.js'
 
 const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")

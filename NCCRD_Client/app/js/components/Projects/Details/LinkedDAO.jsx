@@ -2,9 +2,9 @@ import React from 'react'
 import { Row, Col, Button, Input, Card, CardBody, CardText } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
-import { ccisBaseURL } from '../../../config/serviceURLs.cfg'
+import { ccisBaseURL } from '../../../config/serviceURLs.js'
 import OData from 'react-odata'
-import { DEAGreen } from '../../../config/colours.cfg'
+import { DEAGreen } from '../../../config/colours.js'
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
