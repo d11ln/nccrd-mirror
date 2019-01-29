@@ -105,13 +105,6 @@ module.exports = {
         DEV: false
       }
     }),
-    new webpack.IgnorePlugin(/^(fs|ipc|cfg)$/),
-    new CopyWebpackPlugin([
-      {
-        from: 'js/config/*.cfg',
-        to: '[name].[ext]',
-        toType: 'template'
-      }
-    ])
+    new webpack.IgnorePlugin(/^(fs|ipc|cfg)$/)
   ]
 }
