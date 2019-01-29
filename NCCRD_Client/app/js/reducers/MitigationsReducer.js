@@ -200,6 +200,95 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ProjectStatusId: payload, state: modState }] }
         }
 
+        case "SET_MITIGATION_DETAILS_RESEARCH_DETAILS": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: payload, state: modState }] }
+        }
+
+        case "SET_MITIGATION_RESEARCH_AUTHOR": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1);
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.Author = payload
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_MITIGATION_RESEARCH_PAPER_LINK": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.PaperLink = payload
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_MITIGATION_RESEARCH_RESEARCH_TYPE": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.ResearchTypeId = payload
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_MITIGATION_RESEARCH_TARGET_AUDIENCE": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.TargetAudienceId = payload
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
+        case "SET_MITIGATION_RESEARCH_FEASIBILITY": {
+            let { mitigationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(mitigationDetails, "MitigationDetailId", id)
+            //Remove item from array
+            mitigationDetails.splice(details.id, 1)
+
+            let researchDetail = details.item.ResearchDetail
+            researchDetail.FeasibilityId = payload
+
+            //return updated state
+            return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
+        }
+
         default: {
             return state
         }

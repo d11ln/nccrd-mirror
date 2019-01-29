@@ -1,5 +1,6 @@
 import React from 'react'
 import { apiBaseURL } from "../../../config/serviceURLs.js"
+import { Row, Col } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import SelectComponent from '../../Shared/SelectComponent.jsx'
@@ -7,14 +8,28 @@ import ReactTooltip from 'react-tooltip'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 import { DEAGreenDark } from '../../../config/colours.js'
 
+const _gf = require("../../../globalFunctions")
+
 const mapStateToProps = (state, props) => {
   let { mitigationData: { mitigationDetails } } = state
-  let { lookupData: { carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
-    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology } } = state
+  let { globalData: { editMode } } = state
+  let { lookupData: {
+    researchType, targetAudience, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
+    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, feasibility
+  } } = state
   return {
-    carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
+    researchType, targetAudience, carbonCredit,
+    carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
     voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology,
-    mitigationDetails
+    mitigationDetails, editMode, feasibility
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setMitigationDetailsResearchDetails: payload => {
+      dispatch({ type: "SET_MITIGATION_DETAILS_RESEARCH_DETAILS", payload })
+    }
   }
 }
 
@@ -24,13 +39,58 @@ class MitigationDetailsItem extends React.Component {
     super(props)
   }
 
+  onResearchChange(value) {
+
+    let { details } = this.props
+
+    if (details.ResearchDetail) {
+      //Disable
+      details.ResearchDetail = null
+    }
+    else {
+      //Enable
+      details.ResearchDetail = {
+        ResearchDetailId: _gf.getRndInteger(1111111, 9999999),
+        Author: "",
+        PaperLink: "",
+        ResearchTypeId: 0,
+        TargetAudienceId: 0,
+        ProjectId: details.ProjectId,
+        SectorId: null,
+        FeasibilityId: null
+      }
+    }
+
+    //Dispatch
+    this.props.setMitigationDetailsResearchDetails({
+      id: details.MitigationDetailId,
+      value: details.ResearchDetail,
+      state: 'modified'
+    })
+  }
+
   render() {
 
-    let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
-      voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, mitigationDetails } = this.props
+    let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus, editMode,
+      voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, mitigationDetails,
+      researchType, targetAudience, feasibility } = this.props
 
     return (
       <>
+
+        <Row style={{ marginBottom: 10 }}>
+          <Col md="6">
+            <label style={{ fontWeight: "bold" }}>
+              Research project:
+            </label>
+            <br />
+            <label className="bs-switch">
+              <input disabled={!editMode} type="checkbox" checked={details.ResearchDetail !== null} onClick={this.onResearchChange.bind(this)} />
+              <span className="slider round" />
+            </label>
+          </Col>
+        </Row>
+
         <div className="row">
           <SelectComponent
             id="selMitigationCarbonCredit"
@@ -186,6 +246,7 @@ class MitigationDetailsItem extends React.Component {
             }}
           />
         </div>
+
         <br />
 
         <div className="row">
@@ -208,6 +269,91 @@ class MitigationDetailsItem extends React.Component {
           />
         </div>
 
+        <br />
+
+        {
+          details.ResearchDetail &&
+          <div>
+
+            <Row>
+              <TextComponent
+                col="col-md-4"
+                label="Author:"
+                id="txtResearchAuthor"
+                value={details.ResearchDetail.Author}
+                setValueKey={"SET_MITIGATION_RESEARCH_AUTHOR"}
+                parentId={details.MitigationDetailId}
+              />
+              <TextComponent
+                col="col-md-4"
+                label="Paper link:"
+                id="txtResearchPaperLink"
+                value={details.ResearchDetail.PaperLink}
+                setValueKey={"SET_MITIGATION_RESEARCH_PAPER_LINK"}
+                parentId={details.MitigationDetailId}
+              />
+              <SelectComponent
+                id="selResearchType"
+                col="col-md-4"
+                label="Research type:"
+                selectedValue={details.ResearchDetail.ResearchTypeId}
+                data={researchType}
+                setSelectedValueKey={"SET_MITIGATION_RESEARCH_RESEARCH_TYPE"}
+                parentId={details.MitigationDetailId}
+                dispatch={"LOAD_RESEARCH_TYPE"}
+                persist="ResearchType"
+                allowEdit={true}
+                newItemTemplate={{
+                  "ResearchTypeId": 0,
+                  "Value": "",
+                  "Description": ""
+                }}
+              />
+            </Row>
+
+            <br />
+
+            <Row>
+              <SelectComponent
+                id="selResearchTargetAudience"
+                col="col-md-4"
+                label="Target audience:"
+                selectedValue={details.ResearchDetail.TargetAudienceId}
+                data={targetAudience}
+                setSelectedValueKey={"SET_MITIGATION_RESEARCH_TARGET_AUDIENCE"}
+                parentId={details.MitigationDetailId}
+                dispatch={"LOAD_TARGET_AUDIENCE"}
+                persist="TargetAudience"
+                allowEdit={true}
+                newItemTemplate={{
+                  "TargetAudienceId": 0,
+                  "Value": "",
+                  "Description": ""
+                }}
+              />
+
+              <SelectComponent
+                id="selResearchFeasibility"
+                col="col-md-4"
+                label="Feasibility:"
+                selectedValue={details.ResearchDetail.FeasibilityId}
+                data={feasibility}
+                setSelectedValueKey={"SET_MITIGATION_RESEARCH_FEASIBILITY"}
+                parentId={details.MitigationDetailId}
+                dispatch={"LOAD_FEASIBILITY"}
+                persist="Feasibility"
+                allowEdit={false}
+                newItemTemplate={{
+                  "FeasibilityId": 0,
+                  "Value": "",
+                  "Description": ""
+                }}
+              />
+            </Row>
+
+          </div>
+        }
+
         {
           (mitigationDetails && mitigationDetails.length > 1) &&
           <div
@@ -227,4 +373,4 @@ class MitigationDetailsItem extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(MitigationDetailsItem)
+export default connect(mapStateToProps, mapDispatchToProps)(MitigationDetailsItem)

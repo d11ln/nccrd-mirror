@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NCCRD.Services.DataV2.Database.Contexts;
 
 namespace NCCRD.Services.DataV2.Migrations
 {
     [DbContext(typeof(SQLDBContext))]
-    partial class SQLDBContextModelSnapshot : ModelSnapshot
+    [Migration("20190117143611_Removed AdaptationDetail.IsResearch")]
+    partial class RemovedAdaptationDetailIsResearch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -526,8 +528,6 @@ namespace NCCRD.Services.DataV2.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("NextStates");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(450);
@@ -593,6 +593,8 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.Property<int>("ProjectId");
 
                     b.Property<int>("ResearchTypeId");
+
+                    b.Property<int?>("SectorId");
 
                     b.Property<int>("TargetAudienceId");
 

@@ -277,6 +277,7 @@ namespace NCCRD.Services.DataV2.Controllers
             var validationStatus = _context.ValidationStatus.OrderBy(x => x.Value).ToArray();
             var voluntaryGoldStandard = _context.VoluntaryGoldStandard.OrderBy(x => x.Value).ToArray();
             var voluntaryMethodology = _context.VoluntaryMethodology.OrderBy(x => x.Value).ToArray();
+            var feasibility = _context.Feasibility.OrderBy(x => x.Value).ToArray();
 
             return new Lookups()
             {
@@ -296,7 +297,8 @@ namespace NCCRD.Services.DataV2.Controllers
                 Person = user,
                 ValidationStatus = validationStatus,
                 VoluntaryGoldStandard = voluntaryGoldStandard,
-                VoluntaryMethodology = voluntaryMethodology
+                VoluntaryMethodology = voluntaryMethodology,
+                Feasibility = feasibility
             };
         }
 

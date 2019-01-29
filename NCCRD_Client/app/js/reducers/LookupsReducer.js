@@ -124,6 +124,10 @@ export default function LookupsReducer(state = {}, action) {
       return { ...state, hazards: data }
     }
 
+    case "LOAD_FEASIBILITY": {
+      return { ...state, feasibility: payload }
+    }
+
     default: {
       return state
     }

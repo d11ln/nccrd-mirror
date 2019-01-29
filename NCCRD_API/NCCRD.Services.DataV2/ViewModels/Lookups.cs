@@ -26,5 +26,6 @@ namespace NCCRD.Services.DataV2.ViewModels
         public ValidationStatus[] ValidationStatus { get; set; }
         public VoluntaryGoldStandard[] VoluntaryGoldStandard { get; set; }
         public VoluntaryMethodology[] VoluntaryMethodology { get; set; }
+        public Feasibility[] Feasibility { get; set; }
     }
 }
