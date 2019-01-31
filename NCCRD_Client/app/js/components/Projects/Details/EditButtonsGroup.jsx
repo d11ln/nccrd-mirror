@@ -75,7 +75,6 @@ class EditButtonsGroup extends React.Component {
             {
               editMode &&
               <div style={{ textAlign: "right", marginRight: 2, color: "red", fontSize: 15, fontWeight: 500, marginTop: -2 }}>
-                {/* <label>WARNING: You are currently editing!</label> */}
                 <label><i>Be careful, you are editing!</i></label>
               </div>
             }
