@@ -39,10 +39,10 @@ export function stripURLParam(paramKey) {
 
 export function getFontColour(editMode) {
   if (editMode) {
-    return DEAGreen
+    return "black" //DEAGreen
   }
   else {
-    return "black"
+    return "#606060"
   }
 }
 

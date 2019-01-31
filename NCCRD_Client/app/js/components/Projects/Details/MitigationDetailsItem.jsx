@@ -15,13 +15,13 @@ const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
   let { lookupData: {
     researchType, targetAudience, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
-    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, feasibility
+    voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, researchMaturity
   } } = state
   return {
     researchType, targetAudience, carbonCredit,
     carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus,
     voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology,
-    mitigationDetails, editMode, feasibility
+    mitigationDetails, editMode, researchMaturity
   }
 }
 
@@ -57,7 +57,7 @@ class MitigationDetailsItem extends React.Component {
         TargetAudienceId: 0,
         ProjectId: details.ProjectId,
         SectorId: null,
-        FeasibilityId: null
+        ResearchMaturityId: null
       }
     }
 
@@ -73,7 +73,7 @@ class MitigationDetailsItem extends React.Component {
 
     let { details, carbonCredit, carbonCreditMarket, cdmStatus, cdmMethodology, projectStatus, editMode,
       voluntaryMethodology, voluntaryGoldStandard, sector, sectorType, typology, mitigationDetails,
-      researchType, targetAudience, feasibility } = this.props
+      researchType, targetAudience, researchMaturity } = this.props
 
     return (
       <>
@@ -333,18 +333,18 @@ class MitigationDetailsItem extends React.Component {
               />
 
               <SelectComponent
-                id="selResearchFeasibility"
+                id="selResearchResearchMaturity"
                 col="col-md-4"
-                label="Feasibility:"
-                selectedValue={details.ResearchDetail.FeasibilityId}
-                data={feasibility}
-                setSelectedValueKey={"SET_MITIGATION_RESEARCH_FEASIBILITY"}
+                label="Research Maturity:"
+                selectedValue={details.ResearchDetail.ResearchMaturityId}
+                data={researchMaturity}
+                setSelectedValueKey={"SET_MITIGATION_RESEARCH_MATURITY"}
                 parentId={details.MitigationDetailId}
-                dispatch={"LOAD_FEASIBILITY"}
-                persist="Feasibility"
+                dispatch={"LOAD_RESEARCH_MATURITY"}
+                persist="ResearchMaturity"
                 allowEdit={false}
                 newItemTemplate={{
-                  "FeasibilityId": 0,
+                  "ResearchMaturityId": 0,
                   "Value": "",
                   "Description": ""
                 }}

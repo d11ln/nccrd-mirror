@@ -67,9 +67,9 @@ const store = createStore(
             emissionsData: []
         },
 
-        researchData: {
-            researchDetails: []
-        },
+        // researchData: {
+        //     researchDetails: []
+        // },
 
         lookupData: {
             projectTypes: [],
@@ -94,7 +94,7 @@ const store = createStore(
             researchType: [],
             targetAudience: [],
             hazards: [],
-            feasibility: []
+            researchMaturity: []
         },
 
         filterData: {

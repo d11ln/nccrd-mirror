@@ -12,7 +12,6 @@ import ProjectFundersTab from './ProjectFundersTab.jsx'
 import AdaptationDetailsTab from './AdaptationDetailsTab.jsx'
 import MitigationDetailsTab from './MitigationDetailsTab.jsx'
 import MitigationEmissionsDataTab from './MitigationEmissionsDataTab.jsx'
-import ResearchDetailsTab from './ResearchDetailsTab.jsx'
 import RangeComponent from '../../Shared/RangeComponent.jsx'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import ReactTooltip from 'react-tooltip'
@@ -20,6 +19,7 @@ import { UILookup } from '../../../config/ui_config.js'
 import classnames from 'classnames';
 import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 import LinkedDAO from './LinkedDAO.jsx'
+import EditButtonsGroup from './EditButtonsGroup.jsx';
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
@@ -33,14 +33,13 @@ const mapStateToProps = (state, props) => {
   let { adaptationData: { adaptationDetails } } = state
   let { mitigationData: { mitigationDetails } } = state
   let { emissionsData: { emissionsData } } = state
-  let { researchData: { researchDetails } } = state
   let { globalData: { loading, editMode, projectsFullView, daoid, readOnly, showBackToList } } = state
   let editListModalType = state.editListModalData.type
   let editListModalShow = state.editListModalData.show
   let user = state.oidc.user
 
   return {
-    projectDetails, projectFunderDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails,
+    projectDetails, projectFunderDetails, adaptationDetails, mitigationDetails, emissionsData,
     editMode, loading, editListModalType, editListModalShow, user, projectsFullView, daoid, readOnly, showBackToList
   }
 }
@@ -134,8 +133,8 @@ const mapDispatchToProps = (dispatch) => {
     loadHazards: payload => {
       dispatch({ type: "LOAD_HAZARDS", payload })
     },
-    loadFeasibility: payload => {
-      dispatch({ type: "LOAD_FEASIBILITY", payload })
+    loadResearchMaturity: payload => {
+      dispatch({ type: "LOAD_RESEARCH_MATURITY", payload })
     },
     resetProjectState: payload => {
       dispatch({ type: "RESET_PROJECT_STATE", payload })
@@ -166,9 +165,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     addMitigationEmissions: payload => {
       dispatch({ type: "ADD_MITIGATION_EMISSIONS", payload })
-    },
-    addResearchDetails: payload => {
-      dispatch({ type: "ADD_RESEARCH_DETAILS", payload })
     },
     setLinkedLinkedDAOGoalId: payload => {
       dispatch({ type: "SET_PROJECT_LINKED_DAO_GOAL_ID", payload })
@@ -222,7 +218,7 @@ class ProjectDetails extends React.Component {
       loadProjectDetails, loadProjectFunderDetails, loadAdaptationDetails, loadMitigationDetails, loadSectorType, loadTypology,
       loadMitigationEmissions, loadResearchDetails, loadAdaptationPurpose, loadRegions, loadSectors, loadCarbonCredit,
       loadCarbonCreditMarket, loadCDMStatus, loadCDMMethodology, loadVoluntaryMethodology, loadVoluntaryGoldStandard,
-      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards, loadFeasibility } = this.props
+      loadResearchType, loadTargetAudience, user, loadFunders, loadFundingStatus, loadHazards, loadResearchMaturity } = this.props
 
     let { projectId } = this.state
 
@@ -243,7 +239,7 @@ class ProjectDetails extends React.Component {
     if (!detailsOnly) {
       oHandler.expand("Lookups($expand=AdaptationPurpose,CarbonCredit,CarbonCreditMarket,CDMMethodology,CDMStatus," +
         "ProjectStatus,ProjectType,ProjectSubType,ResearchType,TargetAudience,Typology,Person," +
-        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus,Feasibility)")
+        "ValidationStatus,VoluntaryGoldStandard,VoluntaryMethodology,FundingStatus,ResearchMaturity)")
     }
 
     oHandler.get()
@@ -318,7 +314,7 @@ class ProjectDetails extends React.Component {
             loadValidationStatus(oHandler.data.Lookups.ValidationStatus)
             loadVoluntaryGoldStandard(oHandler.data.Lookups.VoluntaryGoldStandard)
             loadVoluntaryMethodology(oHandler.data.Lookups.VoluntaryMethodology)
-            loadFeasibility(oHandler.data.Lookups.Feasibility)
+            loadResearchMaturity(oHandler.data.Lookups.ResearchMaturity)
           }
 
           loadProjectDetails(oHandler.data.Project)
@@ -407,7 +403,7 @@ class ProjectDetails extends React.Component {
 
     let { setEditMode, setLoading, loadProjectDetails, loadAdaptationDetails, loadMitigationDetails,
       loadMitigationEmissions, loadResearchDetails, projectDetails, projectFunderDetails, adaptationDetails,
-      mitigationDetails, emissionsData, researchDetails, resetProjectState, resetAdaptationState,
+      mitigationDetails, emissionsData, resetProjectState, resetAdaptationState,
       resetMitigationState, resetEmissionState, resetResearchState } = this.props
 
     let { projectId } = this.state
@@ -467,18 +463,6 @@ class ProjectDetails extends React.Component {
       modified = true
     }
 
-    //Add ResearchDetails
-    // if (researchDetails.filter(x => x.state === 'modified').length > 0) {
-    //   let researchData = []
-    //   researchDetails.filter(x => x.state === 'modified').forEach(item => {
-    //     delete item.state //OData can only bind to the original object spec which does not contain 'state'
-    //     item.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
-    //     researchData.push(item)
-    //   })
-    //   dataObj.ResearchDetails = researchData
-    //   modified = true
-    // }
-
     //Add Funding
     if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
       let funderData = []
@@ -505,7 +489,7 @@ class ProjectDetails extends React.Component {
           this.loadData(true)
         })
       }
-      else{
+      else {
         this.props.setLoading(false)
       }
     }
@@ -616,19 +600,18 @@ class ProjectDetails extends React.Component {
 
   backToList() {
 
-    let { projectDetails, adaptationDetails, mitigationDetails, emissionsData, researchDetails } = this.props
+    let { projectDetails, adaptationDetails, mitigationDetails, emissionsData } = this.props
     let dataState = "original"
 
     if (projectDetails.state !== 'original' && typeof projectDetails.state !== 'undefined') {
       dataState = projectDetails.state
     }
 
-    let arraySources = [adaptationDetails, mitigationDetails, emissionsData, researchDetails]
+    let arraySources = [adaptationDetails, mitigationDetails, emissionsData]
     arraySources.map(source => {
       if (dataState === "original") {
         source.map((item) => {
           if (item.state !== 'original' && typeof item.state !== 'undefined') {
-            console.log("item.state", item.state)
             dataState = item.state
           }
         })
@@ -684,10 +667,6 @@ class ProjectDetails extends React.Component {
         this.props.addMitigationEmissions(projectId)
         break;
 
-      case "5":
-        this.props.addResearchDetails(projectId)
-        break;
-
       case "6":
         this.props.addProjectFunderDetails(projectId)
         break;
@@ -741,11 +720,6 @@ class ProjectDetails extends React.Component {
                   Emissions
                   </NavLink>
               </NavItem>
-              {/* <NavItem>
-                <NavLink to={tabTo} style={{ backgroundColor: (activeTabId === "5" ? DEAGreen : ""), color: "black" }} onClick={() => { this.toggleTabs('5'); }}>
-                  Research
-                  </NavLink>
-              </NavItem> */}
             </Nav>
 
             <TabContent activeItem={activeTabId}>
@@ -760,6 +734,7 @@ class ProjectDetails extends React.Component {
                 }
 
                 {(daoid !== false) &&
+
                   <Button
                     style={{
                       margin: "0px 0px 20px 15px",
@@ -778,6 +753,17 @@ class ProjectDetails extends React.Component {
                   </Button>
                 }
 
+                <EditButtonsGroup
+                  editMode={editMode}
+                  allowAdd={activeTabId !== "1"}
+                  editClick={this.editClick}
+                  discardClick={this.discardClick}
+                  saveClick={this.saveClick}
+                  addClick={this.addClick}
+                  user={user}
+                  readOnly={readOnly}
+                />
+
                 <div style={{ height: "10px" }} />
                 <ProjectDetailsTab />
                 <br />
@@ -792,6 +778,17 @@ class ProjectDetails extends React.Component {
                     Back to list
                   </Button>
                 }
+
+                <EditButtonsGroup
+                  editMode={editMode}
+                  allowAdd={activeTabId !== "1"}
+                  editClick={this.editClick}
+                  discardClick={this.discardClick}
+                  saveClick={this.saveClick}
+                  addClick={this.addClick}
+                  user={user}
+                  readOnly={readOnly}
+                />
 
                 <div style={{ height: "10px" }} />
                 <ProjectFundersTab />
@@ -808,6 +805,17 @@ class ProjectDetails extends React.Component {
                   </Button>
                 }
 
+                <EditButtonsGroup
+                  editMode={editMode}
+                  allowAdd={activeTabId !== "1"}
+                  editClick={this.editClick}
+                  discardClick={this.discardClick}
+                  saveClick={this.saveClick}
+                  addClick={this.addClick}
+                  user={user}
+                  readOnly={readOnly}
+                />
+
                 <div style={{ height: "10px" }} />
                 <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
                 <br />
@@ -822,6 +830,17 @@ class ProjectDetails extends React.Component {
                     Back to list
                   </Button>
                 }
+
+                <EditButtonsGroup
+                  editMode={editMode}
+                  allowAdd={activeTabId !== "1"}
+                  editClick={this.editClick}
+                  discardClick={this.discardClick}
+                  saveClick={this.saveClick}
+                  addClick={this.addClick}
+                  user={user}
+                  readOnly={readOnly}
+                />
 
                 <div style={{ height: "10px" }} />
                 <MitigationDetailsTab projectId={projectDetails.ProjectId} />
@@ -838,70 +857,26 @@ class ProjectDetails extends React.Component {
                   </Button>
                 }
 
+                <EditButtonsGroup
+                  editMode={editMode}
+                  allowAdd={activeTabId !== "1"}
+                  editClick={this.editClick}
+                  discardClick={this.discardClick}
+                  saveClick={this.saveClick}
+                  addClick={this.addClick}
+                  user={user}
+                  readOnly={readOnly}
+                />
+
                 <div style={{ height: "10px" }} />
                 <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
                 <br />
                 <br />
                 <br />
               </TabPane>
-              {/* <TabPane tabId="5">
-                {
-                  showBackToList === true &&
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
-                  </Button>
-                }
-
-                <div style={{ height: "10px" }} />
-                <ResearchDetailsTab projectId={projectDetails.ProjectId} />
-                <br />
-                <br />
-                <br />
-              </TabPane> */}
             </TabContent>
           </Col>
         </Row>
-
-        {
-          ((user && !user.expired) && !readOnly) &&
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-12">
-                <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
-
-                  {!editMode &&
-                    <div>
-                      <Button /*data-tip="Edit"*/ size="sm" floating color="" onClick={this.editClick} style={{ backgroundColor: DEAGreen }}>
-                        <Fa icon="pencil" />
-                      </Button>
-                      <br />
-                    </div>}
-
-                  {(activeTabId !== "1" && editMode) &&
-                    <div>
-                      <Button data-tip="Add Adaptation Details" size="sm" floating color="" onClick={this.addClick}
-                        style={{ backgroundColor: DEAGreen }}>
-                        <Fa icon="plus" />
-                      </Button>
-                    </div>
-                  }
-
-                  {editMode &&
-                    <div>
-                      <Button data-tip="Discard changes" size="sm" floating color="" onClick={this.discardClick} style={{ backgroundColor: "grey" }}>
-                        <Fa icon="trash" />
-                      </Button>
-                      <br />
-                      <Button data-tip="Save changes" size="sm" floating color="" onClick={this.saveClick} style={{ backgroundColor: DEAGreen }}>
-                        <Fa icon="save" />
-                      </Button>
-                    </div>}
-                </div>
-              </div>
-            </div>
-          </div>
-        }
 
         <Container>
           <Modal fade={false} isOpen={this.state.discardModal} centered>
@@ -911,7 +886,7 @@ class ProjectDetails extends React.Component {
             </ModalBody>
             <ModalFooter>
               <Button size="sm" style={{ width: "100px" }} color="" onClick={() => this.setState({ discardModal: false })} style={{ backgroundColor: "grey" }} >Cancel</Button>
-              <Button size="sm" style={{ width: "100px" }} color="" onClick={this.discardChanges} style={{ backgroundColor: DEAGreen }} >Discard</Button>
+              <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.discardChanges} style={{ backgroundColor: DEAGreen }} >Discard</Button>
             </ModalFooter>
           </Modal>
         </Container>
@@ -924,7 +899,7 @@ class ProjectDetails extends React.Component {
             </ModalBody>
             <ModalFooter>
               <Button size="sm" style={{ width: "100px" }} color="" onClick={() => this.setState({ saveModal: false })} style={{ backgroundColor: "grey" }} >Cancel</Button>
-              <Button size="sm" style={{ width: "100px" }} color="" onClick={this.saveChanges} style={{ backgroundColor: DEAGreen }} >Save</Button>
+              <Button size="sm" style={{ width: "100px" }} color="warning" onClick={this.saveChanges} style={{ backgroundColor: DEAGreen }} >Save</Button>
             </ModalFooter>
           </Modal>
         </Container>
