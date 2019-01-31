@@ -139,6 +139,7 @@ class AdaptationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
 
           <TreeSelectComponent
@@ -191,14 +192,8 @@ class AdaptationDetailsItem extends React.Component {
             data={this.props.projectStatus}
             setSelectedValueKey={"SET_ADAPTATION_DETAILS_PROJECT_STATUS"}
             parentId={details.AdaptationDetailId}
-            dispatch={"LOAD_PROJECT_STATUS"}
-            persist="ProjectStatus"
-            allowEdit={true}
-            newItemTemplate={{
-              "ProjectStatusId": 0,
-              "Value": "",
-              "Description": ""
-            }}
+            allowEdit={false}
+            allowClear={true}
           />
         </div>
 
@@ -241,6 +236,7 @@ class AdaptationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
             </Row>
 
@@ -263,6 +259,7 @@ class AdaptationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
 
               <SelectComponent
@@ -281,6 +278,7 @@ class AdaptationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
             </Row>
 

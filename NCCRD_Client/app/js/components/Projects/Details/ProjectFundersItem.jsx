@@ -111,6 +111,7 @@ class ProjectFundersItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
 
           <SelectComponent
@@ -128,6 +129,7 @@ class ProjectFundersItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
 
         </Row>

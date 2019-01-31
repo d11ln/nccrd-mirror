@@ -108,6 +108,7 @@ class MitigationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selMitigationCarbonCreditMarket"
@@ -125,6 +126,7 @@ class MitigationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selMitigationCDMStatus"
@@ -142,6 +144,7 @@ class MitigationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
         </div>
 
@@ -164,6 +167,7 @@ class MitigationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selMitigationVoluntaryMethodology"
@@ -181,6 +185,7 @@ class MitigationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selMitigationVoluntaryGoldStandard"
@@ -198,6 +203,7 @@ class MitigationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
         </div>
 
@@ -258,14 +264,8 @@ class MitigationDetailsItem extends React.Component {
             data={this.props.projectStatus}
             setSelectedValueKey={"SET_MITIGATION_DETAILS_PROJECT_STATUS"}
             parentId={details.MitigationDetailId}
-            dispatch={"LOAD_PROJECT_STATUS"}
-            persist="ProjectStatus"
-            allowEdit={true}
-            newItemTemplate={{
-              "ProjectStatusId": 0,
-              "Value": "",
-              "Description": ""
-            }}
+            allowEdit={false}
+            allowClear={true}
           />
         </div>
 
@@ -308,6 +308,7 @@ class MitigationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
             </Row>
 
@@ -330,6 +331,7 @@ class MitigationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
 
               <SelectComponent
@@ -348,6 +350,7 @@ class MitigationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
             </Row>
 
