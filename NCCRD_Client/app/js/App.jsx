@@ -348,7 +348,6 @@ class App extends React.Component {
                 <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
                 <Footer />
               </div>
-
             }
 
             <div className="container-fluid">

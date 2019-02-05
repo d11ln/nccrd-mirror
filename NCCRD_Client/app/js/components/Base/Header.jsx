@@ -28,7 +28,8 @@ class Header extends React.Component {
               align="left"
             />
           </Col>
-          <Col md="8" style={{paddingLeft: "5%"}}>
+          <Col md="1"/>
+          <Col md="6">
             <div>
               <h1 style={{ textAlign: "center", letterSpacing: "2px", color: "#2e7d32" }}>
                 <b>NCCRD</b>
@@ -45,6 +46,7 @@ class Header extends React.Component {
               </h5>
             </div>
           </Col>
+          <Col md="1"/>
           <Col md="2" className="d-none d-md-block">
             <img
               src={sa_flag}
