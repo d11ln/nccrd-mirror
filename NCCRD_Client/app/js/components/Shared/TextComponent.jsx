@@ -86,7 +86,7 @@ class TextComponent extends React.Component {
           value={value.toString()}
           onChange={this.valueChange.bind(this)}
           style={{
-            height: "22px",
+            height: "21px",
             marginTop: "-15px",
             marginBottom: "-20px",
             color: _gf.getFontColour(editMode),

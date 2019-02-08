@@ -257,7 +257,7 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             var projectStatusIDs = new List<int>();
 
-            if(project.ProjectStatusId != null)
+            if (project.ProjectStatusId != null)
             {
                 projectStatusIDs.Add((int)project.ProjectStatusId);
             }
@@ -282,17 +282,17 @@ namespace NCCRD.Services.DataV2.Controllers
         {
             var typologyName = "";
 
-            if (adaptations.Count() > 0)
+            if (research.Count() > 0)
+            {
+                typologyName = "Research";
+            }
+            else if (adaptations.Count() > 0)
             {
                 typologyName = "Adaptation";
             }
             else if (mitigations.Count() > 0)
             {
                 typologyName = "Mitigation";
-            }
-            else if (research.Count() > 0)
-            {
-                typologyName = "Research";
             }
 
             var typology = typologyData.FirstOrDefault(t => t.Value == typologyName);

@@ -115,7 +115,7 @@ class RangeComponent extends React.Component {
                     {this.getPrefix()}
 
                     <Input size="sm" id={this.getId("from")} readOnly={!editMode}
-                        style={{ height: "22px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                        style={{ height: "21px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                         value={this.fixNullOrUndefinedValue(valueFrom)}
                         onChange={this.valueFromChange.bind(this)} />
 
@@ -126,7 +126,7 @@ class RangeComponent extends React.Component {
                     {this.getPrefix()}
 
                     <Input size="sm" id={this.getId("to")} readOnly={!editMode}
-                        style={{ height: "22px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                        style={{ height: "21px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                         value={this.fixNullOrUndefinedValue(valueTo)}
                         onChange={this.valueToChange.bind(this)} />
 

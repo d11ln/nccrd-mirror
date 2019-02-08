@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
+import { Select } from 'antd'
 
 const _gf = require('../../globalFunctions')
 
 //AntD Tree-Select
-import Select from 'antd/lib/select'
-import '../../../css/antd.select.css' //Overrides default antd.select css
+// import Select from 'antd/lib/select'
+//import '../../../css/antd.select.css' //Overrides default antd.select css
 const Option = Select.Option;
 
 const mapStateToProps = (state, props) => {
@@ -262,6 +263,8 @@ class SelectComponent extends React.Component {
 
         <Select
           style={{ width: "100%", ...style }}
+          dropdownMatchSelectWidth={false}
+          dropdownStyle={{ width: 200 }}
           onChange={this.onSelect}
           value={displayValue}
           disabled={this.getDisabledState()}
