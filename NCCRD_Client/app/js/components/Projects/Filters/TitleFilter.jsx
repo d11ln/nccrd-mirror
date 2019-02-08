@@ -61,7 +61,7 @@ class TitleFilter extends React.Component {
             padding: "5px", 
             marginTop: "-28px", 
             width: "98%", 
-            height: "24px", 
+            height: "21px", 
             border: "1px solid lightgrey", 
             borderRadius: "5px",
             backgroundColor: "white",

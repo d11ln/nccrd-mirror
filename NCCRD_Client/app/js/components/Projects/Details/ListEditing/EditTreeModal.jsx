@@ -4,13 +4,14 @@ import {
   ListGroup, ListGroupItem, Input, Button, Container, Modal, ModalBody, ModalHeader, ModalFooter
 } from 'mdbreact'
 import { apiBaseURL } from "../../../../config/serviceURLs.js"
+import { Tree, TreeSelect, Select } from 'antd'
 
 //AntD TreeSelect + Select
-import Tree from 'antd/lib/tree'
-import TreeSelect from 'antd/lib/tree-select'
-import Select from 'antd/lib/select'
-import '../../../../../css/antd.tree.css' //Overrides default antd.tree css
-import '../../../../../css/antd.select.css' //Overrides default antd.select css
+// import Tree from 'antd/lib/tree'
+// import TreeSelect from 'antd/lib/tree-select'
+// import Select from 'antd/lib/select'
+// import '../../../../../css/antd.tree.css' //Overrides default antd.tree css
+// import '../../../../../css/antd.select.css' //Overrides default antd.select css
 const TreeNode = Tree.TreeNode
 const TreeSelectNode = TreeSelect.TreeNode
 const Option = Select.Option;

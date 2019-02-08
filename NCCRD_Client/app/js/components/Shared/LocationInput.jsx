@@ -166,7 +166,7 @@ class LocationInput extends React.Component {
                 <Input
                   value={value}
                   style={{
-                    height: "22px",
+                    height: "21px",
                     marginTop: "-15px",
                     marginBottom: "-20px",
                     border: "1px solid lightgrey",
