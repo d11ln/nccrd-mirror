@@ -13,6 +13,8 @@ namespace NCCRD.Services.DataV2.Database.Models
     {
         public int ProjectStatusId { get; set; }
 
+        public int RefId { get; set; }
+
         [Required]
         [MaxLength(450)]
         public string Value { get; set; }

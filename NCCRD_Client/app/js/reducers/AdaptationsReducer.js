@@ -60,6 +60,7 @@ export default function AdaptationsReducer(state = {}, action) {
                 "ProjectId": payload,
                 "SectorId": 0,
                 "ProjectStatusId": 0,
+                "ResearchDetail": null,
                 "state": "modified"
             }
 
@@ -198,7 +199,7 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
         }
 
-        case "SET_ADAPTATION_RESEARCH_FEASIBILITY": {
+        case "SET_ADAPTATION_RESEARCH_MATURITY": {
             let { adaptationDetails } = state
 
             //Get item and Id
@@ -207,7 +208,7 @@ export default function AdaptationsReducer(state = {}, action) {
             adaptationDetails.splice(details.id, 1)
 
             let researchDetail = details.item.ResearchDetail
-            researchDetail.FeasibilityId = payload
+            researchDetail.ResearchMaturityId = payload
 
             //return updated state
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }

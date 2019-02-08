@@ -88,7 +88,8 @@ class SelectComponent extends React.Component {
       preProcessedItems.push({
         id: item[Object.keys(item)[0]],
         value: Object.keys(item).includes("Value") ? item.Value : item[Object.keys(item)[1]],
-        parentId: parentKeys.length > 0 ? item[parentKeys[0]] : null
+        parentId: parentKeys.length > 0 ? item[parentKeys[0]] : null,
+        refId: item.RefId
       })
     })
 
@@ -118,9 +119,14 @@ class SelectComponent extends React.Component {
         if(dataItem.NextStates){
           let nextStates = dataItem.NextStates.split(",").map(x => parseInt(x))
     
+          console.log("nextStates", nextStates)
+          console.log("procData", procData)
+
           if(nextStates && nextStates.length > 0){
-            procData = procData.filter(x => nextStates.includes(x.id))
+            procData = procData.filter(x => nextStates.includes(x.refId))
           }
+
+          console.log("procData2", procData)
         }   
       }
       
@@ -219,7 +225,7 @@ class SelectComponent extends React.Component {
 
   render() {
 
-    let { col, label, id, selectedValue, data, style, labelStyle } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle, allowClear } = this.props
     let uiconf = UILookup(id, label)
     let displayValue = "Select..."
 
@@ -236,6 +242,10 @@ class SelectComponent extends React.Component {
 
     if (!labelStyle) {
       labelStyle = {}
+    }
+
+    if(!allowClear){
+      allowClear = false
     }
 
     return (
@@ -255,6 +265,7 @@ class SelectComponent extends React.Component {
           onChange={this.onSelect}
           value={displayValue}
           disabled={this.getDisabledState()}
+          allowClear={allowClear}
         >
           {this.selectOptions()}
         </Select>

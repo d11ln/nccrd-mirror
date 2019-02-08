@@ -16,11 +16,11 @@ const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
   let { lookupData: {
     researchType, targetAudience, adaptationPurpose, sector, sectorType, typology, hazards, projectStatus,
-    feasibility
+    researchMaturity
   } } = state
   return {
     researchType, targetAudience, adaptationPurpose, sector, sectorType, typology, hazards, projectStatus, adaptationDetails,
-    editMode, feasibility
+    editMode, researchMaturity
   }
 }
 
@@ -54,7 +54,7 @@ class AdaptationDetailsItem extends React.Component {
         TargetAudienceId: 0,
         ProjectId: details.ProjectId,
         SectorId: null,
-        FeasibilityId: null
+        ResearchMaturityId: null
       }
     }
 
@@ -69,7 +69,7 @@ class AdaptationDetailsItem extends React.Component {
   render() {
 
     let { details, researchType, targetAudience, adaptationPurpose, sector, sectorType, typology, hazards, projectStatus,
-      adaptationDetails, editMode, feasibility } = this.props
+      adaptationDetails, editMode, researchMaturity } = this.props
 
     if (typeof details.ResearchDetail === 'undefined') {
       details.ResearchDetail = null
@@ -79,16 +79,29 @@ class AdaptationDetailsItem extends React.Component {
       <>
         {/* <br /> */}
 
-        <Row style={{ marginBottom: 10 }}>
+        <Row>
           <Col md="6">
             <label style={{ fontWeight: "bold" }}>
               Research project:
             </label>
-            <br />
+          </Col>
+        </Row>
+        <Row>
+          <Col md="6">
             <label className="bs-switch">
               <input disabled={!editMode} type="checkbox" checked={details.ResearchDetail !== null} onClick={this.onResearchChange.bind(this)} />
               <span className="slider round" />
             </label>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: -10, marginBottom: 15 }}>
+          <Col md="6">
+            {
+              details.ResearchDetail !== null &&
+              <label style={{ fontWeight: "bold", color: "#2196F3", fontSize: 14 }}>
+                <i>* This is a research project</i>
+              </label>
+            }
           </Col>
         </Row>
 
@@ -126,6 +139,7 @@ class AdaptationDetailsItem extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
 
           <TreeSelectComponent
@@ -178,14 +192,8 @@ class AdaptationDetailsItem extends React.Component {
             data={this.props.projectStatus}
             setSelectedValueKey={"SET_ADAPTATION_DETAILS_PROJECT_STATUS"}
             parentId={details.AdaptationDetailId}
-            dispatch={"LOAD_PROJECT_STATUS"}
-            persist="ProjectStatus"
-            allowEdit={true}
-            newItemTemplate={{
-              "ProjectStatusId": 0,
-              "Value": "",
-              "Description": ""
-            }}
+            allowEdit={false}
+            allowClear={true}
           />
         </div>
 
@@ -228,6 +236,7 @@ class AdaptationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
             </Row>
 
@@ -250,24 +259,26 @@ class AdaptationDetailsItem extends React.Component {
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
 
               <SelectComponent
-                id="selResearchFeasibility"
+                id="selResearchResearchMaturity"
                 col="col-md-4"
-                label="Feasibility:"
-                selectedValue={details.ResearchDetail.FeasibilityId}
-                data={feasibility}
-                setSelectedValueKey={"SET_ADAPTATION_RESEARCH_FEASIBILITY"}
+                label="Research Maturity:"
+                selectedValue={details.ResearchDetail.ResearchMaturityId}
+                data={researchMaturity}
+                setSelectedValueKey={"SET_ADAPTATION_RESEARCH_MATURITY"}
                 parentId={details.AdaptationDetailId}
-                dispatch={"LOAD_FEASIBILITY"}
-                persist="Feasibility"
+                dispatch={"LOAD_RESEARCH_MATURITY"}
+                persist="ResearchMaturity"
                 allowEdit={false}
                 newItemTemplate={{
-                  "FeasibilityId": 0,
+                  "ResearchMaturity": 0,
                   "Value": "",
                   "Description": ""
                 }}
+                allowClear={true}
               />
             </Row>
 

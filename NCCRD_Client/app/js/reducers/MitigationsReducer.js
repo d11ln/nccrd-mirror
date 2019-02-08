@@ -68,6 +68,7 @@ export default function MitigationsReducer(state = {}, action) {
                 "ProjectId": payload,
                 "SectorId": 0,
                 "ProjectStatusId": 0,
+                "ResearchDetail": null,
                 "state": "modified"
             }
 
@@ -274,7 +275,7 @@ export default function MitigationsReducer(state = {}, action) {
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
         }
 
-        case "SET_MITIGATION_RESEARCH_FEASIBILITY": {
+        case "SET_MITIGATION_RESEARCH_MATURITY": {
             let { mitigationDetails } = state
 
             //Get item and Id
@@ -283,7 +284,7 @@ export default function MitigationsReducer(state = {}, action) {
             mitigationDetails.splice(details.id, 1)
 
             let researchDetail = details.item.ResearchDetail
-            researchDetail.FeasibilityId = payload
+            researchDetail.ResearchMaturityId = payload
 
             //return updated state
             return { ...state, mitigationDetails: [...mitigationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }

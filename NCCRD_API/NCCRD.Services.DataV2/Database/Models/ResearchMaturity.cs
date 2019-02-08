@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NCCRD.Services.DataV2.Database.Models
 {
-    [Table("Feasibility")]
-    public class Feasibility
+    [Table("ResearchMaturity")]
+    public class ResearchMaturity
     {
-        public int FeasibilityId { get; set; }
+        public int ResearchMaturityId { get; set; }
 
         [Required]
         public string Value { get; set; }

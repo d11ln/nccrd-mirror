@@ -128,89 +128,86 @@ class DashLayout extends React.Component {
             <ProjectList />
           </Col>
 
-          {
-            !showBackToTop &&
-            <Col md="5">
-              <Row>
-                <Col md="12">
-                  <ProjectFilters />
-                </Col>
-              </Row>
+          <Col md="5" style={{ position: (showBackToTop ? "absolute" : "relative"), top: (showBackToTop ? 285 : 0), right: 0 }}>
+            <Row>
+              <Col md="12">
+                <ProjectFilters />
+              </Col>
+            </Row>
 
-              <br />
+            <br />
 
-              <Row>
-                {/* map */}
-                <Col md="12">
-                  {/* <DashMapPreview /> */}
-                  <MapViewCore />
-                </Col>
-              </Row>
+            <Row>
+              {/* map */}
+              <Col md="12">
+                <MapViewCore />
+              </Col>
+            </Row>
 
-              <br />
+            <br />
 
-              <Row>
-                {/* graphs */}
-                <Col md="12">
-                  <Row>
-                    <Col md="6">
-                      <DashGraph1Preview />
-                    </Col>
+            <Row>
+              {/* graphs */}
+              <Col md="12">
+                <Row>
+                  <Col md="6">
+                    <DashGraph1Preview />
+                  </Col>
 
-                    <Col md="6">
-                      <DashGraph2Preview>
-                        <iframe
-                          style={{
-                            width: "100%",
-                            height: "150px",
-                            margin: "0px",
-                            border: "none"
-                          }}
-                          src={""}
-                        />
-                      </DashGraph2Preview>
-                    </Col>
+                  <Col md="6">
+                    <DashGraph2Preview>
+                      <iframe
+                        style={{
+                          width: "100%",
+                          height: "150px",
+                          margin: "0px",
+                          border: "none"
+                        }}
+                        src={""}
+                      />
+                    </DashGraph2Preview>
+                  </Col>
 
-                  </Row>
+                </Row>
 
-                  <br />
+                <br />
 
-                  <Row>
-                    <Col md="6">
-                      <DashGraph3Preview>
-                        <iframe
-                          style={{
-                            width: "100%",
-                            height: "150px",
-                            margin: "0px",
-                            border: "none"
-                          }}
-                          src={""}
-                        />
-                      </DashGraph3Preview>
-                    </Col>
+                <Row>
+                  <Col md="6">
+                    <DashGraph3Preview>
+                      <iframe
+                        style={{
+                          width: "100%",
+                          height: "150px",
+                          margin: "0px",
+                          border: "none"
+                        }}
+                        src={""}
+                      />
+                    </DashGraph3Preview>
+                  </Col>
 
-                    <Col md="6">
-                      <DashGraph4Preview>
-                        <iframe
-                          style={{
-                            width: "100%",
-                            height: "150px",
-                            margin: "0px",
-                            border: "none"
-                          }}
-                          src={""}
-                        />
-                      </DashGraph4Preview>
-                    </Col>
+                  <Col md="6">
+                    <DashGraph4Preview>
+                      <iframe
+                        style={{
+                          width: "100%",
+                          height: "150px",
+                          margin: "0px",
+                          border: "none"
+                        }}
+                        src={""}
+                      />
+                    </DashGraph4Preview>
+                  </Col>
 
-                  </Row>
+                </Row>
 
-                </Col>
+              </Col>
 
-              </Row>
-            </Col>
-          }
+            </Row>
+          </Col>
+
 
         </Row>
 

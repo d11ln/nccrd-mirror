@@ -218,6 +218,7 @@ class ProjectDetailsTab extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selProjectSubType"
@@ -240,6 +241,7 @@ class ProjectDetailsTab extends React.Component {
               "Description": "",
               "ProjectTypeId": 0
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selProjectStatus"
@@ -248,14 +250,8 @@ class ProjectDetailsTab extends React.Component {
             selectedValue={projectDetails.ProjectStatusId}
             data={this.props.projectStatus}
             setSelectedValueKey={"SET_PROJECT_DETAILS_PROJECT_STATUS"}
-            dispatch={"LOAD_PROJECT_STATUS"}
-            persist="ProjectStatus"
-            allowEdit={true}
-            newItemTemplate={{
-              "ProjectStatusId": 0,
-              "Value": "",
-              "Description": ""
-            }}
+            allowEdit={false}
+            allowClear={true}
           />
         </div>
 
@@ -277,6 +273,7 @@ class ProjectDetailsTab extends React.Component {
               "Value": "",
               "Description": ""
             }}
+            allowClear={true}
           />
           <SelectComponent
             id="selProjectManager"
@@ -297,6 +294,7 @@ class ProjectDetailsTab extends React.Component {
               "PhoneNumber": "",
               "MobileNumber": ""
             }}
+            allowClear={true}
           />
         </div>
 

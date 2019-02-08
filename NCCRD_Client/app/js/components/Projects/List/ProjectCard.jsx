@@ -130,11 +130,11 @@ class ProjectCard extends React.Component {
       <>
         <CardBody>
 
-          <CardTitle>
+          <CardTitle style={{ fontSize: 18, fontWeight: 400 }}>
             {this.props.ptitle}
           </CardTitle >
 
-          <CardText style={{ wordWrap: "break-word", minHeight: 75 }}>
+          <CardText style={{ wordWrap: "break-word", minHeight: 75, fontSize: 16 }}>
             {pdes}
           </CardText>
 

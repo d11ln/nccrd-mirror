@@ -115,7 +115,7 @@ class App extends React.Component {
     super(props);
   }
 
-  componentWillMount(){
+  componentWillMount() {
     //this.genTestConfig()
     this.processURLConfig()
   }
@@ -309,8 +309,10 @@ class App extends React.Component {
         <Router>
           <div>
 
-            {(showHeader === true) && <Header />}
-            {(showNavbar !== false) && <CustomNavbar />}
+            <div style={{ marginLeft: -15, marginRight: -15 }}>
+              {(showHeader === true) && <Header />}
+              {(showNavbar !== false) && <CustomNavbar />}
+            </div>
 
             {
               showSideNavButton === true &&
@@ -320,7 +322,7 @@ class App extends React.Component {
             {
               (showHeader === true || showNavbar !== false) &&
               <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
-            }          
+            }
 
             <div style={{ backgroundColor: "whitesmoke" }}>
               <div style={{ margin: "0px" }}>
@@ -339,14 +341,13 @@ class App extends React.Component {
                 </Switch>
               </div>
             </div>
-        
+
             {
-              (showFooter === true) && 
-              <div>
+              (showFooter === true) &&
+              <div style={{ marginLeft: -15, marginRight: -15 }}>
                 <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
                 <Footer />
               </div>
-
             }
 
             <div className="container-fluid">
