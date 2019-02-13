@@ -725,151 +725,201 @@ class ProjectDetails extends React.Component {
             <TabContent activeItem={activeTabId}>
               <TabPane tabId="1">
 
-                {
-                  showBackToList === true &&
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
+                <Row>
+                  <Col>
+                    {
+                      showBackToList === true &&
+                      <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                        <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                        Back to list
                   </Button>
-                }
+                    }
 
-                {(daoid !== false) &&
+                    {(daoid !== false) &&
 
-                  <Button
-                    style={{
-                      margin: "0px 0px 20px 15px",
-                      backgroundColor: (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "grey" : DEAGreen
-                    }}
-                    color=""
-                    size="sm"
-                    onClick={() => { this.setState({ doaModal: true }) }}
-                  >
-                    <i
-                      className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
-                      aria-hidden="true"
-                      style={{ marginRight: "15px" }}
+                      <Button
+                        style={{
+                          margin: "0px 0px 20px 15px",
+                          backgroundColor: (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "grey" : DEAGreen
+                        }}
+                        color=""
+                        size="sm"
+                        onClick={() => { this.setState({ doaModal: true }) }}
+                      >
+                        <i
+                          className={(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "fa fa-unlink" : "fa fa-link"}
+                          aria-hidden="true"
+                          style={{ marginRight: "15px" }}
+                        />
+                        Linked DAO Details
+                  </Button>
+                    }
+
+                    <EditButtonsGroup
+                      editMode={editMode}
+                      allowAdd={activeTabId !== "1"}
+                      editClick={this.editClick}
+                      discardClick={this.discardClick}
+                      saveClick={this.saveClick}
+                      addClick={this.addClick}
+                      user={user}
+                      readOnly={readOnly}
                     />
-                    Linked DAO Details
-                  </Button>
-                }
+                  </Col>
+                </Row>
 
-                <EditButtonsGroup
-                  editMode={editMode}
-                  allowAdd={activeTabId !== "1"}
-                  editClick={this.editClick}
-                  discardClick={this.discardClick}
-                  saveClick={this.saveClick}
-                  addClick={this.addClick}
-                  user={user}
-                  readOnly={readOnly}
-                />
 
                 <div style={{ height: "10px" }} />
-                <ProjectDetailsTab />
+                <Row>
+                  <Col>
+                    <ProjectDetailsTab />
+                  </Col>
+                </Row>
                 <br />
                 <br />
                 <br />
               </TabPane>
               <TabPane tabId="6">
-                {
-                  showBackToList === true &&
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
+
+                <Row>
+                  <Col>
+                    {
+                      showBackToList === true &&
+                      <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                        <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                        Back to list
                   </Button>
-                }
+                    }
 
-                <EditButtonsGroup
-                  editMode={editMode}
-                  allowAdd={activeTabId !== "1"}
-                  editClick={this.editClick}
-                  discardClick={this.discardClick}
-                  saveClick={this.saveClick}
-                  addClick={this.addClick}
-                  user={user}
-                  readOnly={readOnly}
-                />
+                    <EditButtonsGroup
+                      editMode={editMode}
+                      allowAdd={activeTabId !== "1"}
+                      editClick={this.editClick}
+                      discardClick={this.discardClick}
+                      saveClick={this.saveClick}
+                      addClick={this.addClick}
+                      user={user}
+                      readOnly={readOnly}
+                    />
+                  </Col>
+                </Row>
 
-                <div style={{ height: "10px" }} />
-                <ProjectFundersTab />
+                <div style={{ height: "20px" }} />
+
+                <Row>
+                  <Col>
+                    <ProjectFundersTab />
+                  </Col>
+                </Row>
                 <br />
                 <br />
                 <br />
               </TabPane>
               <TabPane tabId="2">
-                {
-                  showBackToList === true &&
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
-                  </Button>
-                }
 
-                <EditButtonsGroup
-                  editMode={editMode}
-                  allowAdd={activeTabId !== "1"}
-                  editClick={this.editClick}
-                  discardClick={this.discardClick}
-                  saveClick={this.saveClick}
-                  addClick={this.addClick}
-                  user={user}
-                  readOnly={readOnly}
-                />
+                <Row>
+                  <Col>
+                    {
+                      showBackToList === true &&
+                      <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                        <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                        Back to list
+                  </Button>
+                    }
+
+                    <EditButtonsGroup
+                      editMode={editMode}
+                      allowAdd={activeTabId !== "1"}
+                      editClick={this.editClick}
+                      discardClick={this.discardClick}
+                      saveClick={this.saveClick}
+                      addClick={this.addClick}
+                      user={user}
+                      readOnly={readOnly}
+                    />
+                  </Col>
+                </Row>
 
                 <div style={{ height: "10px" }} />
-                <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
+
+                <Row>
+                  <Col>
+                    <AdaptationDetailsTab projectId={projectDetails.ProjectId} />
+                  </Col>
+                </Row>
+
                 <br />
                 <br />
                 <br />
               </TabPane>
               <TabPane tabId="3">
-                {
-                  showBackToList === true &&
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
-                  </Button>
-                }
 
-                <EditButtonsGroup
-                  editMode={editMode}
-                  allowAdd={activeTabId !== "1"}
-                  editClick={this.editClick}
-                  discardClick={this.discardClick}
-                  saveClick={this.saveClick}
-                  addClick={this.addClick}
-                  user={user}
-                  readOnly={readOnly}
-                />
+                <Row>
+                  <Col>
+                    {
+                      showBackToList === true &&
+                      <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                        <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                        Back to list
+                  </Button>
+                    }
+
+                    <EditButtonsGroup
+                      editMode={editMode}
+                      allowAdd={activeTabId !== "1"}
+                      editClick={this.editClick}
+                      discardClick={this.discardClick}
+                      saveClick={this.saveClick}
+                      addClick={this.addClick}
+                      user={user}
+                      readOnly={readOnly}
+                    />
+                  </Col>
+                </Row>
 
                 <div style={{ height: "10px" }} />
-                <MitigationDetailsTab projectId={projectDetails.ProjectId} />
+
+                <Row>
+                  <Col>
+                    <MitigationDetailsTab projectId={projectDetails.ProjectId} />
+                  </Col>
+                </Row>
                 <br />
                 <br />
                 <br />
               </TabPane>
               <TabPane tabId="4">
-                {
-                  showBackToList === true &&
-                  <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
-                    <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
-                    Back to list
-                  </Button>
-                }
 
-                <EditButtonsGroup
-                  editMode={editMode}
-                  allowAdd={activeTabId !== "1"}
-                  editClick={this.editClick}
-                  discardClick={this.discardClick}
-                  saveClick={this.saveClick}
-                  addClick={this.addClick}
-                  user={user}
-                  readOnly={readOnly}
-                />
+                <Row>
+                  <Col>
+                    {
+                      showBackToList === true &&
+                      <Button style={{ margin: "0px 0px 20px -2px" }} color="grey" size="sm" onClick={this.backToList}>
+                        <i className="fa fa-chevron-circle-left" aria-hidden="true" style={{ marginRight: "15px" }} />
+                        Back to list
+                  </Button>
+                    }
+
+                    <EditButtonsGroup
+                      editMode={editMode}
+                      allowAdd={activeTabId !== "1"}
+                      editClick={this.editClick}
+                      discardClick={this.discardClick}
+                      saveClick={this.saveClick}
+                      addClick={this.addClick}
+                      user={user}
+                      readOnly={readOnly}
+                    />
+                  </Col>
+                </Row>
 
                 <div style={{ height: "10px" }} />
-                <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
+                
+                <Row>
+                  <Col>
+                    <MitigationEmissionsDataTab projectId={projectDetails.ProjectId} />
+                  </Col>
+                </Row>
                 <br />
                 <br />
                 <br />

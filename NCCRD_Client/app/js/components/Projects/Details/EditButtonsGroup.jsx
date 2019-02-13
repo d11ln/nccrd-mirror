@@ -78,7 +78,6 @@ class EditButtonsGroup extends React.Component {
                 <label><i>Be careful, you are editing!</i></label>
               </div>
             }
-
           </div>
         }
       </>

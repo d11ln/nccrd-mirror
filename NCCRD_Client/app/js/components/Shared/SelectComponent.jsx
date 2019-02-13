@@ -120,14 +120,9 @@ class SelectComponent extends React.Component {
         if(dataItem.NextStates){
           let nextStates = dataItem.NextStates.split(",").map(x => parseInt(x))
     
-          console.log("nextStates", nextStates)
-          console.log("procData", procData)
-
           if(nextStates && nextStates.length > 0){
             procData = procData.filter(x => nextStates.includes(x.refId))
           }
-
-          console.log("procData2", procData)
         }   
       }
       
