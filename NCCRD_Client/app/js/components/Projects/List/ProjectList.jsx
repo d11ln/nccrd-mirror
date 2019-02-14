@@ -2,14 +2,14 @@ import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
 import { apiBaseURL } from "../../../config/serviceURLs.js"
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, InputSwitch } from "mdbreact"
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, Row, Col } from "mdbreact"
 import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
 
-//AntD Tree
-import Popover from 'antd/lib/popover'
-import 'antd/lib/popover/style/index.css' //Overrides default antd.tree css
+// AntD
+import { Popover, Select } from 'antd'
+const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
@@ -87,7 +87,9 @@ class ProjectList extends React.Component {
       title: "",
       message: "",
       ellipsisMenu: false,
-      daoid: null
+      daoid: null,
+      sortOrder: "D_D",
+      sortOrderChanged: false
     }
 
   }
@@ -119,14 +121,15 @@ class ProjectList extends React.Component {
       start,
       end,
       favoritesFilter,
-      daoid
+      daoid,
+      sortOrderChanged
     } = this.state
 
     //If any filters changed...refetch projects
     let filtersChanged = false
     if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
       pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
-      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid) {
+      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid || sortOrderChanged === true) {
 
       filtersChanged = true
     }
@@ -172,7 +175,8 @@ class ProjectList extends React.Component {
       favoritesFilter: favoritesFilter,
       start: start,
       end: end,
-      daoid: daoid
+      daoid: daoid,
+      sortOrderChanged: false
     })
 
     setLoading(true)
@@ -264,7 +268,9 @@ class ProjectList extends React.Component {
         oHandler
           .skip(skip)
           .top(batchSize)
-          .orderBy("ProjectTitle")
+        // .orderBy(this.getProjectSort())
+
+        this.setProjectSort(oHandler);
 
         //Select
         oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
@@ -281,13 +287,43 @@ class ProjectList extends React.Component {
     }
   }
 
+  setProjectSort(oHandler) {
+
+    let { sortOrder } = this.state
+
+    switch (sortOrder) {
+
+      //Alphabetical - Ascending
+      case "A_A":
+        oHandler.orderBy("ProjectTitle")
+        break
+
+      //Alphabetical - Descending
+      case "A_D":
+        oHandler.orderByDesc("ProjectTitle")
+        break
+
+      //Date - Ascending
+      case "D_A":
+        oHandler.orderBy("ProjectId")
+        break
+
+      //Date - Descending
+      case "D_D":
+        oHandler.orderByDesc("ProjectId")
+        break
+    }
+  }
+
   buildList() {
 
-    const { projects } = this.props
+    let { projects } = this.props
+
     let ar = []
     if (typeof projects !== 'undefined' && projects.length > 0) {
       for (let i of projects) {
         ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
+        //ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={`(${i.ProjectId}) ${i.ProjectTitle}`} pdes={i.ProjectDescription} />)
       }
       return ar
     }
@@ -330,13 +366,13 @@ class ProjectList extends React.Component {
                 this.props.setScrollPos(0)
 
                 let navTo = ""
-                  if (location.hash.includes("projects")) {
-                    navTo = location.hash.replace("#/projects", "")
-                  }
-                  else {
-                    navTo = location.hash.replace("#/", "#/projects")
-                  }            
-                  location.hash = navTo
+                if (location.hash.includes("projects")) {
+                  navTo = location.hash.replace("#/projects", "")
+                }
+                else {
+                  navTo = location.hash.replace("#/", "#/projects")
+                }
+                location.hash = navTo
               }}
             />
           }
@@ -346,43 +382,75 @@ class ProjectList extends React.Component {
             <Popover
               content={
                 <div>
-                  <p style={{ display: "inline-block", margin: "10px 5px 10px 5px" }}>
-                    Favorites:
-                </p>
-                  <Button
-                    size="sm"
-                    color=""
-                    style={{
-                      padding: "4px 10px 5px 10px",
-                      marginTop: "1px",
-                      marginRight: "-1px",
-                      width: "40px",
-                      backgroundColor: favoritesFilter ? DEAGreen : "grey"
-                    }}
-                    onClick={() => {
-                      this.props.toggleFavorites(!favoritesFilter)
-                      this.setState({ ellipsisMenu: false })
-                    }}
-                  >
-                    On
-                </Button>
-                  <Button
-                    size="sm"
-                    color=""
-                    style={{
-                      padding: "4px 10px 5px 10px",
-                      marginTop: "1px",
-                      marginLeft: "-1px",
-                      width: "40px",
-                      backgroundColor: !favoritesFilter ? DEAGreen : "grey"
-                    }}
-                    onClick={() => {
-                      this.props.toggleFavorites(!favoritesFilter)
-                      this.setState({ ellipsisMenu: false })
-                    }}
-                  >
-                    Off
-                </Button>
+
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p style={{ margin: "10px 5px 10px 5px" }}>
+                            Favorites:
+                          </p>
+                        </td>
+                        <td>
+                          <Button
+                            size="sm"
+                            color=""
+                            style={{
+                              padding: "4px 10px 5px 10px",
+                              marginTop: "1px",
+                              marginRight: "-1px",
+                              marginLeft: 0,
+                              width: "40px",
+                              backgroundColor: favoritesFilter ? DEAGreen : "grey"
+                            }}
+                            onClick={() => {
+                              this.props.toggleFavorites(!favoritesFilter)
+                              this.setState({ ellipsisMenu: false })
+                            }}
+                          >
+                            On
+                          </Button>
+                          <Button
+                            size="sm"
+                            color=""
+                            style={{
+                              padding: "4px 10px 5px 10px",
+                              marginTop: "1px",
+                              marginLeft: "-1px",
+                              width: "40px",
+                              backgroundColor: !favoritesFilter ? DEAGreen : "grey"
+                            }}
+                            onClick={() => {
+                              this.props.toggleFavorites(!favoritesFilter)
+                              this.setState({ ellipsisMenu: false })
+                            }}
+                          >
+                            Off
+                          </Button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p style={{ margin: "10px 5px 10px 5px" }}>
+                            Sort by:
+                          </p>
+                        </td>
+                        <td>
+                          <Select defaultValue={this.state.sortOrder} style={{ width: 160 }}
+                            onChange={(value) => {
+                              this.setState({ sortOrderChanged: true, sortOrder: value })
+                            }}
+                            dropdownMatchSelectWidth={false} >
+                            <Option value="A_A">Alphabetical (ascending)</Option>
+                            <Option value="A_D">Alphabetical (descending)</Option>
+                            <Option value="D_A">Date (ascending)</Option>
+                            <Option value="D_D">Date (descending)</Option>
+                          </Select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
                 </div>
               }
               placement="leftTop"
