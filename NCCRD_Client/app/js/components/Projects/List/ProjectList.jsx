@@ -8,7 +8,7 @@ import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
 
 // AntD
-import { Popover, Select } from 'antd'
+import { Popover, Select, Button as ABtn } from 'antd'
 const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
     resetProjectCounts: () => {
       dispatch({ type: "RESET_PROJECT_COUNTS" })
     },
-    toggleFavorites: async payload => {
+    toggleFavorites: payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
     }
   }
@@ -392,41 +392,42 @@ class ProjectList extends React.Component {
                           </p>
                         </td>
                         <td>
-                          <Button
-                            size="sm"
-                            color=""
+                          <ABtn
+                            size="small"
+                            type="primary"
                             style={{
-                              padding: "4px 10px 5px 10px",
-                              marginTop: "1px",
-                              marginRight: "-1px",
                               marginLeft: 0,
                               width: "40px",
-                              backgroundColor: favoritesFilter ? DEAGreen : "grey"
+                              backgroundColor: favoritesFilter === true ? DEAGreen : "grey",
+                              borderColor: "gainsboro",
+                              color: "black",
+                              fontWeight: 300
                             }}
                             onClick={() => {
-                              this.props.toggleFavorites(!favoritesFilter)
+                              this.props.toggleFavorites(true)
                               this.setState({ ellipsisMenu: false })
                             }}
                           >
                             On
-                          </Button>
-                          <Button
-                            size="sm"
-                            color=""
+                          </ABtn>
+                          <ABtn
+                            size="small"
+                            type="primary"
                             style={{
-                              padding: "4px 10px 5px 10px",
-                              marginTop: "1px",
-                              marginLeft: "-1px",
+                              marginLeft: -1,
                               width: "40px",
-                              backgroundColor: !favoritesFilter ? DEAGreen : "grey"
+                              backgroundColor: favoritesFilter === false ? DEAGreen : "grey",
+                              borderColor: "gainsboro",
+                              color: "black",
+                              fontWeight: 300
                             }}
                             onClick={() => {
-                              this.props.toggleFavorites(!favoritesFilter)
+                              this.props.toggleFavorites(false)
                               this.setState({ ellipsisMenu: false })
                             }}
                           >
                             Off
-                          </Button>
+                          </ABtn>
                         </td>
                       </tr>
                       <tr>
@@ -438,7 +439,7 @@ class ProjectList extends React.Component {
                         <td>
                           <Select defaultValue={this.state.sortOrder} style={{ width: 160 }}
                             onChange={(value) => {
-                              this.setState({ sortOrderChanged: true, sortOrder: value })
+                              this.setState({ sortOrderChanged: true, sortOrder: value, ellipsisMenu: false })
                             }}
                             dropdownMatchSelectWidth={false} >
                             <Option value="A_A">Alphabetical (ascending)</Option>
