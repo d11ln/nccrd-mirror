@@ -387,7 +387,7 @@ class ProjectList extends React.Component {
                     <tbody>
                       <tr>
                         <td>
-                          <p style={{ margin: "10px 5px 10px 5px" }}>
+                          <p style={{ margin: "10px 15px 10px 5px" }}>
                             Favorites:
                           </p>
                         </td>
@@ -399,7 +399,8 @@ class ProjectList extends React.Component {
                               marginLeft: 0,
                               width: "40px",
                               backgroundColor: favoritesFilter === true ? DEAGreen : "grey",
-                              borderColor: "gainsboro",
+                              border: "none",
+                              borderRadius: 0,
                               color: "black",
                               fontWeight: 300
                             }}
@@ -417,7 +418,8 @@ class ProjectList extends React.Component {
                               marginLeft: -1,
                               width: "40px",
                               backgroundColor: favoritesFilter === false ? DEAGreen : "grey",
-                              borderColor: "gainsboro",
+                              border: "none",
+                              borderRadius: 0,
                               color: "black",
                               fontWeight: 300
                             }}
