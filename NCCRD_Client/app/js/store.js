@@ -104,6 +104,7 @@ const store = createStore(
             typologyFilter: 0,
             regionFilter: 0,
             sectorFilter: 0,
+            hazardFilter: 0,
             polygonFilter: "",
             favoritesFilter: false
         },

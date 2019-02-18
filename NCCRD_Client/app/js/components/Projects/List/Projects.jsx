@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreen } from '../../../config/colours.js'
+import HazardFilter from '../Filters/HazardFilter.jsx';
 
 const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
@@ -97,22 +98,20 @@ class Projects extends React.Component {
           this.props.showListFilterOptions === true &&
           <div>
             <Row>
-              <Col md="3">
+              <Col md="2">
                 <TitleFilter />
               </Col>
 
-                <StatusFilter />
-
-                <TypologyFilter />
-
-                <RegionFilters />
-
-                <SectorFilters />
+              <RegionFilters />
+              <SectorFilters />
+              <HazardFilter />
+              <StatusFilter />
+              <TypologyFilter />
 
             </Row>
 
             <ProjectFilters />
-            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />            
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
           </div>
         }
 
