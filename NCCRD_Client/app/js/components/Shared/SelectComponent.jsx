@@ -117,17 +117,17 @@ class SelectComponent extends React.Component {
       //Implement state flow control
       if (selectedValue > 0) {
         let dataItem = data.filter(x => x[Object.keys(x)[0]] === selectedValue)[0]
-        if(dataItem.NextStates){
+        if (dataItem.NextStates) {
           let nextStates = dataItem.NextStates.split(",").map(x => parseInt(x))
-    
-          if(nextStates && nextStates.length > 0){
+
+          if (nextStates && nextStates.length > 0) {
             procData = procData.filter(x => nextStates.includes(x.refId))
           }
-        }   
+        }
       }
-      
+
       //Allow editing
-      if (allowEdit === true) {
+      if (allowEdit === true && !this.getDisabledState()) {
 
         //Insert "[Edit list values...]" entry
         if (procData.filter(x => x.value === "[Edit list values...]").length === 0) {
@@ -162,46 +162,48 @@ class SelectComponent extends React.Component {
 
   onSelect(value) {
 
-    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-    let selectedValue = 0
+    if (!this.getDisabledState()) {
 
-    if (value !== null) {
-      if (value === '[Edit list values...]') {
-        selectedValue = -1
-      }
-      else {
+      let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
+      let selectedValue = 0
 
-        let dataItem = data.filter(x => x.Value === value)[0]
+      if (value !== null) {
+        if (value === '[Edit list values...]') {
+          selectedValue = -1
+        }
+        else {
 
-        if (typeof dataItem !== 'undefined' && dataItem !== null) {
-          selectedValue = parseInt(dataItem[Object.keys(dataItem)[0]])
+          let dataItem = data.filter(x => x.Value === value)[0]
+
+          if (typeof dataItem !== 'undefined' && dataItem !== null) {
+            selectedValue = parseInt(dataItem[Object.keys(dataItem)[0]])
+          }
         }
       }
-    }
 
-    if (selectedValue === -1) {
-      //Setup and Show EditListModal
-      if (typeof type === 'undefined') {
-        type = "std"
+      if (selectedValue === -1) {
+        //Setup and Show EditListModal
+        if (typeof type === 'undefined') {
+          type = "std"
+        }
+        if (typeof dependencies === 'undefined') {
+          dependencies = []
+        }
+
+        setEditList({
+          show: true, data: data, dispatch: dispatch, persist: persist, type: type,
+          dependencies: dependencies, newItemTemplate: newItemTemplate
+        })
       }
-      if (typeof dependencies === 'undefined') {
-        dependencies = []
+      else {
+        //Dispatch to store
+        if (typeof setSelectedValueKey !== 'undefined') {
+          setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        }
       }
 
-      setEditList({
-        show: true, data: data, dispatch: dispatch, persist: persist, type: type,
-        dependencies: dependencies, newItemTemplate: newItemTemplate
-      })
+      allowChange = false
     }
-    else {
-      //Dispatch to store
-      if (typeof setSelectedValueKey !== 'undefined') {
-        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
-      }
-    }
-
-    allowChange = false
-
   }
 
   getDisabledState() {
@@ -221,7 +223,7 @@ class SelectComponent extends React.Component {
 
   render() {
 
-    let { col, label, id, selectedValue, data, style, labelStyle, allowClear } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle, allowClear, matchWidth } = this.props
     let uiconf = UILookup(id, label)
     let displayValue = "Select..."
 
@@ -240,8 +242,12 @@ class SelectComponent extends React.Component {
       labelStyle = {}
     }
 
-    if(!allowClear){
+    if (!allowClear) {
       allowClear = false
+    }
+
+    if (!matchWidth) {
+      matchWidth = false
     }
 
     return (
@@ -258,11 +264,11 @@ class SelectComponent extends React.Component {
 
         <Select
           style={{ width: "100%", ...style }}
-          dropdownMatchSelectWidth={false}
+          dropdownMatchSelectWidth={matchWidth}
           dropdownStyle={{ width: 200 }}
           onChange={this.onSelect}
           value={displayValue}
-          disabled={this.getDisabledState()}
+          // disabled={this.getDisabledState()}
           allowClear={allowClear}
         >
           {this.selectOptions()}

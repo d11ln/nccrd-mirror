@@ -73,6 +73,7 @@ class TypologyFilter extends React.Component {
           marginRight: "0px",
           marginBottom: "15px"
         }}
+        matchWidth={true}
       />
     )
   }

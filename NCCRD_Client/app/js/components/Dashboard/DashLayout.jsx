@@ -14,6 +14,7 @@ import DashGraph3Preview from "./DashGraph3Preview.jsx"
 import DashGraph4Preview from "./DashGraph4Preview.jsx"
 import { DEAGreen } from '../../config/colours.js'
 import MapViewCore from '../Map/MapViewCore.jsx'
+import HazardFilter from '../Projects/Filters/HazardFilter.jsx';
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -113,10 +114,11 @@ class DashLayout extends React.Component {
                 <TitleFilter />
               </Col>
 
-              <StatusFilter />
-              <TypologyFilter />
               <RegionFilters />
               <SectorFilters />
+              <HazardFilter />
+              <StatusFilter />
+              <TypologyFilter />
 
             </Row>
           </Col>

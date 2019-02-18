@@ -3,11 +3,6 @@ import { Button, Collapse, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import { DEAGreen } from '../../../config/colours.js'
 
-//Filters
-import GeneralFilters from './GeneralFilters.jsx';
-import RegionFilters from './RegionFilters.jsx';
-import SectorFilters from './SectorFilters.jsx';
-
 const mapStateToProps = (state, props) => {
   let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter } } = state
   let { lookupData: { projectStatus, typology, sector, region } } = state

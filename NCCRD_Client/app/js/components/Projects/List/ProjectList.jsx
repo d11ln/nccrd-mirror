@@ -17,13 +17,17 @@ const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let { projectData: { projects, start, end, listScrollPos } } = state
-  let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter } } = state
+  let { filterData: {
+    titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter,
+    hazardFilter
+  } } = state
   let user = state.oidc.user
   let { globalData: { loading, daoid, showListExpandCollapse, showFavoritesOption } } = state
   let { lookupData: { typology } } = state
   return {
     projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-    listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption
+    listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption,
+    hazardFilter
   }
 }
 
@@ -79,6 +83,7 @@ class ProjectList extends React.Component {
       typologyFilter: 0,
       regionFilter: 0,
       sectorFilter: 0,
+      hazardFilter: 0,
       polygonFilter: "",
       favoritesFilter: false,
       start: 0,
@@ -111,12 +116,15 @@ class ProjectList extends React.Component {
     let pStart = this.props.start
     let pEnd = this.props.end
     let pDAOID = this.props.daoid
+    let pHazardFilter = this.props.hazardFilter
+
     let {
       titleFilter,
       statusFilter,
       typologyFilter,
       regionFilter,
       sectorFilter,
+      hazardFilter,
       polygonFilter,
       start,
       end,
@@ -129,7 +137,8 @@ class ProjectList extends React.Component {
     let filtersChanged = false
     if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
       pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
-      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid || sortOrderChanged === true) {
+      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid || sortOrderChanged === true || 
+      pHazardFilter !== hazardFilter) {
 
       filtersChanged = true
     }
@@ -155,7 +164,7 @@ class ProjectList extends React.Component {
 
   async getProjectList(resetCounts) {
 
-    let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
+    let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, hazardFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
       clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user, typology, daoid } = this.props
 
@@ -171,6 +180,7 @@ class ProjectList extends React.Component {
       typologyFilter: typologyFilter,
       regionFilter: regionFilter,
       sectorFilter: sectorFilter,
+      hazardFilter: hazardFilter,
       polygonFilter: polygonFilter,
       favoritesFilter: favoritesFilter,
       start: start,
@@ -252,6 +262,11 @@ class ProjectList extends React.Component {
       //Sector//
       if (sectorFilter != 0) {
         filters.sector = sectorFilter
+      }
+      
+      //Hazard//
+      if (hazardFilter != 0) {
+        filters.hazard = hazardFilter
       }
 
       //DAO Goal Filter//
