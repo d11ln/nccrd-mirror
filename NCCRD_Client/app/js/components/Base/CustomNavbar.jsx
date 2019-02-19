@@ -1,9 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input, Fa } from 'mdbreact'
-import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
+import { 
+  Navbar, 
+  NavItem, 
+  NavbarNav, 
+  NavbarToggler, 
+  Collapse,  
+  NavLink,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle 
+} from 'mdbreact'
+
 import userManager from '../Authentication/userManager'
-import { ssoBaseURL } from '../../config/serviceURLs.js'
+import { ssoBaseURL, ccisSiteBaseURL, ndmcBaseURL } from '../../config/serviceURLs.js'
 import { DEAGreen } from '../../config/colours.js'
 import { data as NavData } from '../../../data/sideNavConfig'
 
@@ -127,7 +139,55 @@ class CustomNavbar extends React.Component {
               </Button>
             }
 
-          </NavbarNav>
+            {/* Monitoring */}
+            <NavItem>
+                <Dropdown>
+                  <DropdownToggle nav caret style={{ color: "black" }}><b>Monitoring and Evaluation</b></DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header style={{ marginLeft: "-16px", fontSize:"16px", color: "black" }}>
+                      <b>
+                        Climate Change Adaptation&nbsp;
+                        <br className="d-block d-md-none" />
+                        Monitoring and Evaluation
+                      </b>
+                    </DropdownItem>
+                    <DropdownItem divider />
+                    {/* <DropdownItem header style={{ marginLeft: "-16px", fontWeight: "400", fontSize: "16px", color: "black" }}>
+                      Impacts:
+                    </DropdownItem> */}
+                    <DropdownItem href={ ccisSiteBaseURL } style={{ marginLeft: "7px" }}>
+                      <b style={{ color: "grey" }}>View Information</b>
+                    </DropdownItem>
+                    <DropdownItem href={ ccisSiteBaseURL + '/#/ame/contribute' }  style={{ marginLeft: "7px" }}>
+                      <b style={{ color: "grey" }}>Submit evaluation on Progress</b>
+                    </DropdownItem>                   
+                  </DropdownMenu>
+                </Dropdown>
+              </NavItem>  
+
+
+
+          {/* Hazards */}
+          <NavItem>
+            <Dropdown>
+              <DropdownToggle nav caret style={{ color: "black" }}><b>Hazardous Events </b></DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem header style={{ marginLeft: "-16px", fontSize:"16px", color: "black" }}>
+                  <b>
+                    National Hazardous Events
+                  </b>
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem href={ ndmcBaseURL } style={{ marginLeft: "7px" }}>
+                  <b style={{ color: "grey" }}>National Hazardous Events Database</b>
+                </DropdownItem>
+                <DropdownItem href={ ndmcBaseURL }  style={{ marginLeft: "7px" }}>
+                  <b style={{ color: "grey" }}>Submit Hazardous Event</b>
+                </DropdownItem>                   
+              </DropdownMenu>
+            </Dropdown>
+          </NavItem>  
+        </NavbarNav>
 
           {/* RIGHT */}
           {
@@ -141,7 +201,7 @@ class CustomNavbar extends React.Component {
                   <tbody>
                     <tr style={{ height: "40px" }}>
                       <td valign="middle">
-                        <div style={{ marginRight: "7px", color: "grey" }} >
+                        <div style={{ marginRight: "7px", color: DEAGreen }} >
                           <Fa size="2x" icon="user-circle-o" />
                         </div>
                       </td>
