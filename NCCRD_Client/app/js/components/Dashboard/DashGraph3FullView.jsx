@@ -13,7 +13,8 @@ const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, sectorFilter, regionFilter, typologyFilter } } = state
   let { chartData: { chart3 } } = state
   let { projectData: { filteredProjectIDs } } = state
-  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3, filteredProjectIDs }
+  let { lookupData: { hazards } } = state
+  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3, filteredProjectIDs, hazards }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -23,6 +24,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadProjectIDList: payload => {
       dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
+    },
+    loadHazards: payload => {
+      dispatch({ type: "LOAD_HAZARDS", payload })
     }
   }
 }
@@ -39,10 +43,6 @@ class DashGraph3FullView extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      hazards: []
-    }
 
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
     this.getPercent = this.getPercent.bind(this)
@@ -102,23 +102,28 @@ class DashGraph3FullView extends React.Component {
 
   async getHazards() {
 
-    //Get Hazards list/details
-    try {
+    let { hazards, loadHazards } = this.props
 
-      let res = await fetch(vmsBaseURL + "hazards/flat")
+    if (hazards.length === 0) {
 
-      //Get response body
-      let resBody = await res.json()
+      //Get Hazards list/details
+      try {
 
-      if (res.ok) {
-        this.setState({ hazards: resBody.items })
+        let res = await fetch(vmsBaseURL + "hazards/flat")
+
+        //Get response body
+        let resBody = await res.json()
+
+        if (res.ok && resBody && resBody.items) {
+          loadHazards(resBody.items)
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+
+      } catch (ex) {
+        console.error(ex)
       }
-      else {
-        throw new Error(resBody.error.message)
-      }
-
-    } catch (ex) {
-      console.error(ex)
     }
   }
 
@@ -217,9 +222,9 @@ class DashGraph3FullView extends React.Component {
 
         //Get Hazard Name
         let hazName = "Unknown"
-        let searchHaz = hazards.filter(x => x.id == haz.HazardId)
+        let searchHaz = hazards.filter(x => x.Id == haz.HazardId)
         if (searchHaz.length > 0) {
-          hazName = searchHaz[0].value.trim()
+          hazName = searchHaz[0].Text.trim()
         }
 
         //Get relevant hazards
@@ -276,7 +281,7 @@ class DashGraph3FullView extends React.Component {
 
         //Get Hazard color
         let color = "lightgrey"
-        let searchHaz = hazards.filter(h => h.value.trim() === key)
+        let searchHaz = hazards.length > 0 ? hazards.filter(h => h.Text.trim() === key) : []
         if (searchHaz.length > 0) {
           color = chartColours[index] //searchHaz[0].color
         }
@@ -300,8 +305,7 @@ class DashGraph3FullView extends React.Component {
 
   render() {
 
-    let { hazards } = this.state
-    let { chart3, filteredProjectIDs } = this.props
+    let { chart3, filteredProjectIDs, hazards } = this.props
     let filteredData = chart3.filter(p => filteredProjectIDs.includes(p.Project.ProjectId))
     let transformedData = this.transformData(filteredData, hazards)
 

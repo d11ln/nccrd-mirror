@@ -40,23 +40,25 @@ class SectorFilters extends React.Component {
 
   async componentDidMount() {
 
-    let { loadSectors } = this.props
+    let { loadSectors, sector } = this.props
 
-    //Get data
-    try {
-      let res = await fetch(vmsBaseURL + "Sectors/flat")
+    if (sector.length === 0) {
+      //Get data
+      try {
+        let res = await fetch(vmsBaseURL + "Sectors/flat")
 
-      if (res.ok) {
-        res = await res.json()
+        if (res.ok) {
+          res = await res.json()
 
-        if (res.items && res.items.length > 0) {
-          let data = res.items
-          loadSectors(data)
+          if (res.items && res.items.length > 0) {
+            let data = res.items
+            loadSectors(data)
+          }
         }
       }
-    }
-    catch (ex) {
-      console.error(ex)
+      catch (ex) {
+        console.error(ex)
+      }
     }
   }
 

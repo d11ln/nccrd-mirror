@@ -38,23 +38,25 @@ class HazardFilters extends React.Component {
 
   async componentDidMount() {
 
-    let { loadHazards } = this.props
+    let { loadHazards, hazards } = this.props
 
-    //Get data
-    try {
-      let res = await fetch(vmsBaseURL + "Hazards/flat")
+    if (hazards.length === 0) {
+      //Get data
+      try {
+        let res = await fetch(vmsBaseURL + "Hazards/flat")
 
-      if (res.ok) {
-        res = await res.json()
+        if (res.ok) {
+          res = await res.json()
 
-        if (res.items && res.items.length > 0) {
-          let data = res.items
-          loadHazards(data)
+          if (res.items && res.items.length > 0) {
+            let data = res.items
+            loadHazards(data)
+          }
         }
       }
-    }
-    catch (ex) {
-      console.error(ex)
+      catch (ex) {
+        console.error(ex)
+      }
     }
   }
 

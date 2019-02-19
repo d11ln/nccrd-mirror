@@ -40,27 +40,27 @@ class RegionFilters extends React.Component {
 
   async componentDidMount() {
 
-    //Load data
-    let { loadRegions } = this.props
+    let { loadRegions, region } = this.props
 
-    //Get data
-    try {
-      let res = await fetch(vmsBaseURL + "Regions/flat")
+    if (region.length === 0) {
+      //Get data
+      try {
+        let res = await fetch(vmsBaseURL + "Regions/flat")
 
-      if (res.ok) {
-        res = await res.json()
+        if (res.ok) {
+          res = await res.json()
 
-        if (res.items && res.items.length > 0) {
-          let data = res.items
-          loadRegions(data)
+          if (res.items && res.items.length > 0) {
+            let data = res.items
+            loadRegions(data)
+          }
         }
       }
-    }
-    catch (ex) {
-      console.error(ex)
+      catch (ex) {
+        console.error(ex)
+      }
     }
   }
-
 
   render() {
 
