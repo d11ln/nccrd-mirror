@@ -95,6 +95,7 @@ const store = createStore(
         },
 
         filterData: {
+            filtersChanged: false,
             titleFilter: "",
             titleFilterInternal: "",
             statusFilter: 0,

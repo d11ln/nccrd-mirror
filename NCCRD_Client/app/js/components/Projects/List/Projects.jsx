@@ -64,7 +64,6 @@ class Projects extends React.Component {
 
   componentDidMount() {
     this.props.setProjectsFullView(true)
-    this.props.setLoading(true)
     window.addEventListener("scroll", this.handleScroll);
     this.props.updateNav(location.hash)
   }
@@ -79,7 +78,6 @@ class Projects extends React.Component {
 
   render() {
 
-    let { user } = this.props
     let { showBackToTop } = this.state
 
     return (
