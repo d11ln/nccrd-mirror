@@ -12,13 +12,21 @@ const _gf = require('../../globalFunctions')
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, sectorFilter, regionFilter, typologyFilter } } = state
   let { chartData: { chart3 } } = state
-  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3 }
+  let { projectData: { filteredProjectIDs } } = state
+  let { lookupData: { hazards } } = state
+  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3, filteredProjectIDs, hazards }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setChartData: payload => {
       dispatch({ type: "SET_CHART_3", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
+    },
+    loadHazards: payload => {
+      dispatch({ type: "LOAD_HAZARDS", payload })
     }
   }
 }
@@ -35,11 +43,6 @@ class DashGraph3FullView extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      hazards: [],
-      filterIDs: []
-    }
 
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
     this.getPercent = this.getPercent.bind(this)
@@ -58,7 +61,6 @@ class DashGraph3FullView extends React.Component {
     this.getHazards()
     this.getFilteredProjectIDs()
   }
-
 
   componentDidUpdate() {
     this.getFilteredProjectIDs()
@@ -100,82 +102,85 @@ class DashGraph3FullView extends React.Component {
 
   async getHazards() {
 
-    //Get Hazards list/details
-    try {
+    let { hazards, loadHazards } = this.props
 
-      let res = await fetch(vmsBaseURL + "hazards/flat")
+    if (hazards.length === 0) {
 
-      //Get response body
-      let resBody = await res.json()
+      //Get Hazards list/details
+      try {
 
-      if (res.ok) {
-        this.setState({ hazards: resBody.items })
+        let res = await fetch(vmsBaseURL + "hazards/flat")
+
+        //Get response body
+        let resBody = await res.json()
+
+        if (res.ok && resBody && resBody.items) {
+          loadHazards(resBody.items)
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+
+      } catch (ex) {
+        console.error(ex)
       }
-      else {
-        throw new Error(resBody.error.message)
-      }
-
-    } catch (ex) {
-      console.error(ex)
     }
   }
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, regionFilter, sectorFilter, typologyFilter } = this.props
+    let { statusFilter, regionFilter, sectorFilter, typologyFilter, filteredProjectIDs, loadProjectIDList } = this.props
     let filters = {}
 
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
+    if (filteredProjectIDs.length === 0) {
 
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
+      //ADD FILTERS//
+      //Status//
+      if (statusFilter !== 0) {
+        filters.status = statusFilter
+      }
 
-    //Sector//
-    if (sectorFilter != 0) {
-      filters.sector = sectorFilter
-    }
+      //Region//
+      if (regionFilter != 0) {
+        filters.region = regionFilter
+      }
 
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
+      //Sector//
+      if (sectorFilter != 0) {
+        filters.sector = sectorFilter
+      }
 
-    //GET PROJECTS FILTERED//
-    try {
+      //Typology//
+      if (typologyFilter !== 0) {
+        filters.typology = typologyFilter
+      }
 
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
+      //GET PROJECTS FILTERED//
+      try {
+        let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(filters)
+          })
 
-      let resBody = await res.json()
+        let resBody = await res.json()
 
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok) {
+          //Process resBody
+          loadProjectIDList(resBody.value.map(p => p.ProjectId))
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      }
+      catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   transformData(data, hazards) {
@@ -217,9 +222,9 @@ class DashGraph3FullView extends React.Component {
 
         //Get Hazard Name
         let hazName = "Unknown"
-        let searchHaz = hazards.filter(x => x.id == haz.HazardId)
+        let searchHaz = hazards.filter(x => x.Id == haz.HazardId)
         if (searchHaz.length > 0) {
-          hazName = searchHaz[0].value.trim()
+          hazName = searchHaz[0].Text.trim()
         }
 
         //Get relevant hazards
@@ -276,7 +281,7 @@ class DashGraph3FullView extends React.Component {
 
         //Get Hazard color
         let color = "lightgrey"
-        let searchHaz = hazards.filter(h => h.value.trim() === key)
+        let searchHaz = hazards.length > 0 ? hazards.filter(h => h.Text.trim() === key) : []
         if (searchHaz.length > 0) {
           color = chartColours[index] //searchHaz[0].color
         }
@@ -300,9 +305,8 @@ class DashGraph3FullView extends React.Component {
 
   render() {
 
-    let { hazards, filterIDs } = this.state
-    let { chart3 } = this.props
-    let filteredData = chart3.filter(p => filterIDs.includes(p.Project.ProjectId))
+    let { chart3, filteredProjectIDs, hazards } = this.props
+    let filteredData = chart3.filter(p => filteredProjectIDs.includes(p.Project.ProjectId))
     let transformedData = this.transformData(filteredData, hazards)
 
     return (

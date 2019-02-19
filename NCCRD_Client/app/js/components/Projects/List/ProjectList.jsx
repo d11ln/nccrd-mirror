@@ -2,7 +2,7 @@ import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
 import { apiBaseURL } from "../../../config/serviceURLs.js"
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, Row, Col } from "mdbreact"
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa } from "mdbreact"
 import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
@@ -13,13 +13,12 @@ const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
-const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let { projectData: { projects, start, end, listScrollPos } } = state
   let { filterData: {
     titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter,
-    hazardFilter
+    hazardFilter, filtersChanged
   } } = state
   let user = state.oidc.user
   let { globalData: { loading, daoid, showListExpandCollapse, showFavoritesOption } } = state
@@ -27,7 +26,7 @@ const mapStateToProps = (state, props) => {
   return {
     projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
     listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption,
-    hazardFilter
+    hazardFilter, filtersChanged
   }
 }
 
@@ -38,6 +37,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadProjects: payload => {
       dispatch({ type: "LOAD_PROJECTS", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
     },
     setLoading: payload => {
       dispatch({ type: "SET_LOADING", payload })
@@ -65,6 +67,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     toggleFavorites: payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
+    },
+    setFiltersChanged: payload => {
+      dispatch({ type: "SET_FILTERS_CHANGED", payload })
     }
   }
 }
@@ -78,21 +83,12 @@ class ProjectList extends React.Component {
 
     //Set initial state
     this.state = {
-      titleFilter: "",
-      statusFilter: 0,
-      typologyFilter: 0,
-      regionFilter: 0,
-      sectorFilter: 0,
-      hazardFilter: 0,
-      polygonFilter: "",
-      favoritesFilter: false,
       start: 0,
       end: 25,
       messageModal: false,
       title: "",
       message: "",
       ellipsisMenu: false,
-      daoid: null,
       sortOrder: "D_D",
       sortOrderChanged: false
     }
@@ -100,46 +96,22 @@ class ProjectList extends React.Component {
   }
 
   async componentDidMount() {
-    this.getProjectList()
+
+    if (this.props.projects.length === 0) {
+      this.getProjectList()
+    }
+
     window.scrollTo(0, this.props.listScrollPos);
   }
 
   componentDidUpdate() {
 
-    let pTitleFilter = this.props.titleFilter
-    let pStatusFilter = this.props.statusFilter
-    let pTypologyFilter = this.props.typologyFilter
-    let pRegionFilter = this.props.regionFilter
-    let pSectorFilter = this.props.sectorFilter
-    let pPolygonFilter = this.props.polygonFilter
-    let pfavoritesFilter = this.props.favoritesFilter
+    let { filtersChanged } = this.props
+    let { sortOrderChanged, start, end } = this.state
     let pStart = this.props.start
     let pEnd = this.props.end
-    let pDAOID = this.props.daoid
-    let pHazardFilter = this.props.hazardFilter
 
-    let {
-      titleFilter,
-      statusFilter,
-      typologyFilter,
-      regionFilter,
-      sectorFilter,
-      hazardFilter,
-      polygonFilter,
-      start,
-      end,
-      favoritesFilter,
-      daoid,
-      sortOrderChanged
-    } = this.state
-
-    //If any filters changed...refetch projects
-    let filtersChanged = false
-    if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-      pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
-      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid || sortOrderChanged === true || 
-      pHazardFilter !== hazardFilter) {
-
+    if(sortOrderChanged === true){
       filtersChanged = true
     }
 
@@ -149,7 +121,7 @@ class ProjectList extends React.Component {
       nextBatchNeeded = true
     }
 
-    if (filtersChanged === true || nextBatchNeeded === true) {
+    if (filtersChanged === true || nextBatchNeeded === true) {      
       this.getProjectList(filtersChanged)
     }
   }
@@ -162,33 +134,26 @@ class ProjectList extends React.Component {
     })
   }
 
-  async getProjectList(resetCounts) {
+  async getProjectList(filtersChanged) {
 
     let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, hazardFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
-      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user, typology, daoid } = this.props
+      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, daoid, loadProjectIDList, 
+      setFiltersChanged } = this.props
 
-    if (resetCounts === true) {
+    if (filtersChanged === true) {
       start = 0
       end = 25
       resetProjectCounts()
     }
 
     this.setState({
-      titleFilter: titleFilter,
-      statusFilter: statusFilter,
-      typologyFilter: typologyFilter,
-      regionFilter: regionFilter,
-      sectorFilter: sectorFilter,
-      hazardFilter: hazardFilter,
-      polygonFilter: polygonFilter,
-      favoritesFilter: favoritesFilter,
       start: start,
       end: end,
-      daoid: daoid,
       sortOrderChanged: false
     })
 
+    setFiltersChanged(false)
     setLoading(true)
 
     //Clear details data
@@ -263,7 +228,7 @@ class ProjectList extends React.Component {
       if (sectorFilter != 0) {
         filters.sector = sectorFilter
       }
-      
+
       //Hazard//
       if (hazardFilter != 0) {
         filters.hazard = hazardFilter
@@ -274,31 +239,60 @@ class ProjectList extends React.Component {
         filters.daoid = daoid
       }
 
-      //GET PROJECTS FILTERED//
-      try {
+      //Fetch projects
+      this.fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize)
+      this.fetchProjectsAll(filters, setLoading, loadProjectIDList)
+    }
+  }
 
-        var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+  async fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize) {
+    //GET PROJECTS FILTERED [BATCH]//
+    try {
 
-        //Pagination and ordering
-        oHandler
-          .skip(skip)
-          .top(batchSize)
-        // .orderBy(this.getProjectSort())
+      var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
 
-        this.setProjectSort(oHandler);
+      //Pagination and ordering
+      oHandler
+        .skip(skip)
+        .top(batchSize)
+      // .orderBy(this.getProjectSort())
 
-        //Select
-        oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+      this.setProjectSort(oHandler);
 
-        let res = await oHandler.post(filters).save()
-        setLoading(false)
-        loadProjects(res.data)
+      //Select
+      oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+
+      let res = await oHandler.post(filters).save()
+      setLoading(false)
+      loadProjects(res.data)
+    }
+    catch (ex) {
+      console.error("error", ex)
+      setLoading(false)
+      this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+    }
+  }
+
+  async fetchProjectsAll(filters, setLoading, loadProjectIDList) {
+    //GET PROJECTS FILTERED [ALL]//
+    try {
+
+      var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+
+      //Select
+      oHandler.select("ProjectId")
+
+      let res = await oHandler.post(filters).save()
+      setLoading(false)
+
+      if (res.data) {
+        loadProjectIDList(res.data.map(d => d.ProjectId))
       }
-      catch (ex) {
-        console.error("error", ex)
-        setLoading(false)
-        this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-      }
+    }
+    catch (ex) {
+      console.error("error", ex)
+      setLoading(false)
+      this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
     }
   }
 

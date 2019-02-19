@@ -579,7 +579,7 @@ class ProjectDetails extends React.Component {
 
   navBack() {
 
-    this.props.setLoading(true)
+    // this.props.setLoading(true)
 
     let navTo = location.hash
     if (location.hash.includes("projects/add")) {

@@ -26,7 +26,7 @@ export default function FilterReducer(state = {}, action) {
   switch (type) {
 
     case "LOAD_TITLE_FILTER": {
-      return { ...state, titleFilterInternal: payload, titleFilter: payload }
+      return { ...state, titleFilterInternal: payload, titleFilter: payload, filtersChanged: true }
     }
 
     case "LOAD_TITLE_FILTER_INTERNAL": {
@@ -34,33 +34,32 @@ export default function FilterReducer(state = {}, action) {
     }
 
     case "LOAD_STATUS_FILTER": {
-      return { ...state, statusFilter: payload }
+      return { ...state, statusFilter: payload, filtersChanged: true }
     }
 
     case "LOAD_TYPOLOGY_FILTER": {
-      return { ...state, typologyFilter: payload }
+      return { ...state, typologyFilter: payload, filtersChanged: true }
     }
 
     case "LOAD_REGION_FILTER": {
-      return { ...state, regionFilter: payload }
+      return { ...state, regionFilter: payload, filtersChanged: true }
     }
 
     case "LOAD_SECTOR_FILTER": {
-      return { ...state, sectorFilter: payload }
+      return { ...state, sectorFilter: payload, filtersChanged: true }
     }
 
     case "LOAD_HAZARD_FILTER": {
-      return { ...state, hazardFilter: payload }
+      return { ...state, hazardFilter: payload, filtersChanged: true }
     }
 
     case "LOAD_POLYGON_FILTER": {
-      return { ...state, polygonFilter: payload }
+      return { ...state, polygonFilter: payload, filtersChanged: true }
     }
 
     case "TOGGLE_FAVS_FILTER": {
-      return { ...state, favoritesFilter: payload }
+      return { ...state, favoritesFilter: payload, filtersChanged: true }
     }
-
 
     case "CLEAR_FILTERS": {
       return {
@@ -72,6 +71,10 @@ export default function FilterReducer(state = {}, action) {
         sectorFilter: 0,
         polygonFilter: ""
       }
+    }
+
+    case 'SET_FILTERS_CHANGED': {
+      return { ...state, filtersChanged: payload }
     }
 
     default: {

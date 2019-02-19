@@ -101,6 +101,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
   }
 }
