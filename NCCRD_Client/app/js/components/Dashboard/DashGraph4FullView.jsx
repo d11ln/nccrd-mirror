@@ -12,13 +12,17 @@ const _gf = require('../../globalFunctions')
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, typologyFilter, regionFilter } } = state
   let { chartData: { chart4 } } = state
-  return { statusFilter, typologyFilter, regionFilter, chart4 }
+  let { projectData: { filteredProjectIDs } } = state
+  return { statusFilter, typologyFilter, regionFilter, chart4, filteredProjectIDs }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setChartData: payload => {
       dispatch({ type: "SET_CHART_4", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
     }
   }
 }
@@ -37,8 +41,7 @@ class DashGraph4FullView extends React.Component {
     super(props);
 
     this.state = {
-      sectors: [],
-      filterIDs: []
+      sectors: []
     }
 
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
@@ -127,55 +130,53 @@ class DashGraph4FullView extends React.Component {
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, typologyFilter, regionFilter } = this.props
+    let { statusFilter, typologyFilter, regionFilter, filteredProjectIDs, loadProjectIDList } = this.props
     let filters = {}
 
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
+    if (filteredProjectIDs.length === 0) {
 
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
+      //ADD FILTERS//
+      //Status//
+      if (statusFilter !== 0) {
+        filters.status = statusFilter
+      }
 
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
+      //Typology//
+      if (typologyFilter !== 0) {
+        filters.typology = typologyFilter
+      }
 
-    //GET PROJECTS FILTERED//
-    try {
+      //Region//
+      if (regionFilter != 0) {
+        filters.region = regionFilter
+      }
 
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
+      //GET PROJECTS FILTERED//
+      try {
+        let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(filters)
+          })
 
-      let resBody = await res.json()
+        let resBody = await res.json()
 
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok) {
+          //Process resBody
+          loadProjectIDList(resBody.value.map(p => p.ProjectId))
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      }
+      catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   transformData(data, sectors) {
@@ -324,8 +325,8 @@ class DashGraph4FullView extends React.Component {
 
   render() {
 
-    let { sectors, filterIDs } = this.state
-    let { chart4 } = this.props
+    let { sectors } = this.state
+    let { chart4, filteredProjectIDs } = this.props
 
     //Remove projects with no sectors
     let tData = []
@@ -336,7 +337,7 @@ class DashGraph4FullView extends React.Component {
     })
     chart4 = tData
 
-    let filteredData = chart4.filter(p => filterIDs.includes(p.ProjectId))
+    let filteredData = chart4.filter(p => filteredProjectIDs.includes(p.ProjectId))
     let transformedData = this.transformData(filteredData, sectors)
 
     return (

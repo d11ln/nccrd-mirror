@@ -53,6 +53,10 @@ export default function ProjectsReducer(state = {}, action) {
       }
     }
 
+    case "LOAD_PROJECT_ID_LIST": {
+      return { ...state, filteredProjectIDs: payload }
+    }
+
     case "LOAD_PROJECT_DETAILS": {
       return { ...state, projectDetails: { ...payload } }
     }

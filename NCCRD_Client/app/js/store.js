@@ -46,6 +46,7 @@ const store = createStore(
         projectData: {
             projects: [],
             projectDetails: {},
+            filteredProjectIDs: [],
             start: 0,
             end: 25,
             listScrollPos: 0
@@ -66,10 +67,6 @@ const store = createStore(
         emissionsData: {
             emissionsData: []
         },
-
-        // researchData: {
-        //     researchDetails: []
-        // },
 
         lookupData: {
             projectTypes: [],

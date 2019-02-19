@@ -39,6 +39,9 @@ const mapDispatchToProps = (dispatch) => {
     loadProjects: payload => {
       dispatch({ type: "LOAD_PROJECTS", payload })
     },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
+    },
     setLoading: payload => {
       dispatch({ type: "SET_LOADING", payload })
     },
@@ -92,7 +95,7 @@ class ProjectList extends React.Component {
       title: "",
       message: "",
       ellipsisMenu: false,
-      daoid: null,
+      daoid: true,
       sortOrder: "D_D",
       sortOrderChanged: false
     }
@@ -100,7 +103,11 @@ class ProjectList extends React.Component {
   }
 
   async componentDidMount() {
-    this.getProjectList()
+
+    if (this.props.projects.length === 0) {
+      this.getProjectList()
+    }
+
     window.scrollTo(0, this.props.listScrollPos);
   }
 
@@ -137,10 +144,21 @@ class ProjectList extends React.Component {
     let filtersChanged = false
     if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
       pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
-      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid || sortOrderChanged === true || 
+      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid || sortOrderChanged === true ||
       pHazardFilter !== hazardFilter) {
 
       filtersChanged = true
+
+      console.log("title", pTitleFilter, titleFilter)
+      console.log("status", pStatusFilter, statusFilter)
+      console.log("typology", pTypologyFilter, typologyFilter)
+      console.log("region", pRegionFilter, regionFilter)
+      console.log("sector", pSectorFilter, sectorFilter)
+      console.log("hazard", pHazardFilter, hazardFilter)
+      console.log("polygon", pPolygonFilter, polygonFilter)
+      console.log("favorites", pfavoritesFilter, favoritesFilter)
+      console.log("daoid", pDAOID, daoid)
+      console.log("sort order", sortOrderChanged)
     }
 
     //If next batch needed
@@ -149,7 +167,7 @@ class ProjectList extends React.Component {
       nextBatchNeeded = true
     }
 
-    if (filtersChanged === true || nextBatchNeeded === true) {
+    if (filtersChanged === true || nextBatchNeeded === true) {      
       this.getProjectList(filtersChanged)
     }
   }
@@ -166,7 +184,7 @@ class ProjectList extends React.Component {
 
     let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, hazardFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
-      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user, typology, daoid } = this.props
+      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, daoid, loadProjectIDList } = this.props
 
     if (resetCounts === true) {
       start = 0
@@ -263,7 +281,7 @@ class ProjectList extends React.Component {
       if (sectorFilter != 0) {
         filters.sector = sectorFilter
       }
-      
+
       //Hazard//
       if (hazardFilter != 0) {
         filters.hazard = hazardFilter
@@ -274,31 +292,60 @@ class ProjectList extends React.Component {
         filters.daoid = daoid
       }
 
-      //GET PROJECTS FILTERED//
-      try {
+      //Fetch projects
+      this.fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize)
+      this.fetchProjectsAll(filters, setLoading, loadProjectIDList)
+    }
+  }
 
-        var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+  async fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize) {
+    //GET PROJECTS FILTERED [BATCH]//
+    try {
 
-        //Pagination and ordering
-        oHandler
-          .skip(skip)
-          .top(batchSize)
-        // .orderBy(this.getProjectSort())
+      var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
 
-        this.setProjectSort(oHandler);
+      //Pagination and ordering
+      oHandler
+        .skip(skip)
+        .top(batchSize)
+      // .orderBy(this.getProjectSort())
 
-        //Select
-        oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+      this.setProjectSort(oHandler);
 
-        let res = await oHandler.post(filters).save()
-        setLoading(false)
-        loadProjects(res.data)
+      //Select
+      oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+
+      let res = await oHandler.post(filters).save()
+      setLoading(false)
+      loadProjects(res.data)
+    }
+    catch (ex) {
+      console.error("error", ex)
+      setLoading(false)
+      this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+    }
+  }
+
+  async fetchProjectsAll(filters, setLoading, loadProjectIDList) {
+    //GET PROJECTS FILTERED [ALL]//
+    try {
+
+      var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+
+      //Select
+      oHandler.select("ProjectId")
+
+      let res = await oHandler.post(filters).save()
+      setLoading(false)
+
+      if (res.data) {
+        loadProjectIDList(res.data.map(d => d.ProjectId))
       }
-      catch (ex) {
-        console.error("error", ex)
-        setLoading(false)
-        this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-      }
+    }
+    catch (ex) {
+      console.error("error", ex)
+      setLoading(false)
+      this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
     }
   }
 
