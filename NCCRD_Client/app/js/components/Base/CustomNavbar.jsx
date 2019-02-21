@@ -14,7 +14,6 @@ import {
   DropdownToggle, 
 } from 'mdbreact'
 import { notification, message } from 'antd'
-
 import userManager from '../Authentication/userManager'
 import { ssoBaseURL, ccisSiteBaseURL, ndmcBaseURL } from '../../config/serviceURLs.js'
 import { DEAGreen } from '../../config/colours.js'
@@ -35,6 +34,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     toggleSideNav: payload => {
       dispatch({ type: "TOGGLE_SIDENAV", payload })

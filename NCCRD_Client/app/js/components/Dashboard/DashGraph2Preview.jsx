@@ -12,7 +12,8 @@ const _gf = require('../../globalFunctions')
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, sectorFilter, regionFilter, typologyFilter } } = state
   let { chartData: { chart2 } } = state
-  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart2 }
+  let { projectData: { filteredProjectIDs } } = state
+  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart2, filteredProjectIDs }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -30,19 +31,10 @@ class DashGraph2Preview extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      filterIDs: []
-    }
   }
 
   componentDidMount() {
     this.getChartData()
-    this.getFilteredProjectIDs()
-  }
-
-  componentDidUpdate() {
-    this.getFilteredProjectIDs()
   }
 
   async getChartData() {
@@ -79,64 +71,6 @@ class DashGraph2Preview extends React.Component {
     }
   }
 
-  async getFilteredProjectIDs() {
-
-    let { statusFilter, regionFilter, sectorFilter, typologyFilter } = this.props
-    let filters = {}
-
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
-
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
-
-    //Sector//
-    if (sectorFilter != 0) {
-      filters.sector = sectorFilter
-    }
-
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
-
-    //GET PROJECTS FILTERED//
-    try {
-
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
-
-      let resBody = await res.json()
-
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
-        }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
-
-    }
-    catch (ex) {
-      console.error(ex)
-    }
-
-  }
-
   transformData(data) {
 
     let tData = []
@@ -164,9 +98,8 @@ class DashGraph2Preview extends React.Component {
 
   render() {
 
-    let { chart2 } = this.props
-    let { filterIDs } = this.state
-    let filteredData = chart2.filter(p => filterIDs.includes(p.Project.ProjectId))
+    let { chart2, filteredProjectIDs } = this.props
+    let filteredData = chart2.filter(p => filteredProjectIDs.includes(p.Project.ProjectId))
     let transformedData = this.transformData(filteredData)
 
     return (

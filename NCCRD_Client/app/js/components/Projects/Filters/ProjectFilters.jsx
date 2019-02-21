@@ -3,11 +3,6 @@ import { Button, Collapse, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import { DEAGreen } from '../../../config/colours.js'
 
-//Filters
-import GeneralFilters from './GeneralFilters.jsx';
-import RegionFilters from './RegionFilters.jsx';
-import SectorFilters from './SectorFilters.jsx';
-
 const mapStateToProps = (state, props) => {
   let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter } } = state
   let { lookupData: { projectStatus, typology, sector, region } } = state
@@ -21,24 +16,31 @@ const mapDispatchToProps = (dispatch) => {
   return {
     clearFilters: payload => {
       dispatch({ type: "CLEAR_FILTERS", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearTitleFilter: () => {
       dispatch({ type: "LOAD_TITLE_FILTER", payload: "" })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearStatusFilter: () => {
       dispatch({ type: "LOAD_STATUS_FILTER", payload: { id: 0, value: 0 } })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearTypologyFilter: () => {
       dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload: { id: 0, value: 0 } })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearRegionFilter: () => {
       dispatch({ type: "LOAD_REGION_FILTER", payload: 0 })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearSectorFilter: () => {
       dispatch({ type: "LOAD_SECTOR_FILTER", payload: 0 })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     toggleFavorites: async payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     }
   }
 }

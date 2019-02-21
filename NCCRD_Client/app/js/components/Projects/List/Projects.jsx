@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreen } from '../../../config/colours.js'
+import HazardFilter from '../Filters/HazardFilter.jsx';
 
 const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
@@ -63,7 +64,6 @@ class Projects extends React.Component {
 
   componentDidMount() {
     this.props.setProjectsFullView(true)
-    this.props.setLoading(true)
     window.addEventListener("scroll", this.handleScroll);
     this.props.updateNav(location.hash)
   }
@@ -78,7 +78,6 @@ class Projects extends React.Component {
 
   render() {
 
-    let { user } = this.props
     let { showBackToTop } = this.state
 
     return (
@@ -97,22 +96,20 @@ class Projects extends React.Component {
           this.props.showListFilterOptions === true &&
           <div>
             <Row>
-              <Col md="3">
+              <Col md="2">
                 <TitleFilter />
               </Col>
 
-                <StatusFilter />
-
-                <TypologyFilter />
-
-                <RegionFilters />
-
-                <SectorFilters />
+              <RegionFilters />
+              <SectorFilters />
+              <HazardFilter />
+              <StatusFilter />
+              <TypologyFilter />
 
             </Row>
 
             <ProjectFilters />
-            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />            
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
           </div>
         }
 

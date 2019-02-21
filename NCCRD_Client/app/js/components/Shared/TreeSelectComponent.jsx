@@ -99,7 +99,7 @@ class TreeSelectComponent extends React.Component {
 
     let { allowEdit } = this.props
 
-    if (allowEdit === true && level === "top") {
+    if (allowEdit === true && level === "top" && !this.getDisabledState()) {
 
       //Insert "[Edit list values...]" entry
       if (data.filter(x => x.value === "[Edit list values...]").length === 0) {
@@ -125,33 +125,36 @@ class TreeSelectComponent extends React.Component {
 
   dependencyTreeSelect(value, label, extra) {
 
-    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-    let selectedValue = 0
+    if (!this.getDisabledState()) {
 
-    if (typeof extra.triggerNode !== 'undefined') {
-      selectedValue = extra.triggerNode.props.eventKey
-    }
+      let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
+      let selectedValue = 0
 
-    if (selectedValue == -1) {
-
-      //Setup and Show EditListModal
-      if (typeof type === 'undefined') {
-        type = "std"
-      }
-      if (typeof dependencies === 'undefined') {
-        dependencies = []
+      if (typeof extra.triggerNode !== 'undefined') {
+        selectedValue = extra.triggerNode.props.eventKey
       }
 
-      setEditList({
-        show: true, data: data, dispatch: dispatch, persist: persist, type: type,
-        dependencies: dependencies, newItemTemplate: newItemTemplate
-      })
-    }
-    else {
+      if (selectedValue == -1) {
 
-      //Dispatch to store
-      if (typeof setSelectedValueKey !== 'undefined') {
-        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        //Setup and Show EditListModal
+        if (typeof type === 'undefined') {
+          type = "std"
+        }
+        if (typeof dependencies === 'undefined') {
+          dependencies = []
+        }
+
+        setEditList({
+          show: true, data: data, dispatch: dispatch, persist: persist, type: type,
+          dependencies: dependencies, newItemTemplate: newItemTemplate
+        })
+      }
+      else {
+
+        //Dispatch to store
+        if (typeof setSelectedValueKey !== 'undefined') {
+          setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        }
       }
     }
   }
@@ -173,7 +176,7 @@ class TreeSelectComponent extends React.Component {
 
   render() {
 
-    let { col, label, id, selectedValue, data, style, labelStyle } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle, matchWidth } = this.props
     let uiconf = UILookup(id, label)
     let treeData = []
     let selVal = []
@@ -184,6 +187,10 @@ class TreeSelectComponent extends React.Component {
 
     if (!labelStyle) {
       labelStyle = {}
+    }
+
+    if (!matchWidth) {
+      matchWidth = false
     }
 
     if (data.length > 0) {
@@ -213,13 +220,13 @@ class TreeSelectComponent extends React.Component {
         </label>
 
         <TreeSelect
-          disabled={this.getDisabledState()}
+          // disabled={this.getDisabledState()}
           showSearch
           searchPlaceholder="Search..."
           style={{ width: "100%", ...style }}
           value={selVal}
-          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto' }}
-          //dropdownMatchSelectWidth={true}
+          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto',  }}
+          dropdownMatchSelectWidth={matchWidth}
           placeholder="Select..."
           allowClear
           onChange={this.dependencyTreeSelect.bind(this)}

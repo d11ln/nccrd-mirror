@@ -12,7 +12,9 @@ const _gf = require('../../globalFunctions')
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, typologyFilter, regionFilter } } = state
   let { chartData: { chart4 } } = state
-  return { statusFilter, typologyFilter, regionFilter, chart4 }
+  let { projectData: { filteredProjectIDs } } = state
+  let { lookupData: { sector } } = state
+  return { statusFilter, typologyFilter, regionFilter, chart4, filteredProjectIDs, sector }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -22,6 +24,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setChartData: payload => {
       dispatch({ type: "SET_CHART_4", payload })
+    },
+    loadSectors: payload => {
+      dispatch({ type: "LOAD_SECTOR", payload })
     }
   }
 }
@@ -39,11 +44,6 @@ class DashGraph4Preview extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      sectors: [],
-      filterIDs: []
-    }
-
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
     this.getPercent = this.getPercent.bind(this)
     this.toPercent = this.toPercent.bind(this)
@@ -52,11 +52,6 @@ class DashGraph4Preview extends React.Component {
   componentDidMount() {
     this.getChartData()
     this.getSectors()
-    this.getFilteredProjectIDs()
-  }
-
-  componentDidUpdate() {
-    this.getFilteredProjectIDs()
   }
 
   async getChartData() {
@@ -101,77 +96,28 @@ class DashGraph4Preview extends React.Component {
 
   async getSectors() {
 
-    //Get Sectors list/details
-    try {
+    let { sector, loadSectors } = this.props
 
-      let res = await fetch(vmsBaseURL + "sectors/flat")
+    if (sector.length === 0) {
+      //Get Sectors list/details
+      try {
 
-      //Get response body
-      let resBody = await res.json()
+        let res = await fetch(vmsBaseURL + "sectors/flat")
 
-      if (res.ok) {
-        this.setState({ sectors: resBody.items })
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        //Get response body
+        let resBody = await res.json()
 
-    } catch (ex) {
-      console.error(ex)
-    }
-  }
-
-  async getFilteredProjectIDs() {
-
-    let { statusFilter, typologyFilter, regionFilter } = this.props
-    let filters = {}
-
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
-
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
-
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
-
-    //GET PROJECTS FILTERED//
-    try {
-
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
-
-      let resBody = await res.json()
-
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok && resBody && resBody.items) {
+          loadSectors(resBody.items)
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      } catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   transformData(data, sectors) {
@@ -231,9 +177,9 @@ class DashGraph4Preview extends React.Component {
 
         //Get Sector Name
         let secName = "Unknown"
-        let searchSec = sectors.filter(x => x.id == sec.SectorId)
+        let searchSec = sectors.length > 0 ? sectors.filter(x => x.Id == sec.SectorId) : []
         if (searchSec.length > 0) {
-          secName = searchSec[0].value.trim()
+          secName = searchSec[0].Text.trim()
         }
 
         //Get relevant Sectors
@@ -294,9 +240,9 @@ class DashGraph4Preview extends React.Component {
     Object.keys(transformedData[0]).filter(k => k !== "Year")
       .forEach(key => {
 
-        //Get Hazard color
+        //Get Sector color
         let color = "lightgrey"
-        let searchSec = sectors.filter(h => h.value.trim() === key)
+        let searchSec = sectors.length > 0 ? sectors.filter(h => h.Text.trim() === key): []
         if (searchSec.length > 0) {
           color = chartColours[index]
         }
@@ -320,8 +266,7 @@ class DashGraph4Preview extends React.Component {
 
   render() {
 
-    let { sectors, filterIDs } = this.state
-    let { chart4 } = this.props
+    let { chart4, filteredProjectIDs, sector } = this.props
 
     //Remove projects with no sectors
     let tData = []
@@ -332,8 +277,8 @@ class DashGraph4Preview extends React.Component {
     })
     chart4 = tData
 
-    let filteredData = chart4.filter(p => filterIDs.includes(p.ProjectId))
-    let transformedData = this.transformData(filteredData, sectors)
+    let filteredData = chart4.filter(p => filteredProjectIDs.includes(p.ProjectId))
+    let transformedData = this.transformData(filteredData, sector)
 
     return (
       <div
@@ -377,13 +322,13 @@ class DashGraph4Preview extends React.Component {
           }}
         >
           {
-            (transformedData.length > 0 && sectors.length > 0) &&
+            (transformedData.length > 0 && sector.length > 0) &&
             <ResponsiveContainer key={"G4Graph"} width="100%" height="100%">
               <AreaChart data={transformedData} stackOffset="expand" >
                 <XAxis hide dataKey="Year" />
                 <YAxis hide tickFormatter={this.toPercent} />
                 <Tooltip content={this.renderTooltipContent} />
-                {this.renderAreas(transformedData, sectors)}
+                {this.renderAreas(transformedData, sector)}
               </AreaChart>
             </ResponsiveContainer>
           }

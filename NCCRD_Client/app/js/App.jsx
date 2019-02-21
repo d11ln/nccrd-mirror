@@ -84,6 +84,9 @@ const mapDispatchToProps = (dispatch) => {
     loadSectorFilter: payload => {
       dispatch({ type: "LOAD_SECTOR_FILTER", payload })
     },
+    loadHazardFilter: payload => {
+      dispatch({ type: "LOAD_HAZARD_FILTER", payload })
+    },
     loadStatusFilter: payload => {
       dispatch({ type: "LOAD_STATUS_FILTER", payload })
     },
@@ -98,6 +101,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
   }
 }
@@ -121,7 +125,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    window.onhashchange = this.saveCurrentURL
     this.processSilentSignIn()
   }
 
@@ -147,6 +150,7 @@ class App extends React.Component {
       filters: {
         region: 0, //number  >>>  region filter
         sector: 0, //number  >>>  sector filter
+        hazard: 0, //number  >>>  hazard filter
         status: 0, //number  >>>  status filter
         title: "", //string  >>>  title filter - partial match logic
         typology: 0, //number  >>>  typology filter
@@ -220,6 +224,11 @@ class App extends React.Component {
           //sector
           if (typeof filters.sector === 'number' && filters.sector > 0) {
             this.props.loadSectorFilter(filters.sector)
+          }
+
+          //hazard
+          if (typeof filters.hazard === 'number' && filters.hazard > 0) {
+            this.props.loadHazardFilter(filters.hazard)
           }
 
           //status
