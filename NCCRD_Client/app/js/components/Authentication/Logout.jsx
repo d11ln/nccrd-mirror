@@ -29,9 +29,12 @@ class Logout extends React.Component {
 
     //Back to last page
     let locHash = "#"
+    let saveUrl = _gf.SaveCurrentUrl()
     let lastUrl = _gf.ReadLastUrl()
     if (!lastUrl.endsWith("logout")) {
       locHash = lastUrl
+    } else if (lastUrl.endsWith("add")) {
+      locHash = "#"
     }
     location = locHash
   }

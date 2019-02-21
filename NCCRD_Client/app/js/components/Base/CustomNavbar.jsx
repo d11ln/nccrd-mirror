@@ -11,16 +11,18 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  DropdownToggle 
+  DropdownToggle, 
 } from 'mdbreact'
-
+import { notification, message } from 'antd'
 import userManager from '../Authentication/userManager'
 import { ssoBaseURL, ccisSiteBaseURL, ndmcBaseURL } from '../../config/serviceURLs.js'
 import { DEAGreen } from '../../config/colours.js'
 import { data as NavData } from '../../../data/sideNavConfig'
+import { destroyFns } from 'antd/lib/modal/Modal';
 
 const _gf = require("../../globalFunctions")
 const queryString = require('query-string')
+
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
@@ -84,7 +86,7 @@ class CustomNavbar extends React.Component {
 
   render() {
 
-    let { user, toggleSideNav, showSideNav, showSideNavButton, showNavbar } = this.props
+    let {  user, toggleSideNav, showSideNav, showSideNavButton, showNavbar } = this.props
 
     return (
       <Navbar
@@ -121,19 +123,26 @@ class CustomNavbar extends React.Component {
             }
 
             {
-              (!location.hash.includes("projects/") && (user && !user.expired)) &&
+              (!location.hash.includes("projects/") /* && (user && !user.expired) */ ) &&
               <Button
                 color="warning"
                 size="sm"
                 style={{ marginLeft: "0px" }}
                 onClick={() => { 
                   let navTo = ""
-                  if (location.hash.includes("projects")) {
-                    navTo = location.hash.replace("#/projects", "#/projects/add")
+                  if (location.hash.includes("projects") && 
+                     (user && !user.expired)) {
+                     navTo = location.hash.replace("#/projects", "#/projects/add")
                   }
-                  else {
+                  else if (user && !user.expired) {
                     navTo = location.hash.replace("#/", "#/projects/add")
-                  }            
+                  } 
+                  else {
+                    notification.warning({
+                      description:'Please login to submit projects.',
+                   
+                    })
+                  }
                   location.hash = navTo
                 }} >
                 Add New Project
