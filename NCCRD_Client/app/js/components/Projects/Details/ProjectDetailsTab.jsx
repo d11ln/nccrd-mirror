@@ -232,9 +232,9 @@ class ProjectDetailsTab extends React.Component {
             dispatch={"LOAD_PROJECT_SUBTYPE"}
             persist="ProjectSubType"
             allowEdit={true}
-            dependencies={[
-              { key: "ProjectTypeId", value: this.props.projectTypes }
-            ]}
+            // dependencies={[
+            //   { key: "ProjectTypeId", value: this.props.projectTypes }
+            // ]}
             newItemTemplate={{
               "ProjectSubTypeId": 0,
               "Value": "",
