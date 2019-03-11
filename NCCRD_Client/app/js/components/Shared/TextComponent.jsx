@@ -74,7 +74,7 @@ class TextComponent extends React.Component {
     label = this.fixNullOrUndefinedValue(label)
 
     return (
-      <div className={col}>
+      <div className={col} style={{ paddingRight: 20 }}>
         {
           (label !== "") &&
           <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px", fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
@@ -86,6 +86,7 @@ class TextComponent extends React.Component {
           value={value.toString()}
           onChange={this.valueChange.bind(this)}
           style={{
+            width: "98.4%",
             height: "21px",
             marginTop: "-15px",
             marginBottom: "-20px",

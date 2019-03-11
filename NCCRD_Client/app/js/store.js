@@ -24,8 +24,9 @@ const store = createStore(
             showListViewOption: true,
             showFavoritesOption: true,
             showListFilterOptions: true,
-            showBackToList: true,
+            showBackToList: true,            
             showDetailsInParent: false,
+            showInputWizard: false,
             projectsFullView: false
         },
 
@@ -91,7 +92,8 @@ const store = createStore(
             researchType: [],
             targetAudience: [],
             hazards: [],
-            researchMaturity: []
+            researchMaturity: [],
+            loaded: false
         },
 
         filterData: {

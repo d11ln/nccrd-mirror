@@ -31,6 +31,7 @@ import DashGraph1FullView from './components/Dashboard/DashGraph1FullView.jsx'
 import DashGraph2FullView from './components/Dashboard/DashGraph2FullView.jsx'
 import DashGraph3FullView from './components/Dashboard/DashGraph3FullView.jsx'
 import DashGraph4FullView from './components/Dashboard/DashGraph4FullView.jsx'
+import InputWizard from './components/Wizard/InputWizard.jsx';
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -38,9 +39,11 @@ const o = require("odata")
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading, showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } } = state
+  let { globalData: {
+    loading, showSideNav, showSideNavButton, showHeader, showNavbar, showFooter, showInputWizard
+  } } = state
   let user = state.oidc.user
-  return { loading, user, showSideNav, showHeader, showNavbar, showFooter, showSideNavButton }
+  return { loading, user, showSideNav, showHeader, showNavbar, showFooter, showSideNavButton, showInputWizard }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -311,7 +314,7 @@ class App extends React.Component {
     let loaderWidth = 300
     let loaderHeight = 165
 
-    let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } = this.props
+    let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter, showInputWizard } = this.props
 
     return (
       <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
@@ -327,6 +330,8 @@ class App extends React.Component {
               showSideNavButton === true &&
               <SideNav data={NavData} isOpen={showSideNav} />
             }
+
+            <InputWizard visible={showInputWizard} />
 
             {
               (showHeader === true || showNavbar !== false) &&
@@ -364,7 +369,7 @@ class App extends React.Component {
                 <div
                   hidden={!this.props.loading}
                   className="card"
-                  style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "99" }}>
+                  style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "absolute", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
 
                   <div className="card-body">
                     <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>

@@ -54,13 +54,14 @@ class TextAreaComponent extends React.Component {
 
     render() {
 
-        let { col, label, editMode, id, value } = this.props
+        let { col, label, editMode, id, value, rows } = this.props
         value = this.fixNullOrUndefinedValue(value)
+        rows = rows ? rows : 1
 
         let uiconf = UILookup(id, label)
 
         return (
-            <div className={col}>
+            <div className={col} style={{ paddingRight: 20 }}>
                 <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
                 <TextareaAutosize
                     readOnly={!editMode}
@@ -72,6 +73,7 @@ class TextAreaComponent extends React.Component {
                         width: "100%"
                     }}
                     value={value}
+                    minRows={rows}
                     onChange={this.valueChange.bind(this)}
                 />
             </div>

@@ -128,6 +128,11 @@ export default function LookupsReducer(state = {}, action) {
       return { ...state, researchMaturity: payload }
     }
 
+    case "SET_LOOKUPS_LOADED": {
+      return { ...state, loaded: payload }
+    }
+
+
     default: {
       return state
     }

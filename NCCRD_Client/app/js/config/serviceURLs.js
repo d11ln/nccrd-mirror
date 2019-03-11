@@ -6,7 +6,6 @@ let _ccisBaseURL = ''
 let _ccisSiteBaseURL = ''
 let _ndmcBaseURL = ''
 let _mapServerBaseURL = ''
-let _ndmcBaseURL = ''
 
 if (CONSTANTS.DEV) {
   _apiBaseURL = 'http://localhost:62553/odata/'

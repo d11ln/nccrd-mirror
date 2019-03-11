@@ -67,6 +67,26 @@ export default function AdaptationsReducer(state = {}, action) {
             return { ...state, adaptationDetails: [...adaptationDetails, newItem] }
         }
 
+        case "REMOVE_ADAPTATION_DETAILS": {
+
+            let { adaptationDetails } = state
+            adaptationDetails.splice(payload, 1)
+
+            return { ...state, adaptationDetails: [...adaptationDetails] }
+        }
+
+        case "SET_ADAPTATION_DETAILS_TITLE": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Title: payload, state: modState }] }
+        }
+
         case "SET_ADAPTATION_DETAILS_DESCR": {
             let { adaptationDetails } = state
 
@@ -77,6 +97,30 @@ export default function AdaptationsReducer(state = {}, action) {
 
             //return updated state
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, Description: payload, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_DETAILS_CONTACT_NAME": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ContactName: payload, state: modState }] }
+        }
+
+        case "SET_ADAPTATION_DETAILS_CONTACT_EMAIL": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ContactEmail: payload, state: modState }] }
         }
 
         case "SET_ADAPTATION_DETAILS_PURPOSE": {
@@ -125,6 +169,30 @@ export default function AdaptationsReducer(state = {}, action) {
 
             //return updated state
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ProjectStatusId: payload, state: modState }] }
+        }
+
+        case "ADD_ADAPTATION_DETAILS_RESEARCH_DETAILS": {
+            let { adaptationDetails } = state
+
+            //Get item and Id
+            let details = extractItemAndId(adaptationDetails, "AdaptationDetailId", id)
+            //Remove item from array
+            adaptationDetails.splice(details.id, 1);
+
+            //Add new research
+            let newResearchDetails = {
+                ResearchDetailId: _gf.getRndInteger(1111111, 9999999),
+                Author: "",
+                PaperLink: "",
+                ResearchTypeId: 0,
+                TargetAudienceId: 0,
+                ProjectId: details.ProjectId,
+                SectorId: null,
+                ResearchMaturityId: null
+            }
+
+            //return updated state
+            return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: newResearchDetails, state: modState }] }
         }
 
         case "SET_ADAPTATION_DETAILS_RESEARCH_DETAILS": {
@@ -213,7 +281,7 @@ export default function AdaptationsReducer(state = {}, action) {
             //return updated state
             return { ...state, adaptationDetails: [...adaptationDetails, { ...details.item, ResearchDetail: researchDetail, state: modState }] }
         }
-        
+
         default: {
             return state
         }
