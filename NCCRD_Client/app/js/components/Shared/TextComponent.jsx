@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
+import { Tooltip } from 'antd';
 
 const _gf = require('../../globalFunctions')
 
@@ -77,7 +78,18 @@ class TextComponent extends React.Component {
       <div className={col} style={{ paddingRight: 20 }}>
         {
           (label !== "") &&
-          <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px", fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
+          <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
+            <label
+              style={{
+                marginBottom: "0px",
+                fontWeight: "bold",
+                color: this.getLabelFontColour(uiconf)
+              }}
+            >
+              {uiconf.label}
+            </label>
+          </Tooltip>
+
         }
         <Input
           size="sm"

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Select } from 'antd'
+import { Tooltip } from 'antd';
 
 const _gf = require('../../globalFunctions')
 
@@ -252,15 +253,16 @@ class SelectComponent extends React.Component {
 
     return (
       <div className={col}>
-        <label
-          data-tip={uiconf.tooltip}
-          style={{
-            fontWeight: "bold",
-            color: this.getLabelFontColour(uiconf),
-            ...labelStyle
-          }} >
-          {uiconf.label}
-        </label>
+        <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
+          <label
+            style={{
+              fontWeight: "bold",
+              color: this.getLabelFontColour(uiconf),
+              ...labelStyle
+            }} >
+            {uiconf.label}
+          </label>
+        </Tooltip>
 
         <Select
           style={{ width: "100%", ...style }}

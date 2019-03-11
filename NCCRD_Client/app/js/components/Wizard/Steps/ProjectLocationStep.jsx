@@ -4,8 +4,8 @@ import { Button, Row, Col, Fa } from 'mdbreact'
 import { DEAGreen } from '../../../config/colours.js'
 import TreeSelectMultiple from '../../Shared/TreeSelectMultiple.jsx';
 import LocationInput from '../../Shared/LocationInput.jsx'
-import { Collapse, Icon } from 'antd'
-const Panel = Collapse.Panel;
+import { Collapse, Tooltip } from 'antd'
+import { UILookup } from '../../../config/ui_config.js'
 
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
@@ -82,7 +82,7 @@ class ProjectLocationStep extends React.Component {
     setProjectRegions({ value: projectRegions, state: "modified" })
   }
 
-  addLocation(){
+  addLocation() {
     let dispatch = () => new Promise((resolve, reject) => {
       this.props.setProjectLocation({
         id: 0,
@@ -111,7 +111,7 @@ class ProjectLocationStep extends React.Component {
   mapExpanded(key) {
 
     setTimeout(() => {
-      
+
       if (locationDeleted === true) {
         key = undefined // override key to 'undefined'    
         locationDeleted = false // reset locationDeleted
@@ -190,11 +190,16 @@ class ProjectLocationStep extends React.Component {
 
     let { projectDetails, region, editMode } = this.props
 
+    let id="lblLocations"
+    let label = "Locations:"
+    let uiconf = UILookup(id, label)
+
     return (
       <>
         <Row>
           <TreeSelectMultiple
             col="col-md-12"
+            id="lblRegions"
             label="Regions:"
             selectedValue={this.getProjectRegionsValue()}
             data={region}
@@ -206,7 +211,11 @@ class ProjectLocationStep extends React.Component {
 
         <Row>
           <Col md="12">
-            <label style={{ fontWeight: "bold", marginBottom: "0px" }} >Locations:</label>
+            <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
+              <label style={{ fontWeight: "bold", marginBottom: "0px" }}>
+                {label}
+              </label>
+            </Tooltip>
             <br />
             {
               editMode &&

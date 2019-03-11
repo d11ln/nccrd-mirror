@@ -31,6 +31,7 @@ class FundingDetailsStep extends React.Component {
         <Row>
           <TextComponent
             col="col-md-6"
+            id="lblGrantProgram"
             label="Grant or Program name:"
             value={details.GrantProgName}
             setValueKey="SET_PROJECTFUNDER_GRANTPROGNAME"
@@ -38,11 +39,12 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
             col="col-md-6"
+            id="lblFundingAgency"
             label="Funding Agency:"
             value={details.FundingAgency}
             setValueKey="SET_PROJECTFUNDER_FUNDINGAGENCY"
@@ -50,11 +52,12 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
             col="col-md-6"
+            id="lblPartneringDepts"
             label="Partnering Departments/Organisations:"
             value={details.PartnerDepsOrgs}
             setValueKey="SET_PROJECTFUNDER_PARTNERDEPSORGS"
@@ -62,11 +65,12 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
             col="col-md-6"
+            id="lblProjectCoordinator"
             label="Project Coordinator:"
             readOnly={true}
             selectedValue={details.ProjectCoordinatorId}
@@ -85,11 +89,12 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
             col="col-md-6"
+            id="lblTotalBudget"
             label="Total Budget:"
             value={details.TotalBudget}
             setValueKey="SET_PROJECTFUNDER_TOTALBUDGET"
@@ -98,11 +103,12 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
             col="col-md-6"
+            id="lblAnnualBudget"
             label="Annual Budget:"
             value={details.AnnualBudget}
             setValueKey="SET_PROJECTFUNDER_ANNUALBUDGET"
@@ -111,11 +117,12 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
             col="col-md-6"
+            id="lblFundingStatus"
             label="Funding Status:"
             selectedValue={details.FundingStatusId}
             data={fundingStatus}

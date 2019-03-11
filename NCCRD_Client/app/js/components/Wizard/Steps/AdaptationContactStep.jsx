@@ -41,7 +41,7 @@ class AdaptationContactStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
         <TextComponent

@@ -1,5 +1,10 @@
-.horizontal-spacer {
+.vertical-spacer {
   height: 12px;
+}
+
+.horizontal-spacer {
+  margin-right: 15px;
+  display: inline;
 }
 
 .inline-button {

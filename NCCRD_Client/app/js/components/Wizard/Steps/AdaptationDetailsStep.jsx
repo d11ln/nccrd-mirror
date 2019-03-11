@@ -41,7 +41,7 @@ class AdaptationDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextAreaComponent
@@ -55,7 +55,7 @@ class AdaptationDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
@@ -79,7 +79,7 @@ class AdaptationDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TreeSelectComponent
@@ -109,7 +109,7 @@ class AdaptationDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TreeSelectComponent
@@ -126,11 +126,11 @@ class AdaptationDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
-            id="selProjectStatus"
+            id="selAdaptationActionStatus"
             col="col-md-6"
             label="Status:"
             selectedValue={details.ProjectStatusId}

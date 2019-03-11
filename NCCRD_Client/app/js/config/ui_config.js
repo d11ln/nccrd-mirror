@@ -1,3 +1,4 @@
+import React from 'react'
 
 export const ui_config = [
 
@@ -5,328 +6,433 @@ export const ui_config = [
   {
     key: "txtProjectTitle",
     label: "Project title:",
-    tooltip: "Project title (required)",
+    tooltip: "Name of project (required)",
     required: true
   },
   {
     key: "txtProjectYear",
     label: "Year:",
-    tooltip: "Project year range"
+    tooltip: "Start/End Dates: Dates which work begins/ends on the project (from 2000 - 2050)"
   },
   {
     key: "txtProjectDescription",
     label: "Description:",
-    tooltip: "Detailed description of project"
+    tooltip: "Description of the project including aims, objective, methodology used, life expectancy and outcome. The outcome should be the actual or desired outcome of the project, such as findings of research, levels of emissions or energy savings, level of resilience achieved, human capital potential, other environmental, social and economic benefits."
   },
   {
     key: "txtProjectLeadAgent",
-    label: "Lead agent:",
-    tooltip: "Lead agent (required)",
+    label: "Lead organisation:",
+    tooltip: "Organisation responsible for administering the project",
     required: true
   },
   {
     key: "txtProjectHostPartner",
     label: "Host partner:",
-    tooltip: "Host partner"
+    tooltip: "Other organisation/s responsible for conucting part of the project "
   },
   {
     key: "txtProjectHostOrganisation",
     label: "Host organisation:",
-    tooltip: "Host organisation (required)",
+    tooltip: "Oganisation responsible for conducting the project (required)",
     required: true
-  }, 
+  },
   {
     key: "txtProjectAlternativeContact",
     label: "Contact (alt):",
-    tooltip: "Alternative contact"
-  }, 
+    tooltip: "Alternative contact who would be able to answer questions regarding the details of the project"
+  },
   {
     key: "txtProjectAlternativeContactEmail",
     label: "Contact email (alt):",
-    tooltip: "Alternative contact email"
-  }, 
-  {
-    key: "txtProjectAlternativeContactEmail",
-    label: "Contact email (alt):",
-    tooltip: "Alternative contact email"
-  }, 
+    tooltip: "A valid email address for the alternative contact"
+  },
   {
     key: "txtProjectLink",
     label: "Link:",
-    tooltip: "Link"
-  },
-  {
-    key: "txtProjectValidationComments",
-    label: "Validation comments:",
-    tooltip: "Validation comments"
+    tooltip: "Link to project site or reference information"
   },
   {
     key: "txtProjectBudget",
     label: "Budget range:",
-    tooltip: "Budget range"
+    tooltip: "The approximate range of funding for all actions listed in the project across all funding agencies"
   },
-  {
-    key: "selProjectType",
-    label: "Project type:",
-    tooltip: "Project type (required)",
-    required: true
-  },
-  {
-    key: "selProjectSubType",
-    label: "Project sub-type:",
-    tooltip: "Project sub-type"
-  },
+
   {
     key: "selProjectStatus",
     label: "Project status:",
-    tooltip: "Project status (required)",
+    // tooltip: "Planned: The concept for a project has been put forward but is not currently underway and may not specifically have funding. Adopted (Approved): The project has moved from the concept stage and specifications for implementation have been established. This project may have been assigned funding. In Progress: Infrastructure for the project is in the process of being established and the project has assigned funding. Implemented (Operational): The project infrastructure has been completed and any remaining funding is now directed towards maintenance. Published: The project has been completed and the outcome described in professional documentation. Expired: The project infrastructure is no longer useful or sustainable without additional funding or funding for the project has run out. Discontinued: The project has been abandoned. (required)",
+    tooltip: <div>
+      <p>
+        Planned: The concept for a project has been put forward but is not currently underway and may not specifically have funding.
+      </p>
+      <p>
+        Adopted (Approved): The project has moved from the concept stage and specifications for implementation have been established. This project may have been assigned funding.
+      </p>
+      <p>
+        In Progress: Infrastructure for the project is in the process of being established and the project has assigned funding.
+      </p>
+      <p>
+        Implemented (Operational): The project infrastructure has been completed and any remaining funding is now directed towards maintenance.
+      </p>
+      <p>
+        Published: The project has been completed and the outcome described in professional documentation.
+      </p>
+      <p>
+        Expired: The project infrastructure is no longer useful or sustainable without additional funding or funding for the project has run out.
+      </p>
+      <p>
+        Discontinued: The project has been abandoned.
+      </p>
+      <p>
+        (required)
+      </p>
+    </div>,
     required: true
   },
   {
     key: "selProjectManager",
     label: "Project manager:",
-    tooltip: "Project manager (required)",
+    tooltip: "Name and contact details of the person responsible for this project and for maintaining this entry on the database. (required)",
     required: true
   },
   {
-    key: "selProjectValidationStatus",
-    label: "Validation status:",
-    tooltip: "Validation status"
+    key: "lblLocations",
+    label: "Locations:",
+    tooltip: "The location data as appropriate for the actions described in this project. Add by manually inputting the GPS coordinates into the text field or by placing a pin on the map provided by selecting the globe icon. Please note that only one pin can be placed at a time to eastablish a set of coordinates. "
   },
   {
-    key: "selProjectMAOptions",
-    label: "M.A. Options:",
-    tooltip: "Mitigation & Adaptation options"
+    key: "lblRegions",
+    label: "Regions:",
+    tooltip: "Select all regions at the level that best describes the locations where this project will take place (province, metro or district municipality, local municipality)"
   },
+  // {
+  //   key: "txtProjectValidationComments",
+  //   label: "Validation comments:",
+  //   tooltip: "Validation comments"
+  // },
+  // {
+  //   key: "selProjectType",
+  //   label: "Project type:",
+  //   tooltip: "Project type (required)",
+  //   required: true
+  // },
+  // {
+  //   key: "selProjectSubType",
+  //   label: "Project sub-type:",
+  //   tooltip: "Project sub-type"
+  // },
+  // {
+  //   key: "selProjectValidationStatus",
+  //   label: "Validation status:",
+  //   tooltip: "Validation status"
+  // },
+  // {
+  //   key: "selProjectMAOptions",
+  //   label: "M.A. Options:",
+  //   tooltip: "Mitigation & Adaptation options"
+  // },
+
+
+  //FUNDING
+  {
+    key: "lblGrantProgram",
+    label: "Grant or program name:",
+    tooltip: "The name of the grant or program funding the project"
+  },
+  {
+    key: "lblFundingAgency",
+    label: "Funding agency:",
+    tooltip: "The name of the agency funding the project"
+  },
+  {
+    key: "lblPartneringDepts",
+    label: "Partnering departments/organisations:",
+    tooltip: "The name of any partnering deparments or organisations assisting with funding the project"
+  },
+  {
+    key: "lblProjectCoordinator",
+    label: "Project coordinator:",
+    tooltip: "The name of the project coordinator from the funding agency"
+  },
+  {
+    key: "lblTotalBudget",
+    label: "Total budget:",
+    tooltip: "The total budget from this grant or program"
+  },
+  {
+    key: "lblAnnualBudget",
+    label: "Annual budget:",
+    tooltip: "The annual budget from this grant or program"
+  },
+  {
+    key: "lblFundingStatus",
+    label: "Funding status:",
+    tooltip: "The current funding status of the project"
+  },
+
 
   // ADAPTATION DETAILS //
   {
+    key: "txtAdaptationTitle",
+    label: "Title:",
+    tooltip: "Name of action"
+  },
+  {
     key: "txtAdaptationDescription",
     label: "Description:",
-    tooltip: "Description"
+    tooltip: "The general details of the action including aims, objective, methodology used, life expectancy and outcome. The outcome should be the actual or desired outcome of the project, such as findings of research, level of resilience achieved, human capital potential, other environmental, social and economic benefits."
   },
   {
     key: "selAdaptationPurpose",
     label: "Purpose:",
-    tooltip: "Purpose (required)",
+    tooltip: "Loss Prevention: Reduce vulnerability. Loss Sharing: Spread risk. Behaviour Modification: Eliminate activity or behaviour. Relocation: Move away from hazard (required)",
     required: true
   },
   {
     key: "selAdaptationSector",
     label: "Sector:",
-    tooltip: "Sector"
+    tooltip: "Sector in which project is taking place"
   },
+  {
+    key: "selAdaptationHazard",
+    label: "Hazard:",
+    tooltip: "All hazards this action is designed to adapt to"
+  },
+  {
+    key: "selAdaptationActionStatus",
+    label: "Project status:",
+    tooltip: "Status of action implementation"
+  },
+  {
+    key: "txtAdaptationContactName",
+    label: "Name:",
+    tooltip: "Name of the person in charge of managing this action"
+  },
+  {
+    key: "txtAdaptationContactEmail",
+    label: "Email Address :",
+    tooltip: "Email of person responsible for managing this action"
+  },
+
 
   // MITIGATION DETAILS //
-  {
-    key: "selMitigationCarbonCredit",
-    label: "Carbon credit:",
-    tooltip: "Carbon credit (required)",
-    required: true
-  },
-  {
-    key: "selMitigationCarbonCreditMarket",
-    label: "Carbon credit market:",
-    tooltip: "Carbon credit market"
-  },
-  {
-    key: "selMitigationCDMStatus",
-    label: "CDM status:",
-    tooltip: "CDM status"
-  },
-  {
-    key: "selMitigationCDMMethodology",
-    label: "CDM methodology:",
-    tooltip: "CDM methodology"
-  },
-  {
-    key: "selMitigationVoluntaryMethodology",
-    label: "Voluntary methodology:",
-    tooltip: "Voluntary methodology"
-  },
-  {
-    key: "selMitigationVoluntaryGoldStandard",
-    label: "Voluntary gold standard:",
-    tooltip: "Voluntary gold standard"
-  },
-  {
-    key: "txtMitigationCDMProjectNumber",
-    label: "CDM project number:",
-    tooltip: "CDM project number"
-  },
-  {
-    key: "txtMitigationOtherDescription",
-    label: "Other description:",
-    tooltip: "Other description"
-  },
-  {
-    key: "selMitigationSector",
-    label: "Sector:",
-    tooltip: "Sector"
-  },
+  // {
+  //   key: "selMitigationCarbonCredit",
+  //   label: "Carbon credit:",
+  //   tooltip: "Carbon credit (required)",
+  //   required: true
+  // },
+  // {
+  //   key: "selMitigationCarbonCreditMarket",
+  //   label: "Carbon credit market:",
+  //   tooltip: "Carbon credit market"
+  // },
+  // {
+  //   key: "selMitigationCDMStatus",
+  //   label: "CDM status:",
+  //   tooltip: "CDM status"
+  // },
+  // {
+  //   key: "selMitigationCDMMethodology",
+  //   label: "CDM methodology:",
+  //   tooltip: "CDM methodology"
+  // },
+  // {
+  //   key: "selMitigationVoluntaryMethodology",
+  //   label: "Voluntary methodology:",
+  //   tooltip: "Voluntary methodology"
+  // },
+  // {
+  //   key: "selMitigationVoluntaryGoldStandard",
+  //   label: "Voluntary gold standard:",
+  //   tooltip: "Voluntary gold standard"
+  // },
+  // {
+  //   key: "txtMitigationCDMProjectNumber",
+  //   label: "CDM project number:",
+  //   tooltip: "CDM project number"
+  // },
+  // {
+  //   key: "txtMitigationOtherDescription",
+  //   label: "Other description:",
+  //   tooltip: "Other description"
+  // },
+  // {
+  //   key: "selMitigationSector",
+  //   label: "Sector:",
+  //   tooltip: "Sector"
+  // },
+
 
   // EMISSIONS DETAILS //
-  {
-    key: "txtEmissionsYear",
-    label: "Year:",
-    tooltip: "Year (required)",
-    required: true
-  },
-  {
-    key: "txtEmissionsCO2",
-    label: "CO2:",
-    tooltip: "CO2"
-  },
-  {
-    key: "txtEmissionsCH4",
-    label: "CH4:",
-    tooltip: "CH4"
-  },
-  {
-    key: "txtEmissionsCH4_CO2e",
-    label: "CH4_CO2e:",
-    tooltip: "CH4_CO2e"
-  },
-  {
-    key: "txtEmissionsN2O",
-    label: "N2O:",
-    tooltip: "N2O"
-  },
-  {
-    key: "txtEmissionsN2O_CO2e",
-    label: "N2O_CO2e:",
-    tooltip: "N2O_CO2e"
-  },
-  {
-    key: "txtEmissionsHFC",
-    label: "HFC:",
-    tooltip: "HFC"
-  },
-  {
-    key: "txtEmissionsHFC_CO2e",
-    label: "HFC_CO2e:",
-    tooltip: "HFC_CO2e"
-  },
-  {
-    key: "txtEmissionsPFC",
-    label: "PFC:",
-    tooltip: "PFC"
-  },
-  {
-    key: "txtEmissionsPFC_CO2e",
-    label: "PFC_CO2e:",
-    tooltip: "PFC_CO2e"
-  },
-  {
-    key: "txtEmissionsSF6",
-    label: "SF6:",
-    tooltip: "SF6"
-  },
-  {
-    key: "txtEmissionsSF6_CO2e",
-    label: "SF6_CO2e:",
-    tooltip: "SF6_CO2e"
-  },
-  {
-    key: "txtEmissionsHydro",
-    label: "Hydro:",
-    tooltip: "Hydro"
-  },
-  {
-    key: "txtEmissionsHydro_CO2e",
-    label: "Hydro_CO2e:",
-    tooltip: "Hydro_CO2e"
-  },
-  {
-    key: "txtEmissionsTidal",
-    label: "Tidal:",
-    tooltip: "Tidal"
-  },
-  {
-    key: "txtEmissionsTidal_CO2e",
-    label: "Tidal_CO2e:",
-    tooltip: "Tidal_CO2e"
-  },
-  {
-    key: "txtEmissionsWind",
-    label: "Wind:",
-    tooltip: "Wind"
-  },
-  {
-    key: "txtEmissionsWind_CO2e",
-    label: "Wind_CO2e:",
-    tooltip: "Wind_CO2e"
-  },
-  {
-    key: "txtEmissionsSolar",
-    label: "Solar:",
-    tooltip: "Solar"
-  },
-  {
-    key: "txtEmissionsSolar_CO2e",
-    label: "Solar_CO2e:",
-    tooltip: "Solar_CO2e"
-  },
-  {
-    key: "txtEmissionsFossilFuelElecRed",
-    label: "FossilFuelElecRed:",
-    tooltip: "FossilFuelElecRed"
-  },
-  {
-    key: "txtEmissionsFossilFuelElecRed_CO2e",
-    label: "FossilFuelElecRed_CO2e:",
-    tooltip: "FossilFuelElecRed_CO2e"
-  },
-  {
-    key: "txtEmissionsBioWaste",
-    label: "BioWaste:",
-    tooltip: "BioWaste"
-  },
-  {
-    key: "txtEmissionsBioWaste_CO2e",
-    label: "BioWaste_CO2e:",
-    tooltip: "BioWaste_CO2e"
-  },
-  {
-    key: "txtEmissionsGeothermal",
-    label: "Geothermal:",
-    tooltip: "Geothermal"
-  },
-  {
-    key: "txtEmissionsGeothermal_CO2e",
-    label: "Geothermal_CO2e:",
-    tooltip: "Geothermal_CO2e"
-  },
+  // {
+  //   key: "txtEmissionsYear",
+  //   label: "Year:",
+  //   tooltip: "Year (required)",
+  //   required: true
+  // },
+  // {
+  //   key: "txtEmissionsCO2",
+  //   label: "CO2:",
+  //   tooltip: "CO2"
+  // },
+  // {
+  //   key: "txtEmissionsCH4",
+  //   label: "CH4:",
+  //   tooltip: "CH4"
+  // },
+  // {
+  //   key: "txtEmissionsCH4_CO2e",
+  //   label: "CH4_CO2e:",
+  //   tooltip: "CH4_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsN2O",
+  //   label: "N2O:",
+  //   tooltip: "N2O"
+  // },
+  // {
+  //   key: "txtEmissionsN2O_CO2e",
+  //   label: "N2O_CO2e:",
+  //   tooltip: "N2O_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsHFC",
+  //   label: "HFC:",
+  //   tooltip: "HFC"
+  // },
+  // {
+  //   key: "txtEmissionsHFC_CO2e",
+  //   label: "HFC_CO2e:",
+  //   tooltip: "HFC_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsPFC",
+  //   label: "PFC:",
+  //   tooltip: "PFC"
+  // },
+  // {
+  //   key: "txtEmissionsPFC_CO2e",
+  //   label: "PFC_CO2e:",
+  //   tooltip: "PFC_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsSF6",
+  //   label: "SF6:",
+  //   tooltip: "SF6"
+  // },
+  // {
+  //   key: "txtEmissionsSF6_CO2e",
+  //   label: "SF6_CO2e:",
+  //   tooltip: "SF6_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsHydro",
+  //   label: "Hydro:",
+  //   tooltip: "Hydro"
+  // },
+  // {
+  //   key: "txtEmissionsHydro_CO2e",
+  //   label: "Hydro_CO2e:",
+  //   tooltip: "Hydro_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsTidal",
+  //   label: "Tidal:",
+  //   tooltip: "Tidal"
+  // },
+  // {
+  //   key: "txtEmissionsTidal_CO2e",
+  //   label: "Tidal_CO2e:",
+  //   tooltip: "Tidal_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsWind",
+  //   label: "Wind:",
+  //   tooltip: "Wind"
+  // },
+  // {
+  //   key: "txtEmissionsWind_CO2e",
+  //   label: "Wind_CO2e:",
+  //   tooltip: "Wind_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsSolar",
+  //   label: "Solar:",
+  //   tooltip: "Solar"
+  // },
+  // {
+  //   key: "txtEmissionsSolar_CO2e",
+  //   label: "Solar_CO2e:",
+  //   tooltip: "Solar_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsFossilFuelElecRed",
+  //   label: "FossilFuelElecRed:",
+  //   tooltip: "FossilFuelElecRed"
+  // },
+  // {
+  //   key: "txtEmissionsFossilFuelElecRed_CO2e",
+  //   label: "FossilFuelElecRed_CO2e:",
+  //   tooltip: "FossilFuelElecRed_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsBioWaste",
+  //   label: "BioWaste:",
+  //   tooltip: "BioWaste"
+  // },
+  // {
+  //   key: "txtEmissionsBioWaste_CO2e",
+  //   label: "BioWaste_CO2e:",
+  //   tooltip: "BioWaste_CO2e"
+  // },
+  // {
+  //   key: "txtEmissionsGeothermal",
+  //   label: "Geothermal:",
+  //   tooltip: "Geothermal"
+  // },
+  // {
+  //   key: "txtEmissionsGeothermal_CO2e",
+  //   label: "Geothermal_CO2e:",
+  //   tooltip: "Geothermal_CO2e"
+  // },
 
-  // EMISSIONS DETAILS //
+
+  // RESEARCH DETAILS //
   {
     key: "txtResearchAuthor",
     label: "Author:",
-    tooltip: "Author (required)",
+    tooltip: "Person(s) carrying out research/analysis (required)",
     required: true
   },
   {
     key: "txtResearchPaperLink",
     label: "Paper link:",
-    tooltip: "Paper link"
+    tooltip: "A website link or a digital object identifier (DOI) to the associated research"
   },
   {
     key: "selResearchType",
     label: "Research type:",
-    tooltip: "Research type (required)",
+    tooltip: "Scientific: e.g. climatic impacts. R&D: e.g. industry and technology. Economic and market impacts: e.g. effect of carbon tax. Social: e.g. impact of climate change on communities in x region (required)",
     required: true
   },
   {
     key: "selResearchTargetAudience",
     label: "Target audience:",
-    tooltip: "Target audience (required)",
+    tooltip: "Primary audience for the research (required)",
     required: true
   },
   {
     key: "selResearchSector",
     label: "Sector:",
-    tooltip: "Sector"
+    tooltip: "The sector this action falls under"
   },
+  {
+    key: "selResearchResearchMaturity",
+    label: "Research Maturity:",
+    tooltip: "Published Research: The mitigation or adaptation action has been researched for the region of interest and is linked to a publication (‘Published’ in the original list). Feasible Option: The action has been evaluated in terms of technical, economic, social, and environmental impact and assessed to be feasible. Pre-Design: Preliminary engineering design has been completed and published, detailed feasibility report has been published."
+  },
+
 
   // FILTERS //
   {

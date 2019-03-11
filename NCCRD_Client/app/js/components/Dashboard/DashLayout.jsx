@@ -15,6 +15,7 @@ import DashGraph4Preview from "./DashGraph4Preview.jsx"
 import { DEAGreen } from '../../config/colours.js'
 import MapViewCore from '../Map/MapViewCore.jsx'
 import HazardFilter from '../Projects/Filters/HazardFilter.jsx';
+import { Tooltip } from 'antd';
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -80,18 +81,20 @@ class DashLayout extends React.Component {
         <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
           {
             showBackToTop &&
-            <Button
-              data-tip="Back to top"
-              size="sm"
-              floating
-              color=""
-              onClick={() => {
-                this.scrollToTop()
-              }}
-              style={{ backgroundColor: DEAGreen }}
-            >
-              <Fa icon="arrow-up" />
-            </Button>
+            <Tooltip title="Back to top" mouseEnterDelay={0.7}>
+              <Button
+                size="sm"
+                floating
+                color=""
+                onClick={() => {
+                  this.scrollToTop()
+                }}
+                style={{ backgroundColor: DEAGreen }}
+              >
+                <Fa icon="arrow-up" />
+              </Button>              
+            </Tooltip>
+
           }
         </div>
 

@@ -3,6 +3,7 @@ import { Row, Col } from 'mdbreact'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
+import { Tooltip } from 'antd';
 
 const _gf = require('../../globalFunctions')
 
@@ -50,9 +51,18 @@ class RangeComponent extends React.Component {
     let uiconf = UILookup(id, label)
 
     return (
-      <div>
-        <label data-tip={uiconf.tooltip} style={{ marginBottom: 15, fontSize: size, fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}&nbsp;</label>
-      </div>
+      <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
+        <label
+          style={{
+            marginBottom: 15,
+            fontSize: size,
+            fontWeight: "bold",
+            color: this.getLabelFontColour(uiconf)
+          }}
+        >
+          {uiconf.label}&nbsp;
+        </label>
+      </Tooltip>
     )
   }
 

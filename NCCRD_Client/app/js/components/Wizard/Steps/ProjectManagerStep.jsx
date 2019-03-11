@@ -38,7 +38,7 @@ class ProjectManagerStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
@@ -64,7 +64,7 @@ class ProjectManagerStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -76,7 +76,7 @@ class ProjectManagerStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -89,7 +89,7 @@ class ProjectManagerStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -101,7 +101,7 @@ class ProjectManagerStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent

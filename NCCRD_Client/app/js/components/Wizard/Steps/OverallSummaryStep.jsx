@@ -27,6 +27,10 @@ class OverallSummaryStep extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      activeKey: []
+    }
+
     this.getProjectStatusValue = this.getProjectStatusValue.bind(this)
     this.getProjectRegionValue = this.getProjectRegionValue.bind(this)
     this.getProjectManagerValue = this.getProjectManagerValue.bind(this)
@@ -172,16 +176,28 @@ class OverallSummaryStep extends React.Component {
   render() {
 
     let { projectDetails, funderDetails, adaptationDetails } = this.props
+    let { activeKey } = this.state
 
     return (
       <>
-        <h6 style={{ marginTop: -20 }}>
-          <i>
-            Please review before submitting
-          </i>
-        </h6>
+        <Row style={{ marginTop: -20 }} >
+          <Col>
+            <h6>
+              <i>
+                Please review before submitting
+              </i>
+            </h6>
+          </Col>
+          <Col>
+            <div style={{ float: "right" }}>
+              <a href="#" onClick={() => { this.setState({ activeKey: ["1","2","3","4"]}) }}>Expand all</a>
+              <div className="horizontal-spacer" />
+              <a href="#" onClick={() => { this.setState({ activeKey: []}) }}>Collapse all</a>
+            </div>
+          </Col>
+        </Row>
 
-        <Collapse className="summary-collapse" bordered={false}>
+        <Collapse className="summary-collapse" bordered={false} activeKey={activeKey}>
           <hr style={{ marginBottom: -5, color: "#F0F0F0", backgroundColor: "#F0F0F0" }} />
 
           <Panel
@@ -198,7 +214,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="12">
@@ -207,7 +223,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="12">
@@ -216,7 +232,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -239,7 +255,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -248,7 +264,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -281,7 +297,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -299,7 +315,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -319,7 +335,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -328,7 +344,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -337,7 +353,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -346,7 +362,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -355,7 +371,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -364,7 +380,7 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
-              <div className="horizontal-spacer" />
+              <div className="vertical-spacer" />
 
               <Row>
                 <Col md="6">
@@ -400,7 +416,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -409,7 +425,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -418,7 +434,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -427,7 +443,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -436,7 +452,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -445,7 +461,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -486,7 +502,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -495,7 +511,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -504,7 +520,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -513,7 +529,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -522,7 +538,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -531,7 +547,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -540,7 +556,7 @@ class OverallSummaryStep extends React.Component {
                           </Col>
                         </Row>
 
-                        <div className="horizontal-spacer" />
+                        <div className="vertical-spacer" />
 
                         <Row>
                           <Col md="6">
@@ -552,10 +568,10 @@ class OverallSummaryStep extends React.Component {
                         {
                           adaptation.ResearchDetail &&
                           <div>
-                            <div className="horizontal-spacer" />
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
+                            <div className="vertical-spacer" />
                             <h6 className="summary-label"><u>RESEARCH DETAILS</u></h6>
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
 
                             <Row>
                               <Col md="6">
@@ -564,7 +580,7 @@ class OverallSummaryStep extends React.Component {
                               </Col>
                             </Row>
 
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
 
                             <Row>
                               <Col md="6">
@@ -573,7 +589,7 @@ class OverallSummaryStep extends React.Component {
                               </Col>
                             </Row>
 
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
 
                             <Row>
                               <Col md="6">
@@ -582,7 +598,7 @@ class OverallSummaryStep extends React.Component {
                               </Col>
                             </Row>
 
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
 
                             <Row>
                               <Col md="6">
@@ -591,7 +607,7 @@ class OverallSummaryStep extends React.Component {
                               </Col>
                             </Row>
 
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
 
                             <Row>
                               <Col md="6">
@@ -600,7 +616,7 @@ class OverallSummaryStep extends React.Component {
                               </Col>
                             </Row>
 
-                            <div className="horizontal-spacer" />
+                            <div className="vertical-spacer" />
 
                           </div>
                         }

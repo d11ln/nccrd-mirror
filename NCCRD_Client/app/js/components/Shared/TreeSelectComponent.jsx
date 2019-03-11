@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { TreeSelect } from 'antd'
+import { Tooltip } from 'antd';
 
 const _gf = require('../../globalFunctions')
 
@@ -209,15 +210,16 @@ class TreeSelectComponent extends React.Component {
 
     return (
       <div className={col}>
-        <label
-          data-tip={uiconf.tooltip}
-          style={{
-            fontWeight: "bold",
-            color: this.getLabelFontColour(uiconf),
-            ...labelStyle
-          }}>
-          {uiconf.label}
-        </label>
+        <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
+          <label
+            style={{
+              fontWeight: "bold",
+              color: this.getLabelFontColour(uiconf),
+              ...labelStyle
+            }}>
+            {uiconf.label}
+          </label>
+        </Tooltip>
 
         <TreeSelect
           // disabled={this.getDisabledState()}
@@ -225,7 +227,7 @@ class TreeSelectComponent extends React.Component {
           searchPlaceholder="Search..."
           style={{ width: "100%", ...style }}
           value={selVal}
-          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto',  }}
+          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto', }}
           dropdownMatchSelectWidth={matchWidth}
           placeholder="Select..."
           allowClear

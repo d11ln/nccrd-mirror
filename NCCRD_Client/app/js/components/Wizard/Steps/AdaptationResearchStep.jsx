@@ -43,7 +43,7 @@ class AdaptationResearchStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -56,7 +56,7 @@ class AdaptationResearchStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
@@ -79,7 +79,7 @@ class AdaptationResearchStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
@@ -102,7 +102,7 @@ class AdaptationResearchStep extends React.Component {
           />
         </Row>
 
-        <div className="horizontal-spacer" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
