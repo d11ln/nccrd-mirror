@@ -1,8 +1,10 @@
 import React from 'react'
+import { Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
 import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -37,15 +39,6 @@ class TextComponent extends React.Component {
     return value
   }
 
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
-  }
-
   valueChange(event) {
 
     let { setValue, setValueKey, parentId, editMode, numeric } = this.props
@@ -78,19 +71,8 @@ class TextComponent extends React.Component {
       <div className={col} style={{ paddingRight: 20 }}>
         {
           (label !== "") &&
-          <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-            <label
-              style={{
-                marginBottom: "0px",
-                fontWeight: "bold",
-                color: this.getLabelFontColour(uiconf)
-              }}
-            >
-              {uiconf.label}
-            </label>
-          </Tooltip>
-
-        }
+            <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
+          }
         <Input
           size="sm"
           id={id}
@@ -100,7 +82,7 @@ class TextComponent extends React.Component {
           style={{
             width: "98.4%",
             height: "21px",
-            marginTop: "-15px",
+            marginTop: "-21px",
             marginBottom: "-20px",
             color: _gf.getFontColour(editMode),
             border: "1px solid lightgrey",

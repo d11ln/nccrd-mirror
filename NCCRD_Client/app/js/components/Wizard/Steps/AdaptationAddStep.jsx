@@ -1,46 +1,36 @@
 import React from 'react'
 import { Button, Input } from 'mdbreact'
+import { connect } from 'react-redux'
 
 import './shared.css'
+
+const mapStateToProps = (state, props) => {
+  let { projectData: { projectDetails } } = state
+  return { projectDetails }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addAdaptationDetails: payload => {
+      dispatch({ type: "ADD_ADAPTATION_DETAILS", payload })
+    }
+  }
+}
 
 class AdaptationAddStep extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.asResearchChecked = this.asResearchChecked.bind(this)
-    this.withFundingChecked = this.withFundingChecked.bind(this)
     this.addAdaptation = this.addAdaptation.bind(this)
-
-    this.state = {
-      asResearch: false,
-      withFunding: false
-    }
   }
 
-  addAdaptation(){
-
-    let { onAddClick } = this.props
-    let { asResearch, withFunding } = this.state
-
-    if(onAddClick){
-      onAddClick(asResearch, withFunding)
-    }
-  }
-
-  asResearchChecked(){
-    let { asResearch } = this.state
-    this.setState({ asResearch: !asResearch })
-  }
-
-  withFundingChecked(){
-    let { withFunding } = this.state
-    this.setState({ withFunding: !withFunding })
+  addAdaptation() {
+    let { projectDetails, addAdaptationDetails } = this.props
+    addAdaptationDetails(projectDetails.ProjectId);
   }
 
   render() {
-
-    let { asResearch, withFunding } = this.state
 
     return (
       <>
@@ -48,16 +38,7 @@ class AdaptationAddStep extends React.Component {
           Would you like to add an adaptation action to this project?
         </h5>
 
-        <br />
-
-        <h6>
-          <b>
-            Configure and add your adaptation.
-          </b>          
-        </h6>
-
-        <Input disabled label="Include Funding Details (*coming soon*)" type="checkbox" id="withFundingCheck" checked={withFunding} onClick={this.withFundingChecked} />
-        <Input label="Add As Research" type="checkbox" id="asResearchCheck" checked={asResearch} onClick={this.asResearchChecked} />
+        <div className="vertical-spacer" />
 
         <Button className="inline-button" color="primary" onClick={this.addAdaptation}>
           Add Adaptation
@@ -67,4 +48,4 @@ class AdaptationAddStep extends React.Component {
   }
 }
 
-export default AdaptationAddStep
+export default connect(mapStateToProps, mapDispatchToProps)(AdaptationAddStep)

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Tooltip, TreeSelect } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 const TreeSelectNode = TreeSelect.TreeNode;
@@ -161,16 +162,7 @@ class TreeSelectMultiple extends React.Component {
 
     return (
       <div className={col}>
-        <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-          <label
-            style={{
-              fontWeight: "bold",
-              color: this.getLabelFontColour(uiconf)
-            }}
-          >
-            {uiconf.label}
-          </label>
-        </Tooltip>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <TreeSelect
           showSearch

@@ -5,6 +5,7 @@ import TextComponent from '../../Shared/TextComponent.jsx';
 import TextAreaComponent from '../../Shared/TextAreaComponent.jsx';
 import SelectComponent from '../../Shared/SelectComponent.jsx';
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx';
+import { Popover } from 'antd'
 
 import "./shared.css"
 
@@ -15,13 +16,43 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+    removeAdaptationAction: payload => {
+      dispatch({ type: "REMOVE_ADAPTATION_DETAILS", payload })
+    },
+    addAdaptationDetailsResearchDetails: payload => {
+      dispatch({ type: "ADD_ADAPTATION_DETAILS_RESEARCH_DETAILS", payload })
+    }
+  }
 }
 
 class AdaptationDetailsStep extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.onAdd = this.onAdd.bind(this)
+    this.onRemove = this.onRemove.bind(this)
+  }
+
+  onAdd() {
+
+    let { addAdaptationDetailsResearchDetails, details } = this.props
+
+    //Add adaptation action
+    addAdaptationDetailsResearchDetails({
+      id: details.AdaptationDetailId,
+      state: 'modified'
+    })
+  }
+
+  onRemove() {
+
+    let { adaptationDetails, details, removeAdaptationAction } = this.props
+
+    //Remove adaptation action
+    let actionIndex = adaptationDetails.indexOf(details)
+    removeAdaptationAction(actionIndex)
   }
 
   render() {
@@ -51,7 +82,7 @@ class AdaptationDetailsStep extends React.Component {
             value={details.Description}
             setValueKey={"SET_ADAPTATION_DETAILS_DESCR"}
             parentId={details.AdaptationDetailId}
-            rows={4}
+            rows={3}
           />
         </Row>
 
@@ -140,6 +171,33 @@ class AdaptationDetailsStep extends React.Component {
             allowEdit={false}
             allowClear={true}
           />
+        </Row>
+
+        <div className="vertical-spacer" />
+
+        <Row>
+          <Col>
+            <Popover content={"Add optional research details"}>
+              <Button disabled={details.ResearchDetail !== null} className="inline-button" color="primary" onClick={this.onAdd}>
+                <Fa className="button-icon" icon="plus-circle" />
+                Add Research
+              </Button>
+            </Popover>
+
+            <Popover content={"*coming soon*"}>
+              <Button className="inline-button disabled-button" color="">
+                <Fa className="button-icon" icon="plus-circle" />
+                Add Funding
+              </Button>
+            </Popover>
+
+            <Popover content={"Remove this adaptation action completely"}>
+              <Button className="inline-button" color="danger" onClick={this.onRemove}>
+                <Fa className="button-icon" icon="minus-circle" />
+                Remove adaptation
+              </Button>
+            </Popover>
+          </Col>
         </Row>
       </>
     )

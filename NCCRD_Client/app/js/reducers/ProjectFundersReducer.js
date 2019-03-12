@@ -69,6 +69,14 @@ export default function ProjectFundersReducer(state = {}, action) {
             return { ...state, projectFunderDetails: [...projectFunderDetails, newItem] }
         }
 
+        case "REMOVE_PROJECTFUNDER_DETAILS": {
+
+            let { projectFunderDetails } = state
+            projectFunderDetails.splice(payload, 1)
+
+            return { ...state, projectFunderDetails: [...projectFunderDetails] }
+        }
+
         case "SET_PROJECTFUNDER_FUNDINGAGENCY": {
             let { projectFunderDetails } = state
 

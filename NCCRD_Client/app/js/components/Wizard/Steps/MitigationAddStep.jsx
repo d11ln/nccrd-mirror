@@ -51,7 +51,7 @@ class MitigationAddStep extends React.Component {
           Would you like to add a mitigation action to this project?
         </h5>
 
-        <br />
+        <div className="vertical-spacer" />
 
         <h6>
           <b>

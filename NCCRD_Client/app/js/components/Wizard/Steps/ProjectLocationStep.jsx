@@ -6,6 +6,7 @@ import TreeSelectMultiple from '../../Shared/TreeSelectMultiple.jsx';
 import LocationInput from '../../Shared/LocationInput.jsx'
 import { Collapse, Tooltip } from 'antd'
 import { UILookup } from '../../../config/ui_config.js'
+import DualTip from '../../Shared/DualTip.jsx';
 
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
@@ -190,7 +191,7 @@ class ProjectLocationStep extends React.Component {
 
     let { projectDetails, region, editMode } = this.props
 
-    let id="lblLocations"
+    let id = "lblLocations"
     let label = "Locations:"
     let uiconf = UILookup(id, label)
 
@@ -211,18 +212,14 @@ class ProjectLocationStep extends React.Component {
 
         <Row>
           <Col md="12">
-            <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-              <label style={{ fontWeight: "bold", marginBottom: "0px" }}>
-                {label}
-              </label>
-            </Tooltip>
-            <br />
+            <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
             {
               editMode &&
               <Button
                 size="sm"
                 color="primary"
                 style={{
+                  marginTop: 0,
                   marginLeft: 0
                 }}
                 onClick={this.addLocation} >

@@ -3,6 +3,7 @@ import { Button, Input, FormInline } from 'mdbreact'
 import { connect } from 'react-redux'
 import { UILookup } from '../../../config/ui_config.js'
 import { Tooltip } from 'antd';
+import DualTip from '../../Shared/DualTip.jsx';
 
 const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
@@ -52,17 +53,13 @@ class TitleFilter extends React.Component {
 
     return (
       <div style={{ marginBottom: "-10px" }}>
-        <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-          <label style={{ color: "grey", fontSize: "14px" }}>
-            <b>{uiconf.label}</b>
-          </label>
-        </Tooltip>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <Input size="sm"
           className="form-control"
           style={{
             padding: "5px",
-            marginTop: "-28px",
+            marginTop: "-23px",
             width: "98%",
             height: "21px",
             border: "1px solid lightgrey",

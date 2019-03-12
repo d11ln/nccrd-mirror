@@ -6,7 +6,7 @@ export const ui_config = [
   {
     key: "txtProjectTitle",
     label: "Project title:",
-    tooltip: "Name of project (required)",
+    tooltip: "Name of project",
     required: true
   },
   {
@@ -33,7 +33,7 @@ export const ui_config = [
   {
     key: "txtProjectHostOrganisation",
     label: "Host organisation:",
-    tooltip: "Oganisation responsible for conducting the project (required)",
+    tooltip: "Oganisation responsible for conducting the project",
     required: true
   },
   {
@@ -60,39 +60,28 @@ export const ui_config = [
   {
     key: "selProjectStatus",
     label: "Project status:",
-    // tooltip: "Planned: The concept for a project has been put forward but is not currently underway and may not specifically have funding. Adopted (Approved): The project has moved from the concept stage and specifications for implementation have been established. This project may have been assigned funding. In Progress: Infrastructure for the project is in the process of being established and the project has assigned funding. Implemented (Operational): The project infrastructure has been completed and any remaining funding is now directed towards maintenance. Published: The project has been completed and the outcome described in professional documentation. Expired: The project infrastructure is no longer useful or sustainable without additional funding or funding for the project has run out. Discontinued: The project has been abandoned. (required)",
-    tooltip: <div>
-      <p>
-        Planned: The concept for a project has been put forward but is not currently underway and may not specifically have funding.
-      </p>
-      <p>
-        Adopted (Approved): The project has moved from the concept stage and specifications for implementation have been established. This project may have been assigned funding.
-      </p>
-      <p>
-        In Progress: Infrastructure for the project is in the process of being established and the project has assigned funding.
-      </p>
-      <p>
-        Implemented (Operational): The project infrastructure has been completed and any remaining funding is now directed towards maintenance.
-      </p>
-      <p>
-        Published: The project has been completed and the outcome described in professional documentation.
-      </p>
-      <p>
-        Expired: The project infrastructure is no longer useful or sustainable without additional funding or funding for the project has run out.
-      </p>
-      <p>
-        Discontinued: The project has been abandoned.
-      </p>
-      <p>
-        (required)
-      </p>
+    tooltip: "Status of action implementation",
+    tooltip2: <div>
+      <b>Planned:</b> The concept for a project has been put forward but is not currently underway and may not specifically have funding.
+      <br />
+      <b>Adopted (Approved):</b> The project has moved from the concept stage and specifications for implementation have been established. This project may have been assigned funding.
+      <br />
+      <b>In Progress:</b> Infrastructure for the project is in the process of being established and the project has assigned funding.
+      <br />
+      <b>Implemented (Operational):</b> The project infrastructure has been completed and any remaining funding is now directed towards maintenance.
+      <br />
+      <b>Published:</b> The project has been completed and the outcome described in professional documentation.
+      <br />
+      <b>Expired:</b> The project infrastructure is no longer useful or sustainable without additional funding or funding for the project has run out.
+      <br />
+      <b>Discontinued:</b> The project has been abandoned.
     </div>,
     required: true
   },
   {
     key: "selProjectManager",
     label: "Project manager:",
-    tooltip: "Name and contact details of the person responsible for this project and for maintaining this entry on the database. (required)",
+    tooltip: "Name and contact details of the person responsible for this project and for maintaining this entry on the database.",
     required: true
   },
   {
@@ -113,7 +102,7 @@ export const ui_config = [
   // {
   //   key: "selProjectType",
   //   label: "Project type:",
-  //   tooltip: "Project type (required)",
+  //   tooltip: "Project type",
   //   required: true
   // },
   // {
@@ -185,7 +174,7 @@ export const ui_config = [
   {
     key: "selAdaptationPurpose",
     label: "Purpose:",
-    tooltip: "Loss Prevention: Reduce vulnerability. Loss Sharing: Spread risk. Behaviour Modification: Eliminate activity or behaviour. Relocation: Move away from hazard (required)",
+    tooltip: "Loss Prevention: Reduce vulnerability. Loss Sharing: Spread risk. Behaviour Modification: Eliminate activity or behaviour. Relocation: Move away from hazard",
     required: true
   },
   {
@@ -219,7 +208,7 @@ export const ui_config = [
   // {
   //   key: "selMitigationCarbonCredit",
   //   label: "Carbon credit:",
-  //   tooltip: "Carbon credit (required)",
+  //   tooltip: "Carbon credit",
   //   required: true
   // },
   // {
@@ -268,7 +257,7 @@ export const ui_config = [
   // {
   //   key: "txtEmissionsYear",
   //   label: "Year:",
-  //   tooltip: "Year (required)",
+  //   tooltip: "Year",
   //   required: true
   // },
   // {
@@ -402,7 +391,7 @@ export const ui_config = [
   {
     key: "txtResearchAuthor",
     label: "Author:",
-    tooltip: "Person(s) carrying out research/analysis (required)",
+    tooltip: "Person(s) carrying out research/analysis",
     required: true
   },
   {
@@ -413,13 +402,13 @@ export const ui_config = [
   {
     key: "selResearchType",
     label: "Research type:",
-    tooltip: "Scientific: e.g. climatic impacts. R&D: e.g. industry and technology. Economic and market impacts: e.g. effect of carbon tax. Social: e.g. impact of climate change on communities in x region (required)",
+    tooltip: "Scientific: e.g. climatic impacts. R&D: e.g. industry and technology. Economic and market impacts: e.g. effect of carbon tax. Social: e.g. impact of climate change on communities in x region",
     required: true
   },
   {
     key: "selResearchTargetAudience",
     label: "Target audience:",
-    tooltip: "Primary audience for the research (required)",
+    tooltip: "Primary audience for the research",
     required: true
   },
   {
@@ -436,36 +425,24 @@ export const ui_config = [
 
   // FILTERS //
   {
-    key: "txtGeneralFilters",
-    label: "General filters:",
-    tooltip: "General filters"
-  },
-  {
     key: "txtTitleFilter",
-    label: "Title",
-    tooltip: "Title filter"
+    label: "Title"
   },
   {
     key: "selStatusFilter",
-    label: "Status",
-    tooltip: "Status filter"
+    label: "Status"
   },
   {
     key: "selTypologyFilter",
-    label: "Typology",
-    tooltip: "Typology filter"
+    label: "Typology"
   },
   {
     key: "treeRegionFilter",
-    label: "Region",
-    tooltip: "Region filter",
-    tooltip2: "Selected region filter"
+    label: "Region"
   },
   {
     key: "treeSectorFilter",
-    label: "Sector",
-    tooltip: "Sector filter",
-    tooltip2: "Selected sector filter"
+    label: "Sector"
   }
 ]
 

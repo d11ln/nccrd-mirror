@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
 import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -51,28 +52,8 @@ class RangeComponent extends React.Component {
     let uiconf = UILookup(id, label)
 
     return (
-      <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-        <label
-          style={{
-            marginBottom: 15,
-            fontSize: size,
-            fontWeight: "bold",
-            color: this.getLabelFontColour(uiconf)
-          }}
-        >
-          {uiconf.label}&nbsp;
-        </label>
-      </Tooltip>
+      <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
     )
-  }
-
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
   }
 
   valueFromChange(event) {
@@ -124,7 +105,7 @@ class RangeComponent extends React.Component {
               }
               <td width="49%">
                 <Input size="sm" id={this.getId("from")} readOnly={!editMode}
-                  style={{ height: "21px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), /*width: inputWidth,*/ border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                  style={{ height: "21px", marginTop: "-27px", marginBottom: "-25px", color: _gf.getFontColour(editMode), /*width: inputWidth,*/ border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
                   value={this.fixNullOrUndefinedValue(valueFrom)}
                   onChange={this.valueFromChange.bind(this)} />
               </td>

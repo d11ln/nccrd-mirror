@@ -1,8 +1,9 @@
 import React from 'react'
-import { Row } from 'mdbreact'
+import { Row, Col, Fa, Button } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx';
 import SelectComponent from '../../Shared/SelectComponent.jsx';
+import { Popover } from 'antd'
 
 import "./shared.css"
 
@@ -13,18 +14,30 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+    removeFundingAction: payload => {
+      dispatch({ type: "REMOVE_PROJECTFUNDER_DETAILS", payload })
+    }
+  }
 }
 
 class FundingDetailsStep extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.onRemove = this.onRemove.bind(this)
+  }
+
+  onRemove(){
+    let { removeFundingAction, details, projectFunderDetails } = this.props
+    let actionIndex = projectFunderDetails.indexOf(details)
+    removeFundingAction(actionIndex)
   }
 
   render() {
 
-    let { details, users, fundingStatus, projectFunderDetails } = this.props
+    let { details, users, fundingStatus } = this.props
 
     return (
       <>
@@ -39,7 +52,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        <div className="vertical-spacer-condensed" />
 
         <Row>
           <TextComponent
@@ -52,7 +65,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        <div className="vertical-spacer-condensed" />
 
         <Row>
           <TextComponent
@@ -65,7 +78,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        <div className="vertical-spacer-condensed" />
 
         <Row>
           <SelectComponent
@@ -89,7 +102,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        <div className="vertical-spacer-condensed" />
 
         <Row>
           <TextComponent
@@ -103,7 +116,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        <div className="vertical-spacer-condensed" />
 
         <Row>
           <TextComponent
@@ -117,7 +130,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        <div className="vertical-spacer-condensed" />
 
         <Row>
           <SelectComponent
@@ -138,6 +151,19 @@ class FundingDetailsStep extends React.Component {
             }}
             allowClear={true}
           />
+        </Row>
+
+        <div className="vertical-spacer-condensed" />
+
+        <Row>
+          <Col>
+            <Popover content={"Remove this funding action completely"}>
+              <Button className="inline-button" color="danger" onClick={this.onRemove}>
+                <Fa className="button-icon" icon="minus-circle" />
+                Remove funding
+              </Button>
+            </Popover>
+          </Col>
         </Row>
       </>
     )

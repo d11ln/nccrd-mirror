@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Select } from 'antd'
 import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -152,15 +153,6 @@ class SelectComponent extends React.Component {
     return ar
   }
 
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
-  }
-
   onSelect(value) {
 
     if (!this.getDisabledState()) {
@@ -253,16 +245,7 @@ class SelectComponent extends React.Component {
 
     return (
       <div className={col}>
-        <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-          <label
-            style={{
-              fontWeight: "bold",
-              color: this.getLabelFontColour(uiconf),
-              ...labelStyle
-            }} >
-            {uiconf.label}
-          </label>
-        </Tooltip>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <Select
           style={{ width: "100%", ...style }}
@@ -270,7 +253,6 @@ class SelectComponent extends React.Component {
           dropdownStyle={{ width: 200 }}
           onChange={this.onSelect}
           value={displayValue}
-          // disabled={this.getDisabledState()}
           allowClear={allowClear}
         >
           {this.selectOptions()}

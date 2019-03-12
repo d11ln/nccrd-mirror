@@ -127,18 +127,6 @@ const mapDispatchToProps = (dispatch) => {
     setLookupDataLoaded: payload => {
       dispatch({ type: "SET_LOOKUPS_LOADED", payload })
     },
-    addProjectFunderDetails: payload => {
-      dispatch({ type: "ADD_PROJECTFUNDER_DETAILS", payload })
-    },
-    addAdaptationDetails: payload => {
-      dispatch({ type: "ADD_ADAPTATION_DETAILS", payload })
-    },
-    // addMitigationDetails: payload => {
-    //   dispatch({ type: "ADD_MITIGATION_DETAILS", payload })
-    // },
-    // addMitigationEmissions: payload => {
-    //   dispatch({ type: "ADD_MITIGATION_EMISSIONS", payload })
-    // },
     setAdaptationDetailsResearchDetails: payload => {
       dispatch({ type: "SET_ADAPTATION_DETAILS_RESEARCH_DETAILS", payload })
     },
@@ -160,9 +148,7 @@ class SteppedInputForm extends React.Component {
     this.onClose = this.onClose.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.addAdaptationAction = this.addAdaptationAction.bind(this);
-    this.removeAdaptationAction = this.removeAdaptationAction.bind(this);
-    this.addFundingDetails = this.addFundingDetails.bind(this);
+    this.stepWizard = this.stepWizard.bind(this);
 
     this.state = {
       mode: "edit", //add|edit
@@ -409,6 +395,11 @@ class SteppedInputForm extends React.Component {
     this.setState({ currentStep });
   }
 
+  stepWizard(steps) {
+    let { currentStep } = this.state
+    this.setState({ currentStep: (currentStep + steps) })
+  }
+
   showConfirm(title, message, yesText, noText, yesFunction) {
     confirm({
       title: title,
@@ -424,45 +415,6 @@ class SteppedInputForm extends React.Component {
       },
       onCancel() { },
     });
-  }
-
-  addAdaptationAction(asResearch, withFunding) {
-
-    let { projectDetails, addAdaptationDetails } = this.props
-
-    let _addAdaptationDetails = () => new Promise((resolve, reject) => {
-      addAdaptationDetails(projectDetails.ProjectId);
-      resolve()
-    })
-
-    _addAdaptationDetails().then(() => {
-
-      let { adaptationDetails, addAdaptationDetailsResearchDetails } = this.props
-
-      // ADD RESEARCH //
-      if (asResearch === true) {
-        let details = adaptationDetails[adaptationDetails.length - 1]
-        addAdaptationDetailsResearchDetails({
-          id: details.AdaptationDetailId,
-          state: 'modified'
-        })
-      }
-
-      // ADD FUNDING //
-      if (withFunding === true) {
-        // ...
-      }
-
-    })
-  }
-
-  addFundingDetails() {
-    let { projectDetails, addProjectFunderDetails } = this.props
-    addProjectFunderDetails(projectDetails.ProjectId)
-  }
-
-  removeAdaptationAction(index) {
-    // ...
   }
 
   getSteps() {
@@ -506,7 +458,7 @@ class SteppedInputForm extends React.Component {
     steps.push({
       title: 'Funding - Add',
       optional: true,
-      content: <FundingAddStep onAddClick={this.addFundingDetails} />
+      content: <FundingAddStep />
     })
 
     //Adaptation
@@ -527,7 +479,7 @@ class SteppedInputForm extends React.Component {
       if (action.ResearchDetail !== null) {
         steps.push({
           title: `Adaptation #${index} - Research`,
-          content: <AdaptationResearchStep details={action} />
+          content: <AdaptationResearchStep details={action} stepWizard={this.stepWizard} />
         })
       }
 
@@ -539,14 +491,14 @@ class SteppedInputForm extends React.Component {
     steps.push({
       title: 'Adaptation - Add',
       optional: true,
-      content: <AdaptationAddStep onAddClick={this.addAdaptationAction} />
+      content: <AdaptationAddStep />
     })
 
     //Mitigation
     steps.push({
       title: 'Mitigation - Add',
       optional: true,
-      content: <MitigationAddStep /*onAddClick={this.addMitigationAction}*/ />
+      content: <MitigationAddStep />
     })
 
     //Summary
@@ -554,7 +506,7 @@ class SteppedInputForm extends React.Component {
       title: 'Summary',
       content: <OverallSummaryStep
         projectDetails={projectDetails}
-        adaptationDetails={adaptationDetails} 
+        adaptationDetails={adaptationDetails}
         funderDetails={projectFunderDetails}
       />
     })
@@ -624,7 +576,8 @@ class SteppedInputForm extends React.Component {
                     </i>
                     </h6>
                   }
-                  <br />
+                  {/* <br /> */}
+                  <div className="vertical-spacer" />
                   {steps[currentStep].content}
                 </div>
               </Col>

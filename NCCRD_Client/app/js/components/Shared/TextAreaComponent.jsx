@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from "mdbreact"
 import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -44,15 +45,6 @@ class TextAreaComponent extends React.Component {
     }
   }
 
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
-  }
-
   render() {
 
     let { col, label, editMode, id, value, rows } = this.props
@@ -63,16 +55,7 @@ class TextAreaComponent extends React.Component {
 
     return (
       <div className={col} style={{ paddingRight: 20 }}>
-        <Tooltip title={uiconf.tooltip} mouseEnterDelay={0.7}>
-          <label
-            style={{
-              fontWeight: "bold",
-              color: this.getLabelFontColour(uiconf)
-            }}
-          >
-            {uiconf.label}
-          </label>
-        </Tooltip>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <TextareaAutosize
           readOnly={!editMode}

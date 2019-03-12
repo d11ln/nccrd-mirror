@@ -41,6 +41,7 @@ class OverallSummaryStep extends React.Component {
     this.getResearchTypeValue = this.getResearchTypeValue.bind(this)
     this.getTargetAudienceValue = this.getTargetAudienceValue.bind(this)
     this.getResearchMaturityValue = this.getResearchMaturityValue.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   getProjectStatusValue(id) {
@@ -173,6 +174,10 @@ class OverallSummaryStep extends React.Component {
     return (<h6 className="summary-value">{value}</h6>)
   }
 
+  onChange(key){
+    this.setState({ activeKey: key })
+  }
+
   render() {
 
     let { projectDetails, funderDetails, adaptationDetails } = this.props
@@ -197,9 +202,8 @@ class OverallSummaryStep extends React.Component {
           </Col>
         </Row>
 
-        <Collapse className="summary-collapse" bordered={false} activeKey={activeKey}>
-          <hr style={{ marginBottom: -5, color: "#F0F0F0", backgroundColor: "#F0F0F0" }} />
-
+        <hr style={{ marginBottom: 0, color: "#F0F0F0", backgroundColor: "#F0F0F0" }} />
+        <Collapse className="summary-collapse" bordered={false} activeKey={activeKey} onChange={this.onChange}>
           <Panel
             header={
               <h5 className="summary-panel-header"><u>PROJECT</u></h5>

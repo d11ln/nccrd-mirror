@@ -2,6 +2,10 @@
   height: 12px;
 }
 
+.vertical-spacer-condensed {
+  height: 8px;
+}
+
 .horizontal-spacer {
   margin-right: 15px;
   display: inline;
@@ -10,4 +14,13 @@
 .inline-button {
   margin-left: 0px;
   margin-right: 15px
+}
+
+.button-icon {
+  margin-right: 10px;
+}
+
+.disabled-button {
+  background-color: gainsboro;
+  color: grey;
 }
