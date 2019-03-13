@@ -6,9 +6,12 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa } from "mdbreact
 import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
+import { CSVLink } from 'react-csv'
+
 
 // AntD
 import { Popover, Select, Button as ABtn } from 'antd'
+import { object } from 'prop-types';
 const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
@@ -362,6 +365,19 @@ class ProjectList extends React.Component {
 
         <div style={{ float: "right" }}>
 
+      <Button size="sm">
+        <CSVLink
+            style={{marginRight:'', textDecoration: 'none', color:'white'}}
+            filename={"testreport.csv"}
+            data={[...this.props.projects]}
+            asyncOnClick={true}
+            onClick={() => {
+              console.log(this.props.projects)
+            }}
+          >
+            Download
+          </CSVLink>
+      </Button>
           {
             (this.props.showListExpandCollapse === true) &&
             <img
