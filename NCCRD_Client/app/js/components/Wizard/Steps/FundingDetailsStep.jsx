@@ -52,7 +52,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -65,7 +65,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -78,7 +78,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
@@ -102,7 +102,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -116,7 +116,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        <div className="vertical-spacer" />
 
         <Row>
           <TextComponent
@@ -130,7 +130,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        <div className="vertical-spacer" />
 
         <Row>
           <SelectComponent
@@ -153,7 +153,7 @@ class FundingDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer-condensed" />
+        {/* <div className="vertical-spacer" />
 
         <Row>
           <Col>
@@ -164,7 +164,7 @@ class FundingDetailsStep extends React.Component {
               </Button>
             </Popover>
           </Col>
-        </Row>
+        </Row> */}
       </>
     )
   }

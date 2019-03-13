@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button } from 'mdbreact'
+import { Button,  Row, Col, FormInline, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 
 import './shared.css'
+import './FundingAddStep.css'
 
 const mapStateToProps = (state, props) => {
   let { projectFundersData: { projectFunderDetails } } = state
@@ -29,7 +30,32 @@ class FundingAddStep extends React.Component {
     addProjectFunderDetails(projectFunderDetails.ProjectId)
   }
 
+  getActionItem(index, details, line) {
+    return (
+      <div key={"FundingAction#" + (index + 1)}>
+        <Row className="funding-action-item-row">
+          <Col>
+            <FormInline>
+              <h6 className="funding-action-item-label">Funding #{index + 1}</h6>
+              <Button size="sm" color="danger">
+                <Fa className="button-icon" icon="trash" />
+                Remove
+              </Button>
+            </FormInline>
+          </Col>
+        </Row>
+        {
+          line === true &&
+          <hr className="funding-horizontal-separator" />
+        }
+      </div>
+
+    )
+  }
+
   render() {
+
+    let { projectFunderDetails } = this.props
 
     return (
       <>
@@ -42,6 +68,16 @@ class FundingAddStep extends React.Component {
         <Button className="inline-button" color="primary" onClick={this.addFunding}>
           Add Funding
         </Button>
+
+        <div className="vertical-spacer" />
+        <div className="vertical-spacer" />
+
+        {
+          projectFunderDetails.map(item => {
+            let index = projectFunderDetails.indexOf(item)
+            return this.getActionItem(index, item, index < projectFunderDetails.length - 1)
+          })
+        }
       </>
     )
   }

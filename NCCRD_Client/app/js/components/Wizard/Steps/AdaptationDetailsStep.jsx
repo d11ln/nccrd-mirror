@@ -173,9 +173,9 @@ class AdaptationDetailsStep extends React.Component {
           />
         </Row>
 
-        <div className="vertical-spacer" />
+        {/* <div className="vertical-spacer" /> */}
 
-        <Row>
+        {/* <Row>
           <Col>
             <Popover content={"Add optional research details"}>
               <Button disabled={details.ResearchDetail !== null} className="inline-button" color="primary" onClick={this.onAdd}>
@@ -198,7 +198,7 @@ class AdaptationDetailsStep extends React.Component {
               </Button>
             </Popover>
           </Col>
-        </Row>
+        </Row> */}
       </>
     )
   }

@@ -446,6 +446,12 @@ class SteppedInputForm extends React.Component {
     })
 
     //Funding
+    steps.push({
+      title: 'Funding - Overview',
+      optional: true,
+      content: <FundingAddStep />
+    })
+
     projectFunderDetails.map(funder => {
       let index = projectFunderDetails.indexOf(funder) + 1
 
@@ -455,13 +461,13 @@ class SteppedInputForm extends React.Component {
       })
     })
 
+    //Adaptation
     steps.push({
-      title: 'Funding - Add',
+      title: 'Adaptation - Overview',
       optional: true,
-      content: <FundingAddStep />
+      content: <AdaptationAddStep />
     })
 
-    //Adaptation
     adaptationDetails.map(action => {
 
       let index = adaptationDetails.indexOf(action) + 1
@@ -485,18 +491,11 @@ class SteppedInputForm extends React.Component {
 
       // Optionally add Funding
       // ...
-
-    })
-
-    steps.push({
-      title: 'Adaptation - Add',
-      optional: true,
-      content: <AdaptationAddStep />
     })
 
     //Mitigation
     steps.push({
-      title: 'Mitigation - Add',
+      title: 'Mitigation - Overview',
       optional: true,
       content: <MitigationAddStep />
     })
