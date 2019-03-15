@@ -533,7 +533,7 @@ class ProjectList extends React.Component {
           </h5>
         }
 
-        <Modal fade={false} isOpen={this.state.messageModal} toggle={this.toggle} centered>
+        <Modal isOpen={this.state.messageModal} toggle={this.toggle} centered>
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody>
             <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>

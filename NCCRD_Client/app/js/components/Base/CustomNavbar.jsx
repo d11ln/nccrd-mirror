@@ -206,7 +206,6 @@ class CustomNavbar extends React.Component {
 
               {/* Username */}
               {(user && !user.expired) &&
-
                 <table>
                   <tbody>
                     <tr style={{ height: "40px" }}>

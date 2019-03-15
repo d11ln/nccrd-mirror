@@ -214,7 +214,7 @@ class LocationInput extends React.Component {
           </tbody>
         </table>
 
-        <Modal fade={false} isOpen={mapModal} size="fluid" centered>
+        <Modal isOpen={mapModal} size="fluid" centered>
           <ModalHeader>
             Select location from map
             <Button
