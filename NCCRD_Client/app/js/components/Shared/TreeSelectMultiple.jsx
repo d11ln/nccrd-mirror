@@ -1,15 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
-import TreeSelect from 'antd/lib/tree-select'
-import { } from 'antd'
+import { Tooltip, TreeSelect } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
-
-//AntD Tree-Select
-// import TreeSelect from 'antd/lib/tree-select'
-// import '../../../css/antd.tree-select.css' //Overrides default antd.tree-select css
-// import '../../../css/antd.select.css' //Overrides default antd.select css
 const TreeSelectNode = TreeSelect.TreeNode;
 
 const mapStateToProps = (state, props) => {
@@ -36,7 +31,6 @@ class TreeSelectMultiple extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.onSelect = this.onSelect.bind(this)
     this.getDisabledState = this.getDisabledState.bind(this)
   }
 
@@ -135,36 +129,6 @@ class TreeSelectMultiple extends React.Component {
       if (typeof callback !== 'undefined') {
         callback(value)
       }
-
-      // let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-      // let selectedValue = 0
-
-      // if (typeof extra.triggerNode !== 'undefined') {
-      //     selectedValue = extra.triggerNode.props.eventKey
-      // }
-
-      // if (selectedValue == -1) {
-
-      //     //Setup and Show EditListModal
-      //     if (typeof type === 'undefined') {
-      //         type = "std"
-      //     }
-      //     if (typeof dependencies === 'undefined') {
-      //         dependencies = []
-      //     }
-
-      //     setEditList({
-      //         show: true, data: data, dispatch: dispatch, persist: persist, type: type,
-      //         dependencies: dependencies, newItemTemplate: newItemTemplate
-      //     })
-      // }
-      // else {
-
-      //     //Dispatch to store
-      //     if (typeof setSelectedValueKey !== 'undefined') {
-      //         setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
-      //     }
-      // }
     }
   }
 
@@ -194,22 +158,13 @@ class TreeSelectMultiple extends React.Component {
 
       //Get tree data
       treeData = this.transformDataTree(data)
-
-      //Get selected value
-      // let idKey = Object.keys(data[0])[0].toString()
-      // let valueKey = Object.keys(data[0])[1].toString()
-      // let valObj = data.filter(x => x[idKey] == selectedValue)[0]
-      // if (typeof valObj !== 'undefined') {
-      //   selVal = valObj[valueKey]
-      // }
     }
 
     return (
       <div className={col}>
-        <label data-tip={uiconf.tooltip} style={{ fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <TreeSelect
-          //disabled={this.getDisabledState()}
           showSearch
           searchPlaceholder="Search..."
           style={{ width: "100%" }}

@@ -2,6 +2,8 @@ import React from 'react'
 import { Button, Input, FormInline } from 'mdbreact'
 import { connect } from 'react-redux'
 import { UILookup } from '../../../config/ui_config.js'
+import { Tooltip } from 'antd';
+import DualTip from '../../Shared/DualTip.jsx';
 
 const _gf = require("../../../globalFunctions")
 const queryString = require('query-string')
@@ -51,23 +53,21 @@ class TitleFilter extends React.Component {
 
     return (
       <div style={{ marginBottom: "-10px" }}>
-        <label data-tip={uiconf.tooltip} style={{ color: "grey", fontSize: "14px" }}>
-          <b>{uiconf.label}</b>
-        </label>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <Input size="sm"
           className="form-control"
-          style={{ 
-            padding: "5px", 
-            marginTop: "-28px", 
-            width: "98%", 
-            height: "21px", 
-            border: "1px solid lightgrey", 
+          style={{
+            padding: "5px",
+            marginTop: "-23px",
+            width: "98%",
+            height: "21px",
+            border: "1px solid lightgrey",
             borderRadius: "5px",
             backgroundColor: "white",
             marginBottom: "-10px"
           }}
-          onChange={this.onChange.bind(this)} value={titleFilterInternal} 
+          onChange={this.onChange.bind(this)} value={titleFilterInternal}
           hint="Search..."
           onKeyDown={this.handleKeyDown.bind(this)}
         />

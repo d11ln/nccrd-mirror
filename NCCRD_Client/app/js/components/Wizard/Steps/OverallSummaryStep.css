@@ -1,0 +1,35 @@
+.summary-collapse {
+  /* margin-top: -20px; */
+  margin-left: -13px
+}
+
+.summary-label {
+  font-weight: 600;
+}
+
+.summary-value {
+  border: 1px solid gainsboro;
+  border-radius: 5px;
+  padding: 5px;
+  min-height: 34px;
+}
+
+.summary-panel-header {
+  font-weight: 500;
+  margin-top: 10px;
+  color: #0F83FF;
+}
+
+.summary-panel {
+  margin-left: 25px;
+}
+
+.summary-action-panel {
+  border: 2px solid silver;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.inline-value {
+  display: inline
+}

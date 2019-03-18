@@ -11,6 +11,7 @@ import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreen } from '../../../config/colours.js'
 import HazardFilter from '../Filters/HazardFilter.jsx';
+import { Tooltip } from 'antd';
 
 const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
@@ -83,13 +84,14 @@ class Projects extends React.Component {
     return (
       <>
         <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
-
           {showBackToTop &&
-            <Button data-tip="Back to top" size="sm" floating color="" onClick={this.backToTop}
-              style={{ backgroundColor: DEAGreen }}>
-              <Fa icon="arrow-up" />
-            </Button>}
-
+            <Tooltip title="Back to top" mouseEnterDelay={0.7}>
+              <Button size="sm" floating color="" onClick={this.backToTop}
+                style={{ backgroundColor: DEAGreen }}>
+                <Fa icon="arrow-up" />
+              </Button>
+            </Tooltip>
+          }
         </div>
 
         {

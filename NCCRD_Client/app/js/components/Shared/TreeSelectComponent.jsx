@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { TreeSelect } from 'antd'
+import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -114,7 +116,7 @@ class TreeSelectComponent extends React.Component {
     return data.map((item) => {
       if (item.children) {
         return (
-          <TreeSelectNode value={item.text} title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} dataRef={item}>
+          <TreeSelectNode value={item.text} title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id}>
             {this.renderTreeSelectNodes(item.children, "child")}
           </TreeSelectNode>
         )
@@ -209,23 +211,14 @@ class TreeSelectComponent extends React.Component {
 
     return (
       <div className={col}>
-        <label
-          data-tip={uiconf.tooltip}
-          style={{
-            fontWeight: "bold",
-            color: this.getLabelFontColour(uiconf),
-            ...labelStyle
-          }}>
-          {uiconf.label}
-        </label>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <TreeSelect
-          // disabled={this.getDisabledState()}
           showSearch
           searchPlaceholder="Search..."
           style={{ width: "100%", ...style }}
           value={selVal}
-          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto',  }}
+          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto', }}
           dropdownMatchSelectWidth={matchWidth}
           placeholder="Select..."
           allowClear

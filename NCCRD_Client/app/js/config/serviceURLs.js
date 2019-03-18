@@ -7,7 +7,6 @@ let _ccisSiteBaseURL = ''
 let _ndmcBaseURL = ''
 let _mapServerBaseURL = ''
 
-
 if (CONSTANTS.DEV) {
   _apiBaseURL = 'http://app01.saeon.ac.za/nccrdtestapi/odata/'
   _siteBaseURL = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`

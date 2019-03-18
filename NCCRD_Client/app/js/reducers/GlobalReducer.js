@@ -70,6 +70,10 @@ export default function GlobalReducer(state = {}, action) {
       return { ...state, projectsFullView: payload }
     }
 
+    case "SET_SHOW_INPUT_WIZARD": {
+      return { ...state, showInputWizard: payload }
+    }
+
     default: {
       return state
     }

@@ -1,17 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input, Fa } from 'mdbreact'
-import { 
-  Navbar, 
-  NavItem, 
-  NavbarNav, 
-  NavbarToggler, 
-  Collapse,  
+import {
+  Navbar,
+  NavItem,
+  NavbarNav,
+  NavbarToggler,
+  Collapse,
   NavLink,
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  DropdownToggle, 
+  DropdownToggle,
 } from 'mdbreact'
 import { notification, message } from 'antd'
 import userManager from '../Authentication/userManager'
@@ -38,6 +38,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     toggleSideNav: payload => {
       dispatch({ type: "TOGGLE_SIDENAV", payload })
+    },
+    showInputWizard: payload => {
+      dispatch({ type: "SET_SHOW_INPUT_WIZARD", payload })
     }
   }
 }
@@ -86,7 +89,7 @@ class CustomNavbar extends React.Component {
 
   render() {
 
-    let {  user, toggleSideNav, showSideNav, showSideNavButton, showNavbar } = this.props
+    let { user, toggleSideNav, showSideNav, showSideNavButton, showNavbar } = this.props
 
     return (
       <Navbar
@@ -123,24 +126,24 @@ class CustomNavbar extends React.Component {
             }
 
             {
-              (!location.hash.includes("projects/") /* && (user && !user.expired) */ ) &&
+              (!location.hash.includes("projects/") /* && (user && !user.expired) */) &&
               <Button
                 color="warning"
                 size="sm"
                 style={{ marginLeft: "0px" }}
-                onClick={() => { 
+                onClick={() => {
                   let navTo = ""
-                  if (location.hash.includes("projects") && 
-                     (user && !user.expired)) {
-                     navTo = location.hash.replace("#/projects", "#/projects/add")
+                  if (location.hash.includes("projects") &&
+                    (user && !user.expired)) {
+                    navTo = location.hash.replace("#/projects", "#/projects/add")
                   }
                   else if (user && !user.expired) {
                     navTo = location.hash.replace("#/", "#/projects/add")
-                  } 
+                  }
                   else {
                     notification.warning({
-                      description:'Please login to submit projects.',
-                   
+                      description: 'Please login to submit projects.',
+
                     })
                   }
                   location.hash = navTo
@@ -149,55 +152,60 @@ class CustomNavbar extends React.Component {
               </Button>
             }
 
+            <Button color="danger" size="sm"
+              onClick={() => this.props.showInputWizard(true)}>
+              Input Wizard
+            </Button>
+
             {/* Monitoring */}
             <NavItem>
-                <Dropdown>
-                  <DropdownToggle nav caret style={{ color: "black" }}><b>Monitoring and Evaluation</b></DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem header style={{ marginLeft: "-16px", fontSize:"16px", color: "black" }}>
-                      <b>
-                        Climate Change Adaptation&nbsp;
+              <Dropdown>
+                <DropdownToggle nav caret style={{ color: "black" }}><b>Monitoring and Evaluation</b></DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header style={{ marginLeft: "-16px", fontSize: "16px", color: "black" }}>
+                    <b>
+                      Climate Change Adaptation&nbsp;
                         <br className="d-block d-md-none" />
-                        Monitoring and Evaluation
+                      Monitoring and Evaluation
                       </b>
-                    </DropdownItem>
-                    <DropdownItem divider />
-                    {/* <DropdownItem header style={{ marginLeft: "-16px", fontWeight: "400", fontSize: "16px", color: "black" }}>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  {/* <DropdownItem header style={{ marginLeft: "-16px", fontWeight: "400", fontSize: "16px", color: "black" }}>
                       Impacts:
                     </DropdownItem> */}
-                    <DropdownItem href={ ccisSiteBaseURL } style={{ marginLeft: "7px" }}>
-                      <b style={{ color: "grey" }}>View Information</b>
-                    </DropdownItem>
-                    <DropdownItem href={ ccisSiteBaseURL + '/#/ame/contribute' }  style={{ marginLeft: "7px" }}>
-                      <b style={{ color: "grey" }}>Submit evaluation on Progress</b>
-                    </DropdownItem>                   
-                  </DropdownMenu>
-                </Dropdown>
-              </NavItem>  
+                  <DropdownItem href={ccisSiteBaseURL} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>View Information</b>
+                  </DropdownItem>
+                  <DropdownItem href={ccisSiteBaseURL + '/#/ame/contribute'} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>Submit evaluation on Progress</b>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </NavItem>
 
 
 
-          {/* Hazards */}
-          <NavItem>
-            <Dropdown>
-              <DropdownToggle nav caret style={{ color: "black" }}><b>Hazardous Events </b></DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem header style={{ marginLeft: "-16px", fontSize:"16px", color: "black" }}>
-                  <b>
-                    National Hazardous Events
+            {/* Hazards */}
+            <NavItem>
+              <Dropdown>
+                <DropdownToggle nav caret style={{ color: "black" }}><b>Hazardous Events </b></DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header style={{ marginLeft: "-16px", fontSize: "16px", color: "black" }}>
+                    <b>
+                      National Hazardous Events
                   </b>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem href={ ndmcBaseURL } style={{ marginLeft: "7px" }}>
-                  <b style={{ color: "grey" }}>National Hazardous Events Database</b>
-                </DropdownItem>
-                <DropdownItem href={ ndmcBaseURL }  style={{ marginLeft: "7px" }}>
-                  <b style={{ color: "grey" }}>Submit Hazardous Event</b>
-                </DropdownItem>                   
-              </DropdownMenu>
-            </Dropdown>
-          </NavItem>  
-        </NavbarNav>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem href={ndmcBaseURL} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>National Hazardous Events Database</b>
+                  </DropdownItem>
+                  <DropdownItem href={ndmcBaseURL} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>Submit Hazardous Event</b>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </NavItem>
+          </NavbarNav>
 
           {/* RIGHT */}
           {
