@@ -47,7 +47,7 @@ export function getFontColour(editMode) {
 }
 
 export function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export function GetUID() {
@@ -58,8 +58,7 @@ export function GetUID() {
   });
 }
 
-export function IsValidGuid(guid)
-{
+export function IsValidGuid(guid) {
   let pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
   return pattern.test(guid)
 }
@@ -137,6 +136,13 @@ export function CreateCookie(name, value, days) {
   document.cookie = name + "=" + value + expires + "; path=/";
 }
 
+export function CreateTempCookie(name, value) {
+  var date = new Date();
+  date.setTime(date.getTime() + (5 * 60 * 1000)); //5 minutes
+  var expires = "; expires=" + date.toGMTString();
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
 export function ReadCookie(name) {
   var nameEQ = name + "="; var ca = document.cookie.split(';');
   for (var i = 0; i < ca.length; i++) {
@@ -150,3 +156,7 @@ export function ReadCookie(name) {
   }
   return null;
 } 
+
+export function DeleteCookie(name){
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}

@@ -125,9 +125,6 @@ class App extends React.Component {
   componentWillMount() {
     //this.genTestConfig()
     this.processURLConfig()
-  }
-
-  componentDidMount() {
     this.processSilentSignIn()
   }
 

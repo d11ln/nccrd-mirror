@@ -20,6 +20,7 @@ import classnames from 'classnames';
 import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 import LinkedDAO from './LinkedDAO.jsx'
 import EditButtonsGroup from './EditButtonsGroup.jsx';
+import { CSVLink } from 'react-csv'
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
@@ -754,7 +755,26 @@ class ProjectDetails extends React.Component {
                         Linked DAO Details
                   </Button>
                     }
-
+                  <Button
+                      style={{
+                          margin: "0px 0px 20px 15px",
+                          backgroundColor: (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) ? "grey" : DEAGreen
+                      }}
+                      color=""
+                      size="sm"
+                  >
+                    <CSVLink
+                      style={{marginRight:'15px', color:"white", textDecoration:"none"}}
+                      filename={"testreport.csv"}
+                      data={[this.props.projectDetails]}
+                      asyncOnClick={true}
+                      onClick={() => {
+                        console.log(this.props.projectDetails)
+                      }}
+                    >
+                    Download
+                  </CSVLink>
+                  </Button>
                     <EditButtonsGroup
                       editMode={editMode}
                       allowAdd={activeTabId !== "1"}
@@ -929,7 +949,7 @@ class ProjectDetails extends React.Component {
         </Row>
 
         <Container>
-          <Modal fade={false} isOpen={this.state.discardModal} centered>
+          <Modal isOpen={this.state.discardModal} centered>
             <ModalHeader>Confirm Discard</ModalHeader>
             <ModalBody>
               Are you sure you want to discard all changes?
@@ -942,7 +962,7 @@ class ProjectDetails extends React.Component {
         </Container>
 
         <Container>
-          <Modal fade={false} isOpen={this.state.saveModal} centered>
+          <Modal isOpen={this.state.saveModal} centered>
             <ModalHeader>Confirm Save</ModalHeader>
             <ModalBody>
               Are you sure you want to save all changes?
@@ -955,7 +975,7 @@ class ProjectDetails extends React.Component {
         </Container>
 
         <Container>
-          <Modal fade={false} isOpen={this.state.messageModal} centered>
+          <Modal isOpen={this.state.messageModal} centered>
             <ModalHeader>{this.state.title}</ModalHeader>
             <ModalBody>
               <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>
@@ -969,7 +989,7 @@ class ProjectDetails extends React.Component {
         </Container>
 
         <Container>
-          <Modal fade={false} isOpen={this.state.doaModal} toggle={() => { this.setState({ doaModal: false }) }} size="lg" centered>
+          <Modal isOpen={this.state.doaModal} toggle={() => { this.setState({ doaModal: false }) }} size="lg" centered>
             <ModalHeader toggle={() => { this.setState({ doaModal: false }) }}>
               Linked DAO Details
               {(projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length === 0) &&
