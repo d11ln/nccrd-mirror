@@ -52,6 +52,8 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public decimal? BudgetUpper { get; set; }
 
+        public bool Verified { get; set; }
+
         //FK - ProjectStatus
         public int? ProjectStatusId { get; set; }
         [IgnoreDataMember]
