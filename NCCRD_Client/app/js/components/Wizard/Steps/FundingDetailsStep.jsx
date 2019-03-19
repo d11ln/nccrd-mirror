@@ -29,7 +29,7 @@ class FundingDetailsStep extends React.Component {
     this.onRemove = this.onRemove.bind(this)
   }
 
-  onRemove(){
+  onRemove() {
     let { removeFundingAction, details, projectFunderDetails } = this.props
     let actionIndex = projectFunderDetails.indexOf(details)
     removeFundingAction(actionIndex)
