@@ -13,11 +13,9 @@ import ProjectManagerStep from './Steps/ProjectManagerStep.jsx';
 import AdaptationDetailsStep from './Steps/AdaptationDetailsStep.jsx';
 import AdaptationContactStep from './Steps/AdaptationContactStep.jsx';
 import AdaptationResearchStep from './Steps/AdaptationResearchStep.jsx';
-import AdaptationAddStep from './Steps/AdaptationAddStep.jsx';
 import FundingDetailsStep from './Steps/FundingDetailsStep.jsx';
-import FundingAddStep from './Steps/FundingAddStep.jsx';
-import MitigationAddStep from './Steps/MitigationAddStep.jsx';
 import OverallSummaryStep from './Steps/OverallSummaryStep.jsx';
+import ActionsOverview from './Steps/ActionsOverview.jsx';
 
 const _gf = require("../../globalFunctions")
 
@@ -126,12 +124,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     setLookupDataLoaded: payload => {
       dispatch({ type: "SET_LOOKUPS_LOADED", payload })
-    },
-    setAdaptationDetailsResearchDetails: payload => {
-      dispatch({ type: "SET_ADAPTATION_DETAILS_RESEARCH_DETAILS", payload })
-    },
-    addAdaptationDetailsResearchDetails: payload => {
-      dispatch({ type: "ADD_ADAPTATION_DETAILS_RESEARCH_DETAILS", payload })
     }
   }
 }
@@ -149,6 +141,7 @@ class SteppedInputForm extends React.Component {
     this.onSubmit = this.onSubmit.bind(this)
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.stepWizard = this.stepWizard.bind(this);
+    this.jumpTo = this.jumpTo.bind(this);
 
     this.state = {
       mode: "edit", //add|edit
@@ -400,6 +393,17 @@ class SteppedInputForm extends React.Component {
     this.setState({ currentStep: (currentStep + steps) })
   }
 
+  jumpTo(stepTitle) {
+
+    let steps = this.getSteps()
+    let filteredSteps = steps.filter(s => s.title === stepTitle)
+
+    if (filteredSteps && filteredSteps.length > 0) {
+      let index = steps.indexOf(filteredSteps[0])
+      this.setState({ currentStep: index })
+    }
+  }
+
   showConfirm(title, message, yesText, noText, yesFunction) {
     confirm({
       title: title,
@@ -445,39 +449,34 @@ class SteppedInputForm extends React.Component {
       content: <ProjectManagerStep />
     })
 
-    //Funding
+    //Actions Overview
     steps.push({
-      title: 'Funding - Overview',
-      optional: true,
-      content: <FundingAddStep />
+      title: 'Actions - Overview',
+      content: <ActionsOverview jumpTo={this.jumpTo} />
     })
 
-    projectFunderDetails.map(funder => {
+    //Funding
+    projectFunderDetails.sort((a,b) => a.FunderId > b.FunderId ? 1 : 0).map(funder => {
       let index = projectFunderDetails.indexOf(funder) + 1
 
       steps.push({
         title: `Funding #${index} - Details`,
+        backAction: "Actions - Overview",
         content: <FundingDetailsStep details={funder} />
       })
     })
 
     //Adaptation
-    steps.push({
-      title: 'Adaptation - Overview',
-      optional: true,
-      content: <AdaptationAddStep />
-    })
-
-    adaptationDetails.map(action => {
-
+    adaptationDetails.sort((a,b) => a.AdaptationDetailId > b.AdaptationDetailId ? 1 : 0).map(action => {
       let index = adaptationDetails.indexOf(action) + 1
 
       steps.push({
         title: `Adaptation #${index} - Details`,
+        backAction: "Actions - Overview",
         content: <AdaptationDetailsStep details={action} />
       })
       steps.push({
-        title: `Adaptation #${index} - Contact`,
+        title: `Adaptation #${index} - Contact`,        
         content: <AdaptationContactStep details={action} />
       })
 
@@ -494,11 +493,7 @@ class SteppedInputForm extends React.Component {
     })
 
     //Mitigation
-    steps.push({
-      title: 'Mitigation - Overview',
-      optional: true,
-      content: <MitigationAddStep />
-    })
+    //...coming soon...
 
     //Summary
     steps.push({
@@ -575,7 +570,15 @@ class SteppedInputForm extends React.Component {
                     </i>
                     </h6>
                   }
-                  {/* <br /> */}
+                  {
+                    steps[currentStep].backAction &&
+                    <h6>
+                      <a href="#" onClick={() => this.jumpTo(steps[currentStep].backAction)}>
+                        <Fa className="button-icon" icon="chevron-circle-left" />
+                        <u>{steps[currentStep].backAction}</u>
+                      </a>
+                    </h6>
+                  }
                   <div className="vertical-spacer" />
                   {steps[currentStep].content}
                 </div>

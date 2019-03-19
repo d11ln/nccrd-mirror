@@ -1,0 +1,50 @@
+.adaptation-action-item-label {
+  margin-top: 7px;
+  margin-right: 50px;
+  font-weight: 600;
+}
+
+.adaptation-action-item-row {
+  margin-top: -10px;
+  margin-bottom: -10px;
+  margin-left: 0px;
+}
+
+.adaptation-horizontal-separator {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.table-side {
+  border-right: 2px solid gainsboro;
+}
+
+.table-cell {
+  padding-left: 5px;
+}
+
+.table-head {
+  height: 45px;
+  font-weight: 400;
+  border-bottom: 2px solid gainsboro;
+  font-size: 17px;
+}
+
+.table-button {
+  margin: 5px 10px 5px 0px;
+}
+
+.add-btn {
+  height: 45px;
+  width: 200px;
+}
+
+.add-btn-special {
+  height: 45px;
+  width: 200px;
+  padding-top: 6px;
+}
+
+.tbl-dd {
+  margin: 5px 10px 5px 0px;
+}
