@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button } from 'mdbreact'
-import { Collapse } from 'antd';
+import { Row, Col, Button, Fa } from 'mdbreact'
+import { Collapse, Icon } from 'antd';
 
 const Panel = Collapse.Panel;
 
@@ -174,13 +174,13 @@ class OverallSummaryStep extends React.Component {
     return (<h6 className="summary-value">{value}</h6>)
   }
 
-  onChange(key){
+  onChange(key) {
     this.setState({ activeKey: key })
   }
 
   render() {
 
-    let { projectDetails, funderDetails, adaptationDetails } = this.props
+    let { projectDetails, funderDetails, adaptationDetails, errors } = this.props
     let { activeKey } = this.state
 
     return (
@@ -195,12 +195,42 @@ class OverallSummaryStep extends React.Component {
           </Col>
           <Col>
             <div style={{ float: "right" }}>
-              <a href="#" onClick={() => { this.setState({ activeKey: ["1","2","3","4"]}) }}>Expand all</a>
+              <a href="#" onClick={() => { this.setState({ activeKey: ["1", "2", "3", "4"] }) }}>Expand all</a>
               <div className="horizontal-spacer" />
-              <a href="#" onClick={() => { this.setState({ activeKey: []}) }}>Collapse all</a>
+              <a href="#" onClick={() => { this.setState({ activeKey: [] }) }}>Collapse all</a>
             </div>
           </Col>
         </Row>
+
+        {
+          errors == true &&
+          <div>
+            {/* <div className="vertical-spacer" /> */}
+            <Row>
+              <Col>
+                <div className="error-card">
+                  <h5><b><u>REQUIRED</u></b></h5>
+                  <div className="vertical-spacer" />
+                  <h6>
+                    Some steps are missing require values (indicated by
+                    <Fa icon="info-circle" size="lg" style={{ marginLeft: 5 }} />
+                    ).
+                    <br />
+                    These steps a marked with
+                    <div style={{ fontSize: '32px', marginTop: -8, marginLeft: -1 }}>
+                      <Icon type="close-circle" />
+                    </div>
+                    <br />
+                    You will not be able to submit until these requirements are fulfilled.
+                    <br />
+                    Click on a step-title to jump to that step.
+                  </h6>
+                </div>
+              </Col>
+            </Row>
+            {/* <div className="vertical-spacer" /> */}
+          </div>
+        }
 
         <hr style={{ marginBottom: 0, color: "#F0F0F0", backgroundColor: "#F0F0F0" }} />
         <Collapse className="summary-collapse" bordered={false} activeKey={activeKey} onChange={this.onChange}>

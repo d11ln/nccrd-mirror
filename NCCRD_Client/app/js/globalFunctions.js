@@ -13,7 +13,7 @@ export function fixEmptyValue(value, defaultValue) {
 }
 
 export function isEmptyValue(value) {
-  return (typeof value === 'undefined' || value === "" || value === null)
+  return (typeof value === 'undefined' || value === "" || value === null || value === [] || value === {})
 }
 
 export function stripURLParam(paramKey) {

@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Steps, Progress, Modal } from 'antd'
+import { Steps, Progress, Modal, Icon, Popover, Tooltip } from 'antd'
 import { Button, Row, Col, Fa } from 'mdbreact'
 import buildQuery from 'odata-query'
 import { apiBaseURL, vmsBaseURL } from "../../config/serviceURLs.js"
-
-import "./SteppedInputForm.css"
 import ProjectDetailsStep from './Steps/ProjectDetailsStep.jsx';
 import DAOLinkStep from './Steps/DAOLinkStep.jsx';
 import ProjectLocationStep from './Steps/ProjectLocationStep.jsx';
@@ -16,6 +14,9 @@ import AdaptationResearchStep from './Steps/AdaptationResearchStep.jsx';
 import FundingDetailsStep from './Steps/FundingDetailsStep.jsx';
 import OverallSummaryStep from './Steps/OverallSummaryStep.jsx';
 import ActionsOverview from './Steps/ActionsOverview.jsx';
+import { UILookup } from "../../config/ui_config.js"
+
+import "./SteppedInputForm.css"
 
 const _gf = require("../../globalFunctions")
 
@@ -27,6 +28,17 @@ const mapStateToProps = (state, props) => {
   // let { mitigationData: { mitigationDetails } } = state
   // let { emissionsData: { emissionsData } } = state
   let lookupDataLoaded = state.lookupData.loaded
+
+  //Sort Funder on Id
+  projectFunderDetails.sort((a, b) => {
+    return a.FunderId - b.FunderId;
+  })
+
+  //Sort Adaptations on Id
+  adaptationDetails.sort((a, b) => {
+    return a.AdaptationDetailId - b.AdaptationDetailId;
+  })
+
   return {
     projectDetails, projectFunderDetails, adaptationDetails, //mitigationDetails, emissionsData,
     lookupDataLoaded
@@ -131,6 +143,7 @@ const mapDispatchToProps = (dispatch) => {
 const Step = Steps.Step
 const confirm = Modal.confirm
 
+let steps = [] //Make steps globally accessible
 
 class SteppedInputForm extends React.Component {
 
@@ -142,13 +155,13 @@ class SteppedInputForm extends React.Component {
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.stepWizard = this.stepWizard.bind(this);
     this.jumpTo = this.jumpTo.bind(this);
+    this.validateInputs = this.validateInputs.bind(this);
 
     this.state = {
-      mode: "edit", //add|edit
       winWidth: 0,
       winHeight: 0,
       currentStep: 0,
-      progressCompleteOverride: false,
+      progressCompleteOverride: false
     }
   }
 
@@ -211,6 +224,8 @@ class SteppedInputForm extends React.Component {
       ProjectManagerId: 0,
       ValidationStatusId: 0,
       ProjectDAOs: [],
+      ProjectRegions: [],
+      ProjectLocations: [],
       state: "modified"
     }
 
@@ -395,7 +410,7 @@ class SteppedInputForm extends React.Component {
 
   jumpTo(stepTitle) {
 
-    let steps = this.getSteps()
+    //let steps = this.getSteps()
     let filteredSteps = steps.filter(s => s.title === stepTitle)
 
     if (filteredSteps && filteredSteps.length > 0) {
@@ -424,13 +439,14 @@ class SteppedInputForm extends React.Component {
   getSteps() {
 
     let { projectDetails, adaptationDetails, projectFunderDetails, setLinkedDAOGoalId } = this.props
-    let steps = []
+    steps = []
 
     //Project
-    let title = "Project Details"
+    let title = "Project - Details"
     steps.push({
       title: title,
-      content: <ProjectDetailsStep />
+      content: <ProjectDetailsStep />,
+      error: false
     })
     steps.push({
       title: 'Project - DAO Link',
@@ -438,53 +454,61 @@ class SteppedInputForm extends React.Component {
       content: <DAOLinkStep
         ProjectDAOs={projectDetails.ProjectDAOs}
         linkCallback={(id, action) => { setLinkedDAOGoalId({ value: id, action, state: 'modified' }) }}
-      />
+      />,
+      error: false
     })
     steps.push({
       title: 'Project - Location',
-      content: <ProjectLocationStep />
+      content: <ProjectLocationStep />,
+      error: false
     })
     steps.push({
       title: 'Project - Manager',
-      content: <ProjectManagerStep />
+      content: <ProjectManagerStep />,
+      error: false
     })
 
     //Actions Overview
     steps.push({
       title: 'Actions - Overview',
-      content: <ActionsOverview jumpTo={this.jumpTo} />
+      content: <ActionsOverview jumpTo={this.jumpTo} />,
+      error: false
     })
 
     //Funding
-    projectFunderDetails.sort((a,b) => a.FunderId > b.FunderId ? 1 : 0).map(funder => {
+    projectFunderDetails.map(funder => {
       let index = projectFunderDetails.indexOf(funder) + 1
 
       steps.push({
         title: `Funding #${index} - Details`,
         backAction: "Actions - Overview",
-        content: <FundingDetailsStep details={funder} />
+        content: <FundingDetailsStep details={funder} />,
+        error: false
       })
     })
 
     //Adaptation
-    adaptationDetails.sort((a,b) => a.AdaptationDetailId > b.AdaptationDetailId ? 1 : 0).map(action => {
+    adaptationDetails.map(action => {
       let index = adaptationDetails.indexOf(action) + 1
 
       steps.push({
         title: `Adaptation #${index} - Details`,
         backAction: "Actions - Overview",
-        content: <AdaptationDetailsStep details={action} />
+        content: <AdaptationDetailsStep details={action} />,
+        error: false
       })
       steps.push({
-        title: `Adaptation #${index} - Contact`,        
-        content: <AdaptationContactStep details={action} />
+        title: `Adaptation #${index} - Contact`,
+        content: <AdaptationContactStep details={action} />,
+        error: false
       })
 
       // Optionally add Research
       if (action.ResearchDetail !== null) {
         steps.push({
           title: `Adaptation #${index} - Research`,
-          content: <AdaptationResearchStep details={action} stepWizard={this.stepWizard} />
+          content: <AdaptationResearchStep details={action} stepWizard={this.stepWizard} />,
+          error: false
         })
       }
 
@@ -495,6 +519,9 @@ class SteppedInputForm extends React.Component {
     //Mitigation
     //...coming soon...
 
+    //Validate inputs before summary
+    this.validateInputs()
+
     //Summary
     steps.push({
       title: 'Summary',
@@ -502,37 +529,170 @@ class SteppedInputForm extends React.Component {
         projectDetails={projectDetails}
         adaptationDetails={adaptationDetails}
         funderDetails={projectFunderDetails}
-      />
+        errors={ steps.filter(s => s.error === true).length > 0 }
+      />,
+      error: false
     })
 
-    return steps
+    // return steps
+  }
+
+  validateInputs() {
+
+    let { projectFunderDetails, projectDetails, adaptationDetails, mitigationDetails } = this.props
+    let { currentStep } = this.state
+
+    let uiconf = {}
+    let step = {}
+
+    //PROJECT - DETAILS//
+    step = this.getStepByTitle("Project - Details")
+    if (step && steps.indexOf(step) < currentStep) {
+      let stepValidations = []
+
+      stepValidations.push(this.validateRequiredInput("txtProjectTitle", projectDetails, "ProjectTitle"))
+      stepValidations.push(this.validateRequiredInput("txtProjectDescription", projectDetails, "ProjectDescription"))
+      stepValidations.push(this.validateRequiredInput("txtProjectLink", projectDetails, "Link"))
+      stepValidations.push(this.validateRequiredInput("txtProjectYear", projectDetails, "StartYear"))
+      stepValidations.push(this.validateRequiredInput("txtProjectYear", projectDetails, "EndYear"))
+      stepValidations.push(this.validateRequiredInput("selProjectStatus", projectDetails, "ProjectStatusId"))
+      stepValidations.push(this.validateRequiredInput("txtProjectBudget", projectDetails, "BudgetLower"))
+      stepValidations.push(this.validateRequiredInput("txtProjectBudget", projectDetails, "BudgetUpper"))
+
+      step.error = stepValidations.includes(false)
+    }
+
+    //PROJECT - LOCATION//
+    step = this.getStepByTitle("Project - Location")
+    if (step && steps.indexOf(step) < currentStep) {
+      let stepValidations = []
+
+      stepValidations.push(this.validateRequiredInput("lblRegions", projectDetails, "ProjectRegions"))
+      stepValidations.push(this.validateRequiredInput("lblLocations", projectDetails, "ProjectLocations"))
+
+      step.error = stepValidations.includes(false)
+    }
+
+    //PROJECT - MANAGER//
+    step = this.getStepByTitle("Project - Manager")
+    if (step && steps.indexOf(step) < currentStep) {
+      let stepValidations = []
+
+      stepValidations.push(this.validateRequiredInput("txtProjectLeadAgent", projectDetails, "LeadAgent"))
+      stepValidations.push(this.validateRequiredInput("selProjectManager", projectDetails, "ProjectManagerId"))
+      stepValidations.push(this.validateRequiredInput("txtProjectHostOrganisation", projectDetails, "HostOrganisation"))
+      stepValidations.push(this.validateRequiredInput("txtProjectHostPartner", projectDetails, "HostPartner"))
+      stepValidations.push(this.validateRequiredInput("txtProjectAlternativeContact", projectDetails, "AlternativeContact"))
+      stepValidations.push(this.validateRequiredInput("txtProjectAlternativeContactEmail", projectDetails, "AlternativeContactEmail"))
+
+      step.error = stepValidations.includes(false)
+    }
+
+    //FUNDING//
+    projectFunderDetails.map(pfd => {
+      let index = projectFunderDetails.indexOf(pfd) + 1
+
+      //FUNDING #XX - DETAILS//
+      step = this.getStepByTitle(`Funding #${index} - Details`)
+      if (step && steps.indexOf(step) < currentStep) {
+        let stepValidations = []
+
+        stepValidations.push(this.validateRequiredInput("lblGrantProgram", pfd, "GrantProgName"))
+        stepValidations.push(this.validateRequiredInput("lblFundingAgency", pfd, "FundingAgency"))
+        stepValidations.push(this.validateRequiredInput("lblPartneringDepts", pfd, "PartnerDepsOrgs"))
+        stepValidations.push(this.validateRequiredInput("lblProjectCoordinator", pfd, "ProjectCoordinatorId"))
+        stepValidations.push(this.validateRequiredInput("lblTotalBudget", pfd, "TotalBudget"))
+        stepValidations.push(this.validateRequiredInput("lblAnnualBudget", pfd, "AnnualBudget"))
+        stepValidations.push(this.validateRequiredInput("lblFundingStatus", pfd, "FundingStatusId"))
+
+        step.error = stepValidations.includes(false)
+      }
+    })
+
+    //ADAPTATION//
+    adaptationDetails.map(ad => {
+      let index = adaptationDetails.indexOf(ad) + 1
+
+      //ADAPTATION #XX - DETAILS//
+      step = this.getStepByTitle(`Adaptation #${index} - Details`)
+      if (step && steps.indexOf(step) < currentStep) {
+        let stepValidations = []
+
+        stepValidations.push(this.validateRequiredInput("txtAdaptationTitle", ad, "Title"))
+        stepValidations.push(this.validateRequiredInput("txtAdaptationDescription", ad, "Description"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationPurpose", ad, "AdaptationPurposeId"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationSector", ad, "SectorId"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationHazard", ad, "HazardId"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationActionStatus", ad, "ProjectStatusId"))
+
+        step.error = stepValidations.includes(false)
+      }
+
+      //ADAPTATION #XX - CONTACT//
+      step = this.getStepByTitle(`Adaptation #${index} - Contact`)
+      if (step && steps.indexOf(step) < currentStep) {
+        let stepValidations = []
+
+        stepValidations.push(this.validateRequiredInput("txtAdaptationContactName", ad, "ContactName"))
+        stepValidations.push(this.validateRequiredInput("txtAdaptationContactEmail", ad, "ContactEmail"))
+
+        step.error = stepValidations.includes(false)
+      }
+    })
+  }
+
+  validateRequiredInput(id, data, key) {
+    let uiconf = UILookup(id)
+
+    if (uiconf.required === true && (data[key] === "" || data[key] === 0 || data[key].length === 0)) {
+      return false
+    }
+    return true
+  }
+
+  getStepByTitle(stepTitle) {
+    let filteredSteps = steps.filter(s => s.title === stepTitle)
+    if (filteredSteps && filteredSteps.length > 0) {
+      return filteredSteps[0]
+    }
   }
 
   render() {
 
-    let { winHeight, currentStep, progressCompleteOverride, mode } = this.state
+    let { winHeight, currentStep, progressCompleteOverride } = this.state
 
-    let steps = this.getSteps()
+    this.getSteps()
+    // this.validateInputs()
+
+    let errors = steps.filter(s => s.error === true).length > 0
+
+    if (steps.length === 0) {
+      return (
+        <h6> LOADING... </h6>
+      )
+    }
 
     return (
       <div style={{ height: "93vh", overflowY: "hidden", overflowX: 'hidden' }}>
         <Row>
           <Col md="3">
             <div style={{ height: (winHeight - 200), maxHeight: (winHeight - 200), overflowY: "auto", overflowX: 'hidden' }}>
-              <Steps direction="vertical" current={currentStep}>
+              <Steps direction="vertical" current={currentStep} >
                 {steps.map(item => {
-                  if (mode === "add") {
-                    return < Step key={item.title} title={item.title} />
-                  }
-                  else {
-                    return <Step
-                      key={item.title}
-                      title={<a href="#">{item.title}</a>}
-                      onClick={() => {
-                        this.setState({ currentStep: steps.indexOf(item) })
-                      }}
-                    />
-                  }
+                  return <Step
+                    key={item.title}
+                    title={<a href="#">{item.title}</a>}
+                    icon={
+                      item.error ?
+                        <div style={{ fontSize: '32px', color: "red", marginTop: -8, marginLeft: -1 }}>
+                          <Icon type="close-circle" />
+                        </div> :
+                        undefined
+                    }
+                    onClick={() => {
+                      this.setState({ currentStep: steps.indexOf(item) })
+                    }}
+                  />
                 })}
               </Steps>
             </div>
@@ -625,16 +785,17 @@ class SteppedInputForm extends React.Component {
                   }
 
                   {
-                    currentStep === steps.length - 1 &&
+                    (currentStep === steps.length - 1) &&
                     <Button
+                      disabled={errors}
                       size="sm"
-                      color="warning"
+                      color="secondary"
                       onClick={this.onSubmit}
                       style={{ width: 120, marginRight: 0 }}
                     >
                       <Fa icon="save" style={{ marginRight: 10 }} />
                       Submit
-                      </Button>
+                    </Button>
                   }
                 </div>
               </Col>

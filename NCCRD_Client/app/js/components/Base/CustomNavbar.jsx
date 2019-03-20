@@ -125,8 +125,8 @@ class CustomNavbar extends React.Component {
               </Button>
             }
 
-            {
-              (!location.hash.includes("projects/") /* && (user && !user.expired) */) &&
+            {/* {
+              (!location.hash.includes("projects/")) &&
               <Button
                 color="warning"
                 size="sm"
@@ -143,18 +143,17 @@ class CustomNavbar extends React.Component {
                   else {
                     notification.warning({
                       description: 'Please login to submit projects.',
-
                     })
                   }
                   location.hash = navTo
                 }} >
                 Add New Project
               </Button>
-            }
+            } */}
 
-            <Button color="danger" size="sm"
+            <Button color="default" size="sm"
               onClick={() => this.props.showInputWizard(true)}>
-              Input Wizard
+              Add New Project
             </Button>
 
             {/* Monitoring */}
