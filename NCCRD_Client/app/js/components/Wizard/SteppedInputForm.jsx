@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Steps, Progress, Modal, Icon, Popover, Tooltip } from 'antd'
+import { Steps, Progress, Modal, Icon, notification } from 'antd'
 import { Button, Row, Col, Fa } from 'mdbreact'
 import buildQuery from 'odata-query'
 import { apiBaseURL, vmsBaseURL } from "../../config/serviceURLs.js"
@@ -22,7 +22,7 @@ const _gf = require("../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
 
-  let { projectData: { projectDetails } } = state
+  let { projectData: { projectDetails, selectedProjectId } } = state
   let { projectFundersData: { projectFunderDetails } } = state
   let { adaptationData: { adaptationDetails } } = state
   // let { mitigationData: { mitigationDetails } } = state
@@ -41,7 +41,7 @@ const mapStateToProps = (state, props) => {
 
   return {
     projectDetails, projectFunderDetails, adaptationDetails, //mitigationDetails, emissionsData,
-    lookupDataLoaded
+    lookupDataLoaded, selectedProjectId
   }
 }
 
@@ -161,14 +161,20 @@ class SteppedInputForm extends React.Component {
       winWidth: 0,
       winHeight: 0,
       currentStep: 0,
-      progressCompleteOverride: false
+      progressCompleteOverride: false,
+      currentProjectId: -1
     }
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
-    this.loadData()
+  }
+
+  componentDidUpdate() {
+    if (this.props.selectedProjectId !== this.state.currentProjectId) {
+      this.setState({ currentProjectId: this.props.selectedProjectId }, this.loadData)
+    }
   }
 
   componentWillUnmount() {
@@ -179,15 +185,16 @@ class SteppedInputForm extends React.Component {
     this.setState({ winWidth: window.innerWidth, winHeight: window.innerHeight });
   }
 
-  async loadData() {
-
+  async loadData(overrideId) {
     this.props.setLoading(true)
     this.props.setEditMode(true)
 
     // LOAD PROJECT DATA //
-    await this.loadProjectData()
+    await this.loadProjectData(overrideId)
 
     if (this.props.lookupDataLoaded === false) {
+
+      console.log("LOADING LOOKUP DATA")
 
       // LOAD LOOKUP DATA //
       await this.loadLookupsData()
@@ -201,9 +208,22 @@ class SteppedInputForm extends React.Component {
     this.props.setLoading(false)
   }
 
-  async loadProjectData() {
+  async loadProjectData(overrideId) {
 
-    let projectDetails = {
+    let { currentProjectId } = this.state
+
+    if (typeof overrideId !== 'undefined') {
+      currentProjectId = overrideId
+    }
+
+    let ProjectDetails = null
+    let AdaptationDetails = null
+    let Funders = null
+    let MitigationDetails = null
+    let MitigationEmissionsData = null
+    let ResearchDetails = null
+
+    const newProjectTemplate = {
       ProjectId: _gf.getRndInteger(1111111, 9999999),
       ProjectTitle: "",
       ProjectDescription: "",
@@ -229,23 +249,87 @@ class SteppedInputForm extends React.Component {
       state: "modified"
     }
 
-    // let { daoid } = this.props
-    // if (daoid && _gf.IsValidGuid(daoid)) {
-    //   if (oHandler.data.Project.ProjectDAOs.filter(x => x.DAOId === daoid).length === 0) {
-    //     oHandler.data.Project.ProjectDAOs.push({
-    //       ProjectDAOId: 0,
-    //       ProjectId: oHandler.data.Project.ProjectId,
-    //       DAOId: daoid
-    //     })
-    //   }
-    // }
+    if (currentProjectId === 0) {
 
-    this.props.loadProjectDetails(projectDetails)
-    this.props.loadProjectFunderDetails([])
-    this.props.loadAdaptationDetails([])
-    this.props.loadMitigationDetails([])
-    this.props.loadMitigationEmissions([])
-    this.props.loadResearchDetails([])
+      //Create new project//
+      ProjectDetails = newProjectTemplate
+      AdaptationDetails = []
+      Funders = []
+      MitigationDetails = []
+      MitigationEmissionsData = []
+      ResearchDetails = []
+    }
+    else {
+
+      //Get project details
+      const query = buildQuery({
+        expand: [
+          "Project/ProjectRegions",
+          "Project/ProjectDAOs",
+          "Project/ProjectLocations/Location",
+          "Funders",
+          "AdaptationDetails/ResearchDetail",
+          "MitigationDetails/ResearchDetail",
+          "MitigationEmissionsData",
+          "ResearchDetails"
+        ]
+      })
+
+      try {
+        let res = await fetch(apiBaseURL + `ProjectDetails/${currentProjectId}${query}`)
+        let resBody = await res.json()
+
+        if (res.ok && resBody) {
+          ProjectDetails = resBody.Project
+          AdaptationDetails = resBody.AdaptationDetails
+          Funders = resBody.Funders
+          MitigationDetails = resBody.MitigationDetails
+          MitigationEmissionsData = resBody.MitigationEmissionsData
+          ResearchDetails = resBody.ResearchDetails
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+      }
+      catch (ex) {
+
+        //Show error message
+        notification.error({
+          message: 'Unable to load project details. (See log for details)'
+        })
+
+        //Reset project data
+        ProjectDetails = newProjectTemplate
+        AdaptationDetails = []
+        Funders = []
+        MitigationDetails = []
+        MitigationEmissionsData = []
+        ResearchDetails = []
+
+        //Log error details
+        console.error(ex)
+      }
+    }
+
+    //Push DAOID from url config (if available)
+    let { daoid } = this.props
+    if (daoid && _gf.IsValidGuid(daoid)) {
+      if (ProjectDetails.ProjectDAOs.filter(x => x.DAOId === daoid).length === 0) {
+        ProjectDetails.ProjectDAOs.push({
+          ProjectDAOId: 0,
+          ProjectId: ProjectDetails.ProjectId,
+          DAOId: daoid
+        })
+      }
+    }
+
+    //Dispatch all to store
+    this.props.loadProjectDetails(ProjectDetails)
+    this.props.loadProjectFunderDetails(Funders)
+    this.props.loadAdaptationDetails(AdaptationDetails)
+    this.props.loadMitigationDetails(MitigationDetails)
+    this.props.loadMitigationEmissions(MitigationEmissionsData)
+    this.props.loadResearchDetails(ResearchDetails)
 
   }
 
@@ -373,8 +457,7 @@ class SteppedInputForm extends React.Component {
   onClose() {
 
     //discard changes & reset
-    this.setState({ currentStep: 0, progressCompleteOverride: false })
-    this.loadData()
+    this.setState({ currentStep: 0, progressCompleteOverride: false }, () => { this.loadData(0) })
 
     //close form
     this.props.onClose()
@@ -529,7 +612,7 @@ class SteppedInputForm extends React.Component {
         projectDetails={projectDetails}
         adaptationDetails={adaptationDetails}
         funderDetails={projectFunderDetails}
-        errors={ steps.filter(s => s.error === true).length > 0 }
+        errors={steps.filter(s => s.error === true).length > 0}
       />,
       error: false
     })
@@ -662,8 +745,6 @@ class SteppedInputForm extends React.Component {
     let { winHeight, currentStep, progressCompleteOverride } = this.state
 
     this.getSteps()
-    // this.validateInputs()
-
     let errors = steps.filter(s => s.error === true).length > 0
 
     if (steps.length === 0) {

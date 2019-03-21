@@ -205,7 +205,6 @@ class OverallSummaryStep extends React.Component {
         {
           errors == true &&
           <div>
-            {/* <div className="vertical-spacer" /> */}
             <Row>
               <Col>
                 <div className="error-card">
@@ -228,7 +227,6 @@ class OverallSummaryStep extends React.Component {
                 </div>
               </Col>
             </Row>
-            {/* <div className="vertical-spacer" /> */}
           </div>
         }
 
@@ -358,7 +356,7 @@ class OverallSummaryStep extends React.Component {
                     (projectDetails.ProjectLocations && projectDetails.ProjectLocations.length > 0) &&
                     projectDetails.ProjectLocations.map(pl => {
                       return (
-                        <h6 key={pl.ProjectLocationId} className="summary-value">{pl.Location.LatCalculated}, ${pl.Location.LonCalculated}</h6>
+                        <h6 key={pl.ProjectLocationId} className="summary-value">{pl.Location.LatCalculated}, {pl.Location.LonCalculated}</h6>
                       )
                     })
                   }
@@ -439,7 +437,7 @@ class OverallSummaryStep extends React.Component {
                   let index = funderDetails.indexOf(funder) + 1
 
                   return (
-                    <div>
+                    <div key={`funder#${index}`}>
                       <div className="summary-action-panel">
                         <h6 className="summary-label"><u>FUNDING #{index}</u></h6>
                         <br />
@@ -525,7 +523,7 @@ class OverallSummaryStep extends React.Component {
                   let index = adaptationDetails.indexOf(adaptation) + 1
 
                   return (
-                    <div>
+                    <div key={`adaptation#${index}`}>
                       <div className="summary-action-panel">
                         <h6 className="summary-label"><u>ADAPTATION #{index}</u></h6>
                         <br />

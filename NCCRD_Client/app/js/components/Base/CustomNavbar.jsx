@@ -41,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     showInputWizard: payload => {
       dispatch({ type: "SET_SHOW_INPUT_WIZARD", payload })
+    },
+    setSelectedProjectId: payload => {
+      dispatch({ type: "SET_SELECTED_PROJECT_ID", payload })
     }
   }
 }
@@ -125,34 +128,23 @@ class CustomNavbar extends React.Component {
               </Button>
             }
 
-            {/* {
-              (!location.hash.includes("projects/")) &&
-              <Button
-                color="warning"
-                size="sm"
-                style={{ marginLeft: "0px" }}
-                onClick={() => {
-                  let navTo = ""
-                  if (location.hash.includes("projects") &&
-                    (user && !user.expired)) {
-                    navTo = location.hash.replace("#/projects", "#/projects/add")
-                  }
-                  else if (user && !user.expired) {
-                    navTo = location.hash.replace("#/", "#/projects/add")
-                  }
-                  else {
-                    notification.warning({
-                      description: 'Please login to submit projects.',
-                    })
-                  }
-                  location.hash = navTo
-                }} >
-                Add New Project
-              </Button>
-            } */}
-
             <Button color="default" size="sm"
-              onClick={() => this.props.showInputWizard(true)}>
+              onClick={() => {
+                if (!user || user.expired) {
+                  notification.warning({
+                    message: 'Please login to submit projects.'
+                  })
+                }
+                else {
+                  let dispatch = () => new Promise((resolve, reject) => {
+                    this.props.setSelectedProjectId(0)
+                    resolve()
+                  })     
+                  dispatch().then(() => {
+                    this.props.showInputWizard(true)
+                  })
+                }
+              }}>
               Add New Project
             </Button>
 

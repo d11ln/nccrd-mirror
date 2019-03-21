@@ -366,7 +366,7 @@ class App extends React.Component {
                 <div
                   hidden={!this.props.loading}
                   className="card"
-                  style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "absolute", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
+                  style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
 
                   <div className="card-body">
                     <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>
