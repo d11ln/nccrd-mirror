@@ -206,6 +206,9 @@ class SteppedInputForm extends React.Component {
       this.props.setLookupDataLoaded(true)
     }
 
+    if (typeof overrideId !== 'undefined') {
+      this.setState({ currentProjectId: -1 })
+    }
     this.props.setLoading(false)
   }
 
@@ -774,7 +777,7 @@ class SteppedInputForm extends React.Component {
                     }
                     onClick={() => {
                       this.setState({ currentStep: steps.indexOf(item) })
-                    }}                    
+                    }}
                   />
                 })}
               </Steps>
@@ -788,6 +791,20 @@ class SteppedInputForm extends React.Component {
                 percent={progressCompleteOverride ? 100 : Math.round(100 / steps.length * currentStep)}
                 style={{ marginLeft: -10 }}
                 strokeColor={DEAGreen}
+                format={percent => {
+                  if (percent < 100) {
+                    return (
+                      <span style={{ color: DEAGreen }}>
+                        {`${percent}%`}
+                      </span>
+                    )
+                  }
+                  else {
+                    return(
+                      <Fa size="2x" icon="check" style={{ color: DEAGreen }} />
+                    )
+                  }
+                }}
               />
             </div>
           </Col>
@@ -874,7 +891,11 @@ class SteppedInputForm extends React.Component {
                       disabled={errors}
                       size="sm"
                       color=""
-                      onClick={this.onSubmit}
+                      //onClick={this.onSubmit}
+                      onClick={() => {
+                        this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
+                          "Yes", "No", this.onSubmit)
+                      }}
                       style={{ width: 120, marginRight: 0, backgroundColor: DEAGreenDark }}
                     >
                       <Fa icon="save" style={{ marginRight: 10 }} />

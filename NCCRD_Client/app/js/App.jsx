@@ -314,15 +314,12 @@ class App extends React.Component {
     let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter, showInputWizard } = this.props
 
     return (
-      <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
-        <Router>
-          <div>
+      <Router>
+        <div id="app-content" style={{ height: '100vh', overflowY: ( showInputWizard === true ? 'hidden' : 'scroll'), overflowX: 'hidden' }}>
+          {(showHeader === true) && <Header />}
+          {(showNavbar !== false) && <CustomNavbar />}
 
-            <div style={{ marginLeft: -15, marginRight: -15 }}>
-              {(showHeader === true) && <Header />}
-              {(showNavbar !== false) && <CustomNavbar />}
-            </div>
-
+          <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
             {
               showSideNavButton === true &&
               <SideNav data={NavData} isOpen={showSideNav} />
@@ -352,38 +349,38 @@ class App extends React.Component {
                 </Switch>
               </div>
             </div>
+          </div>
 
-            {
-              (showFooter === true) &&
-              <div style={{ marginLeft: -15, marginRight: -15 }}>
-                <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
-                <Footer />
-              </div>
-            }
+          {
+            (showFooter === true) &&
+            <div>
+              <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+              <Footer />
+            </div>
+          }
 
-            <div className="container-fluid">
-              <div className="row">
-                <div
-                  hidden={!this.props.loading}
-                  className="card"
-                  style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
+          <div className="container-fluid">
+            <div className="row">
+              <div
+                hidden={!this.props.loading}
+                className="card"
+                style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
 
-                  <div className="card-body">
-                    <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>
-                    <br />
-                    <span style={{ width: "100px", paddingLeft: ((loaderWidth / 2) - 50) }}>
-                      <Spinner big multicolor />
-                    </span>
-                  </div>
+                <div className="card-body">
+                  <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>
+                  <br />
+                  <span style={{ width: "100px", paddingLeft: ((loaderWidth / 2) - 50) }}>
+                    <Spinner big multicolor />
+                  </span>
                 </div>
               </div>
             </div>
-
-            <ReactTooltip delayShow={700} />
-
           </div>
-        </Router>
-      </div>
+
+          <ReactTooltip delayShow={700} />
+
+        </div>
+      </Router>
     )
   }
 }
