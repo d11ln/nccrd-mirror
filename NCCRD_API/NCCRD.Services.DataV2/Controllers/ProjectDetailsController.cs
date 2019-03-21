@@ -570,7 +570,15 @@ namespace NCCRD.Services.DataV2.Controllers
                 HelperExtensions.ClearIdentityValue(ref research);
                 HelperExtensions.ClearNullableInts(ref research);
                 _context.ResearchDetails.Add(research);
-                _context.SaveChanges(); //Save changes to get DB ID
+                try
+                {
+                    _context.SaveChanges(); //Save changes to get DB ID
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
                 return Created(research);
             }
             else

@@ -123,7 +123,7 @@ export default function ProjectFundersReducer(state = {}, action) {
             projectFunderDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, TotalBudget: payload, state: modState }] }
+            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, TotalBudget: parseFloat(payload), state: modState }] }
         }
 
         case "SET_PROJECTFUNDER_ANNUALBUDGET": {
@@ -135,7 +135,7 @@ export default function ProjectFundersReducer(state = {}, action) {
             projectFunderDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, AnnualBudget: payload, state: modState }] }
+            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, AnnualBudget: parseFloat(payload), state: modState }] }
         }
 
         case "SET_PROJECTFUNDERS_PROJECTCOORDINATOR": {

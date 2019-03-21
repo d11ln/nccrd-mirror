@@ -23,6 +23,7 @@ const _gf = require("../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
 
+  let user = state.oidc.user
   let { projectData: { projectDetails, selectedProjectId } } = state
   let { projectFundersData: { projectFunderDetails } } = state
   let { adaptationData: { adaptationDetails } } = state
@@ -42,7 +43,7 @@ const mapStateToProps = (state, props) => {
 
   return {
     projectDetails, projectFunderDetails, adaptationDetails, //mitigationDetails, emissionsData,
-    lookupDataLoaded, selectedProjectId
+    lookupDataLoaded, selectedProjectId, user
   }
 }
 
@@ -137,6 +138,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setLookupDataLoaded: payload => {
       dispatch({ type: "SET_LOOKUPS_LOADED", payload })
+    },
+    setFiltersChanged: payload => {
+      dispatch({ type: "SET_FILTERS_CHANGED", payload })
     }
   }
 }
@@ -467,17 +471,132 @@ class SteppedInputForm extends React.Component {
     this.props.onClose()
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     //do submit stuff here//
-    //...
+    let saveRes = await this.saveChanges()
 
-    //reset and close form
-    this.setState({ progressCompleteOverride: true }, () => {
-      setTimeout(() => {
-        this.onClose()
-      }, 500)
-    })
+    if (saveRes) {
+      //complete process
+      this.setState({ progressCompleteOverride: true }, () => {
+        setTimeout(() => {
+          this.onClose()
+
+          //Re-load projects
+          this.props.setFiltersChanged(true)
+        }, 500)
+      })
+    }
+  }
+
+  async saveChanges() {
+
+    let { user, projectDetails, adaptationDetails, projectFunderDetails } = this.props
+    let { currentProjectId: projectId } = this.state
+    let result = true
+    let dataObj = { Id: projectId }
+
+    //Show loading
+    this.props.setLoading(true)
+
+    //Add Project
+    if (projectDetails.state === 'modified') {
+      let projectData = _.clone(projectDetails)
+      projectData.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
+      delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
+      dataObj.Project = projectData
+    }
+
+    //Add Funding
+    if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
+      let funderData = []
+      projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
+        let funderItem = _.clone(item)
+        delete funderItem.ProjectId //OData can only bind to the original object spec which does not contain 'ProjectId'
+        delete funderItem.state //OData can only bind to the original object spec which does not contain 'state'
+        delete funderItem.key //OData can only bind to the original object spec which does not contain 'key'
+        funderData.push(funderItem)
+      })
+      dataObj.Funders = funderData
+    }
+
+    //Add AdaptationDetails
+    if (adaptationDetails.filter(x => x.state === 'modified').length > 0) {
+      let adaptationData = []
+      adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
+        let adaptationItem = _.clone(item)
+        delete adaptationItem.state //OData can only bind to the original object spec which does not contain 'state'
+        adaptationItem.ProjectId = parseInt(projectId)  //Asociate with current project
+        adaptationItem.ResearchDetail.ProjectId = parseInt(projectId)  //Asociate with current project
+        adaptationData.push(adaptationItem)
+      })
+      dataObj.AdaptationDetails = adaptationData
+    }
+
+    //Add MitigationDetails
+    // if (mitigationDetails.filter(x => x.state === 'modified').length > 0) {
+    //   let mitigationData = []
+    //   mitigationDetails.filter(x => x.state === 'modified').forEach(item => {
+    //     let mitigationItem = _.clone(item)
+    //     delete mitigationItem.state //OData can only bind to the original object spec which does not contain 'state'
+    //     mitigationItem.ProjectId = parseInt(projectId) //Asociate with current project  
+    //     mitigationData.push(mitigationItem)
+    //   })
+    //   dataObj.MitigationDetails = mitigationData
+    // }
+
+    //Add MitigationEmissionsData
+    // if (emissionsData.filter(x => x.state === 'modified').length > 0) {
+    //   let mitigationEmissionsData = []
+    //   emissionsData.filter(x => x.state === 'modified').forEach(item => {
+    //     let emissionsItem = _.clone(item)
+    //     delete emissionsItem.state //OData can only bind to the original object spec which does not contain 'state'
+    //     emissionsItem.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
+    //     mitigationEmissionsData.push(emissionsItem)
+    //   })
+    //   dataObj.MitigationEmissionsData = mitigationEmissionsData
+    // }
+
+    let res = ""
+    try {
+      res = await fetch(apiBaseURL + "ProjectDetails",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+          },
+          body: JSON.stringify(dataObj)
+        })
+
+      if (!res.ok) {
+        throw new Error()
+      }
+    }
+    catch {
+
+      //Show error notification
+      notification.error({
+        duration: 0,
+        message: <div>
+          Unable to save project.<br/>
+          (See log for error details)
+          <br/><br/>
+          Please try again in a few minutes.
+          <br/><br/>
+          If this problem persists, please contact the system administrator.
+        </div>
+      })
+
+      // console.error(ex)
+      console.error(res)
+      result = false
+    }
+
+    //Hide loading
+    this.props.setLoading(false)
+
+    return result
   }
 
   onNext() {
@@ -748,6 +867,7 @@ class SteppedInputForm extends React.Component {
   render() {
 
     let { winHeight, currentStep, progressCompleteOverride } = this.state
+    let { projectDetails, projectFunderDetails, adaptationDetails, /*mitigationDetails, MitigationEmissionsData*/ } = this.props
 
     this.getSteps()
     let errors = steps.filter(s => s.error === true).length > 0
@@ -800,7 +920,7 @@ class SteppedInputForm extends React.Component {
                     )
                   }
                   else {
-                    return(
+                    return (
                       <Fa size="2x" icon="check" style={{ color: DEAGreen }} />
                     )
                   }
@@ -891,10 +1011,19 @@ class SteppedInputForm extends React.Component {
                       disabled={errors}
                       size="sm"
                       color=""
-                      //onClick={this.onSubmit}
                       onClick={() => {
-                        this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
-                          "Yes", "No", this.onSubmit)
+                        let projectChanged = projectDetails.state === "modified"
+                        let fundersChanged = projectFunderDetails.filter(x => x.state === "modified").length > 0
+                        let adaptationsChanged = adaptationDetails.filter(x => x.state === "modified").length > 0
+
+                        if (projectChanged || fundersChanged || adaptationsChanged) {
+                          this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
+                            "Yes", "No", this.onSubmit)
+                        }
+                        else {
+                          this.showConfirm("Confirm close", "You have not made any changes, would you like to close the form?",
+                            "Yes", "No", this.onClose)
+                        }
                       }}
                       style={{ width: 120, marginRight: 0, backgroundColor: DEAGreenDark }}
                     >

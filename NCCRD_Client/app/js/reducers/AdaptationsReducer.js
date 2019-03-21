@@ -190,8 +190,6 @@ export default function AdaptationsReducer(state = {}, action) {
                 PaperLink: "",
                 ResearchTypeId: 0,
                 TargetAudienceId: 0,
-                ProjectId: details.ProjectId,
-                SectorId: null,
                 ResearchMaturityId: null
             }
 
