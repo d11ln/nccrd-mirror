@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import { ccisBaseURL } from '../../../config/serviceURLs.js'
 import OData from 'react-odata'
-import { DEAGreen } from '../../../config/colours.js'
+import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
@@ -55,7 +55,7 @@ class DAOLinkStep extends React.Component {
         {/* LINKED */}
         {editMode &&
           <div>
-            <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "#0F83FF" }}>
+            <h5 style={{ marginBottom: "15px", fontWeight: "bold", color:  DEAGreenDark}}>
               Linked DAOs:
             </h5>
 
@@ -187,7 +187,7 @@ class DAOLinkStep extends React.Component {
 
           {editMode &&
             <div>
-              <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "#0F83FF" }}>
+              <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: DEAGreenDark }}>
                 Search for DAOs:
               </h5>
 
@@ -252,8 +252,8 @@ class DAOLinkStep extends React.Component {
                               </CardText>
                               <Button
                                 size="sm"
-                                color="primary"
-                                style={{ /*backgroundColor: DEAGreen,*/ marginLeft: "0px" }}
+                                color=""
+                                style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
                                 onClick={() => {
                                   if (linkCallback) {
                                     setTimeout(linkCallback(item.Id, "add"), 1000)
@@ -335,8 +335,8 @@ class DAOLinkStep extends React.Component {
                               </CardText>
                               <Button
                                 size="sm"
-                                color="primary"
-                                style={{ /*backgroundColor: DEAGreen,*/ marginLeft: "0px" }}
+                                color=""
+                                style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
                                 onClick={() => {
                                   if (linkCallback) {
                                     setTimeout(linkCallback(item.Id, "add"), 1000)

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Fa } from 'mdbreact'
 import { Tooltip, Popover } from 'antd'
+import { DEAGreen, DEAGreenDark } from '../../config/colours.js'
 
 class DualTip extends React.Component {
 
@@ -41,7 +42,7 @@ class DualTip extends React.Component {
     primaryTip = primaryTip ? primaryTip : ""
     secondaryTip = secondaryTip ? secondaryTip : ""
 
-    let color = required === true ? "red-text" : "blue-text"
+    let color = required === true ? "red" : DEAGreen //"blue-text"
 
     const hoverContent = (
       <div>
@@ -95,7 +96,7 @@ class DualTip extends React.Component {
                       visible={this.state.clicked}
                       onVisibleChange={this.handleClickChange}
                     >
-                      <Fa className={color} icon="info-circle" size="lg" style={{ marginRight: 5 }} />
+                      <Fa icon="info-circle" size="lg" style={{ marginRight: 5, color: color }} />
                     </Popover>
                   </Popover>
                 }

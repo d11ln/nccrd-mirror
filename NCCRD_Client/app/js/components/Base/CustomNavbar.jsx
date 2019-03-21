@@ -128,7 +128,10 @@ class CustomNavbar extends React.Component {
               </Button>
             }
 
-            <Button color="default" size="sm"
+            <Button
+              color=""
+              style={{ backgroundColor: DEAGreen }}
+              size="sm"
               onClick={() => {
                 if (!user || user.expired) {
                   notification.warning({
@@ -139,7 +142,7 @@ class CustomNavbar extends React.Component {
                   let dispatch = () => new Promise((resolve, reject) => {
                     this.props.setSelectedProjectId(0)
                     resolve()
-                  })     
+                  })
                   dispatch().then(() => {
                     this.props.showInputWizard(true)
                   })

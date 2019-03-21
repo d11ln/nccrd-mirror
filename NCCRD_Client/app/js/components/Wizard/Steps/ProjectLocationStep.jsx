@@ -221,10 +221,11 @@ class ProjectLocationStep extends React.Component {
               editMode &&
               <Button
                 size="sm"
-                color="primary"
+                color=""
                 style={{
                   marginTop: 0,
-                  marginLeft: 0
+                  marginLeft: 0,
+                  backgroundColor: DEAGreen
                 }}
                 onClick={this.addLocation} >
                 <Fa icon="plus" style={{ marginRight: 15 }} />

@@ -7,6 +7,7 @@ const Panel = Collapse.Panel;
 
 import './shared.css'
 import "./OverallSummaryStep.css"
+import { DEAGreen, DEAGreenDark } from '../../../config/colours';
 
 const mapStateToProps = (state, props) => {
   let { lookupData: {
@@ -195,9 +196,25 @@ class OverallSummaryStep extends React.Component {
           </Col>
           <Col>
             <div style={{ float: "right" }}>
-              <a href="#" onClick={() => { this.setState({ activeKey: ["1", "2", "3", "4"] }) }}>Expand all</a>
+              <a
+                href="#"
+                onClick={() => { this.setState({ activeKey: ["1", "2", "3", "4"] }) }}
+                style={{ color: DEAGreenDark }}
+              >
+                <u>
+                  Expand all
+                </u>
+              </a>
               <div className="horizontal-spacer" />
-              <a href="#" onClick={() => { this.setState({ activeKey: [] }) }}>Collapse all</a>
+              <a
+                href="#"
+                onClick={() => { this.setState({ activeKey: [] }) }}
+                style={{ color: DEAGreenDark }}
+              >
+                <u>
+                  Collapse all
+              </u>
+              </a>
             </div>
           </Col>
         </Row>
@@ -234,7 +251,7 @@ class OverallSummaryStep extends React.Component {
         <Collapse className="summary-collapse" bordered={false} activeKey={activeKey} onChange={this.onChange}>
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>PROJECT</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>PROJECT</u></h5>
             }
             key="1"
           >
@@ -426,7 +443,7 @@ class OverallSummaryStep extends React.Component {
 
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>FUNDING</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>FUNDING</u></h5>
             }
             key="2"
           >
@@ -512,7 +529,7 @@ class OverallSummaryStep extends React.Component {
 
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>ADAPTATION</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>ADAPTATION</u></h5>
             }
             key="3"
           >
@@ -663,7 +680,7 @@ class OverallSummaryStep extends React.Component {
 
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>MITIGATION</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>MITIGATION</u></h5>
             }
             key="4"
           >

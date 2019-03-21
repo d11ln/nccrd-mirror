@@ -15,6 +15,7 @@ import FundingDetailsStep from './Steps/FundingDetailsStep.jsx';
 import OverallSummaryStep from './Steps/OverallSummaryStep.jsx';
 import ActionsOverview from './Steps/ActionsOverview.jsx';
 import { UILookup } from "../../config/ui_config.js"
+import { DEAGreen, DEAGreenDark } from '../../config/colours.js'
 
 import "./SteppedInputForm.css"
 
@@ -554,6 +555,7 @@ class SteppedInputForm extends React.Component {
     //Actions Overview
     steps.push({
       title: 'Actions - Overview',
+      optional: true,
       content: <ActionsOverview jumpTo={this.jumpTo} />,
       error: false
     })
@@ -772,7 +774,7 @@ class SteppedInputForm extends React.Component {
                     }
                     onClick={() => {
                       this.setState({ currentStep: steps.indexOf(item) })
-                    }}
+                    }}                    
                   />
                 })}
               </Steps>
@@ -785,6 +787,7 @@ class SteppedInputForm extends React.Component {
                 type="circle"
                 percent={progressCompleteOverride ? 100 : Math.round(100 / steps.length * currentStep)}
                 style={{ marginLeft: -10 }}
+                strokeColor={DEAGreen}
               />
             </div>
           </Col>
@@ -805,7 +808,7 @@ class SteppedInputForm extends React.Component {
                   </h3>
                   {
                     steps[currentStep].optional === true &&
-                    <h6>
+                    <h6 style={{ color: DEAGreen }}>
                       <i>
                         This step is optional, click 'Next' to skip
                     </i>
@@ -814,8 +817,8 @@ class SteppedInputForm extends React.Component {
                   {
                     steps[currentStep].backAction &&
                     <h6>
-                      <a href="#" onClick={() => this.jumpTo(steps[currentStep].backAction)}>
-                        <Fa className="button-icon" icon="chevron-circle-left" />
+                      <a href="#" onClick={() => this.jumpTo(steps[currentStep].backAction)} style={{ color: DEAGreenDark }}>
+                        <Fa size="lg" className="button-icon" icon="chevron-circle-left" />
                         <u>{steps[currentStep].backAction}</u>
                       </a>
                     </h6>
@@ -829,7 +832,7 @@ class SteppedInputForm extends React.Component {
             <Row style={{ borderTop: "1px solid gainsboro", paddingTop: 5 }}>
               <Col>
 
-                <Button size="sm" color="danger" style={{ width: 120 }} onClick={() => {
+                <Button size="sm" color="grey" style={{ width: 120 }} onClick={() => {
                   this.showConfirm("Confirm cancel", "Are you sure you want to cancel and discard all unsaved changes?",
                     "Yes", "No", this.onClose)
                 }}>
@@ -842,8 +845,8 @@ class SteppedInputForm extends React.Component {
                     currentStep > 0 && (
                       <Button
                         size="sm"
-                        color="primary"
-                        style={{ width: 120, marginRight: 0 }}
+                        color=""
+                        style={{ width: 120, marginRight: 0, backgroundColor: DEAGreen }}
                         onClick={() => this.onPrev()}
                       >
                         <Fa icon="chevron-circle-left" style={{ marginRight: 10 }} />
@@ -856,8 +859,8 @@ class SteppedInputForm extends React.Component {
                     currentStep < steps.length - 1 &&
                     <Button
                       size="sm"
-                      color="primary"
-                      style={{ width: 120, marginRight: 0 }}
+                      color=""
+                      style={{ width: 120, marginRight: 0, backgroundColor: DEAGreen }}
                       onClick={() => this.onNext()}
                     >
                       <Fa icon="chevron-circle-right" style={{ marginRight: 10 }} />
@@ -870,9 +873,9 @@ class SteppedInputForm extends React.Component {
                     <Button
                       disabled={errors}
                       size="sm"
-                      color="secondary"
+                      color=""
                       onClick={this.onSubmit}
-                      style={{ width: 120, marginRight: 0 }}
+                      style={{ width: 120, marginRight: 0, backgroundColor: DEAGreenDark }}
                     >
                       <Fa icon="save" style={{ marginRight: 10 }} />
                       Submit
