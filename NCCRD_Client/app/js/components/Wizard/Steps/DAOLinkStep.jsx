@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Button, Input, Card, CardBody, CardText } from 'mdbreact'
+import { Row, Col, Button, Input, Card, CardBody, CardText, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
 import { ccisBaseURL } from '../../../config/serviceURLs.js'
@@ -162,6 +162,7 @@ class DAOLinkStep extends React.Component {
                                     setTimeout(linkCallback(item.Id, "remove"), 1000)
                                   }
                                 }}>
+                                <Fa className="button-icon" icon="unlink" />
                                 Unlink
                         </Button>
                             </CardBody>
@@ -259,6 +260,7 @@ class DAOLinkStep extends React.Component {
                                     setTimeout(linkCallback(item.Id, "add"), 1000)
                                   }
                                 }}>
+                                <Fa className="button-icon" icon="link" />
                                 Link
                             </Button>
                             </CardBody>
@@ -342,6 +344,7 @@ class DAOLinkStep extends React.Component {
                                     setTimeout(linkCallback(item.Id, "add"), 1000)
                                   }
                                 }}>
+                                <Fa className="button-icon" icon="link" />
                                 Link
                             </Button>
                             </CardBody>

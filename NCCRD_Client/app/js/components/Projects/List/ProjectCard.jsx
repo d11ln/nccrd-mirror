@@ -55,7 +55,7 @@ class ProjectCard extends React.Component {
       window.parent.postMessage(payload, "*")
     }
     else {
-      this.props.setScrollPos(window.pageYOffset)
+      this.props.setScrollPos(document.getElementById("app-content").scrollTop)
       let navTo = ""
       if (location.hash.includes("projects")) {
         navTo = location.hash.replace("#/projects", "#/projects/" + this.props.pid)

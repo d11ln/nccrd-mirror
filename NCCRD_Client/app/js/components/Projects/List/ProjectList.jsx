@@ -104,7 +104,15 @@ class ProjectList extends React.Component {
       this.getProjectList()
     }
 
-    window.scrollTo(0, this.props.listScrollPos);
+    this.scrollTo(this.props.listScrollPos)
+  }
+
+  scrollTo(pos) {
+    document.getElementById("app-content").scroll({
+      top: pos,
+      left: 0,
+      behavior: 'auto'
+    });
   }
 
   componentDidUpdate() {

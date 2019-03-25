@@ -384,8 +384,16 @@ class ProjectDetails extends React.Component {
 
   componentDidMount() {
     this.props.updateNav(location.hash)
-    window.scrollTo(0, 0);
+    this.scrollToTop() //window.scrollTo(0, 0);
     this.loadData()
+  }
+
+  scrollToTop() {
+    document.getElementById("app-content").scroll({
+      top: 0,
+      left: 0,
+      behavior: 'auto'
+    });
   }
 
   editClick() {

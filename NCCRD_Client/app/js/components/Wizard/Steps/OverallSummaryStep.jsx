@@ -50,9 +50,11 @@ class OverallSummaryStep extends React.Component {
     let { projectStatus } = this.props
     let value = ""
 
-    let filtered = projectStatus.filter(ps => ps.ProjectStatusId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (projectStatus) {
+      let filtered = projectStatus.filter(ps => ps.ProjectStatusId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -63,9 +65,11 @@ class OverallSummaryStep extends React.Component {
     let { region } = this.props
     let value = ""
 
-    let filtered = region.filter(r => r.Id === id.toString())
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Text
+    if (region) {
+      let filtered = region.filter(r => r.Id === id.toString())
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Text
+      }
     }
 
     return (<h6 key={id} className="summary-value">{value}</h6>)
@@ -76,9 +80,11 @@ class OverallSummaryStep extends React.Component {
     let { users } = this.props
     let value = ""
 
-    let filtered = users.filter(u => u.PersonId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (users) {
+      let filtered = users.filter(u => u.PersonId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -89,9 +95,11 @@ class OverallSummaryStep extends React.Component {
     let { fundingStatus } = this.props
     let value = ""
 
-    let filtered = fundingStatus.filter(fs => fs.FundingStatusId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (fundingStatus) {
+      let filtered = fundingStatus.filter(fs => fs.FundingStatusId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -102,9 +110,11 @@ class OverallSummaryStep extends React.Component {
     let { adaptationPurpose } = this.props
     let value = ""
 
-    let filtered = adaptationPurpose.filter(ap => ap.AdaptationPurposeId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (adaptationPurpose) {
+      let filtered = adaptationPurpose.filter(ap => ap.AdaptationPurposeId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -115,9 +125,11 @@ class OverallSummaryStep extends React.Component {
     let { sector } = this.props
     let value = ""
 
-    let filtered = sector.filter(sec => sec.Id === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Text
+    if (sector) {
+      let filtered = sector.filter(sec => sec.Id === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Text
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -128,9 +140,11 @@ class OverallSummaryStep extends React.Component {
     let { hazards } = this.props
     let value = ""
 
-    let filtered = hazards.filter(haz => haz.Id === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Text
+    if (hazards) {
+      let filtered = hazards.filter(haz => haz.Id === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Text
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -141,9 +155,11 @@ class OverallSummaryStep extends React.Component {
     let { researchType } = this.props
     let value = ""
 
-    let filtered = researchType.filter(r => r.ResearchTypeId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (researchType) {
+      let filtered = researchType.filter(r => r.ResearchTypeId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -154,9 +170,11 @@ class OverallSummaryStep extends React.Component {
     let { targetAudience } = this.props
     let value = ""
 
-    let filtered = targetAudience.filter(ta => ta.TargetAudienceId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (targetAudience) {
+      let filtered = targetAudience.filter(ta => ta.TargetAudienceId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -167,9 +185,11 @@ class OverallSummaryStep extends React.Component {
     let { researchMaturity } = this.props
     let value = ""
 
-    let filtered = researchMaturity.filter(rm => rm.ResearchMaturityId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (researchMaturity) {
+      let filtered = researchMaturity.filter(rm => rm.ResearchMaturityId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -181,23 +201,23 @@ class OverallSummaryStep extends React.Component {
 
   render() {
 
-    let { projectDetails, funderDetails, adaptationDetails, errors } = this.props
+    let { projectDetails, funderDetails, adaptationDetails, errors, header } = this.props
     let { activeKey } = this.state
 
     return (
       <>
-        <Row style={{ marginTop: -20 }} >
+        <Row>
           <Col>
             <h6>
               <i>
-                Please review before submitting
+                {header}
               </i>
             </h6>
           </Col>
           <Col>
             <div style={{ float: "right" }}>
               <a
-                href="#"
+                // href="#"
                 onClick={() => { this.setState({ activeKey: ["1", "2", "3", "4"] }) }}
                 style={{ color: DEAGreenDark }}
               >
@@ -207,7 +227,7 @@ class OverallSummaryStep extends React.Component {
               </a>
               <div className="horizontal-spacer" />
               <a
-                href="#"
+                // href="#"
                 onClick={() => { this.setState({ activeKey: [] }) }}
                 style={{ color: DEAGreenDark }}
               >
@@ -343,6 +363,22 @@ class OverallSummaryStep extends React.Component {
                       </tr>
                     </tbody>
                   </table>
+                </Col>
+              </Row>
+
+              <div className="vertical-spacer" />
+
+              <Row>
+                <Col md="6">
+                  <h6 className="summary-label">Linked DAO's</h6>
+                  {
+                    (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length > 0) &&
+                    <h6 className="summary-value">{projectDetails.ProjectDAOs.length} linked DAO's</h6>
+                  }
+                  {
+                    (!projectDetails.ProjectDAOs || projectDetails.ProjectDAOs.length === 0) &&
+                    <h6 className="summary-value">0 linked DAO's</h6>
+                  }
                 </Col>
               </Row>
 

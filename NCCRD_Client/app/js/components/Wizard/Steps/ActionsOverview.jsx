@@ -135,6 +135,7 @@ class ActionsOverview extends React.Component {
             onClick={() => { this.onEdit(title) }}
             style={{ backgroundColor: DEAGreen }}
           >
+            <Fa className="button-icon" icon="pencil" />
             Edit
           </Button>
           <Button
@@ -143,6 +144,7 @@ class ActionsOverview extends React.Component {
             color="grey"
             onClick={() => this.onActionRemove(type, id)}
           >
+            <Fa className="button-icon" icon="trash" />
             Remove
           </Button>
         </td>
@@ -210,14 +212,17 @@ class ActionsOverview extends React.Component {
         <div className="vertical-spacer" />
 
         <Button className="inline-button add-btn" color="" onClick={this.addFunding} style={{ backgroundColor: DEAGreen }}>
+          <Fa className="button-icon" icon="plus" />
           Add Funding
         </Button>
 
         <Button className="inline-button add-btn" color="" onClick={this.addAdaptation} style={{ backgroundColor: DEAGreen }}>
+          <Fa className="button-icon" icon="plus" />
           Add Adaptation
         </Button>
 
         <Button disabled className="inline-button add-btn-special" color="" style={{ backgroundColor: DEAGreen }}>
+          <Fa className="button-icon" icon="plus" />
           Add Mitigation
           <div style={{ fontSize: "10px", marginTop: -1 }}>*coming soon*</div>
         </Button>

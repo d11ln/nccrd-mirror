@@ -15,6 +15,7 @@ import { Spinner, Container } from 'mdbreact/'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import Projects from './components/Projects/List/Projects.jsx'
 import ProjectDetails from './components/Projects/Details/ProjectDetails.jsx'
+import ProjectDetails2 from './components/Projects/Details/ProjectDetails2.jsx'
 import Login from './components/Authentication/Login.jsx'
 import Logout from './components/Authentication/Logout.jsx'
 import CustomNavbar from './components/Base/CustomNavbar.jsx'
@@ -337,7 +338,7 @@ class App extends React.Component {
                 <Switch >
                   <Route path="/" component={DashLayout} exact />
                   <Route path="/projects" component={Projects} exact />
-                  <Route path="/projects/:id" component={ProjectDetails} exact />
+                  <Route path="/projects/:id" component={ProjectDetails2} exact />
                   <Route path="/map" component={MapView} exact />
                   <Route path="/login" component={Login} exact />
                   <Route path="/logout" component={Logout} exact />

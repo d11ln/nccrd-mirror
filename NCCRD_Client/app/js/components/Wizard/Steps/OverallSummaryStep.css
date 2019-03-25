@@ -1,7 +1,7 @@
-.summary-collapse {
-  /* margin-top: -20px; */
-  margin-left: -13px
-}
+/* .summary-collapse {
+  margin-top: -20px;
+  margin-left: -13px;
+} */
 
 .summary-label {
   font-weight: 600;
@@ -17,7 +17,6 @@
 .summary-panel-header {
   font-weight: 500;
   margin-top: 10px;
-  /* color: #0F83FF; */
 }
 
 .summary-panel {
