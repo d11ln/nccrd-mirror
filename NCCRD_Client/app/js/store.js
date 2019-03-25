@@ -47,6 +47,7 @@ const store = createStore(
         projectData: {
             projects: [],
             projectDetails: {},
+            selectedProjectId: 0,
             filteredProjectIDs: [],
             start: 0,
             end: 25,

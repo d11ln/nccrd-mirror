@@ -52,7 +52,7 @@ class Projects extends React.Component {
   }
 
   backToTop() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 0,
       left: 0,
       behavior: 'smooth'
@@ -65,16 +65,16 @@ class Projects extends React.Component {
 
   componentDidMount() {
     this.props.setProjectsFullView(true)
-    window.addEventListener("scroll", this.handleScroll);
+    document.getElementById("app-content").addEventListener("scroll", this.handleScroll);
     this.props.updateNav(location.hash)
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll)
+    document.getElementById("app-content").removeEventListener("scroll", this.handleScroll)
   }
 
   handleScroll() {
-    this.setState({ showBackToTop: (window.pageYOffset > 300) })
+    this.setState({ showBackToTop: (document.getElementById("app-content").scrollTop > 500) })
   }
 
   render() {

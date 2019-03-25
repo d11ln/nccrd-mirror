@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Drawer } from 'antd'
 import SteppedInputForm from './SteppedInputForm.jsx';
+import ProjectDataLoader from '../Projects/ProjectDataLoader.jsx';
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -61,7 +62,9 @@ class InputWizard extends React.Component {
           visible={visible}
           width={winInnerWidth < 1250 ? "100%" : 1250}
         >
-          <SteppedInputForm onClose={this.onClose} visible={visible} />
+          <ProjectDataLoader>
+            <SteppedInputForm onClose={this.onClose} visible={visible} />
+          </ProjectDataLoader>
         </Drawer>
       </>
     )

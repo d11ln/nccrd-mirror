@@ -270,6 +270,10 @@ export default function ProjectsReducer(state = {}, action) {
       return { ...state, listScrollPos: payload }
     }
 
+    case "SET_SELECTED_PROJECT_ID": {
+      return { ...state, selectedProjectId: payload }
+    }
+
     default: {
       return state
     }

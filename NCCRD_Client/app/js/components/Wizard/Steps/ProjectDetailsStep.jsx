@@ -76,6 +76,7 @@ class ProjectDetailsStep extends React.Component {
             valueFrom={projectDetails.StartYear} valueTo={projectDetails.EndYear}
             setValueFromKey={"SET_PROJECT_DETAILS_YEAR_FROM"}
             setValueToKey={"SET_PROJECT_DETAILS_YEAR_TO"}
+            numeric
           />
         </Row>
 
@@ -107,6 +108,7 @@ class ProjectDetailsStep extends React.Component {
             valueTo={projectDetails.BudgetUpper}
             setValueFromKey={"SET_PROJECT_DETAILS_BUDGET_FROM"}
             setValueToKey={"SET_PROJECT_DETAILS_BUDGET_TO"}
+            numeric
           />
         </Row>
       </>

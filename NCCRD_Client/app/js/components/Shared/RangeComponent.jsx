@@ -60,7 +60,7 @@ class RangeComponent extends React.Component {
 
     let { setValueFromKey, setValueFrom, parentId, editMode } = this.props
 
-    if (typeof setValueFromKey !== 'undefined' && !isNaN(event.target.value)) {
+    if (typeof setValueFromKey !== 'undefined' /*&& !isNaN(event.target.value)*/) {
       setValueFrom(setValueFromKey, { value: event.target.value, id: parentId, state: editMode === true ? "modified" : "original" })
     }
   }
@@ -69,7 +69,7 @@ class RangeComponent extends React.Component {
 
     let { setValueToKey, setValueTo, parentId, editMode } = this.props
 
-    if (typeof setValueToKey !== 'undefined' && !isNaN(event.target.value)) {
+    if (typeof setValueToKey !== 'undefined' /*&& !isNaN(event.target.value)*/) {
       setValueTo(setValueToKey, { value: event.target.value, id: parentId, state: editMode === true ? "modified" : "original" })
     }
   }
@@ -85,7 +85,7 @@ class RangeComponent extends React.Component {
 
   render() {
 
-    let { label, inputWidth, col, valueFrom, valueTo, editMode, prefix, suffix } = this.props
+    let { label, inputWidth, col, valueFrom, valueTo, editMode, prefix, suffix, numeric } = this.props
     valueFrom = this.fixNullOrUndefinedValue(valueFrom)
     valueTo = this.fixNullOrUndefinedValue(valueTo)
 
@@ -100,70 +100,69 @@ class RangeComponent extends React.Component {
               {
                 prefix &&
                 <td>
-                  <h6>{prefix}&nbsp;</h6>
+                  <h6 style={{ marginTop: 7 }}>{prefix}&nbsp;</h6>
                 </td>
               }
               <td width="49%">
-                <Input size="sm" id={this.getId("from")} readOnly={!editMode}
-                  style={{ height: "21px", marginTop: "-27px", marginBottom: "-25px", color: _gf.getFontColour(editMode), /*width: inputWidth,*/ border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                <Input
+                  size="sm"
+                  type={ numeric ? "number" : text }
+                  id={this.getId("from")}
+                  readOnly={!editMode}
+                  style={{
+                    height: "21px",
+                    marginTop: "-27px",
+                    marginBottom: "-25px",
+                    color: _gf.getFontColour(editMode),
+                    border: "1px solid lightgrey",
+                    borderRadius: "5px",
+                    padding: "5px"
+                  }}
                   value={this.fixNullOrUndefinedValue(valueFrom)}
                   onChange={this.valueFromChange.bind(this)} />
               </td>
               {
                 suffix &&
                 <td>
-                  <h6>{suffix}&nbsp;</h6>
+                  <h6 style={{ marginTop: 7 }}>{suffix}&nbsp;</h6>
                 </td>
               }
               <td>
-                <h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</h6>
+                <h6 style={{ marginTop: 7 }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</h6>
               </td>
               {
                 prefix &&
                 <td>
-                  <h6>{prefix}&nbsp;</h6>
+                  <h6 style={{ marginTop: 7 }}>{prefix}&nbsp;</h6>
                 </td>
               }
               <td width="49%">
-                <Input size="sm" id={this.getId("to")} readOnly={!editMode}
-                  style={{ height: "21px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), /*width: inputWidth,*/ border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
+                <Input
+                  size="sm"
+                  type={ numeric ? "number" : text }
+                  id={this.getId("to")}
+                  readOnly={!editMode}
+                  style={{
+                    height: "21px",
+                    marginTop: "-27px",
+                    marginBottom: "-25px",
+                    color: _gf.getFontColour(editMode),
+                    border: "1px solid lightgrey",
+                    borderRadius: "5px",
+                    padding: "5px"
+                  }}
                   value={this.fixNullOrUndefinedValue(valueTo)}
                   onChange={this.valueToChange.bind(this)} />
               </td>
               {
                 suffix &&
                 <td>
-                  <h6>{suffix}&nbsp;</h6>
+                  <h6 style={{ marginTop: 7 }}>{suffix}&nbsp;</h6>
                 </td>
               }
             </tr>
           </tbody>
         </table>
-
-        {/* <div className="row" style={{ marginBottom: "-15px"}}>
-
-                    <span style={{ width: "16px" }} />
-
-                    {this.getPrefix()}
-
-                    <Input size="sm" id={this.getId("from")} readOnly={!editMode}
-                        style={{ height: "21px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
-                        value={this.fixNullOrUndefinedValue(valueFrom)}
-                        onChange={this.valueFromChange.bind(this)} />
-
-                    {this.getSuffix()}
-
-                    <h6 style={{ marginLeft: "10px", marginRight: "10px" }}> - </h6>
-
-                    {this.getPrefix()}
-
-                    <Input size="sm" id={this.getId("to")} readOnly={!editMode}
-                        style={{ height: "21px", marginTop: "-31px", marginBottom: "-25px", color: _gf.getFontColour(editMode), width: inputWidth, border: "1px solid lightgrey", borderRadius: "5px", padding: "5px" }}
-                        value={this.fixNullOrUndefinedValue(valueTo)}
-                        onChange={this.valueToChange.bind(this)} />
-
-                    {this.getSuffix()}
-                </div> */}
       </div>
     )
   }

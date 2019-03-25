@@ -55,10 +55,14 @@ export default function AdaptationsReducer(state = {}, action) {
 
             let newItem = {
                 "AdaptationDetailId": _gf.getRndInteger(1111111, 9999999),
+                "Title": "",
                 "Description": "",
+                "ContactName": "",
+                "ContactEmail": "",
                 "AdaptationPurposeId": 0,
                 "ProjectId": payload,
                 "SectorId": 0,
+                "HazardId": 0,
                 "ProjectStatusId": 0,
                 "ResearchDetail": null,
                 "state": "modified"
@@ -186,8 +190,6 @@ export default function AdaptationsReducer(state = {}, action) {
                 PaperLink: "",
                 ResearchTypeId: 0,
                 TargetAudienceId: 0,
-                ProjectId: details.ProjectId,
-                SectorId: null,
                 ResearchMaturityId: null
             }
 

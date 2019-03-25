@@ -8,6 +8,8 @@ import { Collapse, Tooltip } from 'antd'
 import { UILookup } from '../../../config/ui_config.js'
 import DualTip from '../../Shared/DualTip.jsx';
 
+const Panel = Collapse.Panel;
+
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
   let { lookupData: { region } } = state
@@ -125,7 +127,9 @@ class ProjectLocationStep extends React.Component {
         //Scroll map into view
         setTimeout(() => {
           let element = document.getElementById(`mapView${key}`);
-          element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+          if (element && element !== null) {
+            element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+          }
         }, 200);
       }
     }, 100);
@@ -217,10 +221,11 @@ class ProjectLocationStep extends React.Component {
               editMode &&
               <Button
                 size="sm"
-                color="primary"
+                color=""
                 style={{
                   marginTop: 0,
-                  marginLeft: 0
+                  marginLeft: 0,
+                  backgroundColor: DEAGreen
                 }}
                 onClick={this.addLocation} >
                 <Fa icon="plus" style={{ marginRight: 15 }} />

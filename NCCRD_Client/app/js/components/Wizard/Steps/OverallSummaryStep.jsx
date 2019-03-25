@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button } from 'mdbreact'
-import { Collapse } from 'antd';
+import { Row, Col, Button, Fa } from 'mdbreact'
+import { Collapse, Icon } from 'antd';
 
 const Panel = Collapse.Panel;
 
 import './shared.css'
 import "./OverallSummaryStep.css"
+import { DEAGreen, DEAGreenDark } from '../../../config/colours';
 
 const mapStateToProps = (state, props) => {
   let { lookupData: {
@@ -49,9 +50,11 @@ class OverallSummaryStep extends React.Component {
     let { projectStatus } = this.props
     let value = ""
 
-    let filtered = projectStatus.filter(ps => ps.ProjectStatusId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (projectStatus) {
+      let filtered = projectStatus.filter(ps => ps.ProjectStatusId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -62,9 +65,11 @@ class OverallSummaryStep extends React.Component {
     let { region } = this.props
     let value = ""
 
-    let filtered = region.filter(r => r.Id === id.toString())
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Text
+    if (region) {
+      let filtered = region.filter(r => r.Id === id.toString())
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Text
+      }
     }
 
     return (<h6 key={id} className="summary-value">{value}</h6>)
@@ -75,9 +80,11 @@ class OverallSummaryStep extends React.Component {
     let { users } = this.props
     let value = ""
 
-    let filtered = users.filter(u => u.PersonId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (users) {
+      let filtered = users.filter(u => u.PersonId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -88,9 +95,11 @@ class OverallSummaryStep extends React.Component {
     let { fundingStatus } = this.props
     let value = ""
 
-    let filtered = fundingStatus.filter(fs => fs.FundingStatusId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (fundingStatus) {
+      let filtered = fundingStatus.filter(fs => fs.FundingStatusId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -101,9 +110,11 @@ class OverallSummaryStep extends React.Component {
     let { adaptationPurpose } = this.props
     let value = ""
 
-    let filtered = adaptationPurpose.filter(ap => ap.AdaptationPurposeId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (adaptationPurpose) {
+      let filtered = adaptationPurpose.filter(ap => ap.AdaptationPurposeId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -114,9 +125,11 @@ class OverallSummaryStep extends React.Component {
     let { sector } = this.props
     let value = ""
 
-    let filtered = sector.filter(sec => sec.Id === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Text
+    if (sector) {
+      let filtered = sector.filter(sec => sec.Id === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Text
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -127,9 +140,11 @@ class OverallSummaryStep extends React.Component {
     let { hazards } = this.props
     let value = ""
 
-    let filtered = hazards.filter(haz => haz.Id === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Text
+    if (hazards) {
+      let filtered = hazards.filter(haz => haz.Id === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Text
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -140,9 +155,11 @@ class OverallSummaryStep extends React.Component {
     let { researchType } = this.props
     let value = ""
 
-    let filtered = researchType.filter(r => r.ResearchTypeId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (researchType) {
+      let filtered = researchType.filter(r => r.ResearchTypeId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -153,9 +170,11 @@ class OverallSummaryStep extends React.Component {
     let { targetAudience } = this.props
     let value = ""
 
-    let filtered = targetAudience.filter(ta => ta.TargetAudienceId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (targetAudience) {
+      let filtered = targetAudience.filter(ta => ta.TargetAudienceId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
@@ -166,47 +185,93 @@ class OverallSummaryStep extends React.Component {
     let { researchMaturity } = this.props
     let value = ""
 
-    let filtered = researchMaturity.filter(rm => rm.ResearchMaturityId === id)
-    if (filtered && filtered.length > 0) {
-      value = filtered[0].Value
+    if (researchMaturity) {
+      let filtered = researchMaturity.filter(rm => rm.ResearchMaturityId === id)
+      if (filtered && filtered.length > 0) {
+        value = filtered[0].Value
+      }
     }
 
     return (<h6 className="summary-value">{value}</h6>)
   }
 
-  onChange(key){
+  onChange(key) {
     this.setState({ activeKey: key })
   }
 
   render() {
 
-    let { projectDetails, funderDetails, adaptationDetails } = this.props
+    let { projectDetails, funderDetails, adaptationDetails, errors, header } = this.props
     let { activeKey } = this.state
 
     return (
       <>
-        <Row style={{ marginTop: -20 }} >
+        <Row>
           <Col>
             <h6>
               <i>
-                Please review before submitting
+                {header}
               </i>
             </h6>
           </Col>
           <Col>
             <div style={{ float: "right" }}>
-              <a href="#" onClick={() => { this.setState({ activeKey: ["1","2","3","4"]}) }}>Expand all</a>
+              <a
+                // href="#"
+                onClick={() => { this.setState({ activeKey: ["1", "2", "3", "4"] }) }}
+                style={{ color: DEAGreenDark }}
+              >
+                <u>
+                  Expand all
+                </u>
+              </a>
               <div className="horizontal-spacer" />
-              <a href="#" onClick={() => { this.setState({ activeKey: []}) }}>Collapse all</a>
+              <a
+                // href="#"
+                onClick={() => { this.setState({ activeKey: [] }) }}
+                style={{ color: DEAGreenDark }}
+              >
+                <u>
+                  Collapse all
+              </u>
+              </a>
             </div>
           </Col>
         </Row>
+
+        {
+          errors == true &&
+          <div>
+            <Row>
+              <Col>
+                <div className="error-card">
+                  <h5><b><u>REQUIRED</u></b></h5>
+                  <div className="vertical-spacer" />
+                  <h6>
+                    Some steps are missing require values (indicated by
+                    <Fa icon="info-circle" size="lg" style={{ marginLeft: 5 }} />
+                    ).
+                    <br />
+                    These steps a marked with
+                    <div style={{ fontSize: '32px', marginTop: -8, marginLeft: -1 }}>
+                      <Icon type="close-circle" />
+                    </div>
+                    <br />
+                    You will not be able to submit until these requirements are fulfilled.
+                    <br />
+                    Click on a step-title to jump to that step.
+                  </h6>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        }
 
         <hr style={{ marginBottom: 0, color: "#F0F0F0", backgroundColor: "#F0F0F0" }} />
         <Collapse className="summary-collapse" bordered={false} activeKey={activeKey} onChange={this.onChange}>
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>PROJECT</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>PROJECT</u></h5>
             }
             key="1"
           >
@@ -305,6 +370,22 @@ class OverallSummaryStep extends React.Component {
 
               <Row>
                 <Col md="6">
+                  <h6 className="summary-label">Linked DAO's</h6>
+                  {
+                    (projectDetails.ProjectDAOs && projectDetails.ProjectDAOs.length > 0) &&
+                    <h6 className="summary-value">{projectDetails.ProjectDAOs.length} linked DAO's</h6>
+                  }
+                  {
+                    (!projectDetails.ProjectDAOs || projectDetails.ProjectDAOs.length === 0) &&
+                    <h6 className="summary-value">0 linked DAO's</h6>
+                  }
+                </Col>
+              </Row>
+
+              <div className="vertical-spacer" />
+
+              <Row>
+                <Col md="6">
                   <h6 className="summary-label">Regions</h6>
                   {
                     (projectDetails.ProjectRegions && projectDetails.ProjectRegions.length > 0) &&
@@ -328,7 +409,7 @@ class OverallSummaryStep extends React.Component {
                     (projectDetails.ProjectLocations && projectDetails.ProjectLocations.length > 0) &&
                     projectDetails.ProjectLocations.map(pl => {
                       return (
-                        <h6 key={pl.ProjectLocationId} className="summary-value">{pl.Location.LatCalculated}, ${pl.Location.LonCalculated}</h6>
+                        <h6 key={pl.ProjectLocationId} className="summary-value">{pl.Location.LatCalculated}, {pl.Location.LonCalculated}</h6>
                       )
                     })
                   }
@@ -398,7 +479,7 @@ class OverallSummaryStep extends React.Component {
 
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>FUNDING</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>FUNDING</u></h5>
             }
             key="2"
           >
@@ -409,7 +490,7 @@ class OverallSummaryStep extends React.Component {
                   let index = funderDetails.indexOf(funder) + 1
 
                   return (
-                    <div>
+                    <div key={`funder#${index}`}>
                       <div className="summary-action-panel">
                         <h6 className="summary-label"><u>FUNDING #{index}</u></h6>
                         <br />
@@ -484,7 +565,7 @@ class OverallSummaryStep extends React.Component {
 
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>ADAPTATION</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>ADAPTATION</u></h5>
             }
             key="3"
           >
@@ -495,7 +576,7 @@ class OverallSummaryStep extends React.Component {
                   let index = adaptationDetails.indexOf(adaptation) + 1
 
                   return (
-                    <div>
+                    <div key={`adaptation#${index}`}>
                       <div className="summary-action-panel">
                         <h6 className="summary-label"><u>ADAPTATION #{index}</u></h6>
                         <br />
@@ -635,7 +716,7 @@ class OverallSummaryStep extends React.Component {
 
           <Panel
             header={
-              <h5 className="summary-panel-header"><u>MITIGATION</u></h5>
+              <h5 className="summary-panel-header" style={{ color: DEAGreenDark }}><u>MITIGATION</u></h5>
             }
             key="4"
           >

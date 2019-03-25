@@ -104,7 +104,15 @@ class ProjectList extends React.Component {
       this.getProjectList()
     }
 
-    window.scrollTo(0, this.props.listScrollPos);
+    this.scrollTo(this.props.listScrollPos)
+  }
+
+  scrollTo(pos) {
+    document.getElementById("app-content").scroll({
+      top: pos,
+      left: 0,
+      behavior: 'auto'
+    });
   }
 
   componentDidUpdate() {
@@ -114,7 +122,7 @@ class ProjectList extends React.Component {
     let pStart = this.props.start
     let pEnd = this.props.end
 
-    if(sortOrderChanged === true){
+    if (sortOrderChanged === true) {
       filtersChanged = true
     }
 
@@ -124,7 +132,7 @@ class ProjectList extends React.Component {
       nextBatchNeeded = true
     }
 
-    if (filtersChanged === true || nextBatchNeeded === true) {      
+    if (filtersChanged === true || nextBatchNeeded === true) {
       this.getProjectList(filtersChanged)
     }
   }
@@ -141,7 +149,7 @@ class ProjectList extends React.Component {
 
     let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, hazardFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
-      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, daoid, loadProjectIDList, 
+      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, daoid, loadProjectIDList,
       setFiltersChanged } = this.props
 
     if (filtersChanged === true) {
@@ -186,7 +194,7 @@ class ProjectList extends React.Component {
         })
         .catch(res => {
           setLoading(false)
-          console.log("Error details:", res)
+          console.error("Error details:", res)
           alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
         })
     }
@@ -365,19 +373,20 @@ class ProjectList extends React.Component {
 
         <div style={{ float: "right" }}>
 
-      <Button size="sm">
-        <CSVLink
-            style={{marginRight:'', textDecoration: 'none', color:'white'}}
-            filename={"testreport.csv"}
-            data={[...this.props.projects]}
-            asyncOnClick={true}
-            onClick={() => {
-              console.log(this.props.projects)
-            }}
-          >
-            Download
-          </CSVLink>
-      </Button>
+          <Button size="sm" color="" style={{ backgroundColor: DEAGreen, marginRight: 30, marginTop: 3 }}>
+            <CSVLink
+              style={{ marginRight: '', textDecoration: 'none', color: 'white' }}
+              filename={"testreport.csv"}
+              data={[...this.props.projects]}
+              asyncOnClick={true}
+              onClick={() => {
+                console.log(this.props.projects)
+              }}
+            >
+              Download
+            </CSVLink>
+          </Button>
+
           {
             (this.props.showListExpandCollapse === true) &&
             <img

@@ -18,35 +18,13 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    removeAdaptationResearch: payload => {
-      dispatch({ type: "SET_ADAPTATION_DETAILS_RESEARCH_DETAILS", payload })
-    }
-  }
+  return {}
 }
 
 class AdaptationResearchStep extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onRemove = this.onRemove.bind(this)
-  }
-
-  onRemove() {
-
-    let { details, removeAdaptationResearch, stepWizard } = this.props
-
-    if(stepWizard){
-      let steps = details.FundingDetails && details.FundingDetails.length > 0 ? -3 : -2
-      stepWizard(steps)
-    }
-
-    //Remove adaptation action
-    removeAdaptationResearch({
-      id: details.AdaptationDetailId,
-      value: null,
-      state: 'modified'
-    })
   }
 
   render() {
@@ -146,19 +124,6 @@ class AdaptationResearchStep extends React.Component {
             }}
             allowClear={true}
           />
-        </Row>
-
-        <div className="vertical-spacer" />
-
-        <Row>
-          <Col>
-            <Popover content={"Remove research from adaptation action"}>
-              <Button className="inline-button" color="danger" onClick={this.onRemove}>
-                <Fa className="button-icon" icon="plus-circle" />
-                Remove research
-              </Button>
-            </Popover>
-          </Col>
         </Row>
       </>
     )

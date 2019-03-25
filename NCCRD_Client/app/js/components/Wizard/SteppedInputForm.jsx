@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Steps, Progress, Modal } from 'antd'
+import { Steps, Progress, Modal, Icon, notification } from 'antd'
 import { Button, Row, Col, Fa } from 'mdbreact'
 import buildQuery from 'odata-query'
 import { apiBaseURL, vmsBaseURL } from "../../config/serviceURLs.js"
-
-import "./SteppedInputForm.css"
 import ProjectDetailsStep from './Steps/ProjectDetailsStep.jsx';
 import DAOLinkStep from './Steps/DAOLinkStep.jsx';
 import ProjectLocationStep from './Steps/ProjectLocationStep.jsx';
@@ -16,20 +14,40 @@ import AdaptationResearchStep from './Steps/AdaptationResearchStep.jsx';
 import FundingDetailsStep from './Steps/FundingDetailsStep.jsx';
 import OverallSummaryStep from './Steps/OverallSummaryStep.jsx';
 import ActionsOverview from './Steps/ActionsOverview.jsx';
+import { UILookup } from "../../config/ui_config.js"
+import { DEAGreen, DEAGreenDark } from '../../config/colours.js'
+import EditListModal from '../Projects/Details/ListEditing/EditListModal.jsx'
+import EditTreeModal from '../Projects/Details/ListEditing/EditTreeModal.jsx'
+
+import "./SteppedInputForm.css"
 
 const _gf = require("../../globalFunctions")
 
 const mapStateToProps = (state, props) => {
 
-  let { projectData: { projectDetails } } = state
+  let user = state.oidc.user
+  let { projectData: { projectDetails, selectedProjectId } } = state
   let { projectFundersData: { projectFunderDetails } } = state
   let { adaptationData: { adaptationDetails } } = state
   // let { mitigationData: { mitigationDetails } } = state
   // let { emissionsData: { emissionsData } } = state
   let lookupDataLoaded = state.lookupData.loaded
+  let editListModalType = state.editListModalData.type
+  let editListModalShow = state.editListModalData.show
+
+  //Sort Funder on Id
+  projectFunderDetails.sort((a, b) => {
+    return a.FunderId - b.FunderId;
+  })
+
+  //Sort Adaptations on Id
+  adaptationDetails.sort((a, b) => {
+    return a.AdaptationDetailId - b.AdaptationDetailId;
+  })
+
   return {
     projectDetails, projectFunderDetails, adaptationDetails, //mitigationDetails, emissionsData,
-    lookupDataLoaded
+    lookupDataLoaded, selectedProjectId, user, editListModalType, editListModalShow
   }
 }
 
@@ -38,92 +56,11 @@ const mapDispatchToProps = (dispatch) => {
     setLoading: payload => {
       dispatch({ type: "SET_LOADING", payload })
     },
-    setEditMode: payload => {
-      dispatch({ type: "SET_EDIT_MODE", payload })
-    },
-    loadProjectDetails: payload => {
-      dispatch({ type: "LOAD_PROJECT_DETAILS", payload })
-    },
-    loadProjectFunderDetails: payload => {
-      dispatch({ type: "LOAD_PROJECTFUNDER_DETAILS", payload })
-    },
-    loadAdaptationDetails: payload => {
-      dispatch({ type: "LOAD_ADAPTATION_DETAILS", payload })
-    },
-    loadMitigationDetails: payload => {
-      dispatch({ type: "LOAD_MITIGATION_DETAILS", payload })
-    },
-    loadMitigationEmissions: payload => {
-      dispatch({ type: "LOAD_MITIGATION_EMISSIONS", payload })
-    },
-    loadResearchDetails: payload => {
-      dispatch({ type: "LOAD_RESEARCH_DETAILS", payload })
-    },
-    loadAdaptationPurpose: payload => {
-      dispatch({ type: "LOAD_ADAPTATION_PURPOSE", payload })
-    },
-    loadCarbonCredit: payload => {
-      dispatch({ type: "LOAD_CARBON_CREDIT", payload })
-    },
-    loadCarbonCreditMarket: payload => {
-      dispatch({ type: "LOAD_CARBON_CREDIT_MARKET", payload })
-    },
-    loadCDMMethodology: payload => {
-      dispatch({ type: "LOAD_CDM_METHODOLOGY", payload })
-    },
-    loadCDMStatus: payload => {
-      dispatch({ type: "LOAD_CDM_STATUS", payload })
-    },
-    loadProjectStatus: payload => {
-      dispatch({ type: "LOAD_PROJECT_STATUS", payload })
-    },
-    loadProjectTypes: payload => {
-      dispatch({ type: "LOAD_PROJECT_TYPE", payload })
-    },
-    loadProjectSubTypes: payload => {
-      dispatch({ type: "LOAD_PROJECT_SUBTYPE", payload })
-    },
-    loadResearchType: payload => {
-      dispatch({ type: "LOAD_RESEARCH_TYPE", payload })
-    },
-    loadTargetAudience: payload => {
-      dispatch({ type: "LOAD_TARGET_AUDIENCE", payload })
-    },
-    loadTypology: payload => {
-      dispatch({ type: "LOAD_TYPOLOGY", payload })
-    },
-    loadFundingStatus: payload => {
-      dispatch({ type: "LOAD_FUNDINGSTATUS", payload })
-    },
-    loadUsers: payload => {
-      dispatch({ type: "LOAD_USERS", payload })
-    },
-    loadValidationStatus: payload => {
-      dispatch({ type: "LOAD_VALIDATION_STATUS", payload })
-    },
-    loadVoluntaryGoldStandard: payload => {
-      dispatch({ type: "LOAD_VOLUNTARY_GOLD_STANDARD", payload })
-    },
-    loadVoluntaryMethodology: payload => {
-      dispatch({ type: "LOAD_VOLUNTARY_METHODOLOGY", payload })
-    },
-    loadResearchMaturity: payload => {
-      dispatch({ type: "LOAD_RESEARCH_MATURITY", payload })
-    },
-    loadHazards: payload => {
-      dispatch({ type: "LOAD_HAZARDS", payload })
-    },
-    loadRegions: payload => {
-      dispatch({ type: "LOAD_REGION", payload })
-    },
-    loadSectors: payload => {
-      dispatch({ type: "LOAD_SECTOR", payload })
-    },
     setLinkedDAOGoalId: payload => {
       dispatch({ type: "SET_PROJECT_LINKED_DAO_GOAL_ID", payload })
     },
-    setLookupDataLoaded: payload => {
-      dispatch({ type: "SET_LOOKUPS_LOADED", payload })
+    setFiltersChanged: payload => {
+      dispatch({ type: "SET_FILTERS_CHANGED", payload })
     }
   }
 }
@@ -131,6 +68,7 @@ const mapDispatchToProps = (dispatch) => {
 const Step = Steps.Step
 const confirm = Modal.confirm
 
+let steps = [] //Make steps globally accessible
 
 class SteppedInputForm extends React.Component {
 
@@ -139,23 +77,24 @@ class SteppedInputForm extends React.Component {
 
     this.onClose = this.onClose.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.stepWizard = this.stepWizard.bind(this);
-    this.jumpTo = this.jumpTo.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+    this.stepWizard = this.stepWizard.bind(this)
+    this.jumpTo = this.jumpTo.bind(this)
+    this.validateInputs = this.validateInputs.bind(this)
+    this.renderListEditor = this.renderListEditor.bind(this)
 
     this.state = {
-      mode: "edit", //add|edit
       winWidth: 0,
       winHeight: 0,
       currentStep: 0,
       progressCompleteOverride: false,
+      currentProjectId: -1
     }
   }
 
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
-    this.loadData()
   }
 
   componentWillUnmount() {
@@ -166,216 +105,144 @@ class SteppedInputForm extends React.Component {
     this.setState({ winWidth: window.innerWidth, winHeight: window.innerHeight });
   }
 
-  async loadData() {
-
-    this.props.setLoading(true)
-    this.props.setEditMode(true)
-
-    // LOAD PROJECT DATA //
-    await this.loadProjectData()
-
-    if (this.props.lookupDataLoaded === false) {
-
-      // LOAD LOOKUP DATA //
-      await this.loadLookupsData()
-      await this.loadHazardsData()
-      await this.loadRegionsData()
-      await this.loadSectorsData()
-
-      this.props.setLookupDataLoaded(true)
-    }
-
-    this.props.setLoading(false)
-  }
-
-  async loadProjectData() {
-
-    let projectDetails = {
-      ProjectId: _gf.getRndInteger(1111111, 9999999),
-      ProjectTitle: "",
-      ProjectDescription: "",
-      LeadAgent: "",
-      HostPartner: "",
-      HostOrganisation: "",
-      StartYear: 0,
-      EndYear: 0,
-      AlternativeContact: "",
-      AlternativeContactEmail: "",
-      Link: "",
-      ValidationComments: "",
-      BudgetLower: 0,
-      BudgetUpper: 0,
-      ProjectTypeId: 0,
-      ProjectStatusId: 0,
-      ProjectSubTypeId: 0,
-      ProjectManagerId: 0,
-      ValidationStatusId: 0,
-      ProjectDAOs: [],
-      state: "modified"
-    }
-
-    // let { daoid } = this.props
-    // if (daoid && _gf.IsValidGuid(daoid)) {
-    //   if (oHandler.data.Project.ProjectDAOs.filter(x => x.DAOId === daoid).length === 0) {
-    //     oHandler.data.Project.ProjectDAOs.push({
-    //       ProjectDAOId: 0,
-    //       ProjectId: oHandler.data.Project.ProjectId,
-    //       DAOId: daoid
-    //     })
-    //   }
-    // }
-
-    this.props.loadProjectDetails(projectDetails)
-    this.props.loadProjectFunderDetails([])
-    this.props.loadAdaptationDetails([])
-    this.props.loadMitigationDetails([])
-    this.props.loadMitigationEmissions([])
-    this.props.loadResearchDetails([])
-
-  }
-
-  async loadLookupsData() {
-
-    const query = buildQuery({
-      expand: [
-        "AdaptationPurpose",
-        "CarbonCredit",
-        "CarbonCreditMarket",
-        "CDMMethodology",
-        "CDMStatus",
-        "ProjectStatus",
-        "ProjectType",
-        "ProjectSubType",
-        "ResearchType",
-        "TargetAudience",
-        "Typology",
-        "Person",
-        "ValidationStatus",
-        "VoluntaryGoldStandard",
-        "VoluntaryMethodology",
-        "FundingStatus",
-        "ResearchMaturity"
-      ]
-    })
-
-    try {
-      let res = await fetch(apiBaseURL + `Lookups${query}`)
-      let resBody = await res.json()
-
-      if (res.ok && resBody) {
-
-        //Dispatch results
-        this.props.loadAdaptationPurpose(resBody.AdaptationPurpose)
-        this.props.loadCarbonCredit(resBody.CarbonCredit)
-        this.props.loadCarbonCreditMarket(resBody.CarbonCreditMarket)
-        this.props.loadCDMMethodology(resBody.CDMMethodology)
-        this.props.loadCDMStatus(resBody.CDMStatus)
-        this.props.loadProjectStatus(resBody.ProjectStatus)
-        this.props.loadProjectTypes(resBody.ProjectType)
-        this.props.loadProjectSubTypes(resBody.ProjectSubType)
-        this.props.loadResearchType(resBody.ResearchType)
-        this.props.loadTargetAudience(resBody.TargetAudience)
-        this.props.loadTypology(resBody.Typology)
-        this.props.loadFundingStatus(resBody.FundingStatus)
-        this.props.loadUsers(resBody.Person)
-        this.props.loadValidationStatus(resBody.ValidationStatus)
-        this.props.loadVoluntaryGoldStandard(resBody.VoluntaryGoldStandard)
-        this.props.loadVoluntaryMethodology(resBody.VoluntaryMethodology)
-        this.props.loadResearchMaturity(resBody.ResearchMaturity)
-      }
-      else {
-        throw new Error(resBody)
-      }
-    }
-    catch (ex) {
-      console.error(ex)
-    }
-  }
-
-  async loadHazardsData() {
-
-    let { loadHazards } = this.props
-
-    //Get (external) Hazards
-    fetch(`${vmsBaseURL}hazards/flat`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.json())
-      .then(res => {
-        loadHazards(res.items)
-      })
-      .catch(res => {
-        console.error("Error details:", res)
-      })
-  }
-
-  async loadRegionsData() {
-
-    let { loadRegions } = this.props
-
-    //Get (external) Regions
-    fetch(`${vmsBaseURL}regions/flat`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.json())
-      .then(res => {
-        loadRegions(res.items)
-      })
-      .catch(res => {
-        console.error("Error details:", res)
-      })
-  }
-
-  async loadSectorsData() {
-
-    let { loadSectors } = this.props
-
-    //Get (external) Sectors
-    fetch(`${vmsBaseURL}sectors/flat`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.json())
-      .then(res => {
-        loadSectors(res.items)
-      })
-      .catch(res => {
-        console.error("Error details:", res)
-      })
-  }
-
   onClose() {
 
     //discard changes & reset
-    this.setState({ currentStep: 0, progressCompleteOverride: false })
-    this.loadData()
+    this.setState({ currentStep: 0, progressCompleteOverride: false }, () => { 
+      this.props.loadData(0) 
+      
+    })
 
     //close form
     this.props.onClose()
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     //do submit stuff here//
-    //...
+    let saveRes = await this.saveChanges()
 
-    //reset and close form
-    this.setState({ progressCompleteOverride: true }, () => {
-      setTimeout(() => {
-        this.onClose()
-      }, 500)
-    })
+    if (saveRes) {
+      //complete process
+      this.setState({ progressCompleteOverride: true }, () => {
+        setTimeout(() => {
+          this.onClose()
+
+          //Re-load projects
+          this.props.setFiltersChanged(true)
+        }, 500)
+      })
+    }
+  }
+
+  async saveChanges() {
+
+    let { user, projectDetails, adaptationDetails, projectFunderDetails } = this.props
+    let { currentProjectId: projectId } = this.state
+    let result = true
+    let dataObj = { Id: projectId }
+
+    //Show loading
+    this.props.setLoading(true)
+
+    //Add Project
+    if (projectDetails.state === 'modified') {
+      let projectData = _.clone(projectDetails)
+      projectData.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
+      delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
+      dataObj.Project = projectData
+    }
+
+    //Add Funding
+    if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
+      let funderData = []
+      projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
+        let funderItem = _.clone(item)
+        delete funderItem.ProjectId //OData can only bind to the original object spec which does not contain 'ProjectId'
+        delete funderItem.state //OData can only bind to the original object spec which does not contain 'state'
+        delete funderItem.key //OData can only bind to the original object spec which does not contain 'key'
+        funderData.push(funderItem)
+      })
+      dataObj.Funders = funderData
+    }
+
+    //Add AdaptationDetails
+    if (adaptationDetails.filter(x => x.state === 'modified').length > 0) {
+      let adaptationData = []
+      adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
+        let adaptationItem = _.clone(item)
+        delete adaptationItem.state //OData can only bind to the original object spec which does not contain 'state'
+        adaptationItem.ProjectId = parseInt(projectId)  //Asociate with current project
+        adaptationItem.ResearchDetail.ProjectId = parseInt(projectId)  //Asociate with current project
+        adaptationData.push(adaptationItem)
+      })
+      dataObj.AdaptationDetails = adaptationData
+    }
+
+    //Add MitigationDetails
+    // if (mitigationDetails.filter(x => x.state === 'modified').length > 0) {
+    //   let mitigationData = []
+    //   mitigationDetails.filter(x => x.state === 'modified').forEach(item => {
+    //     let mitigationItem = _.clone(item)
+    //     delete mitigationItem.state //OData can only bind to the original object spec which does not contain 'state'
+    //     mitigationItem.ProjectId = parseInt(projectId) //Asociate with current project  
+    //     mitigationData.push(mitigationItem)
+    //   })
+    //   dataObj.MitigationDetails = mitigationData
+    // }
+
+    //Add MitigationEmissionsData
+    // if (emissionsData.filter(x => x.state === 'modified').length > 0) {
+    //   let mitigationEmissionsData = []
+    //   emissionsData.filter(x => x.state === 'modified').forEach(item => {
+    //     let emissionsItem = _.clone(item)
+    //     delete emissionsItem.state //OData can only bind to the original object spec which does not contain 'state'
+    //     emissionsItem.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
+    //     mitigationEmissionsData.push(emissionsItem)
+    //   })
+    //   dataObj.MitigationEmissionsData = mitigationEmissionsData
+    // }
+
+    let res = ""
+    try {
+      res = await fetch(apiBaseURL + "ProjectDetails",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + (user === null ? "" : user.access_token)
+          },
+          body: JSON.stringify(dataObj)
+        })
+
+      if (!res.ok) {
+        throw new Error()
+      }
+    }
+    catch {
+
+      //Show error notification
+      notification.error({
+        duration: 0,
+        message: <div>
+          Unable to save project.<br/>
+          (See log for error details)
+          <br/><br/>
+          Please try again in a few minutes.
+          <br/><br/>
+          If this problem persists, please contact the system administrator.
+        </div>
+      })
+
+      // console.error(ex)
+      console.error(res)
+      result = false
+    }
+
+    //Hide loading
+    this.props.setLoading(false)
+
+    return result
   }
 
   onNext() {
@@ -395,7 +262,7 @@ class SteppedInputForm extends React.Component {
 
   jumpTo(stepTitle) {
 
-    let steps = this.getSteps()
+    //let steps = this.getSteps()
     let filteredSteps = steps.filter(s => s.title === stepTitle)
 
     if (filteredSteps && filteredSteps.length > 0) {
@@ -424,13 +291,14 @@ class SteppedInputForm extends React.Component {
   getSteps() {
 
     let { projectDetails, adaptationDetails, projectFunderDetails, setLinkedDAOGoalId } = this.props
-    let steps = []
+    steps = []
 
     //Project
-    let title = "Project Details"
+    let title = "Project - Details"
     steps.push({
       title: title,
-      content: <ProjectDetailsStep />
+      content: <ProjectDetailsStep />,
+      error: false
     })
     steps.push({
       title: 'Project - DAO Link',
@@ -438,53 +306,62 @@ class SteppedInputForm extends React.Component {
       content: <DAOLinkStep
         ProjectDAOs={projectDetails.ProjectDAOs}
         linkCallback={(id, action) => { setLinkedDAOGoalId({ value: id, action, state: 'modified' }) }}
-      />
+      />,
+      error: false
     })
     steps.push({
       title: 'Project - Location',
-      content: <ProjectLocationStep />
+      content: <ProjectLocationStep />,
+      error: false
     })
     steps.push({
       title: 'Project - Manager',
-      content: <ProjectManagerStep />
+      content: <ProjectManagerStep />,
+      error: false
     })
 
     //Actions Overview
     steps.push({
       title: 'Actions - Overview',
-      content: <ActionsOverview jumpTo={this.jumpTo} />
+      optional: true,
+      content: <ActionsOverview jumpTo={this.jumpTo} />,
+      error: false
     })
 
     //Funding
-    projectFunderDetails.sort((a,b) => a.FunderId > b.FunderId ? 1 : 0).map(funder => {
+    projectFunderDetails.map(funder => {
       let index = projectFunderDetails.indexOf(funder) + 1
 
       steps.push({
         title: `Funding #${index} - Details`,
         backAction: "Actions - Overview",
-        content: <FundingDetailsStep details={funder} />
+        content: <FundingDetailsStep details={funder} />,
+        error: false
       })
     })
 
     //Adaptation
-    adaptationDetails.sort((a,b) => a.AdaptationDetailId > b.AdaptationDetailId ? 1 : 0).map(action => {
+    adaptationDetails.map(action => {
       let index = adaptationDetails.indexOf(action) + 1
 
       steps.push({
         title: `Adaptation #${index} - Details`,
         backAction: "Actions - Overview",
-        content: <AdaptationDetailsStep details={action} />
+        content: <AdaptationDetailsStep details={action} />,
+        error: false
       })
       steps.push({
-        title: `Adaptation #${index} - Contact`,        
-        content: <AdaptationContactStep details={action} />
+        title: `Adaptation #${index} - Contact`,
+        content: <AdaptationContactStep details={action} />,
+        error: false
       })
 
       // Optionally add Research
       if (action.ResearchDetail !== null) {
         steps.push({
           title: `Adaptation #${index} - Research`,
-          content: <AdaptationResearchStep details={action} stepWizard={this.stepWizard} />
+          content: <AdaptationResearchStep details={action} stepWizard={this.stepWizard} />,
+          error: false
         })
       }
 
@@ -495,44 +372,194 @@ class SteppedInputForm extends React.Component {
     //Mitigation
     //...coming soon...
 
+    //Validate inputs before summary
+    this.validateInputs()
+
     //Summary
     steps.push({
       title: 'Summary',
       content: <OverallSummaryStep
+        header={<h6><i>Please review before submitting</i></h6>}
         projectDetails={projectDetails}
         adaptationDetails={adaptationDetails}
         funderDetails={projectFunderDetails}
-      />
+        errors={steps.filter(s => s.error === true).length > 0}
+      />,
+      error: false
     })
 
-    return steps
+    // return steps
+  }
+
+  validateInputs() {
+
+    let { projectFunderDetails, projectDetails, adaptationDetails, mitigationDetails } = this.props
+    let { currentStep } = this.state
+
+    let uiconf = {}
+    let step = {}
+
+    //PROJECT - DETAILS//
+    step = this.getStepByTitle("Project - Details")
+    if (step && steps.indexOf(step) < currentStep) {
+      let stepValidations = []
+
+      stepValidations.push(this.validateRequiredInput("txtProjectTitle", projectDetails, "ProjectTitle"))
+      stepValidations.push(this.validateRequiredInput("txtProjectDescription", projectDetails, "ProjectDescription"))
+      stepValidations.push(this.validateRequiredInput("txtProjectLink", projectDetails, "Link"))
+      stepValidations.push(this.validateRequiredInput("txtProjectYear", projectDetails, "StartYear"))
+      stepValidations.push(this.validateRequiredInput("txtProjectYear", projectDetails, "EndYear"))
+      stepValidations.push(this.validateRequiredInput("selProjectStatus", projectDetails, "ProjectStatusId"))
+      stepValidations.push(this.validateRequiredInput("txtProjectBudget", projectDetails, "BudgetLower"))
+      stepValidations.push(this.validateRequiredInput("txtProjectBudget", projectDetails, "BudgetUpper"))
+
+      step.error = stepValidations.includes(false)
+    }
+
+    //PROJECT - LOCATION//
+    step = this.getStepByTitle("Project - Location")
+    if (step && steps.indexOf(step) < currentStep) {
+      let stepValidations = []
+
+      stepValidations.push(this.validateRequiredInput("lblRegions", projectDetails, "ProjectRegions"))
+      stepValidations.push(this.validateRequiredInput("lblLocations", projectDetails, "ProjectLocations"))
+
+      step.error = stepValidations.includes(false)
+    }
+
+    //PROJECT - MANAGER//
+    step = this.getStepByTitle("Project - Manager")
+    if (step && steps.indexOf(step) < currentStep) {
+      let stepValidations = []
+
+      stepValidations.push(this.validateRequiredInput("txtProjectLeadAgent", projectDetails, "LeadAgent"))
+      stepValidations.push(this.validateRequiredInput("selProjectManager", projectDetails, "ProjectManagerId"))
+      stepValidations.push(this.validateRequiredInput("txtProjectHostOrganisation", projectDetails, "HostOrganisation"))
+      stepValidations.push(this.validateRequiredInput("txtProjectHostPartner", projectDetails, "HostPartner"))
+      stepValidations.push(this.validateRequiredInput("txtProjectAlternativeContact", projectDetails, "AlternativeContact"))
+      stepValidations.push(this.validateRequiredInput("txtProjectAlternativeContactEmail", projectDetails, "AlternativeContactEmail"))
+
+      step.error = stepValidations.includes(false)
+    }
+
+    //FUNDING//
+    projectFunderDetails.map(pfd => {
+      let index = projectFunderDetails.indexOf(pfd) + 1
+
+      //FUNDING #XX - DETAILS//
+      step = this.getStepByTitle(`Funding #${index} - Details`)
+      if (step && steps.indexOf(step) < currentStep) {
+        let stepValidations = []
+
+        stepValidations.push(this.validateRequiredInput("lblGrantProgram", pfd, "GrantProgName"))
+        stepValidations.push(this.validateRequiredInput("lblFundingAgency", pfd, "FundingAgency"))
+        stepValidations.push(this.validateRequiredInput("lblPartneringDepts", pfd, "PartnerDepsOrgs"))
+        stepValidations.push(this.validateRequiredInput("lblProjectCoordinator", pfd, "ProjectCoordinatorId"))
+        stepValidations.push(this.validateRequiredInput("lblTotalBudget", pfd, "TotalBudget"))
+        stepValidations.push(this.validateRequiredInput("lblAnnualBudget", pfd, "AnnualBudget"))
+        stepValidations.push(this.validateRequiredInput("lblFundingStatus", pfd, "FundingStatusId"))
+
+        step.error = stepValidations.includes(false)
+      }
+    })
+
+    //ADAPTATION//
+    adaptationDetails.map(ad => {
+      let index = adaptationDetails.indexOf(ad) + 1
+
+      //ADAPTATION #XX - DETAILS//
+      step = this.getStepByTitle(`Adaptation #${index} - Details`)
+      if (step && steps.indexOf(step) < currentStep) {
+        let stepValidations = []
+
+        stepValidations.push(this.validateRequiredInput("txtAdaptationTitle", ad, "Title"))
+        stepValidations.push(this.validateRequiredInput("txtAdaptationDescription", ad, "Description"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationPurpose", ad, "AdaptationPurposeId"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationSector", ad, "SectorId"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationHazard", ad, "HazardId"))
+        stepValidations.push(this.validateRequiredInput("selAdaptationActionStatus", ad, "ProjectStatusId"))
+
+        step.error = stepValidations.includes(false)
+      }
+
+      //ADAPTATION #XX - CONTACT//
+      step = this.getStepByTitle(`Adaptation #${index} - Contact`)
+      if (step && steps.indexOf(step) < currentStep) {
+        let stepValidations = []
+
+        stepValidations.push(this.validateRequiredInput("txtAdaptationContactName", ad, "ContactName"))
+        stepValidations.push(this.validateRequiredInput("txtAdaptationContactEmail", ad, "ContactEmail"))
+
+        step.error = stepValidations.includes(false)
+      }
+    })
+  }
+
+  validateRequiredInput(id, data, key) {
+    let uiconf = UILookup(id)
+
+    if (uiconf.required === true && (data[key] === "" || data[key] === 0 || data[key].length === 0)) {
+      return false
+    }
+    return true
+  }
+
+  getStepByTitle(stepTitle) {
+    let filteredSteps = steps.filter(s => s.title === stepTitle)
+    if (filteredSteps && filteredSteps.length > 0) {
+      return filteredSteps[0]
+    }
+  }
+
+  renderListEditor() {
+
+    let { editListModalType, editListModalShow } = this.props
+
+    if (editListModalShow === true) {
+      if (editListModalType === "std") {
+        return <EditListModal />
+      }
+      else if (editListModalType === "tree") {
+        return <EditTreeModal />
+      }
+    }
   }
 
   render() {
 
-    let { winHeight, currentStep, progressCompleteOverride, mode } = this.state
+    let { winHeight, currentStep, progressCompleteOverride } = this.state
+    let { projectDetails, projectFunderDetails, adaptationDetails, /*mitigationDetails, MitigationEmissionsData*/ } = this.props
 
-    let steps = this.getSteps()
+    this.getSteps()
+    let errors = steps.filter(s => s.error === true).length > 0
+
+    if (steps.length === 0) {
+      return (
+        <h6> LOADING... </h6>
+      )
+    }
 
     return (
       <div style={{ height: "93vh", overflowY: "hidden", overflowX: 'hidden' }}>
         <Row>
           <Col md="3">
             <div style={{ height: (winHeight - 200), maxHeight: (winHeight - 200), overflowY: "auto", overflowX: 'hidden' }}>
-              <Steps direction="vertical" current={currentStep}>
+              <Steps direction="vertical" current={currentStep} >
                 {steps.map(item => {
-                  if (mode === "add") {
-                    return < Step key={item.title} title={item.title} />
-                  }
-                  else {
-                    return <Step
-                      key={item.title}
-                      title={<a href="#">{item.title}</a>}
-                      onClick={() => {
-                        this.setState({ currentStep: steps.indexOf(item) })
-                      }}
-                    />
-                  }
+                  return <Step
+                    key={item.title}
+                    title={<a href="#">{item.title}</a>}
+                    icon={
+                      item.error ?
+                        <div style={{ fontSize: '32px', color: "red", marginTop: -8, marginLeft: -1 }}>
+                          <Icon type="close-circle" />
+                        </div> :
+                        undefined
+                    }
+                    onClick={() => {
+                      this.setState({ currentStep: steps.indexOf(item) })
+                    }}
+                  />
                 })}
               </Steps>
             </div>
@@ -544,6 +571,21 @@ class SteppedInputForm extends React.Component {
                 type="circle"
                 percent={progressCompleteOverride ? 100 : Math.round(100 / steps.length * currentStep)}
                 style={{ marginLeft: -10 }}
+                strokeColor={DEAGreen}
+                format={percent => {
+                  if (percent < 100) {
+                    return (
+                      <span style={{ color: DEAGreen }}>
+                        {`${percent}%`}
+                      </span>
+                    )
+                  }
+                  else {
+                    return (
+                      <Fa size="2x" icon="check" style={{ color: DEAGreen }} />
+                    )
+                  }
+                }}
               />
             </div>
           </Col>
@@ -564,7 +606,7 @@ class SteppedInputForm extends React.Component {
                   </h3>
                   {
                     steps[currentStep].optional === true &&
-                    <h6>
+                    <h6 style={{ color: DEAGreen }}>
                       <i>
                         This step is optional, click 'Next' to skip
                     </i>
@@ -573,8 +615,8 @@ class SteppedInputForm extends React.Component {
                   {
                     steps[currentStep].backAction &&
                     <h6>
-                      <a href="#" onClick={() => this.jumpTo(steps[currentStep].backAction)}>
-                        <Fa className="button-icon" icon="chevron-circle-left" />
+                      <a href="#" onClick={() => this.jumpTo(steps[currentStep].backAction)} style={{ color: DEAGreenDark }}>
+                        <Fa size="lg" className="button-icon" icon="chevron-circle-left" />
                         <u>{steps[currentStep].backAction}</u>
                       </a>
                     </h6>
@@ -588,7 +630,7 @@ class SteppedInputForm extends React.Component {
             <Row style={{ borderTop: "1px solid gainsboro", paddingTop: 5 }}>
               <Col>
 
-                <Button size="sm" color="danger" style={{ width: 120 }} onClick={() => {
+                <Button size="sm" color="grey" style={{ width: 120 }} onClick={() => {
                   this.showConfirm("Confirm cancel", "Are you sure you want to cancel and discard all unsaved changes?",
                     "Yes", "No", this.onClose)
                 }}>
@@ -601,8 +643,8 @@ class SteppedInputForm extends React.Component {
                     currentStep > 0 && (
                       <Button
                         size="sm"
-                        color="primary"
-                        style={{ width: 120, marginRight: 0 }}
+                        color=""
+                        style={{ width: 120, marginRight: 0, backgroundColor: DEAGreen }}
                         onClick={() => this.onPrev()}
                       >
                         <Fa icon="chevron-circle-left" style={{ marginRight: 10 }} />
@@ -615,8 +657,8 @@ class SteppedInputForm extends React.Component {
                     currentStep < steps.length - 1 &&
                     <Button
                       size="sm"
-                      color="primary"
-                      style={{ width: 120, marginRight: 0 }}
+                      color=""
+                      style={{ width: 120, marginRight: 0, backgroundColor: DEAGreen }}
                       onClick={() => this.onNext()}
                     >
                       <Fa icon="chevron-circle-right" style={{ marginRight: 10 }} />
@@ -625,16 +667,30 @@ class SteppedInputForm extends React.Component {
                   }
 
                   {
-                    currentStep === steps.length - 1 &&
+                    (currentStep === steps.length - 1) &&
                     <Button
+                      disabled={errors}
                       size="sm"
-                      color="warning"
-                      onClick={this.onSubmit}
-                      style={{ width: 120, marginRight: 0 }}
+                      color=""
+                      onClick={() => {
+                        let projectChanged = projectDetails.state === "modified"
+                        let fundersChanged = projectFunderDetails.filter(x => x.state === "modified").length > 0
+                        let adaptationsChanged = adaptationDetails.filter(x => x.state === "modified").length > 0
+
+                        if (projectChanged || fundersChanged || adaptationsChanged) {
+                          this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
+                            "Yes", "No", this.onSubmit)
+                        }
+                        else {
+                          this.showConfirm("Confirm close", "You have not made any changes, would you like to close the form?",
+                            "Yes", "No", this.onClose)
+                        }
+                      }}
+                      style={{ width: 120, marginRight: 0, backgroundColor: DEAGreenDark }}
                     >
                       <Fa icon="save" style={{ marginRight: 10 }} />
                       Submit
-                      </Button>
+                    </Button>
                   }
                 </div>
               </Col>
@@ -642,6 +698,9 @@ class SteppedInputForm extends React.Component {
 
           </Col>
         </Row>
+
+        {this.renderListEditor()}
+
       </div>
     )
   }

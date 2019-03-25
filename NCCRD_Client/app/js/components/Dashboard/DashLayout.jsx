@@ -44,27 +44,27 @@ class DashLayout extends React.Component {
   componentDidMount() {
     this.props.updateNav(location.hash)
     this.props.setProjectsFullView(false)
-    window.addEventListener("scroll", this.handleScroll);
+    document.getElementById("app-content").addEventListener("scroll", this.handleScroll);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll)
+    document.getElementById("app-content").removeEventListener("scroll", this.handleScroll);
   }
 
   handleScroll() {
     let { showBackToTop } = this.state
 
-    if (window.pageYOffset > 1450 && showBackToTop === false) {
+    if (document.getElementById("app-content").scrollTop > 1450 && showBackToTop === false) {
       this.setState({ showBackToTop: true })
     }
-    else if (window.pageYOffset <= 1450 && showBackToTop === true) {
+    else if (document.getElementById("app-content").scrollTop <= 1450 && showBackToTop === true) {
       this.setState({ showBackToTop: false })
     }
 
   }
 
   scrollToTop() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 0,
       left: 0,
       behavior: 'smooth'
@@ -92,7 +92,7 @@ class DashLayout extends React.Component {
                 style={{ backgroundColor: DEAGreen }}
               >
                 <Fa icon="arrow-up" />
-              </Button>              
+              </Button>
             </Tooltip>
 
           }
@@ -133,7 +133,11 @@ class DashLayout extends React.Component {
             <ProjectList />
           </Col>
 
-          <Col md="5" style={{ position: (showBackToTop ? "absolute" : "relative"), top: (showBackToTop ? 285 : 0), right: 0 }}>
+          <Col md="5" style={{
+            position: (showBackToTop ? "fixed" : "relative"),
+            top: 0,
+            right: showBackToTop ? "-50vw" : 0
+          }}>
             <Row>
               <Col md="12">
                 <ProjectFilters />

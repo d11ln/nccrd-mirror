@@ -1,7 +1,7 @@
-.summary-collapse {
-  /* margin-top: -20px; */
-  margin-left: -13px
-}
+/* .summary-collapse {
+  margin-top: -20px;
+  margin-left: -13px;
+} */
 
 .summary-label {
   font-weight: 600;
@@ -17,7 +17,6 @@
 .summary-panel-header {
   font-weight: 500;
   margin-top: 10px;
-  color: #0F83FF;
 }
 
 .summary-panel {
@@ -32,4 +31,13 @@
 
 .inline-value {
   display: inline
+}
+
+.error-card {
+  color: red;
+  padding: 15px;
+  border: 2px solid red;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }

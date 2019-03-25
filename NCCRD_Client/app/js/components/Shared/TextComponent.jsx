@@ -44,24 +44,14 @@ class TextComponent extends React.Component {
     let { setValue, setValueKey, parentId, editMode, numeric } = this.props
 
     if (typeof setValueKey !== 'undefined') {
-
       let value = event.target.value
-      if (numeric) {
-        if (value === "") {
-          value = 0
-        }
-        else {
-          value = parseFloat(value.replace(/,/g, "").replace("[^a-zA-Z0-9 -]", ""));
-        }
-      }
-
       setValue(setValueKey, { value, id: parentId, state: editMode === true ? "modified" : "original" })
     }
   }
 
   render() {
 
-    let { col, label, id, editMode, value } = this.props
+    let { col, label, id, editMode, value, numeric } = this.props
     let uiconf = UILookup(id, label)
 
     value = this.fixNullOrUndefinedValue(value)
@@ -71,14 +61,15 @@ class TextComponent extends React.Component {
       <div className={col} style={{ paddingRight: 20 }}>
         {
           (label !== "") &&
-            <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
-          }
+          <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
+        }
         <Input
           size="sm"
           id={id}
           readOnly={!editMode}
           value={value.toString()}
           onChange={this.valueChange.bind(this)}
+          type={ numeric ? "number" : "text" }
           style={{
             width: "98.4%",
             height: "21px",

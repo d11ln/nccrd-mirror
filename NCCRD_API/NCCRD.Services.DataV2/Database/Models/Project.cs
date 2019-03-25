@@ -60,8 +60,8 @@ namespace NCCRD.Services.DataV2.Database.Models
         public ProjectStatus ProjectStatus { get; set; }
 
         //FK - ProjectType
-        [Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
-        public int ProjectTypeId { get; set; }
+        //[Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
+        public int? ProjectTypeId { get; set; }
         [IgnoreDataMember]
         public ProjectType ProjectType { get; set; }
 
