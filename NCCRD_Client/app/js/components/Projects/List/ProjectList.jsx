@@ -194,7 +194,7 @@ class ProjectList extends React.Component {
         })
         .catch(res => {
           setLoading(false)
-          console.log("Error details:", res)
+          console.error("Error details:", res)
           alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
         })
     }

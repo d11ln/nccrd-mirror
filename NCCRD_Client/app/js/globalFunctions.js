@@ -21,18 +21,13 @@ export function stripURLParam(paramKey) {
   let l = location.toString().length
   let queryString = location.toString().substr(i, l - i)
 
-  console.log("queryString", queryString)
-
   if (queryString === ("?" + paramKey)) {
-    console.log("1")
     location = location.toString().replace(("?" + paramKey), "")
   }
   else if (queryString.includes("?" + paramKey + "&")) {
-    console.log("2")
     location = location.toString().replace(paramKey + "&", "")
   }
   else if (queryString.includes("&" + paramKey)) {
-    console.log("3")
     location = location.toString().replace("&" + paramKey, "")
   }
 }

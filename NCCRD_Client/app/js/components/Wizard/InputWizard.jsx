@@ -46,7 +46,6 @@ class InputWizard extends React.Component {
   }
 
   onClose() {
-    console.log("closing wizard")
     this.props.showInputWizard(false)
   }
 
