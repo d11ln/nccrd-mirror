@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import popout from '../../../images/popout.png'
 import OData from 'react-odata'
 import { apiBaseURL } from '../../config/serviceURLs.js'
-import { LineChart, Line, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import { BarChart, Bar, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
 import buildQuery from 'odata-query'
 
 const _gf = require('../../globalFunctions')
@@ -122,7 +122,7 @@ class DashGraph1Preview extends React.Component {
 
         <img src={popout} style={{ width: "25px", position: "absolute", top: "10px", right: "25px" }}
           onClick={() => {
-            this.props.setScrollPos(window.pageYOffset)
+            this.props.setScrollPos(document.getElementById("app-content").scrollTop)
             location.hash = location.hash.replace("#/", "#/chart1")
           }} />
 
@@ -153,12 +153,24 @@ class DashGraph1Preview extends React.Component {
           {
             (transformedData.length > 0) &&
             <ResponsiveContainer key={new Date().valueOf()} width="100%" height="100%">
-              <LineChart data={transformedData} >
+              <BarChart data={transformedData} >
                 <XAxis hide dataKey="Year" />
-                <Line dot={false} type='monotone' dataKey='Adaptation' stroke='#8884d8' strokeWidth={2} />
-                <Line dot={false} type="monotone" dataKey="Mitigation" stroke="#82ca9d" strokeWidth={2} />
+                <Bar
+                  type='monotone'
+                  dataKey='Adaptation'
+                  stackId="1"
+                  stroke='#8884d8'
+                  fill='#8884d8'
+                />
+                <Bar
+                  type='monotone'
+                  dataKey='Mitigation'
+                  stackId="1"
+                  stroke='#82ca9d'
+                  fill='#82ca9d'
+                />
                 <Tooltip />
-              </LineChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

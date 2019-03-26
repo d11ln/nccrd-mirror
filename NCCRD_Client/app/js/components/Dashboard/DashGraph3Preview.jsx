@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import popout from '../../../images/popout.png'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
 import buildQuery from 'odata-query'
 
 const _gf = require('../../globalFunctions')
@@ -219,7 +219,7 @@ class DashGraph3Preview extends React.Component {
         }
 
         areas.push(
-          <Area
+          <Bar
             key={key}
             type='monotone'
             dataKey={key}
@@ -254,7 +254,7 @@ class DashGraph3Preview extends React.Component {
 
         <img src={popout} style={{ width: "25px", position: "absolute", top: "10px", right: "25px" }}
           onClick={() => {
-            this.props.setScrollPos(window.pageYOffset)
+            this.props.setScrollPos(document.getElementById("app-content").scrollTop)
             location.hash = location.hash.replace("#/", "#/chart3")
           }} />
 
@@ -285,12 +285,12 @@ class DashGraph3Preview extends React.Component {
           {
             (transformedData.length > 0 && hazards.length > 0) &&
             <ResponsiveContainer key="G3Graph" width="100%" height="100%">
-              <AreaChart data={transformedData} stackOffset="expand" >
+              <BarChart data={transformedData} >
                 <XAxis hide dataKey="Year" />
                 <YAxis hide tickFormatter={this.toPercent} />
                 <Tooltip content={this.renderTooltipContent} />
                 {this.renderAreas(transformedData, hazards)}
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

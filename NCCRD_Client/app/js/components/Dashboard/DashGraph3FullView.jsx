@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import popin from '../../../images/popin.png'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import buildQuery from 'odata-query'
 
 const _gf = require('../../globalFunctions')
@@ -51,7 +51,7 @@ class DashGraph3FullView extends React.Component {
 
   componentDidMount() {
 
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 125,
       left: 0,
       behavior: 'smooth'
@@ -287,7 +287,7 @@ class DashGraph3FullView extends React.Component {
         }
 
         areas.push(
-          <Area
+          <Bar
             key={key}
             type='monotone'
             dataKey={key}
@@ -364,13 +364,13 @@ class DashGraph3FullView extends React.Component {
           {
             (transformedData.length > 0 && hazards.length > 0) &&
             <ResponsiveContainer key="G3Graph" width="96%" height="98%">
-              <AreaChart data={transformedData} stackOffset="expand" >
+              <BarChart data={transformedData} >
                 <XAxis dataKey="Year" />
                 <YAxis tickFormatter={this.toPercent} />
                 <Tooltip content={this.renderTooltipContent} />
                 {this.renderAreas(transformedData, hazards)}
                 <Legend />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

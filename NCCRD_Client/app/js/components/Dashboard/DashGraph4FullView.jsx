@@ -1,10 +1,8 @@
-import React, { Children } from 'react'
-import { Row, Col, Button } from 'mdbreact'
+import React from 'react'
 import { connect } from 'react-redux'
 import popin from '../../../images/popin.png'
-import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import buildQuery from 'odata-query'
 
 const _gf = require('../../globalFunctions')
@@ -51,7 +49,7 @@ class DashGraph4FullView extends React.Component {
 
   async componentDidMount() {
 
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 125,
       left: 0,
       behavior: 'smooth'
@@ -311,7 +309,7 @@ class DashGraph4FullView extends React.Component {
         }
 
         areas.push(
-          <Area
+          <Bar
             key={key}
             type='monotone'
             dataKey={key}
@@ -398,13 +396,13 @@ class DashGraph4FullView extends React.Component {
           {
             (transformedData.length > 0 && sector.length > 0) &&
             <ResponsiveContainer key="G4Graph" width="96%" height="98%">
-              <AreaChart data={transformedData} stackOffset="expand" >
+              <BarChart data={transformedData} >
                 <XAxis dataKey="Year" />
                 <YAxis tickFormatter={this.toPercent} />
                 <Tooltip content={this.renderTooltipContent} />
                 {this.renderAreas(transformedData, sector)}
                 <Legend />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

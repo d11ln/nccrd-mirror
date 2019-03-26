@@ -166,7 +166,7 @@ class App extends React.Component {
     }
 
     config = encodeURI(JSON.stringify(config))
-    ("config", config)
+      ("config", config)
     // TEST //    
   }
 
@@ -315,11 +315,12 @@ class App extends React.Component {
 
     return (
       <Router>
-        <div id="app-content" style={{ height: '100vh', overflowY: ( showInputWizard === true ? 'hidden' : 'scroll'), overflowX: 'hidden' }}>
+        <div id="app-content" style={{ height: '100vh', overflowY: (showInputWizard === true ? 'hidden' : 'scroll'), overflowX: 'hidden' }}>
           {(showHeader === true) && <Header />}
           {(showNavbar !== false) && <CustomNavbar />}
 
-          <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
+          <div style={{ margin: "0px 15px 0px 15px" }}>
+
             {
               showSideNavButton === true &&
               <SideNav data={NavData} isOpen={showSideNav} />

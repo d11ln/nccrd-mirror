@@ -2,7 +2,7 @@ import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
 import { apiBaseURL } from "../../../config/serviceURLs.js"
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa } from "mdbreact"
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, MDBIcon } from "mdbreact"
 import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
@@ -376,13 +376,15 @@ class ProjectList extends React.Component {
           <Button size="sm" color="" style={{ backgroundColor: DEAGreen, marginRight: 30, marginTop: 3 }}>
             <CSVLink
               style={{ marginRight: '', textDecoration: 'none', color: 'white' }}
-              filename={"testreport.csv"}
+              filename={"projects-list.csv"}
               data={[...this.props.projects]}
               asyncOnClick={true}
               onClick={() => {
                 console.log(this.props.projects)
               }}
             >
+              {/* <Fa icon="arrow-circle-down" style={{ marginRight: 15 }} /> */}
+              <MDBIcon icon="arrow-circle-down" style={{ marginRight: 15 }} />
               Download
             </CSVLink>
           </Button>

@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { LineChart, Line, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
+import { BarChart, Bar, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
 import buildQuery from 'odata-query'
 
 //images
@@ -36,7 +36,7 @@ class DashGraph1FullView extends React.Component {
   }
 
   componentDidMount() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 125,
       left: 0,
       behavior: 'smooth'
@@ -52,7 +52,7 @@ class DashGraph1FullView extends React.Component {
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, typologyFilter, regionFilter, sectorFilter, filteredProjectIDs, loadProjectIDList  } = this.props
+    let { statusFilter, typologyFilter, regionFilter, sectorFilter, filteredProjectIDs, loadProjectIDList } = this.props
     let filters = {}
 
     if (filteredProjectIDs.length === 0) {
@@ -232,14 +232,26 @@ class DashGraph1FullView extends React.Component {
           {
             (transformedData.length > 0) &&
             <ResponsiveContainer key={new Date().valueOf()} width="96%" height="98%">
-              <LineChart data={transformedData} >
+              <BarChart data={transformedData} >
                 <XAxis dataKey="Year" />
                 <YAxis />
-                <Line type='monotone' dataKey='Adaptation' stroke='#8884d8' strokeWidth={2} />
-                <Line type="monotone" dataKey="Mitigation" stroke="#82ca9d" strokeWidth={2} />
+                <Bar
+                  type='monotone'
+                  dataKey='Adaptation'
+                  stackId="1"
+                  stroke='#8884d8'
+                  fill='#8884d8'
+                />
+                <Bar
+                  type='monotone'
+                  dataKey='Mitigation'
+                  stackId="1"
+                  stroke='#82ca9d'
+                  fill='#82ca9d'
+                />
                 <Tooltip />
                 <Legend />
-              </LineChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

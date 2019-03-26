@@ -199,7 +199,7 @@ class MapViewCore extends React.Component {
             cursor: "pointer"
           }}
           onClick={() => {
-            if (!fullView) this.props.setScrollPos(window.pageYOffset)
+            if (!fullView) this.props.setScrollPos(document.getElementById("app-content").scrollTop)
 
             let navTo = ""
             if (fullView) {

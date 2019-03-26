@@ -148,6 +148,7 @@ class CustomNavbar extends React.Component {
                   })
                 }
               }}>
+              <Fa icon="plus" style={{ marginRight: 15 }} />
               Add New Project
             </Button>
 

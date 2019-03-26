@@ -54,10 +54,10 @@ class DashLayout extends React.Component {
   handleScroll() {
     let { showBackToTop } = this.state
 
-    if (document.getElementById("app-content").scrollTop > 1450 && showBackToTop === false) {
+    if (document.getElementById("app-content").scrollTop > 1350 && showBackToTop === false) {
       this.setState({ showBackToTop: true })
     }
-    else if (document.getElementById("app-content").scrollTop <= 1450 && showBackToTop === true) {
+    else if (document.getElementById("app-content").scrollTop <= 1350 && showBackToTop === true) {
       this.setState({ showBackToTop: false })
     }
 
@@ -76,38 +76,25 @@ class DashLayout extends React.Component {
     let { showBackToTop } = this.state
 
     return (
-      <div style={{ padding: "15px 0px 15px 0px" }}>
+      <>
 
-        <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
-          {
-            showBackToTop &&
-            <Tooltip title="Back to top" mouseEnterDelay={0.7}>
-              <Button
-                size="sm"
-                floating
-                color=""
-                onClick={() => {
-                  this.scrollToTop()
-                }}
-                style={{ backgroundColor: DEAGreen }}
-              >
-                <Fa icon="arrow-up" />
-              </Button>
-            </Tooltip>
-
-          }
-        </div>
-
-        <Row style={{ marginTop: "15px", marginBottom: "15px", marginLeft: "-10px" }}>
-          <Col md="2">
-            <div style={{ marginTop: "2px" }}>
-              <b style={{ color: "grey", fontSize: "14px" }}>
-                DASHBOARD
-            </b>
-              <h3 style={{ marginLeft: "-2px", marginTop: "6px" }}>
-                <b>Get Started</b>
-              </h3>
-            </div>
+        <Row style={{ marginBottom: "15px", marginLeft: "-10px" }}>
+          <Col md="2" style={{ color: "grey" }}>
+            <Row>
+              <Col>
+                <span style={{ paddingLeft: 112 }}>
+                  Filters <Fa icon="angle-double-right" />
+                </span>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <h2 style={{ letterSpacing: -2 }}>
+                  <b>Dashboard </b>
+                  <Fa icon="arrow-circle-down" />
+                </h2>
+              </Col>
+            </Row>
           </Col>
 
           <Col md="10">
@@ -209,18 +196,33 @@ class DashLayout extends React.Component {
                       />
                     </DashGraph4Preview>
                   </Col>
-
                 </Row>
-
               </Col>
-
             </Row>
           </Col>
-
-
         </Row>
 
-      </div>
+        <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
+          {
+            showBackToTop &&
+            <Tooltip title="Back to top" mouseEnterDelay={0.7}>
+              <Button
+                size="sm"
+                floating
+                color=""
+                onClick={() => {
+                  this.scrollToTop()
+                }}
+                style={{ backgroundColor: DEAGreen }}
+              >
+                <Fa icon="arrow-up" />
+              </Button>
+            </Tooltip>
+
+          }
+        </div>
+
+      </>
     )
   }
 }

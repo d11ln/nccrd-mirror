@@ -17,8 +17,8 @@ class MapView extends React.Component {
   }
 
   componentDidMount(){
-    window.scroll({
-      top: 175,
+    document.getElementById("app-content").scroll({
+      top: 125,
       left: 0,
       behavior: 'smooth'
     });
