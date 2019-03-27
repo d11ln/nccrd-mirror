@@ -71,6 +71,45 @@ class DashLayout extends React.Component {
     });
   }
 
+  getDashText(small) {
+    return (
+      <div style={{ color: "grey" }}>
+        {
+          !small &&
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <div style={{ paddingLeft: 115 }}>Filters</div>
+                </td>
+                <td>
+                  <Fa icon="angle-double-right" style={{ marginLeft: 2 }} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        }
+
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <h2 style={{ letterSpacing: -2 }}>
+                  <b>Dashboard</b>
+                </h2>
+              </td>
+              <td>
+                <h2>
+                  <Fa icon="arrow-circle-down" style={{ marginLeft: 2 }} />
+                </h2>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
   render() {
 
     let { showBackToTop } = this.state
@@ -78,23 +117,15 @@ class DashLayout extends React.Component {
     return (
       <>
 
-        <Row style={{ marginBottom: "15px", marginLeft: "-10px" }}>
-          <Col md="2" style={{ color: "grey" }}>
-            <Row>
-              <Col>
-                <span style={{ paddingLeft: 112 }}>
-                  Filters <Fa icon="angle-double-right" />
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h2 style={{ letterSpacing: -2 }}>
-                  <b>Dashboard </b>
-                  <Fa icon="arrow-circle-down" />
-                </h2>
-              </Col>
-            </Row>
+        <Row className="d-lg-none">
+          <Col>
+            {this.getDashText(true)}
+          </Col>
+        </Row>
+
+        <Row style={{ marginBottom: "15px" }}>
+          <Col className="d-none d-lg-block" md="2">
+            {this.getDashText()}
           </Col>
 
           <Col md="10">
