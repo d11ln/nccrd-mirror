@@ -147,7 +147,9 @@ class AdaptationDetailsStep extends React.Component {
             id="selAdaptationHazard"
             col="col-md-6"
             label="Hazard:"
-            selectedValue={details.HazardId}
+            placeholder="Coming Soon..."
+            disabled
+            selectedValue={undefined} //{details.HazardId}
             data={hazards}
             setSelectedValueKey={"SET_ADAPTATION_DETAILS_HAZARD"}
             parentId={details.AdaptationDetailId}
@@ -172,33 +174,6 @@ class AdaptationDetailsStep extends React.Component {
             allowClear={true}
           />
         </Row>
-
-        {/* <div className="vertical-spacer" /> */}
-
-        {/* <Row>
-          <Col>
-            <Popover content={"Add optional research details"}>
-              <Button disabled={details.ResearchDetail !== null} className="inline-button" color="primary" onClick={this.onAdd}>
-                <Fa className="button-icon" icon="plus-circle" />
-                Add Research
-              </Button>
-            </Popover>
-
-            <Popover content={"*coming soon*"}>
-              <Button className="inline-button disabled-button" color="">
-                <Fa className="button-icon" icon="plus-circle" />
-                Add Funding
-              </Button>
-            </Popover>
-
-            <Popover content={"Remove this adaptation action completely"}>
-              <Button className="inline-button" color="danger" onClick={this.onRemove}>
-                <Fa className="button-icon" icon="minus-circle" />
-                Remove adaptation
-              </Button>
-            </Popover>
-          </Col>
-        </Row> */}
       </>
     )
   }

@@ -178,7 +178,7 @@ class TreeSelectComponent extends React.Component {
 
   render() {
 
-    let { col, label, id, selectedValue, data, style, labelStyle, matchWidth } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle, matchWidth, placeholder, disabled } = this.props
     let uiconf = UILookup(id, label)
     let treeData = []
     let selVal = []
@@ -193,6 +193,10 @@ class TreeSelectComponent extends React.Component {
 
     if (!matchWidth) {
       matchWidth = false
+    }
+
+    if (!placeholder) {
+      placeholder = "Select..."
     }
 
     if (data.length > 0) {
@@ -215,12 +219,13 @@ class TreeSelectComponent extends React.Component {
 
         <TreeSelect
           showSearch
+          disabled={disabled}
           searchPlaceholder="Search..."
           style={{ width: "100%", ...style }}
           value={selVal}
           dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto', }}
           dropdownMatchSelectWidth={matchWidth}
-          placeholder="Select..."
+          placeholder={placeholder}
           allowClear
           onChange={this.dependencyTreeSelect.bind(this)}
         >

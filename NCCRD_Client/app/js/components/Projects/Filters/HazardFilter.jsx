@@ -70,6 +70,8 @@ class HazardFilters extends React.Component {
           col="col-md-2"
           id="treeHazardFilter"
           label="Hazard"
+          placeholder="Coming Soon..."
+          disabled
           selectedValue={hazardFilter}
           data={hazards}
           editModeOverride={true}
