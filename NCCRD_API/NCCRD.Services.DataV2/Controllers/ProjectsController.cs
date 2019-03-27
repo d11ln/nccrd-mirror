@@ -100,6 +100,7 @@ namespace NCCRD.Services.DataV2.Controllers
             int sectorFilter = filters.sector;
             int hazardFilter = filters.hazard;
             Guid daoidFilter = filters.daoid != null ? new Guid(filters.daoid) : Guid.Empty;
+            string verified = filters.verified;
 
             //FAVORITES - OVERRIDES ALL OTHER FILTERS//
             if (!string.IsNullOrEmpty(favsFilter))
@@ -197,7 +198,8 @@ namespace NCCRD.Services.DataV2.Controllers
                             (sectorFilter == 0 || sectorProjectIds.Contains(p.ProjectId)) &&
                             (hazardFilter == 0 || hazardProjectIds.Contains(p.ProjectId)) &&
                             (typologyFilter == 0 || typologyProjectIds.Contains(p.ProjectId)) &&
-                            (daoidFilter == Guid.Empty || p.ProjectDAOs.Any(dao => dao.DAOId == daoidFilter))
+                            (daoidFilter == Guid.Empty || p.ProjectDAOs.Any(dao => dao.DAOId == daoidFilter)) &&
+                            (verified == "all" || verified == "verified" && p.Verified == true || verified == "unverified" && p.Verified == false)
                         );
         }
 

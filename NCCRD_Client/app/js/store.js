@@ -107,7 +107,8 @@ const store = createStore(
             sectorFilter: 0,
             hazardFilter: 0,
             polygonFilter: "",
-            favoritesFilter: false
+            favoritesFilter: false,
+            unverifiedOnlyFilter: false
         },
 
         chartData:{

@@ -17,6 +17,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setSelectedValue: (key, payload) => {
       dispatch({ type: key, payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     },
     setEditList: (payload) => {
       dispatch({ type: "SET_EDIT_LIST", payload })

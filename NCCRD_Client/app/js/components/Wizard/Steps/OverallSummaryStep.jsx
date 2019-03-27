@@ -474,6 +474,17 @@ class OverallSummaryStep extends React.Component {
                 </Col>
               </Row>
 
+              <div className="vertical-spacer" />
+
+              <Row>
+                <Col md="6">
+                  <h6 className="summary-label">Project Verification State</h6>
+                  <h6 className="summary-value">
+                    {projectDetails.Verified ? "VERIFIED" : "NOT VERIFIED"}
+                  </h6>
+                </Col>
+              </Row>
+
             </div>
           </Panel>
 

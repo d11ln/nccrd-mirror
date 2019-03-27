@@ -1,10 +1,10 @@
 import React from 'react'
 import { Row } from 'mdbreact'
 import { connect } from 'react-redux'
-import TextComponent from '../../Shared/TextComponent.jsx';
-import TextAreaComponent from '../../Shared/TextAreaComponent.jsx';
-import SelectComponent from '../../Shared/SelectComponent.jsx';
-import RangeComponent from '../../Shared/RangeComponent.jsx';
+import TextComponent from '../../Shared/TextComponent.jsx'
+import TextAreaComponent from '../../Shared/TextAreaComponent.jsx'
+import SelectComponent from '../../Shared/SelectComponent.jsx'
+import RangeComponent from '../../Shared/RangeComponent.jsx'
 
 import "./shared.css"
 
@@ -49,7 +49,7 @@ class ProjectDetailsStep extends React.Component {
             id="txtProjectDescription"
             value={projectDetails.ProjectDescription}
             setValueKey={"SET_PROJECT_DETAILS_DESCRIPTION"}
-            rows={4}
+            rows={3}
           />
         </Row>
 

@@ -192,6 +192,7 @@ class ProjectDataLoader extends React.Component {
       ProjectSubTypeId: 0,
       ProjectManagerId: 0,
       ValidationStatusId: 0,
+      Verified: false,
       ProjectDAOs: [],
       ProjectRegions: [],
       ProjectLocations: [],

@@ -274,6 +274,11 @@ export default function ProjectsReducer(state = {}, action) {
       return { ...state, selectedProjectId: payload }
     }
 
+    case "SET_PROJECT_DETAILS_VERIFIED": {
+      let { projectDetails } = state
+      return { ...state, projectDetails: { ...projectDetails, Verified: payload, state: modState } }
+    }
+
     default: {
       return state
     }

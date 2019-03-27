@@ -94,6 +94,11 @@ export const ui_config = [
     label: "Regions:",
     tooltip: "Select all regions at the level that best describes the locations where this project will take place (province, metro or district municipality, local municipality)"
   },
+  {
+    key: "btnVerify",
+    label: "Project verification status:",
+    tooltip: "Click the button below to verify this project"
+  },
   // {
   //   key: "txtProjectValidationComments",
   //   label: "Validation comments:",

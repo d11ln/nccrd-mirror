@@ -21,9 +21,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setProjectRegions: payload => {
       dispatch({ type: "SET_PROJECT_DETAILS_REGIONS", payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     },
     setProjectLocation: (payload) => {
       dispatch({ type: "SET_PROJECT_LOCATION", payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     }
   }
 }

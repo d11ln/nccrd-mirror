@@ -15,5 +15,6 @@ namespace NCCRD.Services.DataV2.ViewModels
         public int hazard { get; set; }
         public string daoid { get; set; }
         public string favorites { get; set; }
+        public string verified { get; set; }
     }
 }
