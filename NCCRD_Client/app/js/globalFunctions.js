@@ -106,6 +106,22 @@ export function arraysEqual(a, b) {
 
 export const wait = ms => new Promise((r, j) => setTimeout(r, ms))
 
+export function IsReviewer(user){
+  let isReviewer = false
+  if (user && user.profile && user.profile.role) {
+
+    let role = user.profile.role
+
+    if (typeof role === 'string') {
+      isReviewer = role === "Reviewer"
+    }
+    else if (Array.isArray(role)) {
+      isReviewer = role.includes("Reviewer")
+    }
+  }
+  return isReviewer
+}
+
 
 //-------------------------//
 // Create and Read Cookies //

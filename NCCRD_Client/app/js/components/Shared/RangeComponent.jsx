@@ -17,9 +17,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setValueFrom: (key, payload) => {
       dispatch({ type: key, payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     },
     setValueTo: (key, payload) => {
       dispatch({ type: key, payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     }
   }
 }

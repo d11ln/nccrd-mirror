@@ -21,7 +21,7 @@ const mapStateToProps = (state, props) => {
   let { projectData: { projects, start, end, listScrollPos } } = state
   let { filterData: {
     titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter,
-    hazardFilter, filtersChanged
+    hazardFilter, filtersChanged, unverifiedOnlyFilter
   } } = state
   let user = state.oidc.user
   let { globalData: { loading, daoid, showListExpandCollapse, showFavoritesOption } } = state
@@ -29,7 +29,7 @@ const mapStateToProps = (state, props) => {
   return {
     projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
     listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption,
-    hazardFilter, filtersChanged
+    hazardFilter, filtersChanged, unverifiedOnlyFilter
   }
 }
 
@@ -71,12 +71,16 @@ const mapDispatchToProps = (dispatch) => {
     toggleFavorites: payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
     },
+    toggleUnverifiedOnly: payload => {
+      dispatch({ type: "TOGGLE_UNVERIFIED_ONLY_FILTER", payload })
+    },
     setFiltersChanged: payload => {
       dispatch({ type: "SET_FILTERS_CHANGED", payload })
     }
   }
 }
 
+let role = ""
 class ProjectList extends React.Component {
 
   constructor(props) {
@@ -117,7 +121,7 @@ class ProjectList extends React.Component {
 
   componentDidUpdate() {
 
-    let { filtersChanged } = this.props
+    let { filtersChanged, user } = this.props
     let { sortOrderChanged, start, end } = this.state
     let pStart = this.props.start
     let pEnd = this.props.end
@@ -132,7 +136,24 @@ class ProjectList extends React.Component {
       nextBatchNeeded = true
     }
 
-    if (filtersChanged === true || nextBatchNeeded === true) {
+    //Check if role changed
+    let roleChanged = false
+    if (user && user.profile && user.profile.role) {
+      if (user.profile.role !== role) {
+        //Update role
+        role = user.profile.role
+        roleChanged = true
+      }
+    }
+    else {
+      if (role !== "") {
+        //Update role
+        role = ""
+        roleChanged = true
+      }
+    }
+
+    if (filtersChanged === true || nextBatchNeeded === true || roleChanged === true) {
       this.getProjectList(filtersChanged)
     }
   }
@@ -150,7 +171,7 @@ class ProjectList extends React.Component {
     let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, hazardFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
       clearResearchDetails, start, end, resetProjectCounts, polygonFilter, daoid, loadProjectIDList,
-      setFiltersChanged } = this.props
+      setFiltersChanged, user, unverifiedOnlyFilter } = this.props
 
     if (filtersChanged === true) {
       start = 0
@@ -250,6 +271,11 @@ class ProjectList extends React.Component {
         filters.daoid = daoid
       }
 
+      //Verified.Unverified/All
+      //Get "reviever" status
+      let isReviewer = _gf.IsReviewer(user)
+      filters.verified = isReviewer === false ? "verified" : unverifiedOnlyFilter === true ? "unverified" : "all"
+
       //Fetch projects
       this.fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize)
       this.fetchProjectsAll(filters, setLoading, loadProjectIDList)
@@ -266,7 +292,6 @@ class ProjectList extends React.Component {
       oHandler
         .skip(skip)
         .top(batchSize)
-      // .orderBy(this.getProjectSort())
 
       this.setProjectSort(oHandler);
 
@@ -343,7 +368,6 @@ class ProjectList extends React.Component {
     if (typeof projects !== 'undefined' && projects.length > 0) {
       for (let i of projects) {
         ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={i.ProjectTitle} pdes={i.ProjectDescription} />)
-        //ar.push(<ProjectCard key={i.ProjectId} pid={i.ProjectId} ptitle={`(${i.ProjectId}) ${i.ProjectTitle}`} pdes={i.ProjectDescription} />)
       }
       return ar
     }
@@ -352,7 +376,7 @@ class ProjectList extends React.Component {
 
   render() {
 
-    let { user, daoid, favoritesFilter } = this.props
+    let { user, daoid, favoritesFilter, unverifiedOnlyFilter } = this.props
     let { ellipsisMenu } = this.state
 
     const projComps = this.buildList()
@@ -468,6 +492,56 @@ class ProjectList extends React.Component {
                           </ABtn>
                         </td>
                       </tr>
+                      {
+                        _gf.IsReviewer(user) &&
+                        <tr>
+                          <td>
+                            <p style={{ margin: "10px 15px 10px 5px" }}>
+                              Unverified Only:
+                            </p>
+                          </td>
+                          <td>
+                            <ABtn
+                              size="small"
+                              type="primary"
+                              style={{
+                                marginLeft: 0,
+                                width: "40px",
+                                backgroundColor: unverifiedOnlyFilter === true ? DEAGreen : "grey",
+                                border: "none",
+                                borderRadius: 0,
+                                color: "black",
+                                fontWeight: 300
+                              }}
+                              onClick={() => {
+                                this.props.toggleUnverifiedOnly(true)
+                                this.setState({ ellipsisMenu: false })
+                              }}
+                            >
+                              On
+                            </ABtn>
+                            <ABtn
+                              size="small"
+                              type="primary"
+                              style={{
+                                marginLeft: -1,
+                                width: "40px",
+                                backgroundColor: unverifiedOnlyFilter === false ? DEAGreen : "grey",
+                                border: "none",
+                                borderRadius: 0,
+                                color: "black",
+                                fontWeight: 300
+                              }}
+                              onClick={() => {
+                                this.props.toggleUnverifiedOnly(false)
+                                this.setState({ ellipsisMenu: false })
+                              }}
+                            >
+                              Off
+                            </ABtn>
+                          </td>
+                        </tr>
+                      }
                       <tr>
                         <td>
                           <p style={{ margin: "10px 5px 10px 5px" }}>

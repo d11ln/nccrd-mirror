@@ -77,6 +77,10 @@ export default function FilterReducer(state = {}, action) {
       return { ...state, filtersChanged: payload }
     }
 
+    case 'TOGGLE_UNVERIFIED_ONLY_FILTER': {
+      return { ...state, unverifiedOnlyFilter: payload, filtersChanged: true }
+    }
+
     default: {
       return state
     }

@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { DEAGreen } from '../../../config/colours.js'
 
 const mapStateToProps = (state, props) => {
-  let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter } } = state
+  let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter, unverifiedOnlyFilter } } = state
   let { lookupData: { projectStatus, typology, sector, region } } = state
   return {
     titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region,
-    favoritesFilter
+    favoritesFilter, unverifiedOnlyFilter
   }
 }
 
@@ -38,8 +38,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: "LOAD_SECTOR_FILTER", payload: 0 })
       dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
-    toggleFavorites: async payload => {
-      dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
+    toggleFavorites: () => {
+      dispatch({ type: "TOGGLE_FAVS_FILTER", payload: false })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
+    },
+    toggleUnverifiedOnly: () => {
+      dispatch({ type: "TOGGLE_UNVERIFIED_ONLY_FILTER", payload: false })
       dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     }
   }
@@ -57,13 +61,22 @@ class ProjectFilters extends React.Component {
 
     let {
       titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region,
-      favoritesFilter
+      favoritesFilter, unverifiedOnlyFilter
     } = this.props
     let filterChips = []
 
     if (titleFilter !== "" || statusFilter !== 0 || typologyFilter !== 0 || sectorFilter !== 0 || regionFilter !== 0 ||
-      favoritesFilter === true) {
-        
+      favoritesFilter === true || unverifiedOnlyFilter === true) {
+
+      if (unverifiedOnlyFilter === true) {
+        filterChips.push(
+          <div className="chip" key="verifFilterChip" style={{ backgroundColor: DEAGreen }}>
+            {"Unverified Only"}
+            <i className="close fa fa-times" onClick={() => this.deleteFilterChip("verif")}></i>
+          </div>
+        )
+      }
+
       if (favoritesFilter === true) {
         filterChips.push(
           <div className="chip" key="favsFilterChip" style={{ backgroundColor: DEAGreen }}>
@@ -152,6 +165,10 @@ class ProjectFilters extends React.Component {
 
       case "favs":
         this.props.toggleFavorites()
+        break
+
+      case "verif":
+        this.props.toggleUnverifiedOnly()
         break
     }
   }

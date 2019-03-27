@@ -18,6 +18,7 @@ import { UILookup } from "../../config/ui_config.js"
 import { DEAGreen, DEAGreenDark } from '../../config/colours.js'
 import EditListModal from '../Projects/Details/ListEditing/EditListModal.jsx'
 import EditTreeModal from '../Projects/Details/ListEditing/EditTreeModal.jsx'
+import ProjectVerifyStep from './Steps/ProjectVerifyStep.jsx';
 
 import "./SteppedInputForm.css"
 
@@ -87,8 +88,7 @@ class SteppedInputForm extends React.Component {
       winWidth: 0,
       winHeight: 0,
       currentStep: 0,
-      progressCompleteOverride: false,
-      currentProjectId: -1
+      progressCompleteOverride: false
     }
   }
 
@@ -108,10 +108,8 @@ class SteppedInputForm extends React.Component {
   onClose() {
 
     //discard changes & reset
-    this.setState({ currentStep: 0, progressCompleteOverride: false }, () => { 
-      this.props.loadData(0) 
-      
-    })
+    this.setState({ currentStep: 0, progressCompleteOverride: false })
+    this.props.loadData(0)
 
     //close form
     this.props.onClose()
@@ -137,10 +135,11 @@ class SteppedInputForm extends React.Component {
 
   async saveChanges() {
 
-    let { user, projectDetails, adaptationDetails, projectFunderDetails } = this.props
-    let { currentProjectId: projectId } = this.state
+    let { user, projectDetails, adaptationDetails, projectFunderDetails, selectedProjectId: projectId } = this.props
     let result = true
     let dataObj = { Id: projectId }
+
+    console.log(dataObj)
 
     //Show loading
     this.props.setLoading(true)
@@ -225,11 +224,11 @@ class SteppedInputForm extends React.Component {
       notification.error({
         duration: 0,
         message: <div>
-          Unable to save project.<br/>
+          Unable to save project.<br />
           (See log for error details)
-          <br/><br/>
+          <br /><br />
           Please try again in a few minutes.
-          <br/><br/>
+          <br /><br />
           If this problem persists, please contact the system administrator.
         </div>
       })
@@ -290,7 +289,7 @@ class SteppedInputForm extends React.Component {
 
   getSteps() {
 
-    let { projectDetails, adaptationDetails, projectFunderDetails, setLinkedDAOGoalId } = this.props
+    let { projectDetails, adaptationDetails, projectFunderDetails, setLinkedDAOGoalId, user } = this.props
     steps = []
 
     //Project
@@ -375,9 +374,18 @@ class SteppedInputForm extends React.Component {
     //Validate inputs before summary
     this.validateInputs()
 
+    //Verify
+    if (_gf.IsReviewer(user)) {
+      steps.push({
+        title: 'Review - Verify',
+        content: <ProjectVerifyStep />,
+        error: false
+      })
+    }
+
     //Summary
     steps.push({
-      title: 'Summary',
+      title: 'Review - Summary',
       content: <OverallSummaryStep
         header={<h6><i>Please review before submitting</i></h6>}
         projectDetails={projectDetails}
@@ -496,10 +504,11 @@ class SteppedInputForm extends React.Component {
   }
 
   validateRequiredInput(id, data, key) {
-    let uiconf = UILookup(id)
-
-    if (uiconf.required === true && (data[key] === "" || data[key] === 0 || data[key].length === 0)) {
-      return false
+    if (id && data && key) {
+      let uiconf = UILookup(id)
+      if (uiconf.required === true && (data[key] === "" || data[key] === 0 || data[key].length === 0)) {
+        return false
+      }
     }
     return true
   }
