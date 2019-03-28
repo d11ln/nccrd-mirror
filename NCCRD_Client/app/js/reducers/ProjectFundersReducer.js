@@ -56,15 +56,15 @@ export default function ProjectFundersReducer(state = {}, action) {
             let { projectFunderDetails, projectDetails } = state
 
             let newItem = {
-                "FunderId": _gf.getRndInteger(1111111, 9999999),
-                "FundingAgency": "",
-                "GrantProgName": "",
-                "TotalBudget": null,
-                "AnnualBudget": null,
-                "PartnerDepsOrgs": "",
-                "ProjectCoordinatorId": null,
-                "FundingStatusId": null,
-                "state": "modified"
+                FunderId: _gf.getRndInteger(1111111, 9999999),
+                FundingAgency: "",
+                GrantProgName: "",
+                TotalBudget: null,
+                AnnualBudget: null,
+                PartnerDepsOrgs: "",
+                ProjectCoordinatorId: null,
+                FundingStatusId: null,
+                state: "modified"
             }
 
             return { ...state, projectFunderDetails: [...projectFunderDetails, newItem] }

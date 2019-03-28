@@ -136,7 +136,8 @@ export const ui_config = [
   {
     key: "lblFundingAgency",
     label: "Funding agency:",
-    tooltip: "The name of the agency funding the project"
+    tooltip: "The name of the agency funding the project",
+    required: true
   },
   {
     key: "lblPartneringDepts",
@@ -195,7 +196,8 @@ export const ui_config = [
   {
     key: "selAdaptationActionStatus",
     label: "Project status:",
-    tooltip: "Status of action implementation"
+    tooltip: "Status of action implementation",
+    required: true
   },
   {
     key: "txtAdaptationContactName",

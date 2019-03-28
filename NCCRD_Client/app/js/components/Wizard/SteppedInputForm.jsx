@@ -139,8 +139,6 @@ class SteppedInputForm extends React.Component {
     let result = true
     let dataObj = { Id: projectId }
 
-    console.log(dataObj)
-
     //Show loading
     this.props.setLoading(true)
 
@@ -172,35 +170,15 @@ class SteppedInputForm extends React.Component {
         let adaptationItem = _.clone(item)
         delete adaptationItem.state //OData can only bind to the original object spec which does not contain 'state'
         adaptationItem.ProjectId = parseInt(projectId)  //Asociate with current project
-        adaptationItem.ResearchDetail.ProjectId = parseInt(projectId)  //Asociate with current project
+
+        if (adaptationItem.ResearchDetail) {
+          adaptationItem.ResearchDetail.ProjectId = parseInt(projectId)  //Asociate with current project
+        }
+
         adaptationData.push(adaptationItem)
       })
       dataObj.AdaptationDetails = adaptationData
     }
-
-    //Add MitigationDetails
-    // if (mitigationDetails.filter(x => x.state === 'modified').length > 0) {
-    //   let mitigationData = []
-    //   mitigationDetails.filter(x => x.state === 'modified').forEach(item => {
-    //     let mitigationItem = _.clone(item)
-    //     delete mitigationItem.state //OData can only bind to the original object spec which does not contain 'state'
-    //     mitigationItem.ProjectId = parseInt(projectId) //Asociate with current project  
-    //     mitigationData.push(mitigationItem)
-    //   })
-    //   dataObj.MitigationDetails = mitigationData
-    // }
-
-    //Add MitigationEmissionsData
-    // if (emissionsData.filter(x => x.state === 'modified').length > 0) {
-    //   let mitigationEmissionsData = []
-    //   emissionsData.filter(x => x.state === 'modified').forEach(item => {
-    //     let emissionsItem = _.clone(item)
-    //     delete emissionsItem.state //OData can only bind to the original object spec which does not contain 'state'
-    //     emissionsItem.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)  //Asociate with current project  
-    //     mitigationEmissionsData.push(emissionsItem)
-    //   })
-    //   dataObj.MitigationEmissionsData = mitigationEmissionsData
-    // }
 
     let res = ""
     try {

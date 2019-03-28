@@ -54,18 +54,18 @@ export default function AdaptationsReducer(state = {}, action) {
             let { adaptationDetails, projectDetails } = state
 
             let newItem = {
-                "AdaptationDetailId": _gf.getRndInteger(1111111, 9999999),
-                "Title": "",
-                "Description": "",
-                "ContactName": "",
-                "ContactEmail": "",
-                "AdaptationPurposeId": 0,
-                "ProjectId": payload,
-                "SectorId": 0,
-                "HazardId": 0,
-                "ProjectStatusId": 0,
-                "ResearchDetail": null,
-                "state": "modified"
+                AdaptationDetailId: _gf.getRndInteger(1111111, 9999999),
+                Title: "",
+                Description: "",
+                ContactName: "",
+                ContactEmail: "",
+                AdaptationPurposeId: null,
+                ProjectId: payload,
+                SectorId: null,
+                HazardId: null,
+                ProjectStatusId: null,
+                ResearchDetail: null,
+                state: "modified"
             }
 
             return { ...state, adaptationDetails: [...adaptationDetails, newItem] }
@@ -188,8 +188,8 @@ export default function AdaptationsReducer(state = {}, action) {
                 ResearchDetailId: _gf.getRndInteger(1111111, 9999999),
                 Author: "",
                 PaperLink: "",
-                ResearchTypeId: 0,
-                TargetAudienceId: 0,
+                ResearchTypeId: null,
+                TargetAudienceId: null,
                 ResearchMaturityId: null
             }
 
