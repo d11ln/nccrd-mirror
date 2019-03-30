@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
-import { TreeSelect } from 'antd'
-import { Tooltip } from 'antd';
+import { Cascader } from 'antd'
 import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
@@ -11,7 +10,7 @@ const _gf = require('../../globalFunctions')
 // import TreeSelect from 'antd/lib/tree-select'
 // import '../../../css/antd.tree-select.css' //Overrides default antd.tree-select css
 // import '../../../css/antd.select.css' //Overrides default antd.select css
-const TreeSelectNode = TreeSelect.TreeNode;
+//const TreeSelectNode = TreeSelect.TreeNode;
 
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
@@ -82,8 +81,10 @@ class TreeSelectComponent extends React.Component {
     effectiveData.map(item => {
 
       let newTreeNode = {
+        key: item[Object.keys(item)[0]],
         id: item[Object.keys(item)[0]],
-        text: item[Object.keys(item)[1]],
+        value: item[Object.keys(item)[1]],
+        label: item[Object.keys(item)[1]],
         modifiedState: item.modifiedState
       }
 
@@ -214,11 +215,26 @@ class TreeSelectComponent extends React.Component {
       }
     }
 
+    console.log(treeData)
+
+    const displayRender = (labels, selectedOptions) => labels.map((label, i) => {
+
+      const option = selectedOptions[i];
+      if (i === labels.length - 1) {
+        return (
+          <span key={option.value}>
+            {label} (<a onClick={e => handleAreaClick(e, label, option)}>{option.code}</a>)
+          </span>
+        );
+      }
+      return <span key={option.value}>{label} / </span>;
+    });
+
     return (
       <div className={col}>
         <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
-        <TreeSelect
+        {/* <TreeSelect
           showSearch
           disabled={disabled}
           searchPlaceholder="Search..."
@@ -231,7 +247,17 @@ class TreeSelectComponent extends React.Component {
           onChange={this.dependencyTreeSelect.bind(this)}
         >
           {this.renderTreeSelectNodes(treeData)}
-        </TreeSelect>
+        </TreeSelect> */}
+
+        <Cascader
+          options={treeData}
+          expandTrigger="hover"
+          placeholder={placeholder}
+          disabled={disabled}
+          // showSearch={true}
+          displayRender={displayRender}
+        />
+
 
       </div>
     )
