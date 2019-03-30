@@ -15,7 +15,7 @@ import {
 } from 'mdbreact'
 import { notification, message } from 'antd'
 import userManager from '../Authentication/userManager'
-import { ssoBaseURL, ccisSiteBaseURL, ndmcBaseURL } from '../../config/serviceURLs.js'
+import { ssoBaseURL, ndaoSiteBaseURL, ndmcBaseURL } from '../../config/serviceURLs.js'
 import { DEAGreen } from '../../config/colours.js'
 import { data as NavData } from '../../../data/sideNavConfig'
 import { destroyFns } from 'antd/lib/modal/Modal';
@@ -168,10 +168,10 @@ class CustomNavbar extends React.Component {
                   {/* <DropdownItem header style={{ marginLeft: "-16px", fontWeight: "400", fontSize: "16px", color: "black" }}>
                       Impacts:
                     </DropdownItem> */}
-                  <DropdownItem href={ccisSiteBaseURL} style={{ marginLeft: "7px" }}>
+                  <DropdownItem href={ndaoSiteBaseURL} style={{ marginLeft: "7px" }}>
                     <b style={{ color: "grey" }}>View Information</b>
                   </DropdownItem>
-                  <DropdownItem href={ccisSiteBaseURL + '/#/ame/contribute'} style={{ marginLeft: "7px" }}>
+                  <DropdownItem href={ndaoSiteBaseURL + '#/ame/contribute'} style={{ marginLeft: "7px" }}>
                     <b style={{ color: "grey" }}>Submit evaluation on Progress</b>
                   </DropdownItem>
                 </DropdownMenu>
@@ -181,7 +181,7 @@ class CustomNavbar extends React.Component {
 
 
             {/* Hazards */}
-            <NavItem>
+            {/* <NavItem>
               <Dropdown>
                 <DropdownToggle nav caret style={{ color: "black" }}><b>Hazardous Events </b></DropdownToggle>
                 <DropdownMenu>
@@ -199,7 +199,7 @@ class CustomNavbar extends React.Component {
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-            </NavItem>
+            </NavItem> */}
           </NavbarNav>
 
           {/* RIGHT */}

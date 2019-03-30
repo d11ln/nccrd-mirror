@@ -91,7 +91,12 @@ class ActionsOverview extends React.Component {
           {/* Adaptations */}
           {adaptationDetails.sort((a, b) => a.AdaptationDetailId > b.AdaptationDetailId ? 1 : 0).map(a => {
             let index = adaptationDetails.indexOf(a) + 1
-            return this.createTableEntry("Adaptation", `Adaptation #${index}`, "Applied", a.AdaptationDetailId)
+            return this.createTableEntry(
+              "Adaptation",
+              `Adaptation #${index}`,
+              a.ResearchDetail === null ? "Applied" : "Research",
+              a.AdaptationDetailId
+            )
           })}
 
           {/* Mitigation */}

@@ -121,12 +121,12 @@ class OverallSummaryStep extends React.Component {
   }
 
   getSectorValue(id) {
-
+    
     let { sector } = this.props
     let value = ""
 
     if (sector) {
-      let filtered = sector.filter(sec => sec.Id === id)
+      let filtered = sector.filter(sec => sec.Id == id)
       if (filtered && filtered.length > 0) {
         value = filtered[0].Text
       }

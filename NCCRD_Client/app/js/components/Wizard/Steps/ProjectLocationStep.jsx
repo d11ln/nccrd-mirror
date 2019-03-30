@@ -8,6 +8,8 @@ import { Collapse, Tooltip } from 'antd'
 import { UILookup } from '../../../config/ui_config.js'
 import DualTip from '../../Shared/DualTip.jsx';
 
+const _gf = require('../../../globalFunctions')
+
 const Panel = Collapse.Panel;
 
 const mapStateToProps = (state, props) => {

@@ -143,15 +143,15 @@ class SteppedInputForm extends React.Component {
     this.props.setLoading(true)
 
     //Add Project
-    if (projectDetails.state === 'modified') {
+    //if (projectDetails.state === 'modified') {
       let projectData = _.clone(projectDetails)
       projectData.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
       delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
       dataObj.Project = projectData
-    }
+    //}
 
     //Add Funding
-    if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
+    //if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
       let funderData = []
       projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
         let funderItem = _.clone(item)
@@ -161,10 +161,10 @@ class SteppedInputForm extends React.Component {
         funderData.push(funderItem)
       })
       dataObj.Funders = funderData
-    }
+    //}
 
     //Add AdaptationDetails
-    if (adaptationDetails.filter(x => x.state === 'modified').length > 0) {
+    //if (adaptationDetails.filter(x => x.state === 'modified').length > 0) {
       let adaptationData = []
       adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
         let adaptationItem = _.clone(item)
@@ -178,7 +178,7 @@ class SteppedInputForm extends React.Component {
         adaptationData.push(adaptationItem)
       })
       dataObj.AdaptationDetails = adaptationData
-    }
+    //}
 
     let res = ""
     try {
@@ -200,7 +200,7 @@ class SteppedInputForm extends React.Component {
 
       //Show error notification
       notification.error({
-        duration: 0,
+        duration: 15,
         message: <div>
           Unable to save project.<br />
           (See log for error details)
@@ -482,9 +482,9 @@ class SteppedInputForm extends React.Component {
   }
 
   validateRequiredInput(id, data, key) {
-    if (id && data && key) {
+    if (id && data && key ) {
       let uiconf = UILookup(id)
-      if (uiconf.required === true && (data[key] === "" || data[key] === 0 || data[key].length === 0)) {
+      if (uiconf.required === true && (_gf.isEmptyValue(data[key]) || data[key] === 0 || data[key].length === 0)) {
         return false
       }
     }
@@ -660,18 +660,22 @@ class SteppedInputForm extends React.Component {
                       size="sm"
                       color=""
                       onClick={() => {
-                        let projectChanged = projectDetails.state === "modified"
-                        let fundersChanged = projectFunderDetails.filter(x => x.state === "modified").length > 0
-                        let adaptationsChanged = adaptationDetails.filter(x => x.state === "modified").length > 0
 
-                        if (projectChanged || fundersChanged || adaptationsChanged) {
-                          this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
+                        this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
                             "Yes", "No", this.onSubmit)
-                        }
-                        else {
-                          this.showConfirm("Confirm close", "You have not made any changes, would you like to close the form?",
-                            "Yes", "No", this.onClose)
-                        }
+
+                        // let projectChanged = projectDetails.state === "modified"
+                        // let fundersChanged = projectFunderDetails.filter(x => x.state === "modified").length > 0
+                        // let adaptationsChanged = adaptationDetails.filter(x => x.state === "modified").length > 0
+
+                        // if (projectChanged || fundersChanged || adaptationsChanged) {
+                        //   this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
+                        //     "Yes", "No", this.onSubmit)
+                        // }
+                        // else {
+                        //   this.showConfirm("Confirm close", "You have not made any changes, would you like to close the form?",
+                        //     "Yes", "No", this.onClose)
+                        // }
                       }}
                       style={{ width: 120, marginRight: 0, backgroundColor: DEAGreenDark }}
                     >

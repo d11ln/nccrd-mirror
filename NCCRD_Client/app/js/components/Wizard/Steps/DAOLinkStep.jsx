@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Button, Input, Card, CardBody, CardText, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
-import { ccisBaseURL } from '../../../config/serviceURLs.js'
+import { ndaoBaseURL } from '../../../config/serviceURLs.js'
 import OData from 'react-odata'
 import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 
@@ -61,7 +61,7 @@ class DAOLinkStep extends React.Component {
 
             <div>
               <OData
-                baseUrl={ccisBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}>
+                baseUrl={ndaoBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}>
                 {({ loading, error, data }) => {
 
                   if (loading) {
@@ -197,7 +197,7 @@ class DAOLinkStep extends React.Component {
               </h5>
 
               <OData
-                baseUrl={ccisBaseURL + "Goals"}
+                baseUrl={ndaoBaseURL + "Goals"}
                 query={{
                   filter: {
                     and: [
@@ -281,7 +281,7 @@ class DAOLinkStep extends React.Component {
                 </h5>
 
               <OData
-                baseUrl={ccisBaseURL + "Goals"}
+                baseUrl={ndaoBaseURL + "Goals"}
                 query={{
                   filter: {
                     and: [

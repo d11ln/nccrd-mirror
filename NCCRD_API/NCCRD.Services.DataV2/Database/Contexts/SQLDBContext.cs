@@ -40,15 +40,15 @@ namespace NCCRD.Services.DataV2.Database.Contexts
 
         public SQLDBContext(DbContextOptions options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelbuilder)
-        {
-            //Disable cascading delete globally
-            foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
+        //protected override void OnModelCreating(ModelBuilder modelbuilder)
+        //{
+        //    //Disable cascading delete globally
+        //    foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        //    {
+        //        relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        //    }
 
-            base.OnModelCreating(modelbuilder);
-        }
+        //    base.OnModelCreating(modelbuilder);
+        //}
     }
 }
