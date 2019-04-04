@@ -1,11 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
-import { TreeSelect } from 'antd'
-import DualTip from './DualTip.jsx'
-import '../../../css/antd.tree-select.css'
-
-const TreeSelectNode = TreeSelect.TreeNode;
+import { Cascader } from 'antd'
+import DualTip from './DualTip.jsx';
 
 const mapStateToProps = (state, props) => {
   let { globalData: { editMode } } = state
@@ -25,21 +22,13 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-class TreeSelectComponent extends React.Component {
+class CascaderSelectComponent extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.getDisabledState = this.getDisabledState.bind(this)
-  }
-
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
+    this.dependencyTreeSelect = this.dependencyTreeSelect.bind(this)
   }
 
   getDisabledState() {
@@ -75,7 +64,8 @@ class TreeSelectComponent extends React.Component {
       let newTreeNode = {
         key: item[Object.keys(item)[0]],
         id: item[Object.keys(item)[0]],
-        text: item[Object.keys(item)[1]],
+        value: item[Object.keys(item)[1]],
+        label: item[Object.keys(item)[1]],
         modifiedState: item.modifiedState
       }
 
@@ -90,46 +80,15 @@ class TreeSelectComponent extends React.Component {
     return treeNodes
   }
 
-  renderTreeSelectNodes(data, level = "top") {
-
-    let { allowEdit } = this.props
-
-    if (allowEdit === true && level === "top" && !this.getDisabledState()) {
-
-      //Insert "[Edit list values...]" entry
-      if (data.filter(x => x.value === "[Edit list values...]").length === 0) {
-        data.splice(0, 0, {
-          "id": -1,
-          "text": "[Edit list values...]",
-          "modifiedState": false
-        })
-      }
-    }
-
-    return data.map((item) => {
-      if (item.children) {
-        return (
-          <TreeSelectNode
-            key={item.id}
-            value={item.text}
-            title={(item.modifiedState === true ? "* " : "") + `(${item.children.length}) ` +  item.text}
-          >
-            {this.renderTreeSelectNodes(item.children, "child")}
-          </TreeSelectNode>
-        )
-      }
-      return <TreeSelectNode value={item.text} title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} />
-    })
-  }
-
-  dependencyTreeSelect(value, label, extra) {
+  dependencyTreeSelect(labels, selectedOptions) {
 
     if (!this.getDisabledState()) {
+
       let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
       let selectedValue = 0
 
-      if (typeof extra.triggerNode !== 'undefined') {
-        selectedValue = extra.triggerNode.props.eventKey
+      if (labels.length > 0) {
+        selectedValue = parseInt(selectedOptions[selectedOptions.length - 1].id)
       }
 
       if (selectedValue == -1) {
@@ -157,6 +116,32 @@ class TreeSelectComponent extends React.Component {
     }
   }
 
+  getSelectedValue(data, id) {
+
+    let labels = []
+
+    //Get selected value
+    let idKey = Object.keys(data[0])[0].toString()
+    let valueKey = Object.keys(data[0])[1].toString()
+    let valObj = data.filter(x => x[idKey] == id)[0]
+
+    if (typeof valObj !== 'undefined') {
+      labels.unshift(valObj[valueKey])
+
+      if (typeof valObj["Parent" + idKey] !== 'undefined' && valObj["Parent" + idKey] !== null) {
+        labels.unshift(...this.getSelectedValue(data, parseInt(valObj["Parent" + idKey])))
+      }
+    }
+
+    return labels
+  }
+
+  filter(inputValue, path) {
+    let test = path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
+    console.log("test", test)
+    return ({ test });
+  }
+
   render() {
 
     let { col, label, id, selectedValue, data, style, labelStyle, matchWidth, placeholder, disabled } = this.props
@@ -181,41 +166,53 @@ class TreeSelectComponent extends React.Component {
     }
 
     if (data.length > 0) {
-
       //Get tree data
       treeData = this.transformDataTree(data)
-
       //Get selected value
-      let idKey = Object.keys(data[0])[0].toString()
-      let valueKey = Object.keys(data[0])[1].toString()
-      let valObj = data.filter(x => x[idKey] == selectedValue)[0]
-      if (typeof valObj !== 'undefined') {
-        selVal = valObj[valueKey]
-      }
+      selVal = this.getSelectedValue(data, selectedValue)
     }
+
+    //Search toggle function
+    let filter = (inputValue, path) => {
+      return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1))
+    }
+
+    //Display render function
+    let displayRender = (labels) => {
+      return labels[labels.length - 1]
+    }
+
+    //Display render function for search results
+    const displayRenderSearch = (inputValue, path) => path.map((item, i) => {
+      if (i === path.length - 1) {
+        return (
+          <span key={item.value} style={{ fontWeight: 'bold' }}>
+            {item.label}
+          </span>
+        )
+      }
+      return <span key={item.value}>{item.label} / </span>
+    });
 
     return (
       <div className={col}>
         <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
-        <TreeSelect
-          showSearch
-          disabled={disabled}
-          searchPlaceholder="Search..."
-          style={{ width: "100%", ...style }}
-          value={selVal}
-          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto', }}
-          dropdownMatchSelectWidth={matchWidth}
+        <Cascader
+          options={treeData}
+          expandTrigger="hover"
           placeholder={placeholder}
-          allowClear
-          onChange={this.dependencyTreeSelect.bind(this)}
-        >
-          {this.renderTreeSelectNodes(treeData)}
-        </TreeSelect>
-
+          disabled={disabled}
+          value={selVal}
+          displayRender={displayRender}
+          showSearch={{ filter, limit: false, matchInputWidth: false, render: displayRenderSearch }}
+          onChange={this.dependencyTreeSelect}
+          changeOnSelect
+          style={{ marginTop: -5, width: "100%", ...style }}
+        />
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TreeSelectComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(CascaderSelectComponent)
