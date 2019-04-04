@@ -1,19 +1,8 @@
 import React from 'react'
-import { Button } from 'mdbreact'
 import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
-import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../config/ui_config.js'
-import TreeSelectComponent from "../../Shared/TreeSelectComponent.jsx"
-
-//AntD Tree
-import Tree from 'antd/lib/tree'
-import '../../../../css/antd.tree.css' //Overrides default antd.tree css
-const TreeNode = Tree.TreeNode
-
-const _gf = require("../../../globalFunctions")
-const queryString = require('query-string')
-const o = require("odata")
+import CascaderSelectComponent from '../../Shared/CascaderSelectComponent.jsx'
+import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { sectorTree, sector } } = state
