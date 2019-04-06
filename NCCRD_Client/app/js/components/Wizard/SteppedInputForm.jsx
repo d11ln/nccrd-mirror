@@ -144,40 +144,40 @@ class SteppedInputForm extends React.Component {
 
     //Add Project
     //if (projectDetails.state === 'modified') {
-      let projectData = _.clone(projectDetails)
-      projectData.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
-      delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
-      dataObj.Project = projectData
+    let projectData = _.clone(projectDetails)
+    projectData.ProjectId = projectId === 'add' ? 0 : parseInt(projectId)
+    delete projectData.state //OData can only bind to the original object spec which does not contain 'state'
+    dataObj.Project = projectData
     //}
 
     //Add Funding
     //if (projectFunderDetails.filter(x => x.state === 'modified').length > 0) {
-      let funderData = []
-      projectFunderDetails.filter(x => x.state === 'modified').forEach(item => {
-        let funderItem = _.clone(item)
-        delete funderItem.ProjectId //OData can only bind to the original object spec which does not contain 'ProjectId'
-        delete funderItem.state //OData can only bind to the original object spec which does not contain 'state'
-        delete funderItem.key //OData can only bind to the original object spec which does not contain 'key'
-        funderData.push(funderItem)
-      })
-      dataObj.Funders = funderData
+    let funderData = []
+    projectFunderDetails/*.filter(x => x.state === 'modified')*/.forEach(item => {
+      let funderItem = _.clone(item)
+      delete funderItem.ProjectId //OData can only bind to the original object spec which does not contain 'ProjectId'
+      delete funderItem.state //OData can only bind to the original object spec which does not contain 'state'
+      delete funderItem.key //OData can only bind to the original object spec which does not contain 'key'
+      funderData.push(funderItem)
+    })
+    dataObj.Funders = funderData
     //}
 
     //Add AdaptationDetails
     //if (adaptationDetails.filter(x => x.state === 'modified').length > 0) {
-      let adaptationData = []
-      adaptationDetails.filter(x => x.state === 'modified').forEach(item => {
-        let adaptationItem = _.clone(item)
-        delete adaptationItem.state //OData can only bind to the original object spec which does not contain 'state'
-        adaptationItem.ProjectId = parseInt(projectId)  //Asociate with current project
+    let adaptationData = []
+    adaptationDetails/*.filter(x => x.state === 'modified')*/.forEach(item => {
+      let adaptationItem = _.clone(item)
+      delete adaptationItem.state //OData can only bind to the original object spec which does not contain 'state'
+      adaptationItem.ProjectId = parseInt(projectId)  //Asociate with current project
 
-        if (adaptationItem.ResearchDetail) {
-          adaptationItem.ResearchDetail.ProjectId = parseInt(projectId)  //Asociate with current project
-        }
+      if (adaptationItem.ResearchDetail) {
+        adaptationItem.ResearchDetail.ProjectId = parseInt(projectId)  //Asociate with current project
+      }
 
-        adaptationData.push(adaptationItem)
-      })
-      dataObj.AdaptationDetails = adaptationData
+      adaptationData.push(adaptationItem)
+    })
+    dataObj.AdaptationDetails = adaptationData
     //}
 
     let res = ""
@@ -482,7 +482,7 @@ class SteppedInputForm extends React.Component {
   }
 
   validateRequiredInput(id, data, key) {
-    if (id && data && key ) {
+    if (id && data && key) {
       let uiconf = UILookup(id)
       if (uiconf.required === true && (_gf.isEmptyValue(data[key]) || data[key] === 0 || data[key].length === 0)) {
         return false
@@ -662,7 +662,7 @@ class SteppedInputForm extends React.Component {
                       onClick={() => {
 
                         this.showConfirm("Confirm submit", "Are you sure you want to save your changes?",
-                            "Yes", "No", this.onSubmit)
+                          "Yes", "No", this.onSubmit)
 
                         // let projectChanged = projectDetails.state === "modified"
                         // let fundersChanged = projectFunderDetails.filter(x => x.state === "modified").length > 0
