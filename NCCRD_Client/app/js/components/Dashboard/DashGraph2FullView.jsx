@@ -8,6 +8,7 @@ import buildQuery from 'odata-query'
 
 //images
 import popin from '../../../images/popin.png'
+import { CustomFetch } from '../../globalFunctions.js';
 
 const _gf = require('../../globalFunctions')
 
@@ -67,7 +68,7 @@ class DashGraph2FullView extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `MitigationEmissionsData${query}`)
+        let res = await CustomFetch(apiBaseURL + `MitigationEmissionsData${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {
@@ -114,7 +115,7 @@ class DashGraph2FullView extends React.Component {
 
       //GET PROJECTS FILTERED//
       try {
-        let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+        let res = await CustomFetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
           {
             method: "POST",
             headers: {

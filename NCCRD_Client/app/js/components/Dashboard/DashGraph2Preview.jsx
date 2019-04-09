@@ -6,6 +6,7 @@ import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
 import { BarChart, Bar, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
 import buildQuery from 'odata-query'
+import { CustomFetch } from '../../globalFunctions';
 
 const _gf = require('../../globalFunctions')
 
@@ -54,7 +55,7 @@ class DashGraph2Preview extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `MitigationEmissionsData${query}`)
+        let res = await CustomFetch(apiBaseURL + `MitigationEmissionsData${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {

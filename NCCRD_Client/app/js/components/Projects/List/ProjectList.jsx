@@ -12,6 +12,7 @@ import { CSVLink } from 'react-csv'
 // AntD
 import { Popover, Select, Button as ABtn } from 'antd'
 import { object } from 'prop-types';
+import { CustomFetch } from '../../../globalFunctions.js';
 const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
@@ -200,7 +201,7 @@ class ProjectList extends React.Component {
       let fetchURL = apiBaseURL + 'Projects/Extensions.ByPolygon'
 
       //Get project list data
-      fetch(fetchURL,
+      CustomFetch(fetchURL,
         {
           method: "POST",
           headers: {

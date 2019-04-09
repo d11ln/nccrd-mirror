@@ -3,6 +3,7 @@ import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
 import CascaderSelectComponent from '../../Shared/CascaderSelectComponent.jsx'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
+import { CustomFetch } from '../../../globalFunctions.js';
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { sectorTree, sector } } = state
@@ -34,7 +35,7 @@ class SectorFilters extends React.Component {
     if (sector.length === 0) {
       //Get data
       try {
-        let res = await fetch(vmsBaseURL + "Sectors/flat")
+        let res = await CustomFetch(vmsBaseURL + "Sectors/flat")
 
         if (res.ok) {
           res = await res.json()

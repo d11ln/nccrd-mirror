@@ -21,6 +21,7 @@ import EditTreeModal from '../Projects/Details/ListEditing/EditTreeModal.jsx'
 import ProjectVerifyStep from './Steps/ProjectVerifyStep.jsx';
 
 import "./SteppedInputForm.css"
+import { CustomFetch } from '../../globalFunctions.js';
 
 const _gf = require("../../globalFunctions")
 
@@ -182,7 +183,7 @@ class SteppedInputForm extends React.Component {
 
     let res = ""
     try {
-      res = await fetch(apiBaseURL + "ProjectDetails",
+      res = await CustomFetch(apiBaseURL + "ProjectDetails",
         {
           method: "POST",
           headers: {

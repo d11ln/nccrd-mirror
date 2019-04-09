@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import buildQuery from 'odata-query'
 import { apiBaseURL, vmsBaseURL } from "../../config/serviceURLs.js"
+import { CustomFetch } from '../../globalFunctions.js';
+import { notification, message } from 'antd'
 
 const _gf = require("../../globalFunctions")
 
@@ -226,7 +228,7 @@ class ProjectDataLoader extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `ProjectDetails/${currentProjectId}${query}`)
+        let res = await CustomFetch(apiBaseURL + `ProjectDetails/${currentProjectId}${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody) {
@@ -308,7 +310,7 @@ class ProjectDataLoader extends React.Component {
     })
 
     try {
-      let res = await fetch(apiBaseURL + `Lookups${query}`)
+      let res = await CustomFetch(apiBaseURL + `Lookups${query}`)
       let resBody = await res.json()
 
       if (res.ok && resBody) {
@@ -346,7 +348,7 @@ class ProjectDataLoader extends React.Component {
     let { loadHazards } = this.props
 
     //Get (external) Hazards
-    fetch(`${vmsBaseURL}hazards/flat`,
+    CustomFetch(`${vmsBaseURL}hazards/flat`,
       {
         method: "GET",
         headers: {
@@ -367,7 +369,7 @@ class ProjectDataLoader extends React.Component {
     let { loadRegions } = this.props
 
     //Get (external) Regions
-    fetch(`${vmsBaseURL}regions/flat`,
+    CustomFetch(`${vmsBaseURL}regions/flat`,
       {
         method: "GET",
         headers: {
@@ -388,7 +390,7 @@ class ProjectDataLoader extends React.Component {
     let { loadSectors } = this.props
 
     //Get (external) Sectors
-    fetch(`${vmsBaseURL}sectors/flat`,
+    CustomFetch(`${vmsBaseURL}sectors/flat`,
       {
         method: "GET",
         headers: {
