@@ -4,7 +4,7 @@ import React from 'react'
 import { DEAGreen, DEAGreenDark } from './config/colours.js'
 
 const fetchDefaults = require("fetch-defaults")
-var apiFetch = fetchDefaults(fetch, "https://example.com", {
+var apiFetch = fetchDefaults(fetch, {
   headers: { 'pragma': 'no-cache', 'cache-control': 'no-cache' }
 })
 
