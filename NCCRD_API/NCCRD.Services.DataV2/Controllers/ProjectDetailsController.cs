@@ -90,497 +90,363 @@ namespace NCCRD.Services.DataV2.Controllers
         [EnableQuery]
         public async Task<IActionResult> Post([FromBody]ProjectDetails data)
         {
-            _projectAdded = false;
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            //Save Project
-            if (data.Project != null)
-            {
-                var result = SaveProjectAsync(data.Project);
-                if (!(result is CreatedODataResult<Project> || result is UpdatedODataResult<Project>))
-                {
-                    return result;
-                }
-            }
-
-            if (_projectAdded)
-            {
-                //Save new Project to get valid Id
-                //Update ProjectId where needed
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    data.Id = data.Project.ProjectId;
-
-                    if (data.AdaptationDetails != null)
-                    {
-                        foreach (var item in data.AdaptationDetails)
-                        {
-                            item.ProjectId = data.Id;
-                        }
-                    }
-
-                    if (data.MitigationDetails != null)
-                    {
-                        foreach (var item in data.MitigationDetails)
-                        {
-                            item.ProjectId = data.Id;
-                        }
-                    }
-
-                    if (data.MitigationEmissionsData != null)
-                    {
-                        foreach (var item in data.MitigationEmissionsData)
-                        {
-                            item.ProjectId = data.Id;
-                        }
-                    }
-
-                    if (data.ResearchDetails != null)
-                    {
-                        foreach (var item in data.ResearchDetails)
-                        {
-                            item.ProjectId = data.Id;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-
-            //Save Funders
-            if (data.Funders != null)
-            {
-                foreach (var funder in data.Funders)
-                {
-                    var result = SaveFundersAsync(funder, data.Id);
-                    if (!(result is CreatedODataResult<Funder> || result is UpdatedODataResult<Funder>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            //Save Research
-            //if (data.ResearchDetails != null)
-            //{
-            //    foreach (var research in data.ResearchDetails)
-            //    {
-            //        var result = SaveResearchAsync(research);
-            //        if (!(result is CreatedODataResult<ResearchDetail> || result is UpdatedODataResult<ResearchDetail>))
-            //        {
-            //            return result;
-            //        }
-            //    }
-            //}
-
-            //Save Adaptations
-            if (data.AdaptationDetails != null)
-            {
-                foreach (var adaptation in data.AdaptationDetails)
-                {
-                    //Save Research
-                    if (adaptation.ResearchDetail != null)
-                    {
-                        var result2 = SaveResearchAsync(adaptation.ResearchDetail);
-                        if (!(result2 is CreatedODataResult<ResearchDetail> || result2 is UpdatedODataResult<ResearchDetail>))
-                        {
-                            return result2;
-                        }
-                    }
-
-                    //Save Adaptation
-                    var result = SaveAdaptationAsync(adaptation);
-                    if (!(result is CreatedODataResult<AdaptationDetail> || result is UpdatedODataResult<AdaptationDetail>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            //Save Mitigations
-            if (data.MitigationDetails != null)
-            {
-                foreach (var mitigation in data.MitigationDetails)
-                {
-                    //Save Research
-                    if (mitigation.ResearchDetail != null)
-                    {
-                        var result2 = SaveResearchAsync(mitigation.ResearchDetail);
-                        if (!(result2 is CreatedODataResult<ResearchDetail> || result2 is UpdatedODataResult<ResearchDetail>))
-                        {
-                            return result2;
-                        }
-                    }
-
-                    var result = SaveMitigationAsync(mitigation);
-                    if (!(result is CreatedODataResult<MitigationDetail> || result is UpdatedODataResult<MitigationDetail>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            //Save Emissions
-            if (data.MitigationEmissionsData != null)
-            {
-                foreach (var emissions in data.MitigationEmissionsData)
-                {
-                    var result = SaveEmissionsAsync(emissions);
-                    if (!(result is CreatedODataResult<MitigationEmissionsData> || result is UpdatedODataResult<MitigationEmissionsData>))
-                    {
-                        return result;
-                    }
-                }
-            }
-
             try
             {
-                await _context.SaveChangesAsync();
-                RemoveUnusedLocations();
-                RemoveUnusedResearchDetails();
+                bool projectAdded = true;
+
+                /*
+                If you're adding a new project data.Project will always have a value.
+                If you're editing a project, data.Project might be null, but it will always exist in the database
+                */
+
+                //Build Project for save
+                var project = new Project();
+
+                //Get project if exists
+                if (_context.Project.Any(x => x.ProjectId == data.Id))
+                {
+                    project = _context.Project
+                        .Include(x => x.ProjectDAOs)
+                        .Include(x => x.ProjectRegions)
+                        .Include(x => x.ProjectLocations).ThenInclude(x => x.Location)
+                        .Include(x => x.ProjectFunders).ThenInclude(x => x.Funder)
+                        .Include(x => x.AdaptationDetails).ThenInclude(x => x.ResearchDetail)
+                        .First(x => x.ProjectId == data.Id);
+
+                    projectAdded = false;
+                }
+
+                //Update 'project'
+                if (data.Project != null)
+                {
+                    //###########################//
+                    // Project //
+                    //###########################//
+                    //...Details
+                    project.ProjectId = data.Id;
+                    project.ProjectTitle = data.Project.ProjectTitle;
+                    project.ProjectDescription = data.Project.ProjectDescription;
+                    project.Link = data.Project.Link;
+                    project.StartYear = data.Project.StartYear;
+                    project.EndYear = data.Project.EndYear;
+                    project.ProjectStatusId = data.Project.ProjectStatusId;
+                    project.ProjectStatus = null; //Not needed if ID is present
+                    project.BudgetLower = data.Project.BudgetLower;
+                    project.BudgetUpper = data.Project.BudgetUpper;
+
+                    //...Manager
+                    project.LeadAgent = data.Project.LeadAgent;
+                    project.ProjectManagerId = data.Project.ProjectManagerId;
+                    project.ProjectManager = null; //Not needed if ID is present
+                    project.HostOrganisation = data.Project.HostOrganisation;
+                    project.HostPartner = data.Project.HostPartner;
+                    project.AlternativeContact = data.Project.AlternativeContact;
+                    project.AlternativeContactEmail = data.Project.AlternativeContactEmail;
+
+                    //...Verified
+                    project.Verified = data.Project.Verified;
+
+                    //###########################//
+                    //DAO Links
+                    //###########################//
+                    if (project.ProjectDAOs == null)
+                    {
+                        project.ProjectDAOs = new List<ProjectDAO>();
+                    }
+
+                    //...Remove
+                    var daoRemove = project.ProjectDAOs.Where(x => !data.Project.ProjectDAOs.Any(y => y.DAOId == x.DAOId))
+                        .Select(x => x.ProjectDAOId)
+                        .ToArray();
+
+                    foreach (var item in daoRemove)
+                    {
+                        var removeItem = project.ProjectDAOs.First(x => x.ProjectDAOId == item);
+                        project.ProjectDAOs.Remove(removeItem);
+                    }
+
+                    //...Add
+                    var daoAdd = data.Project.ProjectDAOs.Where(x => !project.ProjectDAOs.Any(y => y.DAOId == x.DAOId));
+                    foreach (var item in daoAdd)
+                    {
+                        project.ProjectDAOs.Add(new ProjectDAO()
+                        {
+                            DAOId = item.DAOId,
+                            ProjectId = project.ProjectId,
+                            Project = project
+                        });
+                    }
+
+                    //###########################//
+                    //ProjectRegions
+                    //###########################//
+                    if (project.ProjectRegions == null)
+                    {
+                        project.ProjectRegions = new List<ProjectRegion>();
+                    }
+
+                    //...Remove
+                    var prRemove = project.ProjectRegions.Where(x => !data.Project.ProjectRegions.Any(y => y.RegionId == x.RegionId))
+                        .Select(x => x.ProjectRegionId)
+                        .ToArray();
+
+                    foreach (var item in prRemove)
+                    {
+                        var removeItem = project.ProjectRegions.First(x => x.ProjectRegionId == item);
+                        project.ProjectRegions.Remove(removeItem);
+                    }
+
+                    //...Add
+                    var prAdd = data.Project.ProjectRegions.Where(x => !project.ProjectRegions.Any(y => y.RegionId == x.RegionId));
+                    foreach (var item in prAdd)
+                    {
+                        project.ProjectRegions.Add(new ProjectRegion()
+                        {
+                            RegionId = item.RegionId,
+                            ProjectId = project.ProjectId,
+                            Project = project
+                        });
+                    }
+
+                    //###########################//
+                    //ProjectLocations
+                    //###########################//
+                    if (project.ProjectLocations == null)
+                    {
+                        project.ProjectLocations = new List<ProjectLocation>();
+                    }
+
+                    //...Remove
+                    var locRemove = project.ProjectLocations.Where(x => !data.Project.ProjectLocations
+                            .Any(y => y.Location.LatCalculated == x.Location.LatCalculated && y.Location.LonCalculated == x.Location.LonCalculated))
+                        .Select(x => x.ProjectLocationId)
+                        .ToArray();
+
+                    foreach (var item in locRemove)
+                    {
+                        var removeItem = project.ProjectLocations.First(x => x.ProjectLocationId == item);
+                        project.ProjectLocations.Remove(removeItem);
+                    }
+
+                    //...Add
+                    var locAdd = data.Project.ProjectLocations.Where(x => !project.ProjectLocations
+                        .Any(y => y.Location.LatCalculated == x.Location.LatCalculated && y.Location.LonCalculated == x.Location.LonCalculated));
+                    foreach (var item in locAdd)
+                    {
+                        project.ProjectLocations.Add(new ProjectLocation()
+                        {
+                            LocationId = item.LocationId,
+                            Location = new Location()
+                            {
+                                LatCalculated = item.Location.LatCalculated,
+                                LonCalculated = item.Location.LonCalculated
+                            },
+                            ProjectId = project.ProjectId,
+                            Project = project
+                        });
+                    }
+
+                    //###########################//
+                    //Funders
+                    //###########################//
+                    if (project.ProjectFunders == null)
+                    {
+                        project.ProjectFunders = new List<ProjectFunder>();
+                    }
+
+                    //...Remove
+                    var pfRemove = project.ProjectFunders.Where(x => !data.Funders.Any(y => y.FunderId == x.FunderId))
+                        .Select(x => x.ProjectFunderId)
+                        .ToArray();
+
+                    foreach (var item in pfRemove)
+                    {
+                        var removeItem = project.ProjectFunders.First(x => x.ProjectFunderId == item);
+                        project.ProjectFunders.Remove(removeItem);
+                    }
+
+                    //...Update
+                    var pfUpdate = project.ProjectFunders.Where(x => data.Funders.Any(y => y.FunderId == x.FunderId));
+                    foreach (var item in pfUpdate)
+                    {
+                        var updateItem = item.Funder;
+                        var updateSource = data.Funders.First(y => y.FunderId == updateItem.FunderId);
+
+                        updateItem.GrantProgName = updateSource.GrantProgName;
+                        updateItem.FundingAgency = updateSource.FundingAgency;
+                        updateItem.PartnerDepsOrgs = updateSource.PartnerDepsOrgs;
+                        updateItem.ProjectCoordinatorId = updateSource.ProjectCoordinatorId;
+                        updateItem.TotalBudget = updateSource.TotalBudget;
+                        updateItem.AnnualBudget = updateSource.AnnualBudget;
+                        updateItem.FundingStatusId = updateSource.FundingStatusId;
+                    }
+
+                    //...Add
+                    var pfAdd = data.Funders.Where(x => !project.ProjectFunders.Any(y => y.FunderId == x.FunderId));
+                    foreach (var item in pfAdd)
+                    {
+                        project.ProjectFunders.Add(new ProjectFunder()
+                        {
+                            FunderId = item.FunderId,
+                            Funder = new Funder()
+                            {
+                                GrantProgName = item.GrantProgName,
+                                FundingAgency = item.FundingAgency,
+                                PartnerDepsOrgs = item.PartnerDepsOrgs,
+                                ProjectCoordinatorId = item.ProjectCoordinatorId,
+                                TotalBudget = item.TotalBudget,
+                                AnnualBudget = item.AnnualBudget,
+                                FundingStatusId = item.FundingStatusId
+                            },
+                            ProjectId = project.ProjectId,
+                            Project = project
+                        });
+                    }
+
+                    //###########################//
+                    //Adaptations
+                    //###########################//
+                    if (project.AdaptationDetails == null)
+                    {
+                        project.AdaptationDetails = new List<AdaptationDetail>();
+                    }
+
+                    //...Remove
+                    var adRemove = project.AdaptationDetails.Where(x => !data.AdaptationDetails.Any(y => y.AdaptationDetailId == x.AdaptationDetailId))
+                        .Select(x => x.AdaptationDetailId)
+                        .ToArray();
+
+                    foreach (var item in adRemove)
+                    {
+                        var removeItem = project.AdaptationDetails.First(x => x.AdaptationDetailId == item);
+
+
+                        if (removeItem.ResearchDetail != null)
+                        {
+                            //Remove ResearchDetail
+                            _context.ResearchDetails.Remove(removeItem.ResearchDetail);
+                        }
+
+                        project.AdaptationDetails.Remove(removeItem);
+                    }
+
+                    //...Update
+                    var adUpdate = project.AdaptationDetails.Where(x => data.AdaptationDetails.Any(y => y.AdaptationDetailId == x.AdaptationDetailId));
+                    foreach (var item in adUpdate)
+                    {
+                        var updateItem = item;
+                        var updateSource = data.AdaptationDetails.First(y => y.AdaptationDetailId == updateItem.AdaptationDetailId);
+
+                        updateItem.Title = updateSource.Title;
+                        updateItem.Description = updateSource.Description;
+                        updateItem.AdaptationPurposeId = updateSource.AdaptationPurposeId;
+                        updateItem.AdaptationPurpose = null; //Not needed if ID is present
+                        updateItem.SectorId = updateSource.SectorId;
+                        //updateItem.HazardId = updateSource.HazardId;
+                        updateItem.ProjectStatusId = updateSource.ProjectStatusId;
+                        updateItem.ProjectStatus = null; //Not needed if ID is present
+                        updateItem.ContactName = updateSource.ContactName;
+                        updateItem.ContactEmail = updateSource.ContactEmail;
+
+                        //...ResearchDetail
+                        //...Remove
+                        if (updateItem.ResearchDetail != null && updateSource.ResearchDetail == null)
+                        {
+                            //Remove ResearchDetail
+                            _context.ResearchDetails.Remove(updateItem.ResearchDetail);
+                            updateItem.ResearchDetail = null;
+                        }
+
+                        //...Update
+                        if (updateItem.ResearchDetail != null && updateSource.ResearchDetail != null)
+                        {
+                            updateItem.ResearchDetail.Author = updateSource.ResearchDetail.Author;
+                            updateItem.ResearchDetail.PaperLink = updateSource.ResearchDetail.PaperLink;
+                            updateItem.ResearchDetail.ResearchTypeId = updateSource.ResearchDetail.ResearchTypeId;
+                            updateItem.ResearchDetail.ResearchType = null; //Not needed if ID is present
+                            updateItem.ResearchDetail.TargetAudienceId = updateSource.ResearchDetail.TargetAudienceId;
+                            updateItem.ResearchDetail.TargetAudience = null; //Not needed if ID is present
+                            updateItem.ResearchDetail.ResearchMaturityId = updateSource.ResearchDetail.ResearchMaturityId;
+                            updateItem.ResearchDetail.ResearchMaturity = null; //Not needed if ID is present
+                        }
+
+                        //...Add
+                        if (updateItem.ResearchDetail == null && updateSource.ResearchDetail != null)
+                        {
+                            updateItem.ResearchDetail = new ResearchDetail()
+                            {
+                                Author = updateSource.ResearchDetail.Author,
+                                PaperLink = updateSource.ResearchDetail.PaperLink,
+                                ResearchTypeId = updateSource.ResearchDetail.ResearchTypeId,
+                                ResearchType = null, //Not needed if ID is present
+                                TargetAudienceId = updateSource.ResearchDetail.TargetAudienceId,
+                                TargetAudience = null, //Not needed if ID is present
+                                ResearchMaturityId = updateSource.ResearchDetail.ResearchMaturityId,
+                                ResearchMaturity = null, //Not needed if ID is present
+                                ProjectId = project.ProjectId,
+                                Project = project
+                            };
+                        }
+                    }
+
+                    //...Add
+                    var adAdd = data.AdaptationDetails.Where(x => !project.AdaptationDetails.Any(y => y.AdaptationDetailId == x.AdaptationDetailId));
+                    foreach (var item in adAdd)
+                    {
+                        project.AdaptationDetails.Add(new AdaptationDetail()
+                        {
+                            Title = item.Title,
+                            Description = item.Description,
+                            AdaptationPurposeId = item.AdaptationPurposeId,
+                            AdaptationPurpose = null, //Not needed if ID is present
+                            SectorId = item.SectorId,
+                            HazardId = item.HazardId,
+                            ProjectStatusId = item.ProjectStatusId,
+                            ProjectStatus = null, //Not needed if ID is present
+                            ContactName = item.ContactName,
+                            ContactEmail = item.ContactEmail,
+
+                            ResearchDetail = item.ResearchDetail == null ? null :
+                                new ResearchDetail()
+                                {
+                                    Author = item.ResearchDetail.Author,
+                                    PaperLink = item.ResearchDetail.PaperLink,
+                                    ResearchTypeId = item.ResearchDetail.ResearchTypeId,
+                                    ResearchType = null, //Not needed if ID is present
+                                    TargetAudienceId = item.ResearchDetail.TargetAudienceId,
+                                    TargetAudience = null, //Not needed if ID is present
+                                    ResearchMaturityId = item.ResearchDetail.ResearchMaturityId,
+                                    ResearchMaturity = null, //Not needed if ID is present
+                                    ProjectId = project.ProjectId,
+                                    Project = project
+                                },
+
+                            ProjectId = project.ProjectId,
+                            Project = project
+                        });
+                    }
+
+                }
+
+                //Save
+                if (projectAdded)
+                {
+                    _context.Project.Add(project);
+                }
+                _context.SaveChanges();
+
+                //return data object
+                return Ok(project);
             }
             catch (Exception ex)
             {
-                throw ex;
-            }
-
-            //return data object
-            return Ok(data);
-        }
-
-        private IActionResult SaveProjectAsync(Project project)
-        {
-            IActionResult result = null;
-
-            //Check that ProjectTitle is unique
-            if (_context.Project.AsNoTracking().FirstOrDefault(x => x.ProjectTitle == project.ProjectTitle && x.ProjectId != project.ProjectId) != null)
-            {
-                return BadRequest("ProjectTitle already exists");
-            }
-
-            var exiting = _context.Project.FirstOrDefault(x => x.ProjectId == project.ProjectId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref project);
-                HelperExtensions.ClearNullableInts(ref project);
-                _context.Project.Add(project);
-                _projectAdded = true;
-                result = Created(project);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(project);
-                result = Updated(exiting);
-            }
-
-            //Save project related data
-            SaveProjectRegions(project);
-            SaveProjectDAOs(project);
-            SaveProjectLocations(project);
-
-            return result;
-        }
-
-        private void SaveProjectRegions(Project project)
-        {
-            //Add new mappings
-            if (project.ProjectRegions == null)
-            {
-                project.ProjectRegions = new List<ProjectRegion>();
-            }
-
-            for (var i = 0; i < project.ProjectRegions.Count; i++)
-            {
-                var pr = project.ProjectRegions.ToArray()[i];
-
-                if (!_context.ProjectRegion.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
-                {
-                    HelperExtensions.ClearIdentityValue(ref pr);
-                    HelperExtensions.ClearNullableInts(ref pr);
-                    _context.ProjectRegion.Add(pr);
-                }
-            }
-
-            //Remove deleted mappings
-            foreach (var pr in _context.ProjectRegion.Where(x => x.ProjectId == project.ProjectId))
-            {
-                if (!project.ProjectRegions.Any(x => x.ProjectId == pr.ProjectId && x.RegionId == pr.RegionId))
-                {
-                    _context.Remove(pr);
-                }
+                return BadRequest(ex.Message);
             }
         }
-
-        private void SaveProjectDAOs(Project project)
-        {
-            //Add new mappings
-            if (project.ProjectDAOs == null)
-            {
-                project.ProjectDAOs = new List<ProjectDAO>();
-            }
-
-            for (var i = 0; i < project.ProjectDAOs.Count; i++)
-            {
-                var dao = project.ProjectDAOs.ToArray()[i];
-
-                if (!_context.ProjectDAOs.Any(x => x.ProjectId == dao.ProjectId && x.DAOId == dao.DAOId))
-                {
-                    HelperExtensions.ClearIdentityValue(ref dao);
-                    HelperExtensions.ClearNullableInts(ref dao);
-                    _context.ProjectDAOs.Add(dao);
-                }
-            }
-
-            //Remove deleted mappings
-            foreach (var pr in _context.ProjectDAOs.Where(x => x.ProjectId == project.ProjectId))
-            {
-                if (!project.ProjectDAOs.Any(x => x.ProjectId == pr.ProjectId && x.DAOId == pr.DAOId))
-                {
-                    _context.Remove(pr);
-                }
-            }
-        }
-
-        private void SaveProjectLocations(Project project)
-        {
-            //Add new mappings
-            if (project.ProjectLocations == null)
-            {
-                project.ProjectLocations = new List<ProjectLocation>();
-            }
-
-            //Save new locations and link existing ones before saving ProjectLocations
-            SaveLocations(project.ProjectLocations.ToList());
-
-            for (var i = 0; i < project.ProjectLocations.Count; i++)
-            {
-                var pl = project.ProjectLocations.ToArray()[i];
-
-                if (!_context.ProjectLocation.Any(x => x.ProjectId == pl.ProjectId && x.LocationId == pl.LocationId))
-                {
-                    HelperExtensions.ClearIdentityValue(ref pl);
-                    HelperExtensions.ClearNullableInts(ref pl);
-                    _context.ProjectLocation.Add(pl);
-                }
-            }
-
-            //Remove deleted mappings
-            foreach (var pr in _context.ProjectLocation.Where(x => x.ProjectId == project.ProjectId))
-            {
-                if (!project.ProjectLocations.Any(x => x.ProjectId == pr.ProjectId && x.LocationId == pr.LocationId))
-                {
-                    _context.Remove(pr);
-                }
-            }
-        }
-
-        private void SaveLocations(List<ProjectLocation> projectLocations)
-        {
-            foreach (var prLoc in projectLocations)
-            {
-                var _prLoc = prLoc;
-
-                HelperExtensions.ClearIdentityValue(ref _prLoc);
-                HelperExtensions.ClearNullableInts(ref _prLoc);
-                var loc = _prLoc.Location;
-
-                //Check if location exists
-                var exiting = _context.Location.FirstOrDefault(l => l.LocationId == loc.LocationId);
-
-                if (exiting == null)
-                {
-                    //ADD
-                    HelperExtensions.ClearIdentityValue(ref loc);
-                    HelperExtensions.ClearNullableInts(ref loc);
-                    _context.Location.Add(loc);
-
-                    //Have to save to get actual/valid ID
-                    _context.SaveChanges();
-
-                    //Update references
-                    prLoc.Location = loc;
-                    prLoc.LocationId = loc.LocationId;
-
-                }
-                else
-                {
-                    //UPDATE
-                    _context.Entry(exiting).CurrentValues.SetValues(loc);
-                }
-            }
-        }
-
-        private void RemoveUnusedLocations()
-        {
-            var usedLocationIDs = _context.ProjectLocation.Select(pl => pl.LocationId).Distinct().ToList();
-            var unusedLocations = _context.Location.Where(l => !usedLocationIDs.Contains(l.LocationId)).ToArray();
-
-            _context.Location.RemoveRange(unusedLocations);
-            _context.SaveChangesAsync();
-        }
-
-        private void RemoveUnusedResearchDetails()
-        {
-            var usedResearchDetailIDs = new List<int>();
-            usedResearchDetailIDs.AddRange(_context.AdaptationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
-            usedResearchDetailIDs.AddRange(_context.MitigationDetails.Where(a => a.ResearchDetail != null).Select(a => a.ResearchDetail.ResearchDetailId).Distinct().ToList());
-
-            var unusedResearchDetails = _context.ResearchDetails.Where(rd => !usedResearchDetailIDs.Contains(rd.ResearchDetailId)).ToArray();
-
-            _context.ResearchDetails.RemoveRange(unusedResearchDetails);
-            _context.SaveChangesAsync();
-        }
-
-        private IActionResult SaveFundersAsync(Funder funder, int projectId)
-        {
-            var exiting = _context.Funders.FirstOrDefault(x => x.FunderId == funder.FunderId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref funder);
-                HelperExtensions.ClearNullableInts(ref funder);
-                _context.Funders.Add(funder);
-                _context.ProjectFunder.Add(new ProjectFunder
-                {
-                    Funder = funder,
-                    ProjectId = projectId
-                });
-
-                return Created(funder);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(funder);
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveAdaptationAsync(AdaptationDetail adaptation)
-        {
-            var exiting = _context.AdaptationDetails
-                .Include(x => x.ResearchDetail)
-                .FirstOrDefault(x => x.AdaptationDetailId == adaptation.AdaptationDetailId);
-
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref adaptation);
-                HelperExtensions.ClearNullableInts(ref adaptation);
-                _context.AdaptationDetails.Add(adaptation);
-                //await _context.SaveChangesAsync();
-                return Created(adaptation);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(adaptation);
-
-                if (adaptation.ResearchDetail == null)
-                {
-                    exiting.ResearchDetail = null;
-                }
-                else if (exiting.ResearchDetail == null && adaptation.ResearchDetail != null)
-                {
-                    exiting.ResearchDetail = adaptation.ResearchDetail;
-                }
-                else
-                {
-                    _context.Entry(exiting.ResearchDetail).CurrentValues.SetValues(adaptation.ResearchDetail);
-                }
-
-                //await _context.SaveChangesAsync();
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveMitigationAsync(MitigationDetail mitigation)
-        {
-            var exiting = _context.MitigationDetails
-                .Include(x => x.ResearchDetail)
-                .FirstOrDefault(x => x.MitigationDetailId == mitigation.MitigationDetailId);
-
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref mitigation);
-                HelperExtensions.ClearNullableInts(ref mitigation);
-                _context.MitigationDetails.Add(mitigation);
-                //await _context.SaveChangesAsync();
-                return Created(mitigation);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(mitigation);
-
-                if(mitigation.ResearchDetail == null)
-                {
-                    exiting.ResearchDetail = null;
-                }
-                else if(exiting.ResearchDetail == null && mitigation.ResearchDetail != null)
-                {
-                    exiting.ResearchDetail = mitigation.ResearchDetail;
-                }
-                else{
-                    _context.Entry(exiting.ResearchDetail).CurrentValues.SetValues(mitigation.ResearchDetail);
-                }
-
-                //await _context.SaveChangesAsync();
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveEmissionsAsync(MitigationEmissionsData emissions)
-        {
-            var exiting = _context.MitigationEmissionsData.FirstOrDefault(x => x.MitigationEmissionsDataId == emissions.MitigationEmissionsDataId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref emissions);
-                HelperExtensions.ClearNullableInts(ref emissions);
-                _context.MitigationEmissionsData.Add(emissions);
-                //await _context.SaveChangesAsync();
-                return Created(emissions);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(emissions);
-                //await _context.SaveChangesAsync();
-                return Updated(exiting);
-            }
-        }
-
-        private IActionResult SaveResearchAsync(ResearchDetail research)
-        {
-            var exiting = _context.ResearchDetails.FirstOrDefault(x => x.ResearchDetailId == research.ResearchDetailId);
-            if (exiting == null)
-            {
-                //ADD
-                HelperExtensions.ClearIdentityValue(ref research);
-                HelperExtensions.ClearNullableInts(ref research);
-                _context.ResearchDetails.Add(research);
-                _context.SaveChanges(); //Save changes to get DB ID
-                return Created(research);
-            }
-            else
-            {
-                //UPDATE
-                _context.Entry(exiting).CurrentValues.SetValues(research);
-                //_context.SaveChanges();//Save changes to DB
-                return Updated(exiting);
-            }
-        }
-
     }
 }

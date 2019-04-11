@@ -98,7 +98,9 @@ namespace NCCRD.Services.DataV2.Controllers
             int typologyFilter = filters.typology;
             int regionFilter = filters.region;
             int sectorFilter = filters.sector;
+            int hazardFilter = filters.hazard;
             Guid daoidFilter = filters.daoid != null ? new Guid(filters.daoid) : Guid.Empty;
+            string verified = filters.verified;
 
             //FAVORITES - OVERRIDES ALL OTHER FILTERS//
             if (!string.IsNullOrEmpty(favsFilter))
@@ -171,6 +173,21 @@ namespace NCCRD.Services.DataV2.Controllers
                 statusProjectIds = statusProjectIds.Distinct().ToList();
             }
 
+            //HAZARD//
+            var hazardProjectIds = new List<int>();
+            if (hazardFilter > 0)
+            {
+                //Get all HazardIds (including children)
+                var allHazardIDs = GetChildren(hazardFilter, GetVMSData("hazards/flat").Result).Select(r => r).Distinct().ToList();
+                allHazardIDs.Add(hazardFilter);
+
+                //Get all ProjectIds assigned to these Regions and/or Typology
+                hazardProjectIds = _context.AdaptationDetails
+                    .Where(a => allHazardIDs.Contains(a.HazardId == null ? 0 : (int)a.HazardId))
+                    .Select(p => p.ProjectId)
+                    .Distinct().ToList();
+            }
+
             //GET PORJECTS FILTERED//
             //Retrieve project details and filter on query params
             return _context.Project.OrderBy(p => p.ProjectTitle)
@@ -179,8 +196,10 @@ namespace NCCRD.Services.DataV2.Controllers
                             (statusFilter == 0 || statusProjectIds.Contains(p.ProjectId)) &&
                             (regionFilter == 0 || regionProjectIds.Contains(p.ProjectId)) &&
                             (sectorFilter == 0 || sectorProjectIds.Contains(p.ProjectId)) &&
+                            (hazardFilter == 0 || hazardProjectIds.Contains(p.ProjectId)) &&
                             (typologyFilter == 0 || typologyProjectIds.Contains(p.ProjectId)) &&
-                            (daoidFilter == Guid.Empty || p.ProjectDAOs.Any(dao => dao.DAOId == daoidFilter))
+                            (daoidFilter == Guid.Empty || p.ProjectDAOs.Any(dao => dao.DAOId == daoidFilter)) &&
+                            (verified == "all" || verified == "verified" && p.Verified == true || verified == "unverified" && p.Verified == false)
                         );
         }
 

@@ -74,8 +74,6 @@ class MapViewCore extends React.Component {
         var message = JSON.parse(event.data)
         if (message.cmd == 'featureClick' && !location.hash.includes("projects")) {
           
-          //console.log("Message", message)
-          
           let navTo = ""
           if (location.hash.includes("map")) {
             navTo = location.hash.replace("#/map", "#/projects/" + message.id)
@@ -201,7 +199,7 @@ class MapViewCore extends React.Component {
             cursor: "pointer"
           }}
           onClick={() => {
-            if (!fullView) this.props.setScrollPos(window.pageYOffset)
+            if (!fullView) this.props.setScrollPos(document.getElementById("app-content").scrollTop)
 
             let navTo = ""
             if (fullView) {

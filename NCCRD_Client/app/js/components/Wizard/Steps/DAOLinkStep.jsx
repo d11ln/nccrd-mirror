@@ -1,10 +1,10 @@
 import React from 'react'
-import { Row, Col, Button, Input, Card, CardBody, CardText } from 'mdbreact'
+import { Row, Col, Button, Input, Card, CardBody, CardText, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import TextComponent from '../../Shared/TextComponent.jsx'
-import { ccisBaseURL } from '../../../config/serviceURLs.js'
+import { ndaoBaseURL } from '../../../config/serviceURLs.js'
 import OData from 'react-odata'
-import { DEAGreen } from '../../../config/colours.js'
+import { DEAGreen, DEAGreenDark } from '../../../config/colours.js'
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-class LinkedDAO extends React.Component {
+class DAOLinkStep extends React.Component {
 
   constructor(props) {
     super(props);
@@ -32,7 +32,6 @@ class LinkedDAO extends React.Component {
 
     return (
       <>
-
         <div>
           {(!user || user.expires) &&
             <b><i><a href="#/login">Login</a> to allow editing</i></b>
@@ -56,19 +55,19 @@ class LinkedDAO extends React.Component {
         {/* LINKED */}
         {editMode &&
           <div>
-            <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "mediumblue" }}>
+            <h5 style={{ marginBottom: "15px", fontWeight: "bold", color:  DEAGreenDark}}>
               Linked DAOs:
             </h5>
 
             <div>
               <OData
-                baseUrl={ccisBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}>
+                baseUrl={ndaoBaseURL + `Goals?$expand=Questions&$filter=Id in (${ProjectDAOs.map(x => `'${x.DAOId}'`).join(", ")})`}>
                 {({ loading, error, data }) => {
 
                   if (loading) {
                     return (
                       <h6>
-                        Fetching your goals...
+                        Fetching your DAOs...
                     </h6>
                     )
                   }
@@ -77,7 +76,7 @@ class LinkedDAO extends React.Component {
                     console.error(error)
                     return (
                       <p>
-                        Unable to fetch goals. (See log for details)
+                        Unable to fetch DAOs. (See log for details)
                     </p>
                     )
                   }
@@ -89,16 +88,16 @@ class LinkedDAO extends React.Component {
 
                       yourGoals.push(
                         <p key="linked_no_goals_msg">
-                          No goals found.
+                          No DAOs found.
                         </p>
                       )
 
                       if(ProjectDAOs && ProjectDAOs.length > 0){
                         yourGoals.push(
                           <p key="linked_no_goals_msg_2">
-                            This is normal if your goal has not been submitted yet.
+                            This is normal if your DAO has not been submitted yet.
                             <br/>
-                            Once you have submitted your goal in the CCIS, your goal's details will become available here.
+                            Once you have submitted your DAO in the CCIS, your DAO's details will become available here.
                           </p>
                         )
                       }
@@ -163,6 +162,7 @@ class LinkedDAO extends React.Component {
                                     setTimeout(linkCallback(item.Id, "remove"), 1000)
                                   }
                                 }}>
+                                <Fa className="button-icon" icon="unlink" />
                                 Unlink
                         </Button>
                             </CardBody>
@@ -188,16 +188,16 @@ class LinkedDAO extends React.Component {
 
           {editMode &&
             <div>
-              <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: "mediumblue" }}>
+              <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: DEAGreenDark }}>
                 Search for DAOs:
               </h5>
 
               <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
-                Recently added goals (top 25):
+                Recently added DAOs (top 25):
               </h5>
 
               <OData
-                baseUrl={ccisBaseURL + "Goals"}
+                baseUrl={ndaoBaseURL + "Goals"}
                 query={{
                   filter: {
                     and: [
@@ -217,7 +217,7 @@ class LinkedDAO extends React.Component {
                   if (loading) {
                     return (
                       <h6>
-                        Fetching your goals...
+                        Fetching your DAOs...
                     </h6>
                     )
                   }
@@ -226,7 +226,7 @@ class LinkedDAO extends React.Component {
                     console.error(error)
                     return (
                       <p>
-                        Unable to fetch goals. (See log for details)
+                        Unable to fetch DAOs. (See log for details)
                     </p>
                     )
                   }
@@ -237,14 +237,14 @@ class LinkedDAO extends React.Component {
                     if (data.value.length === 0) {
                       yourGoals.push(
                         <p key={new Date().valueOf()}>
-                          No goals found.
+                          No DAOs found.
                       </p>
                       )
                     }
                     else {
                       data.value.forEach(item => {
                         yourGoals.push(
-                          <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
+                          <Card key={item.Id} style={{ marginBottom: "15px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
                             <CardBody>
                               <CardText>
                                 <b>Created on: </b>{item.CreateDate}
@@ -260,6 +260,7 @@ class LinkedDAO extends React.Component {
                                     setTimeout(linkCallback(item.Id, "add"), 1000)
                                   }
                                 }}>
+                                <Fa className="button-icon" icon="link" />
                                 Link
                             </Button>
                             </CardBody>
@@ -276,11 +277,11 @@ class LinkedDAO extends React.Component {
 
               <br />
               <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
-                Your goals:
+                Your DAOs:
                 </h5>
 
               <OData
-                baseUrl={ccisBaseURL + "Goals"}
+                baseUrl={ndaoBaseURL + "Goals"}
                 query={{
                   filter: {
                     and: [
@@ -300,7 +301,7 @@ class LinkedDAO extends React.Component {
                   if (loading) {
                     return (
                       <h6>
-                        Fetching your goals...
+                        Fetching your DAOs...
                     </h6>
                     )
                   }
@@ -309,7 +310,7 @@ class LinkedDAO extends React.Component {
                     console.error(error)
                     return (
                       <p>
-                        Unable to fetch goals. (See log for details)
+                        Unable to fetch DAOs. (See log for details)
                     </p>
                     )
                   }
@@ -320,7 +321,7 @@ class LinkedDAO extends React.Component {
                     if (data.value.length === 0) {
                       yourGoals.push(
                         <p key={new Date().valueOf()}>
-                          No goals found.
+                          No DAOs found.
                       </p>
                       )
                     }
@@ -343,6 +344,7 @@ class LinkedDAO extends React.Component {
                                     setTimeout(linkCallback(item.Id, "add"), 1000)
                                   }
                                 }}>
+                                <Fa className="button-icon" icon="link" />
                                 Link
                             </Button>
                             </CardBody>
@@ -365,4 +367,4 @@ class LinkedDAO extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LinkedDAO)
+export default connect(mapStateToProps, mapDispatchToProps)(DAOLinkStep)

@@ -14,8 +14,13 @@ namespace NCCRD.Services.DataV2.Database.Models
     {
         public int AdaptationDetailId { get; set; }
 
+        public string Title { get; set; }
         public string Description { get; set; } //Optional
 
+        //Contact Details
+        public string ContactName { get; set; }
+        public string ContactEmail { get; set; }
+        
         //FK - AdaptationPurpose
         [Range(0, int.MaxValue, ErrorMessage = "The AdaptationPurpose field is required.")]
         public int AdaptationPurposeId { get; set; }
@@ -38,7 +43,6 @@ namespace NCCRD.Services.DataV2.Database.Models
         public ProjectStatus ProjectStatus { get; set; }
 
         //FK - ResearchDetail
-        //public int? ResearchDetailId { get; set; }
         public ResearchDetail ResearchDetail { get; set; }
     }
 }

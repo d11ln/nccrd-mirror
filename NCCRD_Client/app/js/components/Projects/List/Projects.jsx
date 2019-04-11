@@ -10,6 +10,8 @@ import { connect } from 'react-redux'
 import { Fa, Button, Row, Col } from 'mdbreact'
 import ReactTooltip from 'react-tooltip'
 import { DEAGreen } from '../../../config/colours.js'
+import HazardFilter from '../Filters/HazardFilter.jsx';
+import { Tooltip } from 'antd';
 
 const queryString = require('query-string')
 const _gf = require("../../../globalFunctions")
@@ -50,7 +52,7 @@ class Projects extends React.Component {
   }
 
   backToTop() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 0,
       left: 0,
       behavior: 'smooth'
@@ -63,56 +65,53 @@ class Projects extends React.Component {
 
   componentDidMount() {
     this.props.setProjectsFullView(true)
-    this.props.setLoading(true)
-    window.addEventListener("scroll", this.handleScroll);
+    document.getElementById("app-content").addEventListener("scroll", this.handleScroll);
     this.props.updateNav(location.hash)
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll)
+    document.getElementById("app-content").removeEventListener("scroll", this.handleScroll)
   }
 
   handleScroll() {
-    this.setState({ showBackToTop: (window.pageYOffset > 300) })
+    this.setState({ showBackToTop: (document.getElementById("app-content").scrollTop > 500) })
   }
 
   render() {
 
-    let { user } = this.props
     let { showBackToTop } = this.state
 
     return (
       <>
         <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
-
           {showBackToTop &&
-            <Button data-tip="Back to top" size="sm" floating color="" onClick={this.backToTop}
-              style={{ backgroundColor: DEAGreen }}>
-              <Fa icon="arrow-up" />
-            </Button>}
-
+            <Tooltip title="Back to top" mouseEnterDelay={0.7}>
+              <Button size="sm" floating color="" onClick={this.backToTop}
+                style={{ backgroundColor: DEAGreen }}>
+                <Fa icon="arrow-up" />
+              </Button>
+            </Tooltip>
+          }
         </div>
 
         {
           this.props.showListFilterOptions === true &&
           <div>
             <Row>
-              <Col md="3">
+              <Col md="2">
                 <TitleFilter />
               </Col>
 
-                <StatusFilter />
-
-                <TypologyFilter />
-
-                <RegionFilters />
-
-                <SectorFilters />
+              <RegionFilters />
+              <SectorFilters />
+              <HazardFilter />
+              <StatusFilter />
+              <TypologyFilter />
 
             </Row>
 
             <ProjectFilters />
-            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />            
+            <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
           </div>
         }
 

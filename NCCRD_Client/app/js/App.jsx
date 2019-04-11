@@ -31,6 +31,8 @@ import DashGraph1FullView from './components/Dashboard/DashGraph1FullView.jsx'
 import DashGraph2FullView from './components/Dashboard/DashGraph2FullView.jsx'
 import DashGraph3FullView from './components/Dashboard/DashGraph3FullView.jsx'
 import DashGraph4FullView from './components/Dashboard/DashGraph4FullView.jsx'
+import InputWizard from './components/Wizard/InputWizard.jsx';
+import { DEAGreenDark, DEAGreen } from './config/colours.js';
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -38,9 +40,11 @@ const o = require("odata")
 const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
-  let { globalData: { loading, showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } } = state
+  let { globalData: {
+    loading, showSideNav, showSideNavButton, showHeader, showNavbar, showFooter, showInputWizard
+  } } = state
   let user = state.oidc.user
-  return { loading, user, showSideNav, showHeader, showNavbar, showFooter, showSideNavButton }
+  return { loading, user, showSideNav, showHeader, showNavbar, showFooter, showSideNavButton, showInputWizard }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -84,6 +88,9 @@ const mapDispatchToProps = (dispatch) => {
     loadSectorFilter: payload => {
       dispatch({ type: "LOAD_SECTOR_FILTER", payload })
     },
+    loadHazardFilter: payload => {
+      dispatch({ type: "LOAD_HAZARD_FILTER", payload })
+    },
     loadStatusFilter: payload => {
       dispatch({ type: "LOAD_STATUS_FILTER", payload })
     },
@@ -98,6 +105,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
   }
 }
@@ -118,10 +126,6 @@ class App extends React.Component {
   componentWillMount() {
     //this.genTestConfig()
     this.processURLConfig()
-  }
-
-  componentDidMount() {
-    window.onhashchange = this.saveCurrentURL
     this.processSilentSignIn()
   }
 
@@ -147,6 +151,7 @@ class App extends React.Component {
       filters: {
         region: 0, //number  >>>  region filter
         sector: 0, //number  >>>  sector filter
+        hazard: 0, //number  >>>  hazard filter
         status: 0, //number  >>>  status filter
         title: "", //string  >>>  title filter - partial match logic
         typology: 0, //number  >>>  typology filter
@@ -162,7 +167,7 @@ class App extends React.Component {
     }
 
     config = encodeURI(JSON.stringify(config))
-    console.log("config", config)
+      ("config", config)
     // TEST //    
   }
 
@@ -220,6 +225,11 @@ class App extends React.Component {
           //sector
           if (typeof filters.sector === 'number' && filters.sector > 0) {
             this.props.loadSectorFilter(filters.sector)
+          }
+
+          //hazard
+          if (typeof filters.hazard === 'number' && filters.hazard > 0) {
+            this.props.loadHazardFilter(filters.hazard)
           }
 
           //status
@@ -302,22 +312,22 @@ class App extends React.Component {
     let loaderWidth = 300
     let loaderHeight = 165
 
-    let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter } = this.props
+    let { showSideNav, showSideNavButton, showHeader, showNavbar, showFooter, showInputWizard } = this.props
 
     return (
-      <div style={{ margin: "0px 15px 0px 15px", backgroundColor: "white" }}>
-        <Router>
-          <div>
+      <Router>
+        <div id="app-content" style={{ height: '100vh', overflowY: (showInputWizard === true ? 'hidden' : 'scroll'), overflowX: 'hidden' }}>
+          {(showHeader === true) && <Header />}
+          {(showNavbar !== false) && <CustomNavbar />}
 
-            <div style={{ marginLeft: -15, marginRight: -15 }}>
-              {(showHeader === true) && <Header />}
-              {(showNavbar !== false) && <CustomNavbar />}
-            </div>
+          <div style={{ margin: "0px 15px 0px 15px" }}>
 
             {
               showSideNavButton === true &&
               <SideNav data={NavData} isOpen={showSideNav} />
             }
+
+            <InputWizard visible={showInputWizard} />
 
             {
               (showHeader === true || showNavbar !== false) &&
@@ -341,38 +351,38 @@ class App extends React.Component {
                 </Switch>
               </div>
             </div>
+          </div>
 
-            {
-              (showFooter === true) &&
-              <div style={{ marginLeft: -15, marginRight: -15 }}>
-                <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
-                <Footer />
-              </div>
-            }
+          {
+            (showFooter === true) &&
+            <div>
+              <div style={{ height: "15px", backgroundColor: "whitesmoke" }} />
+              <Footer />
+            </div>
+          }
 
-            <div className="container-fluid">
-              <div className="row">
-                <div
-                  hidden={!this.props.loading}
-                  className="card"
-                  style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "99" }}>
+          <div className="container-fluid">
+            <div className="row">
+              <div
+                hidden={!this.props.loading}
+                className="card"
+                style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
 
-                  <div className="card-body">
-                    <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>
-                    <br />
-                    <span style={{ width: "100px", paddingLeft: ((loaderWidth / 2) - 50) }}>
-                      <Spinner big multicolor />
-                    </span>
-                  </div>
+                <div className="card-body">
+                  <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: DEAGreenDark }}>LOADING</label>
+                  <br />
+                  <span style={{ width: "100px", paddingLeft: ((loaderWidth / 2) - 50) }}>
+                    <Spinner big multicolor />
+                  </span>
                 </div>
               </div>
             </div>
-
-            <ReactTooltip delayShow={700} />
-
           </div>
-        </Router>
-      </div>
+
+          <ReactTooltip delayShow={700} />
+
+        </div>
+      </Router>
     )
   }
 }

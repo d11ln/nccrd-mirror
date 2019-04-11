@@ -3,6 +3,27 @@
 import React from 'react'
 import { DEAGreen, DEAGreenDark } from './config/colours.js'
 
+const fetchDefaults = require("fetch-defaults")
+var apiFetch = fetchDefaults(fetch, {
+  headers: { 'pragma': 'no-cache', 'cache-control': 'no-cache' }
+})
+
+export function CustomFetch(url, options) {
+
+  // Detect IE //
+  let ua = navigator.userAgent;
+  /* MSIE used to detect old browsers and Trident used to newer ones*/
+  let is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+
+  // Execute relevant fetch
+  if (is_ie) {
+    return apiFetch(url, options)
+  }
+  else {
+    return fetch(url, options)
+  }
+}
+
 export function fixEmptyValue(value, defaultValue) {
 
   if (isEmptyValue(value)) {
@@ -13,7 +34,7 @@ export function fixEmptyValue(value, defaultValue) {
 }
 
 export function isEmptyValue(value) {
-  return (typeof value === 'undefined' || value === "" || value === null)
+  return (typeof value === 'undefined' || value === "" || value === null || value === [] || value === {} || value === undefined)
 }
 
 export function stripURLParam(paramKey) {
@@ -21,18 +42,13 @@ export function stripURLParam(paramKey) {
   let l = location.toString().length
   let queryString = location.toString().substr(i, l - i)
 
-  console.log("queryString", queryString)
-
   if (queryString === ("?" + paramKey)) {
-    console.log("1")
     location = location.toString().replace(("?" + paramKey), "")
   }
   else if (queryString.includes("?" + paramKey + "&")) {
-    console.log("2")
     location = location.toString().replace(paramKey + "&", "")
   }
   else if (queryString.includes("&" + paramKey)) {
-    console.log("3")
     location = location.toString().replace("&" + paramKey, "")
   }
 }
@@ -47,19 +63,19 @@ export function getFontColour(editMode) {
 }
 
 export function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export function GetUID() {
   //return Math.random().toString().substr(2, 9)
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var crypto = window.crypto || window.msCrypto;
     var r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
 
-export function IsValidGuid(guid)
-{
+export function IsValidGuid(guid) {
   let pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
   return pattern.test(guid)
 }
@@ -112,6 +128,22 @@ export function arraysEqual(a, b) {
 
 export const wait = ms => new Promise((r, j) => setTimeout(r, ms))
 
+export function IsReviewer(user) {
+  let isReviewer = false
+  if (user && user.profile && user.profile.role) {
+
+    let role = user.profile.role
+
+    if (typeof role === 'string') {
+      isReviewer = role === "Reviewer"
+    }
+    else if (Array.isArray(role)) {
+      isReviewer = role.includes("Reviewer")
+    }
+  }
+  return isReviewer
+}
+
 
 //-------------------------//
 // Create and Read Cookies //
@@ -137,6 +169,13 @@ export function CreateCookie(name, value, days) {
   document.cookie = name + "=" + value + expires + "; path=/";
 }
 
+export function CreateTempCookie(name, value) {
+  var date = new Date();
+  date.setTime(date.getTime() + (5 * 60 * 1000)); //5 minutes
+  var expires = "; expires=" + date.toGMTString();
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
 export function ReadCookie(name) {
   var nameEQ = name + "="; var ca = document.cookie.split(';');
   for (var i = 0; i < ca.length; i++) {
@@ -149,4 +188,8 @@ export function ReadCookie(name) {
     }
   }
   return null;
-} 
+}
+
+export function DeleteCookie(name) {
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}

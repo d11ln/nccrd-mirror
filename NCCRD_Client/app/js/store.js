@@ -24,8 +24,9 @@ const store = createStore(
             showListViewOption: true,
             showFavoritesOption: true,
             showListFilterOptions: true,
-            showBackToList: true,
+            showBackToList: true,            
             showDetailsInParent: false,
+            showInputWizard: false,
             projectsFullView: false
         },
 
@@ -46,6 +47,8 @@ const store = createStore(
         projectData: {
             projects: [],
             projectDetails: {},
+            selectedProjectId: 0,
+            filteredProjectIDs: [],
             start: 0,
             end: 25,
             listScrollPos: 0
@@ -66,10 +69,6 @@ const store = createStore(
         emissionsData: {
             emissionsData: []
         },
-
-        // researchData: {
-        //     researchDetails: []
-        // },
 
         lookupData: {
             projectTypes: [],
@@ -94,18 +93,22 @@ const store = createStore(
             researchType: [],
             targetAudience: [],
             hazards: [],
-            researchMaturity: []
+            researchMaturity: [],
+            loaded: false
         },
 
         filterData: {
+            filtersChanged: false,
             titleFilter: "",
             titleFilterInternal: "",
             statusFilter: 0,
             typologyFilter: 0,
             regionFilter: 0,
             sectorFilter: 0,
+            hazardFilter: 0,
             polygonFilter: "",
-            favoritesFilter: false
+            favoritesFilter: false,
+            unverifiedOnlyFilter: false
         },
 
         chartData:{

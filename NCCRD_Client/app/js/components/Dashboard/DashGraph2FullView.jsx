@@ -8,19 +8,24 @@ import buildQuery from 'odata-query'
 
 //images
 import popin from '../../../images/popin.png'
+import { CustomFetch } from '../../globalFunctions.js';
 
 const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, sectorFilter, regionFilter, typologyFilter } } = state
   let { chartData: { chart2 } } = state
-  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart2 }
+  let { projectData: { filteredProjectIDs } } = state
+  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart2, filteredProjectIDs }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setChartData: payload => {
       dispatch({ type: "SET_CHART_2", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
     }
   }
 }
@@ -29,14 +34,10 @@ class DashGraph2FullView extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      filterIDs: []
-    }
   }
 
   componentDidMount() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 125,
       left: 0,
       behavior: 'smooth'
@@ -67,7 +68,7 @@ class DashGraph2FullView extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `MitigationEmissionsData${query}`)
+        let res = await CustomFetch(apiBaseURL + `MitigationEmissionsData${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {
@@ -86,60 +87,58 @@ class DashGraph2FullView extends React.Component {
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, regionFilter, sectorFilter, typologyFilter } = this.props
+    let { statusFilter, regionFilter, sectorFilter, typologyFilter, filteredProjectIDs, loadProjectIDList } = this.props
     let filters = {}
 
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
+    if (filteredProjectIDs.length === 0) {
 
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
+      //ADD FILTERS//
+      //Status//
+      if (statusFilter !== 0) {
+        filters.status = statusFilter
+      }
 
-    //Sector//
-    if (sectorFilter != 0) {
-      filters.sector = sectorFilter
-    }
+      //Region//
+      if (regionFilter != 0) {
+        filters.region = regionFilter
+      }
 
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
+      //Sector//
+      if (sectorFilter != 0) {
+        filters.sector = sectorFilter
+      }
 
-    //GET PROJECTS FILTERED//
-    try {
+      //Typology//
+      if (typologyFilter !== 0) {
+        filters.typology = typologyFilter
+      }
 
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
+      //GET PROJECTS FILTERED//
+      try {
+        let res = await CustomFetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(filters)
+          })
 
-      let resBody = await res.json()
+        let resBody = await res.json()
 
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok) {
+          //Process resBody
+          loadProjectIDList(resBody.value.map(p => p.ProjectId))
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      }
+      catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   transformData(data) {
@@ -169,9 +168,8 @@ class DashGraph2FullView extends React.Component {
 
   render() {
 
-    let { chart2 } = this.props
-    let { filterIDs } = this.state
-    let filteredData = chart2.filter(p => filterIDs.includes(p.Project.ProjectId))
+    let { chart2, filteredProjectIDs } = this.props
+    let filteredData = chart2.filter(p => filteredProjectIDs.includes(p.Project.ProjectId))
     let transformedData = this.transformData(filteredData)
 
     return (

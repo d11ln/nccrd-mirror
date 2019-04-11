@@ -3,17 +3,12 @@ import { Button, Collapse, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import { DEAGreen } from '../../../config/colours.js'
 
-//Filters
-import GeneralFilters from './GeneralFilters.jsx';
-import RegionFilters from './RegionFilters.jsx';
-import SectorFilters from './SectorFilters.jsx';
-
 const mapStateToProps = (state, props) => {
-  let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter } } = state
+  let { filterData: { titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, favoritesFilter, unverifiedOnlyFilter } } = state
   let { lookupData: { projectStatus, typology, sector, region } } = state
   return {
     titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region,
-    favoritesFilter
+    favoritesFilter, unverifiedOnlyFilter
   }
 }
 
@@ -21,24 +16,35 @@ const mapDispatchToProps = (dispatch) => {
   return {
     clearFilters: payload => {
       dispatch({ type: "CLEAR_FILTERS", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearTitleFilter: () => {
       dispatch({ type: "LOAD_TITLE_FILTER", payload: "" })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearStatusFilter: () => {
       dispatch({ type: "LOAD_STATUS_FILTER", payload: { id: 0, value: 0 } })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearTypologyFilter: () => {
       dispatch({ type: "LOAD_TYPOLOGY_FILTER", payload: { id: 0, value: 0 } })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearRegionFilter: () => {
       dispatch({ type: "LOAD_REGION_FILTER", payload: 0 })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     clearSectorFilter: () => {
       dispatch({ type: "LOAD_SECTOR_FILTER", payload: 0 })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
-    toggleFavorites: async payload => {
-      dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
+    toggleFavorites: () => {
+      dispatch({ type: "TOGGLE_FAVS_FILTER", payload: false })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
+    },
+    toggleUnverifiedOnly: () => {
+      dispatch({ type: "TOGGLE_UNVERIFIED_ONLY_FILTER", payload: false })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     }
   }
 }
@@ -55,13 +61,22 @@ class ProjectFilters extends React.Component {
 
     let {
       titleFilter, statusFilter, typologyFilter, sectorFilter, regionFilter, projectStatus, typology, sector, region,
-      favoritesFilter
+      favoritesFilter, unverifiedOnlyFilter
     } = this.props
     let filterChips = []
 
     if (titleFilter !== "" || statusFilter !== 0 || typologyFilter !== 0 || sectorFilter !== 0 || regionFilter !== 0 ||
-      favoritesFilter === true) {
-        
+      favoritesFilter === true || unverifiedOnlyFilter === true) {
+
+      if (unverifiedOnlyFilter === true) {
+        filterChips.push(
+          <div className="chip" key="verifFilterChip" style={{ backgroundColor: DEAGreen }}>
+            {"Unverified Only"}
+            <i className="close fa fa-times" onClick={() => this.deleteFilterChip("verif")}></i>
+          </div>
+        )
+      }
+
       if (favoritesFilter === true) {
         filterChips.push(
           <div className="chip" key="favsFilterChip" style={{ backgroundColor: DEAGreen }}>
@@ -150,6 +165,10 @@ class ProjectFilters extends React.Component {
 
       case "favs":
         this.props.toggleFavorites()
+        break
+
+      case "verif":
+        this.props.toggleUnverifiedOnly()
         break
     }
   }

@@ -15,7 +15,7 @@ namespace NCCRD.Services.DataV2.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -26,6 +26,10 @@ namespace NCCRD.Services.DataV2.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AdaptationPurposeId");
+
+                    b.Property<string>("ContactEmail");
+
+                    b.Property<string>("ContactName");
 
                     b.Property<string>("Description");
 
@@ -38,6 +42,8 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.Property<int?>("ResearchDetailId");
 
                     b.Property<int?>("SectorId");
+
+                    b.Property<string>("Title");
 
                     b.HasKey("AdaptationDetailId");
 
@@ -405,7 +411,7 @@ namespace NCCRD.Services.DataV2.Migrations
                         .IsRequired()
                         .HasMaxLength(450);
 
-                    b.Property<int>("ProjectTypeId");
+                    b.Property<int?>("ProjectTypeId");
 
                     b.Property<bool?>("ReminderSent");
 
@@ -414,6 +420,8 @@ namespace NCCRD.Services.DataV2.Migrations
                     b.Property<string>("ValidationComments");
 
                     b.Property<int?>("ValidationStatusId");
+
+                    b.Property<bool>("Verified");
 
                     b.HasKey("ProjectId");
 

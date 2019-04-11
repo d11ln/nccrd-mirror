@@ -1,19 +1,9 @@
 import React from 'react'
-import { Button } from 'mdbreact'
 import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
-import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../config/ui_config.js'
-import TreeSelectComponent from "../../Shared/TreeSelectComponent.jsx"
-
-//AntD Tree
-import Tree from 'antd/lib/tree'
-import '../../../../css/antd.tree.css' //Overrides default antd.tree css
-const TreeNode = Tree.TreeNode
-
-const _gf = require("../../../globalFunctions")
-const queryString = require('query-string')
-const o = require("odata")
+import CascaderSelectComponent from '../../Shared/CascaderSelectComponent.jsx'
+import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
+import { CustomFetch } from '../../../globalFunctions.js';
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { sectorTree, sector } } = state
@@ -40,23 +30,25 @@ class SectorFilters extends React.Component {
 
   async componentDidMount() {
 
-    let { loadSectors } = this.props
+    let { loadSectors, sector } = this.props
 
-    //Get data
-    try {
-      let res = await fetch(vmsBaseURL + "Sectors/flat")
+    if (sector.length === 0) {
+      //Get data
+      try {
+        let res = await CustomFetch(vmsBaseURL + "Sectors/flat")
 
-      if (res.ok) {
-        res = await res.json()
+        if (res.ok) {
+          res = await res.json()
 
-        if (res.items && res.items.length > 0) {
-          let data = res.items
-          loadSectors(data)
+          if (res.items && res.items.length > 0) {
+            let data = res.items
+            loadSectors(data)
+          }
         }
       }
-    }
-    catch (ex) {
-      console.error(ex)
+      catch (ex) {
+        console.error(ex)
+      }
     }
   }
 

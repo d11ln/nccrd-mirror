@@ -52,14 +52,16 @@ namespace NCCRD.Services.DataV2.Database.Models
 
         public decimal? BudgetUpper { get; set; }
 
+        public bool Verified { get; set; }
+
         //FK - ProjectStatus
         public int? ProjectStatusId { get; set; }
         [IgnoreDataMember]
         public ProjectStatus ProjectStatus { get; set; }
 
         //FK - ProjectType
-        [Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
-        public int ProjectTypeId { get; set; }
+        //[Range(0, int.MaxValue, ErrorMessage = "The ProjectType field is required.")]
+        public int? ProjectTypeId { get; set; }
         [IgnoreDataMember]
         public ProjectType ProjectType { get; set; }
 

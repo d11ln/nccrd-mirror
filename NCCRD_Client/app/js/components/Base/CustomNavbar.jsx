@@ -1,14 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Input, Fa } from 'mdbreact'
-import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact'
+import {
+  Navbar,
+  NavItem,
+  NavbarNav,
+  NavbarToggler,
+  Collapse,
+  NavLink,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+} from 'mdbreact'
+import { notification, message } from 'antd'
 import userManager from '../Authentication/userManager'
-import { ssoBaseURL } from '../../config/serviceURLs.js'
+import { ssoBaseURL, ndaoSiteBaseURL, ndmcBaseURL } from '../../config/serviceURLs.js'
 import { DEAGreen } from '../../config/colours.js'
 import { data as NavData } from '../../../data/sideNavConfig'
+import { destroyFns } from 'antd/lib/modal/Modal';
 
 const _gf = require("../../globalFunctions")
 const queryString = require('query-string')
+
 
 const mapStateToProps = (state, props) => {
   let user = state.oidc.user
@@ -20,9 +34,16 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setDAOID: async payload => {
       dispatch({ type: "SET_DAOID", payload })
+      dispatch({ type: "SET_FILTERS_CHANGED", payload: true })
     },
     toggleSideNav: payload => {
       dispatch({ type: "TOGGLE_SIDENAV", payload })
+    },
+    showInputWizard: payload => {
+      dispatch({ type: "SET_SHOW_INPUT_WIZARD", payload })
+    },
+    setSelectedProjectId: payload => {
+      dispatch({ type: "SET_SELECTED_PROJECT_ID", payload })
     }
   }
 }
@@ -107,26 +128,78 @@ class CustomNavbar extends React.Component {
               </Button>
             }
 
-            {
-              (!location.hash.includes("projects/") && (user && !user.expired)) &&
-              <Button
-                color="warning"
-                size="sm"
-                style={{ marginLeft: "0px" }}
-                onClick={() => { 
-                  let navTo = ""
-                  if (location.hash.includes("projects")) {
-                    navTo = location.hash.replace("#/projects", "#/projects/add")
-                  }
-                  else {
-                    navTo = location.hash.replace("#/", "#/projects/add")
-                  }            
-                  location.hash = navTo
-                }} >
-                Add New Project
-              </Button>
-            }
+            <Button
+              color=""
+              style={{ backgroundColor: DEAGreen }}
+              size="sm"
+              onClick={() => {
+                if (!user || user.expired) {
+                  notification.warning({
+                    message: 'Please login to submit projects.'
+                  })
+                }
+                else {
+                  let dispatch = () => new Promise((resolve, reject) => {
+                    this.props.setSelectedProjectId(0)
+                    resolve()
+                  })
+                  dispatch().then(() => {
+                    this.props.showInputWizard(true)
+                  })
+                }
+              }}>
+              <Fa icon="plus" style={{ marginRight: 15 }} />
+              Add New Project
+            </Button>
 
+            {/* Monitoring */}
+            <NavItem>
+              <Dropdown>
+                <DropdownToggle nav caret style={{ color: "black" }}><b>Monitoring and Evaluation</b></DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header style={{ marginLeft: "-16px", fontSize: "16px", color: "black" }}>
+                    <b>
+                      Climate Change Adaptation&nbsp;
+                        <br className="d-block d-md-none" />
+                      Monitoring and Evaluation
+                      </b>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  {/* <DropdownItem header style={{ marginLeft: "-16px", fontWeight: "400", fontSize: "16px", color: "black" }}>
+                      Impacts:
+                    </DropdownItem> */}
+                  <DropdownItem href={ndaoSiteBaseURL} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>View Information</b>
+                  </DropdownItem>
+                  <DropdownItem href={ndaoSiteBaseURL + '#/ame/contribute'} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>Submit evaluation on Progress</b>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </NavItem>
+
+
+
+            {/* Hazards */}
+            {/* <NavItem>
+              <Dropdown>
+                <DropdownToggle nav caret style={{ color: "black" }}><b>Hazardous Events </b></DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header style={{ marginLeft: "-16px", fontSize: "16px", color: "black" }}>
+                    <b>
+                      National Hazardous Events
+                  </b>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem href={ndmcBaseURL} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>National Hazardous Events Database</b>
+                  </DropdownItem>
+                  <DropdownItem href={ndmcBaseURL} style={{ marginLeft: "7px" }}>
+                    <b style={{ color: "grey" }}>Submit Hazardous Event</b>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </NavItem> */}
           </NavbarNav>
 
           {/* RIGHT */}
@@ -136,12 +209,11 @@ class CustomNavbar extends React.Component {
 
               {/* Username */}
               {(user && !user.expired) &&
-
                 <table>
                   <tbody>
                     <tr style={{ height: "40px" }}>
                       <td valign="middle">
-                        <div style={{ marginRight: "7px", color: "grey" }} >
+                        <div style={{ marginRight: "7px", color: DEAGreen }} >
                           <Fa size="2x" icon="user-circle-o" />
                         </div>
                       </td>

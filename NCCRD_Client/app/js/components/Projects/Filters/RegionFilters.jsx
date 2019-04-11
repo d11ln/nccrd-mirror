@@ -1,19 +1,8 @@
 import React from 'react'
-import { Button } from 'mdbreact'
 import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
-import ReactTooltip from 'react-tooltip'
-import { UILookup } from '../../../config/ui_config.js'
-import TreeSelectComponent from "../../Shared/TreeSelectComponent.jsx"
-
-//AntD Tree
-import Tree from 'antd/lib/tree'
-import '../../../../css/antd.tree.css' //Overrides default antd.tree css
-const TreeNode = Tree.TreeNode
-
-const _gf = require("../../../globalFunctions")
-const queryString = require('query-string')
-const o = require("odata")
+import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
+import { CustomFetch } from '../../../globalFunctions.js';
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { regionTree, region } } = state
@@ -40,27 +29,27 @@ class RegionFilters extends React.Component {
 
   async componentDidMount() {
 
-    //Load data
-    let { loadRegions } = this.props
+    let { loadRegions, region } = this.props
 
-    //Get data
-    try {
-      let res = await fetch(vmsBaseURL + "Regions/flat")
+    if (region.length === 0) {
+      //Get data
+      try {
+        let res = await CustomFetch(vmsBaseURL + "Regions/flat")
 
-      if (res.ok) {
-        res = await res.json()
+        if (res.ok) {
+          res = await res.json()
 
-        if (res.items && res.items.length > 0) {
-          let data = res.items
-          loadRegions(data)
+          if (res.items && res.items.length > 0) {
+            let data = res.items
+            loadRegions(data)
+          }
         }
       }
-    }
-    catch (ex) {
-      console.error(ex)
+      catch (ex) {
+        console.error(ex)
+      }
     }
   }
-
 
   render() {
 
@@ -68,8 +57,7 @@ class RegionFilters extends React.Component {
 
     return (
       <>
-        <TreeSelectComponent
-          col="col-md-2"
+        <TreeSelectComponent col="col-md-2"
           id="treeRegionFilter"
           label="Region"
           selectedValue={regionFilter}

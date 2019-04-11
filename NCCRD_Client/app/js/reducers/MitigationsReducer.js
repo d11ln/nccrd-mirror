@@ -54,22 +54,22 @@ export default function MitigationsReducer(state = {}, action) {
             let { mitigationDetails, projectDetails } = state
 
             let newItem = {
-                "MitigationDetailId": _gf.getRndInteger(1111111, 9999999),
-                "VCS": 0,
-                "Other": 0,
-                "OtherDescription": "",
-                "CDMProjectNumber": "",
-                "CarbonCreditId": 0,
-                "CarbonCreditMarketId": 0,
-                "CDMStatusId": 0,
-                "CDMMethodologyId": 0,
-                "VoluntaryMethodologyId": 0,
-                "VoluntaryGoldStandardId": 0,
-                "ProjectId": payload,
-                "SectorId": 0,
-                "ProjectStatusId": 0,
-                "ResearchDetail": null,
-                "state": "modified"
+                MitigationDetailId: _gf.getRndInteger(1111111, 9999999),
+                VCS: 0,
+                Other: 0,
+                OtherDescription: "",
+                CDMProjectNumber: "",
+                CarbonCreditId: null,
+                CarbonCreditMarketId: null,
+                CDMStatusId: null,
+                CDMMethodologyId: null,
+                VoluntaryMethodologyId: null,
+                VoluntaryGoldStandardId: null,
+                ProjectId: payload,
+                SectorId: null,
+                ProjectStatusId: null,
+                ResearchDetail: null,
+                state: "modified"
             }
 
             if (mitigationDetails.length > 0) {

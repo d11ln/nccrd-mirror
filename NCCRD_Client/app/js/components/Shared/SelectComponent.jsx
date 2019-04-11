@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Select } from 'antd'
+import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -20,6 +22,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setSelectedValue: (key, payload) => {
       dispatch({ type: key, payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     },
     setEditList: (payload) => {
       dispatch({ type: "SET_EDIT_LIST", payload })
@@ -117,22 +120,17 @@ class SelectComponent extends React.Component {
       //Implement state flow control
       if (selectedValue > 0) {
         let dataItem = data.filter(x => x[Object.keys(x)[0]] === selectedValue)[0]
-        if(dataItem.NextStates){
+        if (dataItem.NextStates) {
           let nextStates = dataItem.NextStates.split(",").map(x => parseInt(x))
-    
-          console.log("nextStates", nextStates)
-          console.log("procData", procData)
 
-          if(nextStates && nextStates.length > 0){
+          if (nextStates && nextStates.length > 0) {
             procData = procData.filter(x => nextStates.includes(x.refId))
           }
-
-          console.log("procData2", procData)
-        }   
+        }
       }
-      
+
       //Allow editing
-      if (allowEdit === true) {
+      if (allowEdit === true && !this.getDisabledState()) {
 
         //Insert "[Edit list values...]" entry
         if (procData.filter(x => x.value === "[Edit list values...]").length === 0) {
@@ -156,57 +154,50 @@ class SelectComponent extends React.Component {
     return ar
   }
 
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
-  }
-
   onSelect(value) {
 
-    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-    let selectedValue = 0
+    if (!this.getDisabledState()) {
 
-    if (value !== null) {
-      if (value === '[Edit list values...]') {
-        selectedValue = -1
-      }
-      else {
+      let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
+      let selectedValue = 0
 
-        let dataItem = data.filter(x => x.Value === value)[0]
+      if (value !== null) {
+        if (value === '[Edit list values...]') {
+          selectedValue = -1
+        }
+        else {
 
-        if (typeof dataItem !== 'undefined' && dataItem !== null) {
-          selectedValue = parseInt(dataItem[Object.keys(dataItem)[0]])
+          let dataItem = data.filter(x => x.Value === value)[0]
+
+          if (typeof dataItem !== 'undefined' && dataItem !== null) {
+            selectedValue = parseInt(dataItem[Object.keys(dataItem)[0]])
+          }
         }
       }
-    }
 
-    if (selectedValue === -1) {
-      //Setup and Show EditListModal
-      if (typeof type === 'undefined') {
-        type = "std"
+      if (selectedValue === -1) {
+        //Setup and Show EditListModal
+        if (typeof type === 'undefined') {
+          type = "std"
+        }
+        if (typeof dependencies === 'undefined') {
+          dependencies = []
+        }
+
+        setEditList({
+          show: true, data: data, dispatch: dispatch, persist: persist, type: type,
+          dependencies: dependencies, newItemTemplate: newItemTemplate
+        })
       }
-      if (typeof dependencies === 'undefined') {
-        dependencies = []
+      else {
+        //Dispatch to store
+        if (typeof setSelectedValueKey !== 'undefined') {
+          setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        }
       }
 
-      setEditList({
-        show: true, data: data, dispatch: dispatch, persist: persist, type: type,
-        dependencies: dependencies, newItemTemplate: newItemTemplate
-      })
+      allowChange = false
     }
-    else {
-      //Dispatch to store
-      if (typeof setSelectedValueKey !== 'undefined') {
-        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
-      }
-    }
-
-    allowChange = false
-
   }
 
   getDisabledState() {
@@ -226,7 +217,7 @@ class SelectComponent extends React.Component {
 
   render() {
 
-    let { col, label, id, selectedValue, data, style, labelStyle, allowClear } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle, allowClear, matchWidth } = this.props
     let uiconf = UILookup(id, label)
     let displayValue = "Select..."
 
@@ -245,29 +236,24 @@ class SelectComponent extends React.Component {
       labelStyle = {}
     }
 
-    if(!allowClear){
+    if (!allowClear) {
       allowClear = false
+    }
+
+    if (!matchWidth) {
+      matchWidth = false
     }
 
     return (
       <div className={col}>
-        <label
-          data-tip={uiconf.tooltip}
-          style={{
-            fontWeight: "bold",
-            color: this.getLabelFontColour(uiconf),
-            ...labelStyle
-          }} >
-          {uiconf.label}
-        </label>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <Select
           style={{ width: "100%", ...style }}
-          dropdownMatchSelectWidth={false}
+          dropdownMatchSelectWidth={matchWidth}
           dropdownStyle={{ width: 200 }}
           onChange={this.onSelect}
           value={displayValue}
-          disabled={this.getDisabledState()}
           allowClear={allowClear}
         >
           {this.selectOptions()}

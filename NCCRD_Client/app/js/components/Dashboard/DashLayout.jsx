@@ -14,6 +14,8 @@ import DashGraph3Preview from "./DashGraph3Preview.jsx"
 import DashGraph4Preview from "./DashGraph4Preview.jsx"
 import { DEAGreen } from '../../config/colours.js'
 import MapViewCore from '../Map/MapViewCore.jsx'
+import HazardFilter from '../Projects/Filters/HazardFilter.jsx';
+import { Tooltip } from 'antd';
 
 const mapStateToProps = (state, props) => {
   return {}
@@ -42,31 +44,70 @@ class DashLayout extends React.Component {
   componentDidMount() {
     this.props.updateNav(location.hash)
     this.props.setProjectsFullView(false)
-    window.addEventListener("scroll", this.handleScroll);
+    document.getElementById("app-content").addEventListener("scroll", this.handleScroll);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll)
+    document.getElementById("app-content").removeEventListener("scroll", this.handleScroll);
   }
 
   handleScroll() {
     let { showBackToTop } = this.state
 
-    if (window.pageYOffset > 1450 && showBackToTop === false) {
+    if (document.getElementById("app-content").scrollTop > 1350 && showBackToTop === false) {
       this.setState({ showBackToTop: true })
     }
-    else if (window.pageYOffset <= 1450 && showBackToTop === true) {
+    else if (document.getElementById("app-content").scrollTop <= 1350 && showBackToTop === true) {
       this.setState({ showBackToTop: false })
     }
 
   }
 
   scrollToTop() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 0,
       left: 0,
       behavior: 'smooth'
     });
+  }
+
+  getDashText(small) {
+    return (
+      <div style={{ color: "grey" }}>
+        {
+          !small &&
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <div style={{ paddingLeft: 115 }}>Filters</div>
+                </td>
+                <td>
+                  <Fa icon="angle-double-right" style={{ marginLeft: 2 }} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        }
+
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <h2 style={{ letterSpacing: -2 }}>
+                  <b>Dashboard</b>
+                </h2>
+              </td>
+              <td>
+                <h2>
+                  <Fa icon="arrow-circle-down" style={{ marginLeft: 2 }} />
+                </h2>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )
   }
 
   render() {
@@ -74,36 +115,17 @@ class DashLayout extends React.Component {
     let { showBackToTop } = this.state
 
     return (
-      <div style={{ padding: "15px 0px 15px 0px" }}>
+      <>
 
-        <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
-          {
-            showBackToTop &&
-            <Button
-              data-tip="Back to top"
-              size="sm"
-              floating
-              color=""
-              onClick={() => {
-                this.scrollToTop()
-              }}
-              style={{ backgroundColor: DEAGreen }}
-            >
-              <Fa icon="arrow-up" />
-            </Button>
-          }
-        </div>
+        <Row className="d-lg-none">
+          <Col>
+            {this.getDashText(true)}
+          </Col>
+        </Row>
 
-        <Row style={{ marginTop: "15px", marginBottom: "15px", marginLeft: "-10px" }}>
-          <Col md="2">
-            <div style={{ marginTop: "2px" }}>
-              <b style={{ color: "grey", fontSize: "14px" }}>
-                DASHBOARD
-            </b>
-              <h3 style={{ marginLeft: "-2px", marginTop: "6px" }}>
-                <b>Get Started</b>
-              </h3>
-            </div>
+        <Row style={{ marginBottom: "15px" }}>
+          <Col className="d-none d-lg-block" md="2">
+            {this.getDashText()}
           </Col>
 
           <Col md="10">
@@ -113,10 +135,11 @@ class DashLayout extends React.Component {
                 <TitleFilter />
               </Col>
 
-              <StatusFilter />
-              <TypologyFilter />
               <RegionFilters />
               <SectorFilters />
+              <HazardFilter />
+              <StatusFilter />
+              <TypologyFilter />
 
             </Row>
           </Col>
@@ -128,7 +151,11 @@ class DashLayout extends React.Component {
             <ProjectList />
           </Col>
 
-          <Col md="5" style={{ position: (showBackToTop ? "absolute" : "relative"), top: (showBackToTop ? 285 : 0), right: 0 }}>
+          <Col md="5" style={{
+            position: (showBackToTop ? "fixed" : "relative"),
+            top: 0,
+            right: showBackToTop ? "-50vw" : 0
+          }}>
             <Row>
               <Col md="12">
                 <ProjectFilters />
@@ -200,18 +227,33 @@ class DashLayout extends React.Component {
                       />
                     </DashGraph4Preview>
                   </Col>
-
                 </Row>
-
               </Col>
-
             </Row>
           </Col>
-
-
         </Row>
 
-      </div>
+        <div style={{ position: "fixed", right: "30px", bottom: "15px", zIndex: "99" }}>
+          {
+            showBackToTop &&
+            <Tooltip title="Back to top" mouseEnterDelay={0.7}>
+              <Button
+                size="sm"
+                floating
+                color=""
+                onClick={() => {
+                  this.scrollToTop()
+                }}
+                style={{ backgroundColor: DEAGreen }}
+              >
+                <Fa icon="arrow-up" />
+              </Button>
+            </Tooltip>
+
+          }
+        </div>
+
+      </>
     )
   }
 }

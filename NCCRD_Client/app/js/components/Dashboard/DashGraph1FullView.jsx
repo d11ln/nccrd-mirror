@@ -3,24 +3,29 @@ import { Row, Col, Button } from 'mdbreact'
 import { connect } from 'react-redux'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { LineChart, Line, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
+import { BarChart, Bar, ResponsiveContainer, Tooltip, Legend, XAxis, YAxis } from 'recharts'
 import buildQuery from 'odata-query'
 
 //images
 import popin from '../../../images/popin.png'
+import { CustomFetch } from '../../globalFunctions.js';
 
 const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, typologyFilter, sectorFilter, regionFilter } } = state
   let { chartData: { chart1 } } = state
-  return { statusFilter, typologyFilter, sectorFilter, regionFilter, chart1 }
+  let { projectData: { filteredProjectIDs } } = state
+  return { statusFilter, typologyFilter, sectorFilter, regionFilter, chart1, filteredProjectIDs }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setChartData: payload => {
       dispatch({ type: "SET_CHART_1", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
     }
   }
 }
@@ -29,14 +34,10 @@ class DashGraph1FullView extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      filterIDs: []
-    }
   }
 
   componentDidMount() {
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 125,
       left: 0,
       behavior: 'smooth'
@@ -52,60 +53,58 @@ class DashGraph1FullView extends React.Component {
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, typologyFilter, regionFilter, sectorFilter } = this.props
+    let { statusFilter, typologyFilter, regionFilter, sectorFilter, filteredProjectIDs, loadProjectIDList } = this.props
     let filters = {}
 
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
+    if (filteredProjectIDs.length === 0) {
 
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
+      //ADD FILTERS//
+      //Status//
+      if (statusFilter !== 0) {
+        filters.status = statusFilter
+      }
 
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
+      //Typology//
+      if (typologyFilter !== 0) {
+        filters.typology = typologyFilter
+      }
 
-    //Sector//
-    if (sectorFilter != 0) {
-      filters.sector = sectorFilter
-    }
+      //Region//
+      if (regionFilter != 0) {
+        filters.region = regionFilter
+      }
 
-    //GET PROJECTS FILTERED//
-    try {
+      //Sector//
+      if (sectorFilter != 0) {
+        filters.sector = sectorFilter
+      }
 
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
+      //GET PROJECTS FILTERED//
+      try {
+        let res = await CustomFetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(filters)
+          })
 
-      let resBody = await res.json()
+        let resBody = await res.json()
 
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok && resBody.value) {
+          //Process resBody
+          loadProjectIDList(resBody.value.map(p => p.ProjectId))
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      }
+      catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   async getChartData() {
@@ -132,7 +131,7 @@ class DashGraph1FullView extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `Projects${query}`)
+        let res = await CustomFetch(apiBaseURL + `Projects${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {
@@ -176,9 +175,8 @@ class DashGraph1FullView extends React.Component {
 
   render() {
 
-    let { chart1 } = this.props
-    let { filterIDs } = this.state
-    let filteredData = chart1.filter(p => filterIDs.includes(p.ProjectId))
+    let { chart1, filteredProjectIDs } = this.props
+    let filteredData = chart1.filter(p => filteredProjectIDs.includes(p.ProjectId))
     let transformedData = this.transformData(filteredData)
 
     return (
@@ -235,14 +233,26 @@ class DashGraph1FullView extends React.Component {
           {
             (transformedData.length > 0) &&
             <ResponsiveContainer key={new Date().valueOf()} width="96%" height="98%">
-              <LineChart data={transformedData} >
+              <BarChart data={transformedData} >
                 <XAxis dataKey="Year" />
                 <YAxis />
-                <Line type='monotone' dataKey='Adaptation' stroke='#8884d8' strokeWidth={2} />
-                <Line type="monotone" dataKey="Mitigation" stroke="#82ca9d" strokeWidth={2} />
+                <Bar
+                  type='monotone'
+                  dataKey='Adaptation'
+                  stackId="1"
+                  stroke='#8884d8'
+                  fill='#8884d8'
+                />
+                <Bar
+                  type='monotone'
+                  dataKey='Mitigation'
+                  stackId="1"
+                  stroke='#82ca9d'
+                  fill='#82ca9d'
+                />
                 <Tooltip />
                 <Legend />
-              </LineChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

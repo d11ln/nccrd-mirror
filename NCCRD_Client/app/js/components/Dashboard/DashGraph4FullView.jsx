@@ -1,24 +1,31 @@
-import React, { Children } from 'react'
-import { Row, Col, Button } from 'mdbreact'
+import React from 'react'
 import { connect } from 'react-redux'
 import popin from '../../../images/popin.png'
-import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import buildQuery from 'odata-query'
+import { CustomFetch } from '../../globalFunctions';
 
 const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, typologyFilter, regionFilter } } = state
   let { chartData: { chart4 } } = state
-  return { statusFilter, typologyFilter, regionFilter, chart4 }
+  let { projectData: { filteredProjectIDs } } = state
+  let { lookupData: { sector } } = state
+  return { statusFilter, typologyFilter, regionFilter, chart4, filteredProjectIDs, sector }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setChartData: payload => {
       dispatch({ type: "SET_CHART_4", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
+    },
+    loadSectors: payload => {
+      dispatch({ type: "LOAD_SECTOR", payload })
     }
   }
 }
@@ -36,11 +43,6 @@ class DashGraph4FullView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      sectors: [],
-      filterIDs: []
-    }
-
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
     this.getPercent = this.getPercent.bind(this)
     this.toPercent = this.toPercent.bind(this)
@@ -48,7 +50,7 @@ class DashGraph4FullView extends React.Component {
 
   async componentDidMount() {
 
-    window.scroll({
+    document.getElementById("app-content").scroll({
       top: 125,
       left: 0,
       behavior: 'smooth'
@@ -86,7 +88,7 @@ class DashGraph4FullView extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `Projects${query}`)
+        let res = await CustomFetch(apiBaseURL + `Projects${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {
@@ -105,77 +107,79 @@ class DashGraph4FullView extends React.Component {
 
   async getSectors() {
 
-    //Get Sectors list/details
-    try {
+    let { sector, loadSectors } = this.props
 
-      let res = await fetch(vmsBaseURL + "sectors/flat")
+    if (sector.length === 0) {
+      //Get Sectors list/details
+      try {
 
-      //Get response body
-      let resBody = await res.json()
+        let res = await CustomFetch(vmsBaseURL + "sectors/flat")
 
-      if (res.ok) {
-        this.setState({ sectors: resBody.items })
+        //Get response body
+        let resBody = await res.json()
+
+        if (res.ok && resBody && resBody.items) {
+          loadSectors(resBody.items)
+        }
+        else {
+          throw new Error(resBody.error.message)
+        }
+
+      } catch (ex) {
+        console.error(ex)
       }
-      else {
-        throw new Error(resBody.error.message)
-      }
-
-    } catch (ex) {
-      console.error(ex)
     }
   }
 
   async getFilteredProjectIDs() {
 
-    let { statusFilter, typologyFilter, regionFilter } = this.props
+    let { statusFilter, typologyFilter, regionFilter, filteredProjectIDs, loadProjectIDList } = this.props
     let filters = {}
 
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
+    if (filteredProjectIDs.length === 0) {
 
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
+      //ADD FILTERS//
+      //Status//
+      if (statusFilter !== 0) {
+        filters.status = statusFilter
+      }
 
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
+      //Typology//
+      if (typologyFilter !== 0) {
+        filters.typology = typologyFilter
+      }
 
-    //GET PROJECTS FILTERED//
-    try {
+      //Region//
+      if (regionFilter != 0) {
+        filters.region = regionFilter
+      }
 
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
+      //GET PROJECTS FILTERED//
+      try {
+        let res = await CustomFetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(filters)
+          })
 
-      let resBody = await res.json()
+        let resBody = await res.json()
 
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok) {
+          //Process resBody
+          loadProjectIDList(resBody.value.map(p => p.ProjectId))
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      }
+      catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   transformData(data, sectors) {
@@ -235,9 +239,9 @@ class DashGraph4FullView extends React.Component {
 
         //Get Sector Name
         let secName = "Unknown"
-        let searchSec = sectors.filter(x => x.id == sec.SectorId)
+        let searchSec = sectors.length > 0 ? sectors.filter(x => x.Id == sec.SectorId) : []
         if (searchSec.length > 0) {
-          secName = searchSec[0].value.trim()
+          secName = searchSec[0].Text.trim()
         }
 
         //Get relevant Sectors
@@ -298,15 +302,15 @@ class DashGraph4FullView extends React.Component {
     Object.keys(transformedData[0]).filter(k => k !== "Year")
       .forEach(key => {
 
-        //Get Hazard color
+        //Get Sector color
         let color = "lightgrey"
-        let searchSec = sectors.filter(h => h.value.trim() === key)
+        let searchSec = sectors.length > 0 ? sectors.filter(h => h.Text.trim() === key) : []
         if (searchSec.length > 0) {
           color = chartColours[index]
         }
 
         areas.push(
-          <Area
+          <Bar
             key={key}
             type='monotone'
             dataKey={key}
@@ -324,8 +328,7 @@ class DashGraph4FullView extends React.Component {
 
   render() {
 
-    let { sectors, filterIDs } = this.state
-    let { chart4 } = this.props
+    let { chart4, filteredProjectIDs, sector } = this.props
 
     //Remove projects with no sectors
     let tData = []
@@ -336,8 +339,8 @@ class DashGraph4FullView extends React.Component {
     })
     chart4 = tData
 
-    let filteredData = chart4.filter(p => filterIDs.includes(p.ProjectId))
-    let transformedData = this.transformData(filteredData, sectors)
+    let filteredData = chart4.filter(p => filteredProjectIDs.includes(p.ProjectId))
+    let transformedData = this.transformData(filteredData, sector)
 
     return (
       <div
@@ -392,15 +395,15 @@ class DashGraph4FullView extends React.Component {
           }}
         >
           {
-            (transformedData.length > 0 && sectors.length > 0) &&
+            (transformedData.length > 0 && sector.length > 0) &&
             <ResponsiveContainer key="G4Graph" width="96%" height="98%">
-              <AreaChart data={transformedData} stackOffset="expand" >
+              <BarChart data={transformedData} >
                 <XAxis dataKey="Year" />
                 <YAxis tickFormatter={this.toPercent} />
                 <Tooltip content={this.renderTooltipContent} />
-                {this.renderAreas(transformedData, sectors)}
+                {this.renderAreas(transformedData, sector)}
                 <Legend />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

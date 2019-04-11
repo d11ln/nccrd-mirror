@@ -2,13 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { TreeSelect } from 'antd'
+import DualTip from './DualTip.jsx'
+import '../../../css/antd.tree-select.css'
 
-const _gf = require('../../globalFunctions')
-
-//AntD Tree-Select
-// import TreeSelect from 'antd/lib/tree-select'
-// import '../../../css/antd.tree-select.css' //Overrides default antd.tree-select css
-// import '../../../css/antd.select.css' //Overrides default antd.select css
 const TreeSelectNode = TreeSelect.TreeNode;
 
 const mapStateToProps = (state, props) => {
@@ -21,6 +17,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setSelectedValue: (key, payload) => {
       dispatch({ type: key, payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     },
     setEditList: (payload) => {
       dispatch({ type: "SET_EDIT_LIST", payload })
@@ -28,14 +25,11 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-let allowChange = false
-
 class TreeSelectComponent extends React.Component {
 
   constructor(props) {
     super(props);
 
-    // this.onSelect = this.onSelect.bind(this)
     this.getDisabledState = this.getDisabledState.bind(this)
   }
 
@@ -79,6 +73,7 @@ class TreeSelectComponent extends React.Component {
     effectiveData.map(item => {
 
       let newTreeNode = {
+        key: item[Object.keys(item)[0]],
         id: item[Object.keys(item)[0]],
         text: item[Object.keys(item)[1]],
         modifiedState: item.modifiedState
@@ -99,7 +94,7 @@ class TreeSelectComponent extends React.Component {
 
     let { allowEdit } = this.props
 
-    if (allowEdit === true && level === "top") {
+    if (allowEdit === true && level === "top" && !this.getDisabledState()) {
 
       //Insert "[Edit list values...]" entry
       if (data.filter(x => x.value === "[Edit list values...]").length === 0) {
@@ -114,7 +109,11 @@ class TreeSelectComponent extends React.Component {
     return data.map((item) => {
       if (item.children) {
         return (
-          <TreeSelectNode value={item.text} title={(item.modifiedState === true ? "* " : "") + item.text} key={item.id} dataRef={item}>
+          <TreeSelectNode
+            key={item.id}
+            value={item.text}
+            title={(item.modifiedState === true ? "* " : "") + `(${item.children.length}) ` +  item.text}
+          >
             {this.renderTreeSelectNodes(item.children, "child")}
           </TreeSelectNode>
         )
@@ -125,55 +124,42 @@ class TreeSelectComponent extends React.Component {
 
   dependencyTreeSelect(value, label, extra) {
 
-    let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
-    let selectedValue = 0
+    if (!this.getDisabledState()) {
+      let { setSelectedValueKey, setSelectedValue, editMode, parentId, setEditList, data, dispatch, persist, type, dependencies, newItemTemplate } = this.props
+      let selectedValue = 0
 
-    if (typeof extra.triggerNode !== 'undefined') {
-      selectedValue = extra.triggerNode.props.eventKey
-    }
-
-    if (selectedValue == -1) {
-
-      //Setup and Show EditListModal
-      if (typeof type === 'undefined') {
-        type = "std"
-      }
-      if (typeof dependencies === 'undefined') {
-        dependencies = []
+      if (typeof extra.triggerNode !== 'undefined') {
+        selectedValue = extra.triggerNode.props.eventKey
       }
 
-      setEditList({
-        show: true, data: data, dispatch: dispatch, persist: persist, type: type,
-        dependencies: dependencies, newItemTemplate: newItemTemplate
-      })
-    }
-    else {
+      if (selectedValue == -1) {
 
-      //Dispatch to store
-      if (typeof setSelectedValueKey !== 'undefined') {
-        setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        //Setup and Show EditListModal
+        if (typeof type === 'undefined') {
+          type = "std"
+        }
+        if (typeof dependencies === 'undefined') {
+          dependencies = []
+        }
+
+        setEditList({
+          show: true, data: data, dispatch: dispatch, persist: persist, type: type,
+          dependencies: dependencies, newItemTemplate: newItemTemplate
+        })
+      }
+      else {
+
+        //Dispatch to store
+        if (typeof setSelectedValueKey !== 'undefined') {
+          setSelectedValue(setSelectedValueKey, { value: selectedValue, id: parentId, state: editMode === true ? "modified" : "original" })
+        }
       }
     }
-  }
-
-  getDisabledState() {
-    let { editMode, editModeOverride } = this.props
-
-    let disabledState = true
-
-    if (typeof editModeOverride !== "undefined" && editModeOverride === true) {
-      disabledState = false
-    }
-    else if (typeof editMode !== "undefined" && editMode === true) {
-      disabledState = false
-    }
-
-    return disabledState
   }
 
   render() {
 
-    let { col, label, id, selectedValue, data, style, labelStyle } = this.props
+    let { col, label, id, selectedValue, data, style, labelStyle, matchWidth, placeholder, disabled } = this.props
     let uiconf = UILookup(id, label)
     let treeData = []
     let selVal = []
@@ -184,6 +170,14 @@ class TreeSelectComponent extends React.Component {
 
     if (!labelStyle) {
       labelStyle = {}
+    }
+
+    if (!matchWidth) {
+      matchWidth = false
+    }
+
+    if (!placeholder) {
+      placeholder = "Select..."
     }
 
     if (data.length > 0) {
@@ -202,25 +196,17 @@ class TreeSelectComponent extends React.Component {
 
     return (
       <div className={col}>
-        <label
-          data-tip={uiconf.tooltip}
-          style={{
-            fontWeight: "bold",
-            color: this.getLabelFontColour(uiconf),
-            ...labelStyle
-          }}>
-          {uiconf.label}
-        </label>
+        <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
 
         <TreeSelect
-          disabled={this.getDisabledState()}
           showSearch
+          disabled={disabled}
           searchPlaceholder="Search..."
           style={{ width: "100%", ...style }}
           value={selVal}
-          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto' }}
-          //dropdownMatchSelectWidth={true}
-          placeholder="Select..."
+          dropdownStyle={{ maxHeight: "300px", maxWidth: "300px", overflow: 'auto', }}
+          dropdownMatchSelectWidth={matchWidth}
+          placeholder={placeholder}
           allowClear
           onChange={this.dependencyTreeSelect.bind(this)}
         >

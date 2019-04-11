@@ -53,6 +53,10 @@ export default function ProjectsReducer(state = {}, action) {
       }
     }
 
+    case "LOAD_PROJECT_ID_LIST": {
+      return { ...state, filteredProjectIDs: payload }
+    }
+
     case "LOAD_PROJECT_DETAILS": {
       return { ...state, projectDetails: { ...payload } }
     }
@@ -264,6 +268,15 @@ export default function ProjectsReducer(state = {}, action) {
 
     case "SET_PROJECT_SCROLL": {
       return { ...state, listScrollPos: payload }
+    }
+
+    case "SET_SELECTED_PROJECT_ID": {
+      return { ...state, selectedProjectId: payload }
+    }
+
+    case "SET_PROJECT_DETAILS_VERIFIED": {
+      let { projectDetails } = state
+      return { ...state, projectDetails: { ...projectDetails, Verified: payload, state: modState } }
     }
 
     default: {

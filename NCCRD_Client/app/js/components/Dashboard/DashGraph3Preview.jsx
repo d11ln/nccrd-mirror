@@ -4,15 +4,18 @@ import { connect } from 'react-redux'
 import popout from '../../../images/popout.png'
 import OData from 'react-odata'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
 import buildQuery from 'odata-query'
+import { CustomFetch } from '../../globalFunctions';
 
 const _gf = require('../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
   let { filterData: { statusFilter, sectorFilter, regionFilter, typologyFilter } } = state
   let { chartData: { chart3 } } = state
-  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3 }
+  let { projectData: { filteredProjectIDs } } = state
+  let { lookupData: { hazards } } = state
+  return { statusFilter, sectorFilter, regionFilter, typologyFilter, chart3, filteredProjectIDs, hazards }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -22,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setChartData: payload => {
       dispatch({ type: "SET_CHART_3", payload })
+    },
+    loadHazards: payload => {
+      dispatch({ type: "LOAD_HAZARDS", payload })
     }
   }
 }
@@ -39,11 +45,6 @@ class DashGraph3Preview extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      hazards: [],
-      filterIDs: []
-    }
-
     this.renderTooltipContent = this.renderTooltipContent.bind(this)
     this.getPercent = this.getPercent.bind(this)
     this.toPercent = this.toPercent.bind(this)
@@ -52,11 +53,6 @@ class DashGraph3Preview extends React.Component {
   componentDidMount() {
     this.getChartData()
     this.getHazards()
-    this.getFilteredProjectIDs()
-  }
-
-  componentDidUpdate() {
-    this.getFilteredProjectIDs()
   }
 
   async getChartData() {
@@ -76,7 +72,7 @@ class DashGraph3Preview extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `AdaptationDetails${query}`)
+        let res = await CustomFetch(apiBaseURL + `AdaptationDetails${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {
@@ -95,82 +91,29 @@ class DashGraph3Preview extends React.Component {
 
   async getHazards() {
 
-    //Get Hazards list/details
-    try {
+    let { hazards, loadHazards } = this.props
 
-      let res = await fetch(vmsBaseURL + "hazards/flat")
+    if (hazards.length === 0) {
 
-      //Get response body
-      let resBody = await res.json()
+      //Get Hazards list/details
+      try {
 
-      if (res.ok) {
-        this.setState({ hazards: resBody.items })
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        let res = await CustomFetch(vmsBaseURL + "hazards/flat")
 
-    } catch (ex) {
-      console.error(ex)
-    }
-  }
+        //Get response body
+        let resBody = await res.json()
 
-  async getFilteredProjectIDs() {
-
-    let { statusFilter, regionFilter, sectorFilter, typologyFilter } = this.props
-    let filters = {}
-
-    //ADD FILTERS//
-    //Status//
-    if (statusFilter !== 0) {
-      filters.status = statusFilter
-    }
-
-    //Region//
-    if (regionFilter != 0) {
-      filters.region = regionFilter
-    }
-
-    //Sector//
-    if (sectorFilter != 0) {
-      filters.sector = sectorFilter
-    }
-
-    //Typology//
-    if (typologyFilter !== 0) {
-      filters.typology = typologyFilter
-    }
-
-    //GET PROJECTS FILTERED//
-    try {
-
-      let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(filters)
-        })
-
-      let resBody = await res.json()
-
-      if (res.ok) {
-        //Process resBody
-        let filterIDs = resBody.value.map(p => p.ProjectId)
-        if (!_gf.arraysEqual(filterIDs, this.state.filterIDs)) {
-          this.setState({ filterIDs })
+        if (res.ok && resBody && resBody.items) {
+          loadHazards(resBody.items)
         }
-      }
-      else {
-        throw new Error(resBody.error.message)
-      }
+        else {
+          throw new Error(resBody.error.message)
+        }
 
+      } catch (ex) {
+        console.error(ex)
+      }
     }
-    catch (ex) {
-      console.error(ex)
-    }
-
   }
 
   transformData(data, hazards) {
@@ -212,9 +155,9 @@ class DashGraph3Preview extends React.Component {
 
         //Get Hazard Name
         let hazName = "Unknown"
-        let searchHaz = hazards.filter(x => x.id == haz.HazardId)
+        let searchHaz = hazards.filter(x => x.Id == haz.HazardId)
         if (searchHaz.length > 0) {
-          hazName = searchHaz[0].value.trim()
+          hazName = searchHaz[0].Text.trim()
         }
 
         //Get relevant hazards
@@ -271,13 +214,13 @@ class DashGraph3Preview extends React.Component {
 
         //Get Hazard color
         let color = "lightgrey"
-        let searchHaz = hazards.filter(h => h.value.trim() === key)
+        let searchHaz = hazards.length > 0 ? hazards.filter(h => h.Text.trim() === key) : []
         if (searchHaz.length > 0) {
           color = chartColours[index] //searchHaz[0].color
         }
 
         areas.push(
-          <Area
+          <Bar
             key={key}
             type='monotone'
             dataKey={key}
@@ -295,9 +238,8 @@ class DashGraph3Preview extends React.Component {
 
   render() {
 
-    let { hazards, filterIDs } = this.state
-    let { chart3 } = this.props
-    let filteredData = chart3.filter(p => filterIDs.includes(p.Project.ProjectId))
+    let { chart3, filteredProjectIDs, hazards } = this.props
+    let filteredData = chart3.filter(p => filteredProjectIDs.includes(p.Project.ProjectId))
     let transformedData = this.transformData(filteredData, hazards)
 
     return (
@@ -313,7 +255,7 @@ class DashGraph3Preview extends React.Component {
 
         <img src={popout} style={{ width: "25px", position: "absolute", top: "10px", right: "25px" }}
           onClick={() => {
-            this.props.setScrollPos(window.pageYOffset)
+            this.props.setScrollPos(document.getElementById("app-content").scrollTop)
             location.hash = location.hash.replace("#/", "#/chart3")
           }} />
 
@@ -344,12 +286,12 @@ class DashGraph3Preview extends React.Component {
           {
             (transformedData.length > 0 && hazards.length > 0) &&
             <ResponsiveContainer key="G3Graph" width="100%" height="100%">
-              <AreaChart data={transformedData} stackOffset="expand" >
+              <BarChart data={transformedData} >
                 <XAxis hide dataKey="Year" />
                 <YAxis hide tickFormatter={this.toPercent} />
                 <Tooltip content={this.renderTooltipContent} />
                 {this.renderAreas(transformedData, hazards)}
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           }
         </div>

@@ -2,28 +2,35 @@ import React from 'react'
 import ProjectCard from './ProjectCard.jsx'
 import { connect } from 'react-redux'
 import { apiBaseURL } from "../../../config/serviceURLs.js"
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, InputSwitch } from "mdbreact"
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Fa, MDBIcon } from "mdbreact"
 import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
+import { CSVLink } from 'react-csv'
 
-//AntD Tree
-import Popover from 'antd/lib/popover'
-import 'antd/lib/popover/style/index.css' //Overrides default antd.tree css
+
+// AntD
+import { Popover, Select, Button as ABtn } from 'antd'
+import { object } from 'prop-types';
+import { CustomFetch } from '../../../globalFunctions.js';
+const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
-const queryString = require('query-string')
 
 const mapStateToProps = (state, props) => {
   let { projectData: { projects, start, end, listScrollPos } } = state
-  let { filterData: { titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter } } = state
+  let { filterData: {
+    titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, favoritesFilter,
+    hazardFilter, filtersChanged, unverifiedOnlyFilter
+  } } = state
   let user = state.oidc.user
   let { globalData: { loading, daoid, showListExpandCollapse, showFavoritesOption } } = state
   let { lookupData: { typology } } = state
   return {
     projects, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, polygonFilter, start, end,
-    listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption
+    listScrollPos, user, loading, typology, daoid, favoritesFilter, showListExpandCollapse, showFavoritesOption,
+    hazardFilter, filtersChanged, unverifiedOnlyFilter
   }
 }
 
@@ -34,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadProjects: payload => {
       dispatch({ type: "LOAD_PROJECTS", payload })
+    },
+    loadProjectIDList: payload => {
+      dispatch({ type: "LOAD_PROJECT_ID_LIST", payload })
     },
     setLoading: payload => {
       dispatch({ type: "SET_LOADING", payload })
@@ -59,12 +69,19 @@ const mapDispatchToProps = (dispatch) => {
     resetProjectCounts: () => {
       dispatch({ type: "RESET_PROJECT_COUNTS" })
     },
-    toggleFavorites: async payload => {
+    toggleFavorites: payload => {
       dispatch({ type: "TOGGLE_FAVS_FILTER", payload })
+    },
+    toggleUnverifiedOnly: payload => {
+      dispatch({ type: "TOGGLE_UNVERIFIED_ONLY_FILTER", payload })
+    },
+    setFiltersChanged: payload => {
+      dispatch({ type: "SET_FILTERS_CHANGED", payload })
     }
   }
 }
 
+let role = ""
 class ProjectList extends React.Component {
 
   constructor(props) {
@@ -74,60 +91,43 @@ class ProjectList extends React.Component {
 
     //Set initial state
     this.state = {
-      titleFilter: "",
-      statusFilter: 0,
-      typologyFilter: 0,
-      regionFilter: 0,
-      sectorFilter: 0,
-      polygonFilter: "",
-      favoritesFilter: false,
       start: 0,
       end: 25,
       messageModal: false,
       title: "",
       message: "",
       ellipsisMenu: false,
-      daoid: null
+      sortOrder: "D_D",
+      sortOrderChanged: false
     }
 
   }
 
   async componentDidMount() {
-    this.getProjectList()
-    window.scrollTo(0, this.props.listScrollPos);
+
+    if (this.props.projects.length === 0) {
+      this.getProjectList()
+    }
+
+    this.scrollTo(this.props.listScrollPos)
+  }
+
+  scrollTo(pos) {
+    document.getElementById("app-content").scroll({
+      top: pos,
+      left: 0,
+      behavior: 'auto'
+    });
   }
 
   componentDidUpdate() {
 
-    let pTitleFilter = this.props.titleFilter
-    let pStatusFilter = this.props.statusFilter
-    let pTypologyFilter = this.props.typologyFilter
-    let pRegionFilter = this.props.regionFilter
-    let pSectorFilter = this.props.sectorFilter
-    let pPolygonFilter = this.props.polygonFilter
-    let pfavoritesFilter = this.props.favoritesFilter
+    let { filtersChanged, user } = this.props
+    let { sortOrderChanged, start, end } = this.state
     let pStart = this.props.start
     let pEnd = this.props.end
-    let pDAOID = this.props.daoid
-    let {
-      titleFilter,
-      statusFilter,
-      typologyFilter,
-      regionFilter,
-      sectorFilter,
-      polygonFilter,
-      start,
-      end,
-      favoritesFilter,
-      daoid
-    } = this.state
 
-    //If any filters changed...refetch projects
-    let filtersChanged = false
-    if (pTitleFilter !== titleFilter || pStatusFilter !== statusFilter || pTypologyFilter !== typologyFilter ||
-      pRegionFilter !== regionFilter || pSectorFilter !== sectorFilter || pPolygonFilter !== polygonFilter ||
-      pfavoritesFilter !== favoritesFilter || pDAOID !== daoid) {
-
+    if (sortOrderChanged === true) {
       filtersChanged = true
     }
 
@@ -137,7 +137,24 @@ class ProjectList extends React.Component {
       nextBatchNeeded = true
     }
 
-    if (filtersChanged === true || nextBatchNeeded === true) {
+    //Check if role changed
+    let roleChanged = false
+    if (user && user.profile && user.profile.role) {
+      if (user.profile.role !== role) {
+        //Update role
+        role = user.profile.role
+        roleChanged = true
+      }
+    }
+    else {
+      if (role !== "") {
+        //Update role
+        role = ""
+        roleChanged = true
+      }
+    }
+
+    if (filtersChanged === true || nextBatchNeeded === true || roleChanged === true) {
       this.getProjectList(filtersChanged)
     }
   }
@@ -150,31 +167,26 @@ class ProjectList extends React.Component {
     })
   }
 
-  async getProjectList(resetCounts) {
+  async getProjectList(filtersChanged) {
 
-    let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter,
+    let { loadProjects, setLoading, titleFilter, statusFilter, typologyFilter, regionFilter, sectorFilter, hazardFilter,
       clearProjectDetails, clearAdaptationDetails, clearMitigationDetails, clearEmissionsData, favoritesFilter,
-      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, user, typology, daoid } = this.props
+      clearResearchDetails, start, end, resetProjectCounts, polygonFilter, daoid, loadProjectIDList,
+      setFiltersChanged, user, unverifiedOnlyFilter } = this.props
 
-    if (resetCounts === true) {
+    if (filtersChanged === true) {
       start = 0
       end = 25
       resetProjectCounts()
     }
 
     this.setState({
-      titleFilter: titleFilter,
-      statusFilter: statusFilter,
-      typologyFilter: typologyFilter,
-      regionFilter: regionFilter,
-      sectorFilter: sectorFilter,
-      polygonFilter: polygonFilter,
-      favoritesFilter: favoritesFilter,
       start: start,
       end: end,
-      daoid: daoid
+      sortOrderChanged: false
     })
 
+    setFiltersChanged(false)
     setLoading(true)
 
     //Clear details data
@@ -189,7 +201,7 @@ class ProjectList extends React.Component {
       let fetchURL = apiBaseURL + 'Projects/Extensions.ByPolygon'
 
       //Get project list data
-      fetch(fetchURL,
+      CustomFetch(fetchURL,
         {
           method: "POST",
           headers: {
@@ -204,7 +216,7 @@ class ProjectList extends React.Component {
         })
         .catch(res => {
           setLoading(false)
-          console.log("Error details:", res)
+          console.error("Error details:", res)
           alert("An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
         })
     }
@@ -250,40 +262,109 @@ class ProjectList extends React.Component {
         filters.sector = sectorFilter
       }
 
+      //Hazard//
+      if (hazardFilter != 0) {
+        filters.hazard = hazardFilter
+      }
+
       //DAO Goal Filter//
       if (_gf.IsValidGuid(daoid)) {
         filters.daoid = daoid
       }
 
-      //GET PROJECTS FILTERED//
-      try {
+      //Verified.Unverified/All
+      //Get "reviever" status
+      let isReviewer = _gf.IsReviewer(user)
+      filters.verified = isReviewer === false ? "verified" : unverifiedOnlyFilter === true ? "unverified" : "all"
 
-        var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+      //Fetch projects
+      this.fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize)
+      this.fetchProjectsAll(filters, setLoading, loadProjectIDList)
+    }
+  }
 
-        //Pagination and ordering
-        oHandler
-          .skip(skip)
-          .top(batchSize)
-          .orderBy("ProjectTitle")
+  async fetchProjectsBatch(filters, setLoading, loadProjects, skip, batchSize) {
+    //GET PROJECTS FILTERED [BATCH]//
+    try {
 
-        //Select
-        oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+      var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
 
-        let res = await oHandler.post(filters).save()
-        setLoading(false)
-        loadProjects(res.data)
+      //Pagination and ordering
+      oHandler
+        .skip(skip)
+        .top(batchSize)
+
+      this.setProjectSort(oHandler);
+
+      //Select
+      oHandler.select("ProjectId,ProjectTitle,ProjectDescription")
+
+      let res = await oHandler.post(filters).save()
+      setLoading(false)
+      loadProjects(res.data)
+    }
+    catch (ex) {
+      console.error("error", ex)
+      setLoading(false)
+      this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+    }
+  }
+
+  async fetchProjectsAll(filters, setLoading, loadProjectIDList) {
+    //GET PROJECTS FILTERED [ALL]//
+    try {
+
+      var oHandler = o(apiBaseURL + "Projects/Extensions.Filter")
+
+      //Select
+      oHandler.select("ProjectId")
+
+      let res = await oHandler.post(filters).save()
+      setLoading(false)
+
+      if (res.data) {
+        loadProjectIDList(res.data.map(d => d.ProjectId))
       }
-      catch (ex) {
-        console.error("error", ex)
-        setLoading(false)
-        this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
-      }
+    }
+    catch (ex) {
+      console.error("error", ex)
+      setLoading(false)
+      this.showMessage("An error occurred", "An error occurred while trying to fetch data from the server. Please try again later. (See log for error details)")
+    }
+  }
+
+  setProjectSort(oHandler) {
+
+    let { sortOrder } = this.state
+
+    switch (sortOrder) {
+
+      //Alphabetical - Ascending
+      case "A_A":
+        oHandler.orderBy("ProjectTitle")
+        break
+
+      //Alphabetical - Descending
+      case "A_D":
+        oHandler.orderByDesc("ProjectTitle")
+        break
+
+      //Date - Ascending
+      case "D_A":
+        oHandler.orderBy("ProjectId")
+        break
+
+      //Date - Descending
+      case "D_D":
+        oHandler.orderByDesc("ProjectId")
+        break
     }
   }
 
   buildList() {
 
-    const { projects } = this.props
+    let { projects } = this.props
+
     let ar = []
     if (typeof projects !== 'undefined' && projects.length > 0) {
       for (let i of projects) {
@@ -296,7 +377,7 @@ class ProjectList extends React.Component {
 
   render() {
 
-    let { user, daoid, favoritesFilter } = this.props
+    let { user, daoid, favoritesFilter, unverifiedOnlyFilter } = this.props
     let { ellipsisMenu } = this.state
 
     const projComps = this.buildList()
@@ -317,6 +398,30 @@ class ProjectList extends React.Component {
 
         <div style={{ float: "right" }}>
 
+          <CSVLink
+            style={{
+              marginTop: 3,
+              marginRight: 30,
+              textDecoration: 'none',
+              color: 'white',
+              backgroundColor: DEAGreen,
+              padding: "9px 20px 8px 20px",
+              borderRadius: 2,
+              fontSize: 11,
+              border: "1px solid dimgrey",
+              fontWeight: 400
+            }}
+            filename={"projects-list.csv"}
+            data={[...this.props.projects]}
+            asyncOnClick={true}
+            onClick={() => {
+              console.log(this.props.projects)
+            }}
+          >
+            <MDBIcon icon="arrow-circle-down" style={{ marginRight: 15 }} />
+            Download
+            </CSVLink>
+
           {
             (this.props.showListExpandCollapse === true) &&
             <img
@@ -330,13 +435,13 @@ class ProjectList extends React.Component {
                 this.props.setScrollPos(0)
 
                 let navTo = ""
-                  if (location.hash.includes("projects")) {
-                    navTo = location.hash.replace("#/projects", "")
-                  }
-                  else {
-                    navTo = location.hash.replace("#/", "#/projects")
-                  }            
-                  location.hash = navTo
+                if (location.hash.includes("projects")) {
+                  navTo = location.hash.replace("#/projects", "")
+                }
+                else {
+                  navTo = location.hash.replace("#/", "#/projects")
+                }
+                location.hash = navTo
               }}
             />
           }
@@ -346,43 +451,128 @@ class ProjectList extends React.Component {
             <Popover
               content={
                 <div>
-                  <p style={{ display: "inline-block", margin: "10px 5px 10px 5px" }}>
-                    Favorites:
-                </p>
-                  <Button
-                    size="sm"
-                    color=""
-                    style={{
-                      padding: "4px 10px 5px 10px",
-                      marginTop: "1px",
-                      marginRight: "-1px",
-                      width: "40px",
-                      backgroundColor: favoritesFilter ? DEAGreen : "grey"
-                    }}
-                    onClick={() => {
-                      this.props.toggleFavorites(!favoritesFilter)
-                      this.setState({ ellipsisMenu: false })
-                    }}
-                  >
-                    On
-                </Button>
-                  <Button
-                    size="sm"
-                    color=""
-                    style={{
-                      padding: "4px 10px 5px 10px",
-                      marginTop: "1px",
-                      marginLeft: "-1px",
-                      width: "40px",
-                      backgroundColor: !favoritesFilter ? DEAGreen : "grey"
-                    }}
-                    onClick={() => {
-                      this.props.toggleFavorites(!favoritesFilter)
-                      this.setState({ ellipsisMenu: false })
-                    }}
-                  >
-                    Off
-                </Button>
+
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p style={{ margin: "10px 15px 10px 5px" }}>
+                            Favorites:
+                          </p>
+                        </td>
+                        <td>
+                          <ABtn
+                            size="small"
+                            type="primary"
+                            style={{
+                              marginLeft: 0,
+                              width: "40px",
+                              backgroundColor: favoritesFilter === true ? DEAGreen : "grey",
+                              border: "none",
+                              borderRadius: 0,
+                              color: "black",
+                              fontWeight: 300
+                            }}
+                            onClick={() => {
+                              this.props.toggleFavorites(true)
+                              this.setState({ ellipsisMenu: false })
+                            }}
+                          >
+                            On
+                          </ABtn>
+                          <ABtn
+                            size="small"
+                            type="primary"
+                            style={{
+                              marginLeft: -1,
+                              width: "40px",
+                              backgroundColor: favoritesFilter === false ? DEAGreen : "grey",
+                              border: "none",
+                              borderRadius: 0,
+                              color: "black",
+                              fontWeight: 300
+                            }}
+                            onClick={() => {
+                              this.props.toggleFavorites(false)
+                              this.setState({ ellipsisMenu: false })
+                            }}
+                          >
+                            Off
+                          </ABtn>
+                        </td>
+                      </tr>
+                      {
+                        _gf.IsReviewer(user) &&
+                        <tr>
+                          <td>
+                            <p style={{ margin: "10px 15px 10px 5px" }}>
+                              Unverified Only:
+                            </p>
+                          </td>
+                          <td>
+                            <ABtn
+                              size="small"
+                              type="primary"
+                              style={{
+                                marginLeft: 0,
+                                width: "40px",
+                                backgroundColor: unverifiedOnlyFilter === true ? DEAGreen : "grey",
+                                border: "none",
+                                borderRadius: 0,
+                                color: "black",
+                                fontWeight: 300
+                              }}
+                              onClick={() => {
+                                this.props.toggleUnverifiedOnly(true)
+                                this.setState({ ellipsisMenu: false })
+                              }}
+                            >
+                              On
+                            </ABtn>
+                            <ABtn
+                              size="small"
+                              type="primary"
+                              style={{
+                                marginLeft: -1,
+                                width: "40px",
+                                backgroundColor: unverifiedOnlyFilter === false ? DEAGreen : "grey",
+                                border: "none",
+                                borderRadius: 0,
+                                color: "black",
+                                fontWeight: 300
+                              }}
+                              onClick={() => {
+                                this.props.toggleUnverifiedOnly(false)
+                                this.setState({ ellipsisMenu: false })
+                              }}
+                            >
+                              Off
+                            </ABtn>
+                          </td>
+                        </tr>
+                      }
+                      <tr>
+                        <td>
+                          <p style={{ margin: "10px 5px 10px 5px" }}>
+                            Sort by:
+                          </p>
+                        </td>
+                        <td>
+                          <Select defaultValue={this.state.sortOrder} style={{ width: 160 }}
+                            onChange={(value) => {
+                              this.setState({ sortOrderChanged: true, sortOrder: value, ellipsisMenu: false })
+                            }}
+                            dropdownMatchSelectWidth={false} >
+                            <Option value="A_A">Alphabetical (ascending)</Option>
+                            <Option value="A_D">Alphabetical (descending)</Option>
+                            <Option value="D_A">Date (ascending)</Option>
+                            <Option value="D_D">Date (descending)</Option>
+                          </Select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
                 </div>
               }
               placement="leftTop"
@@ -437,7 +627,7 @@ class ProjectList extends React.Component {
           </h5>
         }
 
-        <Modal fade={false} isOpen={this.state.messageModal} toggle={this.toggle} centered>
+        <Modal isOpen={this.state.messageModal} toggle={this.toggle} centered>
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody>
             <div className="col-md-12" style={{ overflowY: "auto", maxHeight: "65vh" }}>

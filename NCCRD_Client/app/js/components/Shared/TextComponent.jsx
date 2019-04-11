@@ -1,7 +1,10 @@
 import React from 'react'
+import { Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import { UILookup } from "../../config/ui_config.js"
 import { Input } from 'mdbreact'
+import { Tooltip } from 'antd';
+import DualTip from './DualTip.jsx';
 
 const _gf = require('../../globalFunctions')
 
@@ -14,6 +17,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setValue: (key, payload) => {
       dispatch({ type: key, payload })
+      dispatch({ type: "SET_PROJECT_DETAILS_VERIFIED", payload: { value: false, state: 'modified' } })
     }
   }
 }
@@ -36,48 +40,29 @@ class TextComponent extends React.Component {
     return value
   }
 
-  getLabelFontColour(uiconf) {
-    if (typeof uiconf.required != 'undefined' && uiconf.required === true) {
-      return "red"
-    }
-    else {
-      return "black"
-    }
-  }
-
   valueChange(event) {
 
     let { setValue, setValueKey, parentId, editMode, numeric } = this.props
 
     if (typeof setValueKey !== 'undefined') {
-
       let value = event.target.value
-      if (numeric) {
-        if (value === "") {
-          value = 0
-        }
-        else {
-          value = parseFloat(value.replace(/,/g, "").replace("[^a-zA-Z0-9 -]", ""));
-        }
-      }
-
       setValue(setValueKey, { value, id: parentId, state: editMode === true ? "modified" : "original" })
     }
   }
 
   render() {
 
-    let { col, label, id, editMode, value } = this.props
+    let { col, label, id, editMode, value, numeric } = this.props
     let uiconf = UILookup(id, label)
 
     value = this.fixNullOrUndefinedValue(value)
     label = this.fixNullOrUndefinedValue(label)
 
     return (
-      <div className={col}>
+      <div className={col} style={{ paddingRight: 20 }}>
         {
           (label !== "") &&
-          <label data-tip={uiconf.tooltip} style={{ marginBottom: "0px", fontWeight: "bold", color: this.getLabelFontColour(uiconf) }}>{uiconf.label}</label>
+          <DualTip label={uiconf.label} primaryTip={uiconf.tooltip} secondaryTip={uiconf.tooltip2} required={uiconf.required} />
         }
         <Input
           size="sm"
@@ -85,9 +70,11 @@ class TextComponent extends React.Component {
           readOnly={!editMode}
           value={value.toString()}
           onChange={this.valueChange.bind(this)}
+          type={ numeric ? "number" : "text" }
           style={{
+            width: "98.4%",
             height: "21px",
-            marginTop: "-15px",
+            marginTop: "-21px",
             marginBottom: "-20px",
             color: _gf.getFontColour(editMode),
             border: "1px solid lightgrey",

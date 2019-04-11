@@ -56,17 +56,26 @@ export default function ProjectFundersReducer(state = {}, action) {
             let { projectFunderDetails, projectDetails } = state
 
             let newItem = {
-                "FunderId": _gf.getRndInteger(1111111, 9999999),
-                "GrantProgName": "",
-                "TotalBudget": null,
-                "AnnualBudget": null,
-                "PartnerDepsOrgs": "",
-                "ProjectCoordinatorId": null,
-                "FundingStatusId": null,
-                "state": "modified"
+                FunderId: _gf.getRndInteger(1111111, 9999999),
+                FundingAgency: "",
+                GrantProgName: "",
+                TotalBudget: null,
+                AnnualBudget: null,
+                PartnerDepsOrgs: "",
+                ProjectCoordinatorId: null,
+                FundingStatusId: null,
+                state: "modified"
             }
 
             return { ...state, projectFunderDetails: [...projectFunderDetails, newItem] }
+        }
+
+        case "REMOVE_PROJECTFUNDER_DETAILS": {
+
+            let { projectFunderDetails } = state
+            projectFunderDetails.splice(payload, 1)
+
+            return { ...state, projectFunderDetails: [...projectFunderDetails] }
         }
 
         case "SET_PROJECTFUNDER_FUNDINGAGENCY": {
@@ -114,7 +123,7 @@ export default function ProjectFundersReducer(state = {}, action) {
             projectFunderDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, TotalBudget: payload, state: modState }] }
+            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, TotalBudget: parseFloat(payload), state: modState }] }
         }
 
         case "SET_PROJECTFUNDER_ANNUALBUDGET": {
@@ -126,7 +135,7 @@ export default function ProjectFundersReducer(state = {}, action) {
             projectFunderDetails.splice(details.id, 1);
 
             //return updated state
-            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, AnnualBudget: payload, state: modState }] }
+            return { ...state, projectFunderDetails: [...projectFunderDetails, { ...details.item, AnnualBudget: parseFloat(payload), state: modState }] }
         }
 
         case "SET_PROJECTFUNDERS_PROJECTCOORDINATOR": {

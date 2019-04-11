@@ -2,18 +2,26 @@ import React from 'react'
 import { Card, CardBody, CardText, CardTitle, Button, Fa } from 'mdbreact'
 import { connect } from 'react-redux'
 import { DEAGreen } from "../../../config/colours.js"
+import { notification } from 'antd'
 
 const _gf = require('../../../globalFunctions')
 
 const mapStateToProps = (state, props) => {
+  let user = state.oidc.user
   let { globalData: { showListViewOption, showFavoritesOption, showDetailsInParent } } = state
-  return { showListViewOption, showFavoritesOption, showDetailsInParent }
+  return { showListViewOption, showFavoritesOption, showDetailsInParent, user }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setScrollPos: payload => {
       dispatch({ type: "SET_PROJECT_SCROLL", payload })
+    },
+    showInputWizard: payload => {
+      dispatch({ type: "SET_SHOW_INPUT_WIZARD", payload })
+    },
+    setSelectedProjectId: payload => {
+      dispatch({ type: "SET_SELECTED_PROJECT_ID", payload })
     }
   }
 }
@@ -47,7 +55,7 @@ class ProjectCard extends React.Component {
       window.parent.postMessage(payload, "*")
     }
     else {
-      this.props.setScrollPos(window.pageYOffset)
+      this.props.setScrollPos(document.getElementById("app-content").scrollTop)
       let navTo = ""
       if (location.hash.includes("projects")) {
         navTo = location.hash.replace("#/projects", "#/projects/" + this.props.pid)
@@ -119,7 +127,7 @@ class ProjectCard extends React.Component {
 
   render() {
 
-    let { pdes } = this.props
+    let { pdes, pid, user } = this.props
     let { favorite } = this.state
 
     if (pdes.length > 240) {
@@ -143,31 +151,56 @@ class ProjectCard extends React.Component {
             <Button
               size="sm"
               color="white"
-              onClick={this.onClick.bind(this)}
               style={{
-                backgroundColor: "white",
                 marginLeft: "0px",
                 boxShadow: "none",
                 border: "1px solid silver",
                 borderRadius: "5px",
-                padding: "3px 15px 3px 15px"
+                padding: "3px 15px 3px 15px",
+                fontSize: "14px",
+                height: 33
+              }}
+              onClick={this.onClick.bind(this)}
+            >
+              <Fa icon="eye" size="lg" style={{ color: DEAGreen, marginRight: "5px" }} />
+              View
+          </Button>
+          }
+
+          {
+            this.props.showListViewOption &&
+            <Button
+              size="sm"
+              color="white"
+              style={{
+                marginLeft: "0px",
+                boxShadow: "none",
+                border: "1px solid silver",
+                borderRadius: "5px",
+                padding: "3px 15px 3px 15px",
+                fontSize: "14px",
+                height: 33
+              }}
+              onClick={() => {
+                if(!user || user.expired){
+                  notification.warning({
+                    message: 'Please login to edit projects.'
+                  })
+                }
+                else{
+                  let dispatch = () => new Promise((resolve, reject) => {
+                    this.props.setSelectedProjectId(pid)
+                    resolve()
+                  })     
+                  dispatch().then(() => {
+                    this.props.showInputWizard(true)
+                  })
+                }
               }}
             >
-              <table>
-                <tbody>
-                  <tr>
-                    <td valign="middle">
-                      <Fa icon="eye" size="lg" style={{ color: DEAGreen, marginRight: "5px" }} />
-                    </td>
-                    <td valign="middle">
-                      <div style={{ fontSize: "14px", marginTop: "2px" }} >
-                        View
-                    </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </Button>
+              <Fa icon="pencil" size="lg" style={{ color: DEAGreen, marginRight: "5px" }} />
+              Edit
+          </Button>
           }
 
           {
@@ -175,31 +208,20 @@ class ProjectCard extends React.Component {
             <Button
               size="sm"
               color="white"
-              onClick={this.togleFavorite}
               style={{
-                backgroundColor: "white",
                 marginLeft: "0px",
                 boxShadow: "none",
                 border: "1px solid silver",
                 borderRadius: "5px",
-                padding: "3px 15px 3px 15px"
+                padding: "3px 15px 3px 15px",
+                fontSize: "14px",
+                height: 33
               }}
+              onClick={this.togleFavorite}
             >
-              <table>
-                <tbody>
-                  <tr>
-                    <td valign="middle">
-                      <Fa icon="star" size="lg" style={{ color: favorite ? "#fdd835" : "#D8D8D8", marginRight: "5px" }} />
-                    </td>
-                    <td valign="middle">
-                      <div style={{ fontSize: "14px", marginTop: "2px" }} >
-                        Favorite
-                    </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </Button>
+              <Fa icon="star" size="lg" style={{ color: favorite ? "#fdd835" : "#D8D8D8", marginRight: "5px" }} />
+              Favorite
+          </Button>
           }
 
         </CardBody>

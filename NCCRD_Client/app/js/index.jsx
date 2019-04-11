@@ -1,5 +1,11 @@
 'use strict'
 
+/*--------------IE FIXES--------------*/
+import 'whatwg-fetch'
+import smoothscroll from 'smoothscroll-polyfill';
+smoothscroll.polyfill(); // kick off the polyfill!
+/*--------------IE FIXES--------------*/
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'

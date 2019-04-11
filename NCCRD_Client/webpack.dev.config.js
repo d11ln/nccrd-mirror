@@ -17,7 +17,7 @@ module.exports = {
   },
   entry: {
     app: ["babel-polyfill", './js/index.jsx'],
-    silentRenew: ["./silent_renew/silent_renew.js"],
+    silentRenew: ["babel-polyfill", "./silent_renew/silent_renew.js"],
     react: [
       'react',
       'react-dom',
@@ -63,7 +63,7 @@ module.exports = {
       ]
     },
     {
-      test: /\.scss$/,
+      test: /\.(scss|sass)$/,
       use: [
         'style-loader',
         'css-loader',

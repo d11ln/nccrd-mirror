@@ -12,7 +12,9 @@ namespace NCCRD.Services.DataV2.ViewModels
         public int typology { get; set; }
         public int region { get; set; }
         public int sector { get; set; }
+        public int hazard { get; set; }
         public string daoid { get; set; }
         public string favorites { get; set; }
+        public string verified { get; set; }
     }
 }
