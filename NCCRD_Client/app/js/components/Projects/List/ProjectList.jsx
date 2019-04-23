@@ -12,6 +12,7 @@ import { CSVLink } from 'react-csv'
 // AntD
 import { Popover, Select, Button as ABtn } from 'antd'
 import { object } from 'prop-types';
+import { CustomFetch } from '../../../globalFunctions.js';
 const Option = Select.Option;
 
 const _gf = require("../../../globalFunctions")
@@ -200,7 +201,7 @@ class ProjectList extends React.Component {
       let fetchURL = apiBaseURL + 'Projects/Extensions.ByPolygon'
 
       //Get project list data
-      fetch(fetchURL,
+      CustomFetch(fetchURL,
         {
           method: "POST",
           headers: {
@@ -397,21 +398,29 @@ class ProjectList extends React.Component {
 
         <div style={{ float: "right" }}>
 
-          <Button size="sm" color="" style={{ backgroundColor: DEAGreen, marginRight: 30, marginTop: 3 }}>
-            <CSVLink
-              style={{ marginRight: '', textDecoration: 'none', color: 'white' }}
-              filename={"projects-list.csv"}
-              data={[...this.props.projects]}
-              asyncOnClick={true}
-              onClick={() => {
-                console.log(this.props.projects)
-              }}
-            >
-              {/* <Fa icon="arrow-circle-down" style={{ marginRight: 15 }} /> */}
-              <MDBIcon icon="arrow-circle-down" style={{ marginRight: 15 }} />
-              Download
+          <CSVLink
+            style={{
+              marginTop: 3,
+              marginRight: 30,
+              textDecoration: 'none',
+              color: 'white',
+              backgroundColor: DEAGreen,
+              padding: "9px 20px 8px 20px",
+              borderRadius: 2,
+              fontSize: 11,
+              border: "1px solid dimgrey",
+              fontWeight: 400
+            }}
+            filename={"projects-list.csv"}
+            data={[...this.props.projects]}
+            asyncOnClick={true}
+            onClick={() => {
+              console.log(this.props.projects)
+            }}
+          >
+            <MDBIcon icon="arrow-circle-down" style={{ marginRight: 15 }} />
+            Download
             </CSVLink>
-          </Button>
 
           {
             (this.props.showListExpandCollapse === true) &&

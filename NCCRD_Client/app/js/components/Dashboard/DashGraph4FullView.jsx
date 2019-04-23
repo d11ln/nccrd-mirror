@@ -4,6 +4,7 @@ import popin from '../../../images/popin.png'
 import { apiBaseURL, vmsBaseURL } from '../../config/serviceURLs.js'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import buildQuery from 'odata-query'
+import { CustomFetch } from '../../globalFunctions';
 
 const _gf = require('../../globalFunctions')
 
@@ -87,7 +88,7 @@ class DashGraph4FullView extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `Projects${query}`)
+        let res = await CustomFetch(apiBaseURL + `Projects${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {
@@ -112,7 +113,7 @@ class DashGraph4FullView extends React.Component {
       //Get Sectors list/details
       try {
 
-        let res = await fetch(vmsBaseURL + "sectors/flat")
+        let res = await CustomFetch(vmsBaseURL + "sectors/flat")
 
         //Get response body
         let resBody = await res.json()
@@ -155,7 +156,7 @@ class DashGraph4FullView extends React.Component {
 
       //GET PROJECTS FILTERED//
       try {
-        let res = await fetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
+        let res = await CustomFetch(apiBaseURL + "Projects/Extensions.Filter?$select=ProjectId",
           {
             method: "POST",
             headers: {

@@ -3,6 +3,7 @@ import { Button } from 'mdbreact'
 import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
 import TreeSelectComponent from "../../Shared/TreeSelectComponent.jsx"
+import { CustomFetch } from '../../../globalFunctions.js';
 
 //AntD Tree
 // import Tree from 'antd/lib/tree'
@@ -43,7 +44,7 @@ class HazardFilters extends React.Component {
     if (hazards.length === 0) {
       //Get data
       try {
-        let res = await fetch(vmsBaseURL + "Hazards/flat")
+        let res = await CustomFetch(vmsBaseURL + "Hazards/flat")
 
         if (res.ok) {
           res = await res.json()

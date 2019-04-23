@@ -3,6 +3,27 @@
 import React from 'react'
 import { DEAGreen, DEAGreenDark } from './config/colours.js'
 
+const fetchDefaults = require("fetch-defaults")
+var apiFetch = fetchDefaults(fetch, {
+  headers: { 'pragma': 'no-cache', 'cache-control': 'no-cache' }
+})
+
+export function CustomFetch(url, options) {
+
+  // Detect IE //
+  let ua = navigator.userAgent;
+  /* MSIE used to detect old browsers and Trident used to newer ones*/
+  let is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+
+  // Execute relevant fetch
+  if (is_ie) {
+    return apiFetch(url, options)
+  }
+  else {
+    return fetch(url, options)
+  }
+}
+
 export function fixEmptyValue(value, defaultValue) {
 
   if (isEmptyValue(value)) {
@@ -107,7 +128,7 @@ export function arraysEqual(a, b) {
 
 export const wait = ms => new Promise((r, j) => setTimeout(r, ms))
 
-export function IsReviewer(user){
+export function IsReviewer(user) {
   let isReviewer = false
   if (user && user.profile && user.profile.role) {
 
@@ -167,8 +188,8 @@ export function ReadCookie(name) {
     }
   }
   return null;
-} 
+}
 
-export function DeleteCookie(name){
+export function DeleteCookie(name) {
   document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { vmsBaseURL } from "../../../config/serviceURLs.js"
 import { connect } from 'react-redux'
 import TreeSelectComponent from '../../Shared/TreeSelectComponent.jsx'
+import { CustomFetch } from '../../../globalFunctions.js';
 
 const mapStateToProps = (state, props) => {
   let { lookupData: { regionTree, region } } = state
@@ -33,7 +34,7 @@ class RegionFilters extends React.Component {
     if (region.length === 0) {
       //Get data
       try {
-        let res = await fetch(vmsBaseURL + "Regions/flat")
+        let res = await CustomFetch(vmsBaseURL + "Regions/flat")
 
         if (res.ok) {
           res = await res.json()

@@ -5,6 +5,7 @@ import OData from 'react-odata'
 import { apiBaseURL } from '../../config/serviceURLs.js'
 import { BarChart, Bar, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
 import buildQuery from 'odata-query'
+import { CustomFetch } from '../../globalFunctions';
 
 const _gf = require('../../globalFunctions')
 
@@ -60,7 +61,7 @@ class DashGraph1Preview extends React.Component {
       })
 
       try {
-        let res = await fetch(apiBaseURL + `Projects${query}`)
+        let res = await CustomFetch(apiBaseURL + `Projects${query}`)
         let resBody = await res.json()
 
         if (res.ok && resBody.value) {

@@ -121,7 +121,7 @@ class OverallSummaryStep extends React.Component {
   }
 
   getSectorValue(id) {
-    
+
     let { sector } = this.props
     let value = ""
 
@@ -267,6 +267,13 @@ class OverallSummaryStep extends React.Component {
           </div>
         }
 
+        <h4>
+          <Fa icon="map-marker" style={{ marginRight: 15, color: DEAGreenDark, fontSize: 28 }} />
+          <b>
+            {projectDetails.ProjectTitle}
+          </b>
+        </h4>
+
         <hr style={{ marginBottom: 0, color: "#F0F0F0", backgroundColor: "#F0F0F0" }} />
         <Collapse className="summary-collapse" bordered={false} activeKey={activeKey} onChange={this.onChange}>
           <Panel
@@ -276,14 +283,14 @@ class OverallSummaryStep extends React.Component {
             key="1"
           >
             <div className="summary-panel">
-              <Row >
+              {/* <Row >
                 <Col md="12">
                   <h6 className="summary-label">Title</h6>
                   <h6 className="summary-value">{projectDetails.ProjectTitle}</h6>
                 </Col>
               </Row>
 
-              <div className="vertical-spacer" />
+              <div className="vertical-spacer" /> */}
 
               <Row>
                 <Col md="12">

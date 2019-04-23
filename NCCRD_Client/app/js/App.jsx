@@ -32,6 +32,7 @@ import DashGraph2FullView from './components/Dashboard/DashGraph2FullView.jsx'
 import DashGraph3FullView from './components/Dashboard/DashGraph3FullView.jsx'
 import DashGraph4FullView from './components/Dashboard/DashGraph4FullView.jsx'
 import InputWizard from './components/Wizard/InputWizard.jsx';
+import { DEAGreenDark, DEAGreen } from './config/colours.js';
 
 const Oidc = require("oidc-client")
 const _gf = require("./globalFunctions.js")
@@ -368,7 +369,7 @@ class App extends React.Component {
                 style={{ height: (loaderHeight + "px"), width: (loaderWidth + 'px'), position: "fixed", left: ((window.innerWidth / 2) - (loaderWidth / 2)), top: ((window.innerHeight / 2) - (loaderHeight / 2)), zIndex: "999999999999" }}>
 
                 <div className="card-body">
-                  <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: "#2BBBAD" }}>LOADING</label>
+                  <label style={{ width: "100%", textAlign: "center", fontSize: "x-large", fontWeight: "bold", color: DEAGreenDark }}>LOADING</label>
                   <br />
                   <span style={{ width: "100px", paddingLeft: ((loaderWidth / 2) - 50) }}>
                     <Spinner big multicolor />
