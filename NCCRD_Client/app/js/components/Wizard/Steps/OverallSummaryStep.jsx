@@ -223,7 +223,7 @@ class OverallSummaryStep extends React.Component {
               data={[this.props.projectDetails]}
               asyncOnClick={true}
               onClick={() => {
-                console.log(this.props.projectDetails)
+                // console.log(this.props.projectDetails)
               }}
             >
               {/* <Fa icon="arrow-circle-down" style={{ marginRight: 15 }} /> */}

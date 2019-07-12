@@ -105,14 +105,23 @@ class DAOLinkStep extends React.Component {
                     else {
                       data.value.forEach(item => {
 
+                        let projectTitle= ""
                         let docLink = ""
                         let hasAssessment = ""
                         let docLastUpated = ""
+                        
+                      
 
                         //Get DocumentLink
                         let tmp = item.Questions.filter(q => q.Key === "DocumentLink")
                         if (tmp.length > 0) {
                           docLink = tmp[0].Value
+                        }
+
+                        //Get DAO title
+                        tmp = item.Questions.filter(q => q.Key === "projectTitle")
+                        if (tmp.length > 0) {
+                          projectTitle = tmp[0].Value
                         }
 
                         //Get HasAssessment
@@ -137,6 +146,9 @@ class DAOLinkStep extends React.Component {
                                   <a href={docLink} target="blank">
                                     {docLink}
                                   </a>
+                                </div>
+                                <div>
+                                  <b>Id:</b> {item.Id}
                                 </div>
                                 <div>
                                   <b>Has Assessment:</b> {hasAssessment}
@@ -247,6 +259,8 @@ class DAOLinkStep extends React.Component {
                           <Card key={item.Id} style={{ marginBottom: "15px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
                             <CardBody>
                               <CardText>
+                                <b>DAO Id: </b>{item.Id}
+                                <br />
                                 <b>Created on: </b>{item.CreateDate}
                                 <br />
                                 <b>Last updated on: </b>{item.UpdateDate === null ? item.CreateDate : item.UpdateDate}
@@ -331,6 +345,8 @@ class DAOLinkStep extends React.Component {
                           <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
                             <CardBody>
                               <CardText>
+                                <b>DAO Id: </b>{item.Id}
+                                <br />
                                 <b>Created on: </b>{item.CreateDate}
                                 <br />
                                 <b>Last updated on: </b>{item.UpdateDate === null ? item.CreateDate : item.UpdateDate}
