@@ -7,12 +7,14 @@ import { DEAGreen } from '../../../config/colours.js'
 import popout from '../../../../images/popout.png'
 import popin from '../../../../images/popin.png'
 import { CSVLink } from 'react-csv'
+import { CustomFetch } from '../../../globalFunctions.js'
 
 
 // AntD
 import { Popover, Select, Button as ABtn } from 'antd'
-import { object } from 'prop-types';
-const Option = Select.Option;
+import { object } from 'prop-types'
+
+const Option = Select.Option
 
 const _gf = require("../../../globalFunctions")
 const o = require("odata")
@@ -200,7 +202,7 @@ class ProjectList extends React.Component {
       let fetchURL = apiBaseURL + 'Projects/Extensions.ByPolygon'
 
       //Get project list data
-      fetch(fetchURL,
+      customFetch(fetchURL,
         {
           method: "POST",
           headers: {
