@@ -196,6 +196,92 @@ class DAOLinkStep extends React.Component {
               <h5 style={{ marginBottom: "15px", fontWeight: "bold", color: DEAGreenDark }}>
                 Search for DAOs:
               </h5>
+              <br />
+              <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
+                Your DAOs:
+                </h5>
+
+              <OData
+                baseUrl={ndaoBaseURL + "Goals"}
+                query={{
+                  filter: {
+                    and: [
+                      { CreateUser: { eq: { type: 'guid', value: user ? user.profile.UserId : "" } } },
+                      { Type: 1 },
+                      ProjectDAOs.map(x => ({
+                        Id: { ne: { type: 'guid', value: x.DAOId } }
+                      }))
+                    ]
+                  },
+                  select: ['Id', 'CreateDate', 'UpdateDate'],
+                  orderBy: ["CreateDate DESC"]
+                }}
+              >
+                {({ loading, error, data }) => {
+
+                  if (loading) {
+                    return (
+                      <h6>
+                        Fetching your DAOs...
+                    </h6>
+                    )
+                  }
+
+                  if (error) {
+                    console.error(error)
+                    return (
+                      <p>
+                        Unable to fetch DAOs. (See log for details)
+                    </p>
+                    )
+                  }
+
+                  if (data) {
+                    let yourGoals = []
+
+                    if (data.value.length === 0) {
+                      yourGoals.push(
+                        <p key={new Date().valueOf()}>
+                          No DAOs found.
+                      </p>
+                      )
+                    }
+                    else {
+                      data.value.forEach(item => {
+                        yourGoals.push(
+                          <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
+                            <CardBody>
+                              <CardText>
+                                <b>DAO Id: </b>{item.Id}
+                                <br />
+                                <b>Created on: </b>{item.CreateDate}
+                                <br />
+                                <b>Last updated on: </b>{item.UpdateDate === null ? item.CreateDate : item.UpdateDate}
+                              </CardText>
+                              <Button
+                                size="sm"
+                                color=""
+                                style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
+                                onClick={() => {
+                                  if (linkCallback) {
+                                    setTimeout(linkCallback(item.Id, "add"), 1000)
+                                  }
+                                }}>
+                                <Fa className="button-icon" icon="link" />
+                                Link
+                            </Button>
+                            </CardBody>
+                          </Card>
+                        )
+                      })
+                    }
+
+                    return yourGoals
+                  }
+
+                }}
+              </OData>
+              <br />
 
               <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
                 Recently added DAOs (top 25):
@@ -283,90 +369,7 @@ class DAOLinkStep extends React.Component {
               </OData>
 
               <br />
-              <h5 style={{ fontWeight: "400", marginBottom: "15px" }}>
-                Your DAOs:
-                </h5>
-
-              <OData
-                baseUrl={ndaoBaseURL + "Goals"}
-                query={{
-                  filter: {
-                    and: [
-                      { CreateUser: { eq: { type: 'guid', value: user ? user.profile.UserId : "" } } },
-                      { Type: 1 },
-                      ProjectDAOs.map(x => ({
-                        Id: { ne: { type: 'guid', value: x.DAOId } }
-                      }))
-                    ]
-                  },
-                  select: ['Id', 'CreateDate', 'UpdateDate'],
-                  orderBy: ["CreateDate DESC"]
-                }}
-              >
-                {({ loading, error, data }) => {
-
-                  if (loading) {
-                    return (
-                      <h6>
-                        Fetching your DAOs...
-                    </h6>
-                    )
-                  }
-
-                  if (error) {
-                    console.error(error)
-                    return (
-                      <p>
-                        Unable to fetch DAOs. (See log for details)
-                    </p>
-                    )
-                  }
-
-                  if (data) {
-                    let yourGoals = []
-
-                    if (data.value.length === 0) {
-                      yourGoals.push(
-                        <p key={new Date().valueOf()}>
-                          No DAOs found.
-                      </p>
-                      )
-                    }
-                    else {
-                      data.value.forEach(item => {
-                        yourGoals.push(
-                          <Card key={item.Id} style={{ marginBottom: "10px", backgroundColor: "whitesmoke", border: "1px solid gainsboro" }}>
-                            <CardBody>
-                              <CardText>
-                                <b>DAO Id: </b>{item.Id}
-                                <br />
-                                <b>Created on: </b>{item.CreateDate}
-                                <br />
-                                <b>Last updated on: </b>{item.UpdateDate === null ? item.CreateDate : item.UpdateDate}
-                              </CardText>
-                              <Button
-                                size="sm"
-                                color=""
-                                style={{ backgroundColor: DEAGreen, marginLeft: "0px" }}
-                                onClick={() => {
-                                  if (linkCallback) {
-                                    setTimeout(linkCallback(item.Id, "add"), 1000)
-                                  }
-                                }}>
-                                <Fa className="button-icon" icon="link" />
-                                Link
-                            </Button>
-                            </CardBody>
-                          </Card>
-                        )
-                      })
-                    }
-
-                    return yourGoals
-                  }
-
-                }}
-              </OData>
+              
             </div>
           }
         </div>
