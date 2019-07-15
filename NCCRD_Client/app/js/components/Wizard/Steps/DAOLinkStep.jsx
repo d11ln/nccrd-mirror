@@ -105,7 +105,6 @@ class DAOLinkStep extends React.Component {
                     else {
                       data.value.forEach(item => {
 
-                        let projectTitle= ""
                         let docLink = ""
                         let hasAssessment = ""
                         let docLastUpated = ""
@@ -116,12 +115,6 @@ class DAOLinkStep extends React.Component {
                         let tmp = item.Questions.filter(q => q.Key === "DocumentLink")
                         if (tmp.length > 0) {
                           docLink = tmp[0].Value
-                        }
-
-                        //Get DAO title
-                        tmp = item.Questions.filter(q => q.Key === "projectTitle")
-                        if (tmp.length > 0) {
-                          projectTitle = tmp[0].Value
                         }
 
                         //Get HasAssessment
