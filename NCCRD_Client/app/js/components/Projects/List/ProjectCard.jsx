@@ -223,6 +223,26 @@ class ProjectCard extends React.Component {
               Favorite
           </Button>
           }
+          {
+            this.props.showListViewOption &&
+            <Button
+              size="sm"
+              color="white"
+              style={{
+                marginLeft:"0px",
+                boxShadow:"none",
+                border:"1px solid silver",
+                borderRadius:"5px",
+                padding:"3px 15px 3px 15px",
+                fontSize: "14px",
+                height: 33
+              }}
+              onClick={console.log('button works')}
+            >
+            <Fa icon="trash" size="lg" style={{ color: DEAGreen, marginRight: "5px" }} />
+              Delete
+            </Button>
+          }
 
         </CardBody>
         <hr style={{ margin: "0px 0px 15px 0px" }} />
