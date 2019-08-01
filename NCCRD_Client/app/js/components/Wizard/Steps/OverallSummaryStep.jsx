@@ -219,11 +219,14 @@ class OverallSummaryStep extends React.Component {
             <div style={{ float: "right" }}>
             <CSVLink
               style={{ marginRight: '15px', textDecoration: 'underline', color: '#006532' }}
-              filename={"projects-list.csv"}
-              data={[this.props.projectDetails]}
+              filename={`${projectDetails.ProjectTitle + '.csv'}`}
+              // headers = {
+              //   [{label: 'project-title', key: 'projectDetails.projectTitle'}]
+              // }
+              data={[projectDetails]}
               asyncOnClick={true}
               onClick={() => {
-                // console.log(this.props.projectDetails)
+                console.log(projectDetails.ProjectTitle)
               }}
             >
               {/* <Fa icon="arrow-circle-down" style={{ marginRight: 15 }} /> */}
