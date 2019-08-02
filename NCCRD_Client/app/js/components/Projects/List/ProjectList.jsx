@@ -98,7 +98,7 @@ class ProjectList extends React.Component {
       title: "",
       message: "",
       ellipsisMenu: false,
-      sortOrder: "D_D",
+      sortOrder: "A_A",
       sortOrderChanged: false
     }
 
@@ -378,7 +378,7 @@ class ProjectList extends React.Component {
 
   render() {
 
-    let { user, daoid, favoritesFilter, unverifiedOnlyFilter } = this.props
+    let { user, daoid, favoritesFilter, unverifiedOnlyFilter, projectDetails } = this.props
     let { ellipsisMenu } = this.state
 
     const projComps = this.buildList()
@@ -389,6 +389,8 @@ class ProjectList extends React.Component {
         projComps.slice(this.props.start, this.props.end)
       )
     }
+
+  
 
     return (
       <div style={{ backgroundColor: "white", padding: "10px", borderRadius: "10px", border: "1px solid gainsboro" }}>
@@ -619,6 +621,7 @@ class ProjectList extends React.Component {
             No Projects Found.
           </h5>
         }
+        
 
         <Modal isOpen={this.state.messageModal} toggle={this.toggle} centered>
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
@@ -635,5 +638,6 @@ class ProjectList extends React.Component {
     )
   }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectList)
