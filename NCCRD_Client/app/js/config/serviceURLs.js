@@ -2,10 +2,12 @@ let _apiBaseURL = ''
 let _siteBaseURL = ''
 let _vmsBaseURL = ''
 let _ssoBaseURL = ''
+let _nccisBaseURL = ''
 let _ndaoBaseURL = ''
 let _ndaoSiteBaseURL = ''
 let _ndmcBaseURL = ''
 let _mapServerBaseURL = ''
+
 
 if (CONSTANTS.DEV) {
   // _apiBaseURL =  'http://app01.saeon.ac.za/nccrdtestapi/odata/' //'http://localhost:62553/odata/'
@@ -18,6 +20,7 @@ if (CONSTANTS.DEV) {
   // _mapServerBaseURL = 'https://ccis.environment.gov.za/map' //'http://app01.saeon.ac.za'
   _apiBaseURL = 'https://ccis.environment.gov.za/nccrd/api/odata/';
   _siteBaseURL = 'https://ccis.environment.gov.za/nccrd/';
+  _nccisBaseURL = 'https://ccis.environment.gov.za/#/'
   _ndmcBaseURL = 'https://ccis.environment.gov.za/nhe/';
   _ndaoBaseURL = 'https://ccis.environment.gov.za/ndao/api/odata/';
   _ndaoSiteBaseURL = 'https://ccis.environment.gov.za/ndao/';
@@ -50,6 +53,7 @@ export const apiBaseURL = _apiBaseURL
 export const siteBaseURL = _siteBaseURL
 export const vmsBaseURL = _vmsBaseURL
 export const ssoBaseURL = _ssoBaseURL
+export const nccisBaseURL = _nccisBaseURL
 export const ndmcBaseURL = _ndmcBaseURL
 export const ndaoBaseURL = _ndaoBaseURL
 export const ndaoSiteBaseURL = _ndaoSiteBaseURL
